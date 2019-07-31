@@ -11,7 +11,7 @@ import {
   Row,
   Col,
 } from 'reactstrap';
-import FontAwesome from 'react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import { ButtonStyler } from '../../../styles';
 import { FORM_STATES } from '../constants';
@@ -54,7 +54,8 @@ class PhraseGenerator extends PureComponent {
                   lg={4}
                   className='p-4'
                 >
-                  {`${wordIdx + 1}. ${word}`}
+                  {`${wordIdx + 1}. `}
+                  <b>{word}</b>
                 </Col>
               ))}
             </Row>
@@ -76,7 +77,7 @@ class PhraseGenerator extends PureComponent {
                 </ButtonStyler>
               </Col>
               <Col xs={1} sm={1} md={1} lg={1} className='pl-2 text-right'>
-                <FontAwesome name='save' />
+                <FontAwesomeIcon icon={['far', 'save']} />
               </Col>
             </Row>
           </Container>

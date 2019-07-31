@@ -10,13 +10,15 @@ import {
   TOGGLE_CONFIRMATION_POPUP,
   TOGGLE_SUCCESS_POPUP,
   TOGGLE_VERIFYCATION_POPUP,
+  RESET_VERIFICATION_FORM,
+  UPDATE_ERRORS,
 } from './constants';
 
 const initialState = fromJS({
   mnemonic: {
     origin: [],
     compare: [],
-    isVerified: false,
+    errors: [],
   },
   popupFlag: {
     confirmation: false,
@@ -35,11 +37,15 @@ export default (state = initialState, action) => {
         words.concat(action.word),
       );
     case REMOVE_MNEMONIC_WORD:
-      return state.updateIn(['mnemonic', 'compare'], words =>
-        words.filter((_, index) => index !== action.index),
-      );
+      return state
+        .updateIn(['mnemonic', 'compare'], words =>
+          words.filter((_, index) => index !== action.index),
+        )
+        .setIn(['mnemonic', 'errors'], []);
     case VERIFY_MNEMONIC:
-      return state.setIn(['mnemonic', 'isVerified'], action.bool);
+      return state
+        .setIn(['popupFlag', 'verification'], false)
+        .setIn(['popupFlag', 'success'], true);
     case UPDATE_FORM_STATE:
       return state.set('formState', action.newState);
     case TOGGLE_CONFIRMATION_POPUP:
@@ -48,6 +54,12 @@ export default (state = initialState, action) => {
       return state.setIn(['popupFlag', 'verification'], action.bool);
     case TOGGLE_SUCCESS_POPUP:
       return state.setIn(['popupFlag', 'success'], action.bool);
+    case RESET_VERIFICATION_FORM:
+      return state
+        .setIn(['mnemonic', 'compare'], [])
+        .setIn(['mnemonic', 'errors'], []);
+    case UPDATE_ERRORS:
+      return state.setIn(['mnemonic', 'errors'], action.errors);
     case RESET_STATE:
       return initialState;
     default:

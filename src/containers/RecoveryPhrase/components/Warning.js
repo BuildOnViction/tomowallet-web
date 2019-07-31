@@ -7,10 +7,9 @@ import {
   CardImg,
   CardTitle,
   CardText,
-  Button,
 } from 'reactstrap';
 // Custom Components
-import { ButtonStyler } from '../../../styles';
+import { ButtonStyler, ErrorTextStyler } from '../../../styles';
 // Styles
 import warningIcon from '../../../assets/images/warning-icon.png';
 import { FORM_STATES } from '../constants';
@@ -34,9 +33,11 @@ class Warning extends PureComponent {
             event that you lose your password or our service is unavailable,
             this will be your safety net.
           </CardText>
-          <CardText className='text-left mb-4 danger'>
-            If you lose your recovery phrase, you will be unable to recover
-            access to your account
+          <CardText className='text-left mb-4'>
+            <ErrorTextStyler>
+              If you lose your recovery phrase, you will be unable to recover
+              access to your account
+            </ErrorTextStyler>
           </CardText>
           <CardText>
             <ButtonStyler onClick={() => updateFormState(FORM_STATES.PHRASE)}>

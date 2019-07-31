@@ -11,6 +11,7 @@ import Warning from './components/Warning';
 import PhraseGenerator from './components/PhraseGenerator';
 import ConfirmationPopup from './components/ConfirmationPopup';
 import VerificationPopup from './components/VerificationPopup';
+import SuccessPopup from './components/SuccessPopup';
 import { BackgroundStyler } from './style';
 // Utilites, Constants & Styles
 import reducer from './reducer';
@@ -24,6 +25,8 @@ import {
   toggleConfirmationPopup,
   toggleVerificationPopup,
   toggleSuccessPopup,
+  resetVerificationForm,
+  updateErrors,
 } from './actions';
 import {
   selectMnemonicState,
@@ -39,12 +42,13 @@ class RecoveryPhrase extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.bip39 = require('bip39');
+
     this.handleGenerateMnemonic = this.handleGenerateMnemonic.bind(this);
-    this.handleAddMnemonicWord = this.handleAddMnemonicWord.bind(this);
-    this.handleRemoveMnemonicWord = this.handleRemoveMnemonicWord.bind(this);
     this.handleVerifyMnemonic = this.handleVerifyMnemonic.bind(this);
     this.handleUpdateFormState = this.handleUpdateFormState.bind(this);
     this.handleRedirect = this.handleRedirect.bind(this);
+    this.handleAccessNewWallet = this.handleAccessNewWallet.bind(this);
   }
 
   componentWillUnmount() {
@@ -54,28 +58,23 @@ class RecoveryPhrase extends PureComponent {
 
   handleGenerateMnemonic() {
     const { onGenerateMnemonic } = this.props;
-    const newMnemonic = [
-      'coconut',
-      'virus',
-      'holiday',
-      'genre',
-      'remind',
-      'quick',
-      'panda',
-      'number',
-      'caught',
-      'smoke',
-      'betray',
-      'possible',
-    ];
+    const newMnemonic = this.bip39
+      .generateMnemonic()
+      .trim()
+      .split(/\s+/g);
     onGenerateMnemonic(shuffleArray(newMnemonic));
   }
 
-  handleAddMnemonicWord() {}
-
-  handleRemoveMnemonicWord() {}
-
-  handleVerifyMnemonic() {}
+  handleVerifyMnemonic() {
+    const { mnemonic, onVerifyMnemonic, onUpdateErrors } = this.props;
+    if (_isEqual(_get(mnemonic, 'origin'), _get(mnemonic, 'compare'))) {
+      onVerifyMnemonic(true);
+    } else {
+      onUpdateErrors([
+        'Verification failed. Please choose a different order of words.',
+      ]);
+    }
+  }
 
   handleUpdateFormState(newState) {
     const { onUpdateFormState } = this.props;
@@ -87,6 +86,12 @@ class RecoveryPhrase extends PureComponent {
     history.push(newRoute);
   }
 
+  handleAccessNewWallet() {
+    const { mnemonic } = this.props;
+
+    const privateKey = this.bip39.mnemonicToSeedSync(_get(mnemonic, ''))
+  }
+
   render() {
     const {
       mnemonic,
@@ -94,6 +99,9 @@ class RecoveryPhrase extends PureComponent {
       formState,
       onToggleConfirmationPopup,
       onToggleVerificationPopup,
+      onAddMnemonicWord,
+      onRemoveMnemonicWord,
+      onResetVerificationForm,
     } = this.props;
 
     return (
@@ -152,6 +160,15 @@ class RecoveryPhrase extends PureComponent {
           isOpen={_get(popupFlag, 'verification', false)}
           hidePopup={() => onToggleVerificationPopup(false)}
           handleExecution={() => {}}
+          mnemonic={mnemonic}
+          addWord={onAddMnemonicWord}
+          removeWord={onRemoveMnemonicWord}
+          verifyMnemonic={this.handleVerifyMnemonic}
+          resetVerificationForm={onResetVerificationForm}
+        />
+        <SuccessPopup
+          isOpen={_get(popupFlag, 'success', false)}
+          handleExecution={() => {}}
         />
       </BackgroundStyler>
     );
@@ -169,7 +186,9 @@ RecoveryPhrase.propTypes = {
   onVerifyMnemonic: PropTypes.func,
   onUpdateFormState: PropTypes.func,
   onToggleConfirmationPopup: PropTypes.func,
+  onToggleVerificationPopup: PropTypes.func,
   onResetState: PropTypes.func,
+  onResetVerificationForm: PropTypes.func,
 };
 // ======================
 
@@ -184,12 +203,14 @@ const mapDispatchToProps = dispatch => ({
   onGenerateMnemonic: mnemonic => dispatch(generateMnemonic(mnemonic)),
   onAddMnemonicWord: word => dispatch(addMnemonicWord(word)),
   onRemoveMnemonicWord: index => dispatch(removeMnemonicWord(index)),
-  onVerifyMnemonic: bool => dispatch(verifyMnemonic(bool)),
+  onVerifyMnemonic: () => dispatch(verifyMnemonic()),
   onUpdateFormState: newState => dispatch(updateFormState(newState)),
   onToggleConfirmationPopup: bool => dispatch(toggleConfirmationPopup(bool)),
   onToggleVerificationPopup: bool => dispatch(toggleVerificationPopup(bool)),
   onToggleSuccessPopup: bool => dispatch(toggleSuccessPopup(bool)),
   onResetState: () => dispatch(resetState()),
+  onResetVerificationForm: () => dispatch(resetVerificationForm()),
+  onUpdateErrors: errors => dispatch(updateErrors(errors)),
 });
 
 const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });

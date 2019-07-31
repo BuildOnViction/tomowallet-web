@@ -41,7 +41,7 @@ const BackgroundStyler = styled(Jumbotron)`
       border: 2px solid lightgrey;
       border-radius: 3px;
     }
-    .fa {
+    .svg-inline--fa {
       font-size: 36px;
       cursor: pointer;
     }
@@ -50,7 +50,7 @@ const BackgroundStyler = styled(Jumbotron)`
 
 const ConfirmationPopupStyler = styled(Popup)`
   .modal-body {
-    .fa {
+    .svg-inline--fa {
       font-size: 42px;
     }
   }
@@ -65,9 +65,55 @@ const VerificationPopupStyler = styled(Popup)`
       .phrase-box {
         border: 1px solid dimgrey;
         border-radius: 3px;
+        .phrase-word {
+          position: relative;
+          cursor: pointer;
+          .svg-inline--fa {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: -1px;
+          }
+          &:hover {
+            text-decoration: underline;
+            .svg-inline--fa {
+              display: inline-block;
+            }
+          }
+        }
       }
     }
   }
 `;
 
-export { BackgroundStyler, ConfirmationPopupStyler, VerificationPopupStyler };
+const SuccessPopupStyler = styled(Popup)`
+  width: 500px;
+  .modal-body {
+    .card-body {
+      .svg-inline--fa {
+        color: green;
+        font-size: 110px;
+      }
+      .card-title {
+        font-weight: bold;
+        font-size: 22px;
+      }
+      .card-text {
+        font-size: 18px;
+      }
+    }
+  }
+  .modal-footer {
+    button {
+      width: 60%;
+      margin-left: 20%;
+    }
+  }
+`;
+
+export {
+  BackgroundStyler,
+  ConfirmationPopupStyler,
+  VerificationPopupStyler,
+  SuccessPopupStyler,
+};

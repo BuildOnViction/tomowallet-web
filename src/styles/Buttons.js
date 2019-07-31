@@ -30,12 +30,15 @@ const ButtonStyler = styled.button`
   color: ${({ outline, color }) => (outline ? color || 'grey' : 'white')};
   border: 1px solid ${({ color }) => color || 'grey'};
   border-radius: 5px;
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: ${({ outline }) => (outline ? 'white' : 'dimgrey')};
     font-weight: ${({ outline }) => (outline ? 'bold' : '400')};
   }
   &:focus {
     outline: none;
+  }
+  &:disabled {
+    opacity: 0.5;
   }
 `;
 

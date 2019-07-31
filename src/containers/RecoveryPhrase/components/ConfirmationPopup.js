@@ -7,7 +7,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { CardBody, CardText } from 'reactstrap';
-import FontAwesome from 'react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import { ConfirmationPopupStyler } from '../style';
 
@@ -15,7 +15,7 @@ import { ConfirmationPopupStyler } from '../style';
 const ConfirmationContent = () => (
   <CardBody className='text-center'>
     <CardText>
-      <FontAwesome name='edit' />
+      <FontAwesomeIcon icon='edit' />
     </CardText>
     <CardText>Are you sure you have noted down your Recovery Phrase?</CardText>
   </CardBody>

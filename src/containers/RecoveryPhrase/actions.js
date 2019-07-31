@@ -8,6 +8,8 @@ import {
   TOGGLE_CONFIRMATION_POPUP,
   TOGGLE_SUCCESS_POPUP,
   TOGGLE_VERIFYCATION_POPUP,
+  RESET_VERIFICATION_FORM,
+  UPDATE_ERRORS,
 } from './constants';
 
 export const generateMnemonic = mnemonic => ({
@@ -51,4 +53,13 @@ export const toggleVerificationPopup = bool => ({
 export const toggleSuccessPopup = bool => ({
   type: TOGGLE_SUCCESS_POPUP,
   bool,
+});
+
+export const resetVerificationForm = () => ({
+  type: RESET_VERIFICATION_FORM,
+});
+
+export const updateErrors = errors => ({
+  type: UPDATE_ERRORS,
+  errors,
 });

@@ -5,6 +5,9 @@ import { createStructuredSelector } from 'reselect';
 import { get as _get } from 'lodash';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 // Custom Components
 import PrivateRoute from './components/PrivateRoute';
 import NavigationBar from '../../components/NavigationBar';
@@ -18,6 +21,10 @@ import { setLanguage } from '../Global/actions';
 import { selectAccount, selectLanguage } from '../Global/selectors';
 import { ROUTE } from '../../constants';
 import AppStyler from './style';
+
+// ===== PRE-INITIATION CONFIGURATION =====
+library.add(fas, far);
+// ========================================
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
