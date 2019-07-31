@@ -1,0 +1,203 @@
+// Modules
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { isEqual as _isEqual, get as _get } from 'lodash';
+import { Container, Row, Col } from 'reactstrap';
+// Custom Components
+import Warning from './components/Warning';
+import PhraseGenerator from './components/PhraseGenerator';
+import ConfirmationPopup from './components/ConfirmationPopup';
+import VerificationPopup from './components/VerificationPopup';
+import { BackgroundStyler } from './style';
+// Utilites, Constants & Styles
+import reducer from './reducer';
+import {
+  generateMnemonic,
+  addMnemonicWord,
+  removeMnemonicWord,
+  verifyMnemonic,
+  updateFormState,
+  resetState,
+  toggleConfirmationPopup,
+  toggleVerificationPopup,
+  toggleSuccessPopup,
+} from './actions';
+import {
+  selectMnemonicState,
+  selectPopupState,
+  selectFormState,
+} from './selectors';
+import { injectReducer, shuffleArray } from '../../utils';
+import { DOMAIN_KEY, FORM_STATES } from './constants';
+import { ROUTE } from '../../constants';
+
+// ===== MAIN COMPONENT =====
+class RecoveryPhrase extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleGenerateMnemonic = this.handleGenerateMnemonic.bind(this);
+    this.handleAddMnemonicWord = this.handleAddMnemonicWord.bind(this);
+    this.handleRemoveMnemonicWord = this.handleRemoveMnemonicWord.bind(this);
+    this.handleVerifyMnemonic = this.handleVerifyMnemonic.bind(this);
+    this.handleUpdateFormState = this.handleUpdateFormState.bind(this);
+    this.handleRedirect = this.handleRedirect.bind(this);
+  }
+
+  componentWillUnmount() {
+    const { onResetState } = this.props;
+    onResetState();
+  }
+
+  handleGenerateMnemonic() {
+    const { onGenerateMnemonic } = this.props;
+    const newMnemonic = [
+      'coconut',
+      'virus',
+      'holiday',
+      'genre',
+      'remind',
+      'quick',
+      'panda',
+      'number',
+      'caught',
+      'smoke',
+      'betray',
+      'possible',
+    ];
+    onGenerateMnemonic(shuffleArray(newMnemonic));
+  }
+
+  handleAddMnemonicWord() {}
+
+  handleRemoveMnemonicWord() {}
+
+  handleVerifyMnemonic() {}
+
+  handleUpdateFormState(newState) {
+    const { onUpdateFormState } = this.props;
+    onUpdateFormState(newState);
+  }
+
+  handleRedirect(newRoute) {
+    const { history } = this.props;
+    history.push(newRoute);
+  }
+
+  render() {
+    const {
+      mnemonic,
+      popupFlag,
+      formState,
+      onToggleConfirmationPopup,
+      onToggleVerificationPopup,
+    } = this.props;
+
+    return (
+      <BackgroundStyler>
+        <Container fluid>
+          <Row className='mb-3'>
+            <Col xs={12} sm={12} md={12} lg={12} className='text-center'>
+              <h1>Create New Wallet</h1>
+            </Col>
+          </Row>
+          <Row className='my-3'>
+            <Col xs={12} sm={12} md={12} lg={12} className='text-center'>
+              <div className='import-wallet'>
+                {`Already have a wallet ? `}
+                <div
+                  role='presentation'
+                  onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
+                  className='d-inline-block import-wallet__link'
+                >
+                  Import your wallet
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row className='my-4'>
+            <Col
+              xs={12}
+              sm={12}
+              md={{ size: 6, offset: 3 }}
+              lg={{ size: 4, offset: 4 }}
+              className='text-center'
+            >
+              {(_isEqual(formState, FORM_STATES.WARNING) && (
+                <Warning updateFormState={this.handleUpdateFormState} />
+              )) ||
+                (_isEqual(formState, FORM_STATES.PHRASE) && (
+                  <PhraseGenerator
+                    mnemonic={mnemonic}
+                    generateMnemonic={this.handleGenerateMnemonic}
+                    toggleConfirmationPopup={onToggleConfirmationPopup}
+                    updateFormState={this.handleUpdateFormState}
+                  />
+                ))}
+            </Col>
+          </Row>
+        </Container>
+        <ConfirmationPopup
+          isOpen={_get(popupFlag, 'confirmation', false)}
+          handleExecution={() => {
+            onToggleConfirmationPopup(false);
+            onToggleVerificationPopup(true);
+          }}
+          hidePopup={() => onToggleConfirmationPopup(false)}
+        />
+        <VerificationPopup
+          isOpen={_get(popupFlag, 'verification', false)}
+          hidePopup={() => onToggleVerificationPopup(false)}
+          handleExecution={() => {}}
+        />
+      </BackgroundStyler>
+    );
+  }
+}
+// ==========================
+
+// ===== PROP TYPES =====
+RecoveryPhrase.propTypes = {
+  mnemonic: PropTypes.object,
+  formState: PropTypes.number,
+  onGenerateMnemonic: PropTypes.func,
+  onAddMnemonicWord: PropTypes.func,
+  onRemoveMnemonicWord: PropTypes.func,
+  onVerifyMnemonic: PropTypes.func,
+  onUpdateFormState: PropTypes.func,
+  onToggleConfirmationPopup: PropTypes.func,
+  onResetState: PropTypes.func,
+};
+// ======================
+
+// ===== INJECTIONS =====
+const mapStateToProps = () =>
+  createStructuredSelector({
+    mnemonic: selectMnemonicState,
+    popupFlag: selectPopupState,
+    formState: selectFormState,
+  });
+const mapDispatchToProps = dispatch => ({
+  onGenerateMnemonic: mnemonic => dispatch(generateMnemonic(mnemonic)),
+  onAddMnemonicWord: word => dispatch(addMnemonicWord(word)),
+  onRemoveMnemonicWord: index => dispatch(removeMnemonicWord(index)),
+  onVerifyMnemonic: bool => dispatch(verifyMnemonic(bool)),
+  onUpdateFormState: newState => dispatch(updateFormState(newState)),
+  onToggleConfirmationPopup: bool => dispatch(toggleConfirmationPopup(bool)),
+  onToggleVerificationPopup: bool => dispatch(toggleVerificationPopup(bool)),
+  onToggleSuccessPopup: bool => dispatch(toggleSuccessPopup(bool)),
+  onResetState: () => dispatch(resetState()),
+});
+
+const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
+// ======================
+
+export default compose(withReducer)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(RecoveryPhrase),
+);

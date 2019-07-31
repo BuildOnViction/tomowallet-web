@@ -1,0 +1,52 @@
+{
+  "name": "tomowallet-project-v1.0",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "connected-react-router": "^6.5.2",
+    "history": "^4.9.0",
+    "hoist-non-react-statics": "^3.3.0",
+    "immutable": "^4.0.0-rc.12",
+    "invariant": "^2.2.4",
+    "lodash": "^4.17.15",
+    "node-sass": "^4.12.0",
+    "prop-types": "^15.7.2",
+    "qrcode.react": "^0.9.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-fontawesome": "^1.6.1",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "react-table": "^6.10.0",
+    "reactstrap": "^8.0.1",
+    "recharts": "^1.6.2",
+    "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
+    "styled-components": "^4.3.2",
+    "web3": "^1.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
