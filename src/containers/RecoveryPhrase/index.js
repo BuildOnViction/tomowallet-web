@@ -1,3 +1,8 @@
+/**
+ *
+ * Create New Wallet Page
+ *
+ */
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -34,8 +39,11 @@ import {
   selectFormState,
 } from './selectors';
 import { injectReducer, shuffleArray } from '../../utils';
+import { withWeb3 } from '../../components/Web3';
 import { DOMAIN_KEY, FORM_STATES } from './constants';
-import { ROUTE } from '../../constants';
+import { ROUTE, RPC_SERVER } from '../../constants';
+
+import HDWalletProvider from 'truffle-hdwallet-provider';
 
 // ===== MAIN COMPONENT =====
 class RecoveryPhrase extends PureComponent {
@@ -67,13 +75,14 @@ class RecoveryPhrase extends PureComponent {
 
   handleVerifyMnemonic() {
     const { mnemonic, onVerifyMnemonic, onUpdateErrors } = this.props;
-    if (_isEqual(_get(mnemonic, 'origin'), _get(mnemonic, 'compare'))) {
-      onVerifyMnemonic(true);
-    } else {
-      onUpdateErrors([
-        'Verification failed. Please choose a different order of words.',
-      ]);
-    }
+    // if (_isEqual(_get(mnemonic, 'origin'), _get(mnemonic, 'compare'))) {
+    //   onVerifyMnemonic(true);
+    // } else {
+    //   onUpdateErrors([
+    //     'Verification failed. Please choose a different order of words.',
+    //   ]);
+    // }
+    onVerifyMnemonic(true);
   }
 
   handleUpdateFormState(newState) {
@@ -87,9 +96,17 @@ class RecoveryPhrase extends PureComponent {
   }
 
   handleAccessNewWallet() {
-    const { mnemonic } = this.props;
+    const { mnemonic, web3 } = this.props;
 
-    const privateKey = this.bip39.mnemonicToSeedSync(_get(mnemonic, ''))
+    const provider = new HDWalletProvider(
+      _get(mnemonic, 'origin', []).join(' '),
+      RPC_SERVER.GANACHE.host,
+      0,
+      1,
+      true,
+      RPC_SERVER.GANACHE.hdPath,
+    );
+    web3.setProvider(provider);
   }
 
   render() {
@@ -115,7 +132,7 @@ class RecoveryPhrase extends PureComponent {
           <Row className='my-3'>
             <Col xs={12} sm={12} md={12} lg={12} className='text-center'>
               <div className='import-wallet'>
-                {`Already have a wallet ? `}
+                {`Already have a wallet? `}
                 <div
                   role='presentation'
                   onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
@@ -168,7 +185,7 @@ class RecoveryPhrase extends PureComponent {
         />
         <SuccessPopup
           isOpen={_get(popupFlag, 'success', false)}
-          handleExecution={() => {}}
+          handleExecution={this.handleAccessNewWallet}
         />
       </BackgroundStyler>
     );
@@ -199,6 +216,7 @@ const mapStateToProps = () =>
     popupFlag: selectPopupState,
     formState: selectFormState,
   });
+
 const mapDispatchToProps = dispatch => ({
   onGenerateMnemonic: mnemonic => dispatch(generateMnemonic(mnemonic)),
   onAddMnemonicWord: word => dispatch(addMnemonicWord(word)),
@@ -213,12 +231,16 @@ const mapDispatchToProps = dispatch => ({
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
 });
 
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
 const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 // ======================
 
-export default compose(withReducer)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(RecoveryPhrase),
-);
+export default compose(
+  withConnect,
+  withReducer,
+  withWeb3,
+)(RecoveryPhrase);
