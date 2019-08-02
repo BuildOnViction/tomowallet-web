@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import { Jumbotron, Card, Container } from 'reactstrap';
 
@@ -23,9 +24,11 @@ const BackgroundStyler = styled(Jumbotron)`
   }
 `;
 
-const ImportTypeCardStyler = styled(Card)`
-  ${({ active }) =>
-    active
+const ImportTypeCardStyler = styled(({ isActive, ...remains }) => (
+  <Card {...remains} />
+))`
+  ${({ isActive }) =>
+    isActive
       ? 'box-shadow: 2px 2px 3px lightgrey, -2px 2px 3px lightgrey;'
       : 'opacity: 0.5;'}
   width: 100%;
@@ -40,7 +43,7 @@ const ImportTypeCardStyler = styled(Card)`
     .card-title {
       margin-bottom: 0px;
       font-size: 20px;
-      ${({ active }) => active && 'font-weight: bold;'}
+      ${({ isActive }) => isActive && 'font-weight: bold;'}
     }
   }
 `;

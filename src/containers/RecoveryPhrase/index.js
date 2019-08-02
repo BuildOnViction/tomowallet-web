@@ -8,6 +8,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { isEqual as _isEqual, get as _get } from 'lodash';
 import { Container, Row, Col } from 'reactstrap';
@@ -194,6 +195,7 @@ class RecoveryPhrase extends PureComponent {
 
 // ===== PROP TYPES =====
 RecoveryPhrase.propTypes = {
+  history: PropTypes.object,
   mnemonic: PropTypes.object,
   formState: PropTypes.number,
   onGenerateMnemonic: PropTypes.func,
@@ -242,4 +244,5 @@ export default compose(
   withConnect,
   withReducer,
   withWeb3,
+  withRouter,
 )(RecoveryPhrase);

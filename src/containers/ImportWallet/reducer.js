@@ -7,6 +7,7 @@
 import { fromJS } from 'immutable';
 // Constants
 import {
+  RESET_STATE,
   TOGGLE_LOCK,
   UPDATE_ERRORS,
   UPDATE_INPUT,
@@ -25,6 +26,8 @@ const initialState = fromJS({
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case RESET_STATE:
+      return initialState;
     case TOGGLE_LOCK:
       return state.setIn(['importWallet', 'isLocked'], action.bool);
     case UPDATE_ERRORS:

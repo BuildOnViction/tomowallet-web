@@ -8,6 +8,7 @@ import React, { PureComponent } from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 import { get as _get } from 'lodash';
 import PropTypes from 'prop-types';
 import { Container, Row, Col, CardBody, CardImg, CardTitle } from 'reactstrap';
@@ -19,10 +20,11 @@ import RPOrPKForm from './components/RPOrPKForm';
 import { IMPORT_TYPES, DOMAIN_KEY } from './constants';
 import { selectImportState } from './selectors';
 import {
+  resetState,
+  toggleLock,
   updateErrors,
   updateImportType,
   updateInput,
-  toggleLock,
 } from './actions';
 import reducer from './reducer';
 import { ROUTE } from '../../constants';
@@ -34,8 +36,19 @@ class ImportWallet extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.handleRedirect = this.handleRedirect.bind(this);
     this.handleChangeType = this.handleChangeType.bind(this);
     this.handleToggleLock = this.handleToggleLock.bind(this);
+  }
+
+  componentWillUnmount() {
+    const { onResetState } = this.props;
+    onResetState();
+  }
+
+  handleRedirect(newRoute) {
+    const { history } = this.props;
+    history.push(newRoute);
   }
 
   handleChangeType(newType) {
@@ -84,7 +97,7 @@ class ImportWallet extends PureComponent {
                 <Row noGutters>
                   <Col className='pr-4'>
                     <ImportTypeCardStyler
-                      active={
+                      isActive={
                         _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
                       }
                       onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
@@ -99,7 +112,7 @@ class ImportWallet extends PureComponent {
                   </Col>
                   <Col className='pl-4'>
                     <ImportTypeCardStyler
-                      active={
+                      isActive={
                         _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
                       }
                       onClick={() =>
@@ -137,7 +150,10 @@ class ImportWallet extends PureComponent {
                 <LedgerForm />
               )}
               {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
-                <RPOrPKForm isLocked={_get(importWallet, 'isLocked')} toggleLock={this.handleToggleLock} />
+                <RPOrPKForm
+                  isLocked={_get(importWallet, 'isLocked')}
+                  toggleLock={this.handleToggleLock}
+                />
               )}
             </Col>
           </Row>
@@ -150,6 +166,7 @@ class ImportWallet extends PureComponent {
 
 // ===== PROP TYPES =====
 ImportWallet.propTypes = {
+  history: PropTypes.object,
   importWallet: PropTypes.object,
   onToggleLock: PropTypes.func,
   onUpdateErrors: PropTypes.func,
@@ -164,6 +181,7 @@ const mapStateToProps = () =>
     importWallet: selectImportState,
   });
 const mapDispatchToProps = dispatch => ({
+  onResetState: () => dispatch(resetState()),
   onToggleLock: bool => dispatch(toggleLock(bool)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onUpdateImportType: type => dispatch(updateImportType(type)),
@@ -181,4 +199,5 @@ const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 export default compose(
   withConnect,
   withReducer,
+  withRouter,
 )(ImportWallet);

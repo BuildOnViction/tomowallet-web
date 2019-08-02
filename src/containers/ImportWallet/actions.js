@@ -4,11 +4,16 @@
  *
  */
 import {
+  RESET_STATE,
   TOGGLE_LOCK,
   UPDATE_ERRORS,
   UPDATE_INPUT,
   UPDATE_TYPE,
 } from './constants';
+
+export const resetState = () => ({
+  type: RESET_STATE,
+});
 
 export const toggleLock = bool => ({
   type: TOGGLE_LOCK,
