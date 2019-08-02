@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { Jumbotron } from 'reactstrap';
+import { Jumbotron, Card, Container } from 'reactstrap';
 
 const BackgroundStyler = styled(Jumbotron)`
+  min-height: 100vh;
   color: dimgrey;
-  .create-wallet {
+  .create-wallet__text {
     font-size: 18px;
     .create-wallet__link {
       color: cornflowerblue;
@@ -14,37 +15,67 @@ const BackgroundStyler = styled(Jumbotron)`
       }
     }
   }
-  .warning-content {
-    img {
-      width: 70px;
-      height: 70px;
-    }
-    .card-title {
-      font-size: 18px;
-    }
-    .card-text {
-      font-size: 15px;
-      &.danger {
-        color: red;
-      }
-    }
-  }
-  .phrase-generator-content {
-    .card-title {
-      font-size: 20px;
-    }
-    .card-text {
-      font-size: 15px;
-    }
-    .phrase-box {
-      border: 2px solid lightgrey;
-      border-radius: 3px;
-    }
-    .svg-inline--fa {
-      font-size: 36px;
-      cursor: pointer;
+  .import-type {
+    .col {
+      flex: 1;
+      flex-direction: column;
     }
   }
 `;
 
-export { BackgroundStyler };
+const ImportTypeCardStyler = styled(Card)`
+  ${({ active }) =>
+    active
+      ? 'box-shadow: 2px 2px 3px lightgrey, -2px 2px 3px lightgrey;'
+      : 'opacity: 0.5;'}
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: 0.1s;
+  .card-img {
+    width: 70px;
+    height: 70px;
+  }
+  .card-body {
+    .card-title {
+      margin-bottom: 0px;
+      font-size: 20px;
+      ${({ active }) => active && 'font-weight: bold;'}
+    }
+  }
+`;
+
+const RPOrPKFormStyler = styled(Container)`
+  .phrase-key-input {
+    position: relative;
+    width: 100%;
+    height: 130px;
+    padding: 45px 20px 20px 20px;
+    background-color: white;
+    textarea {
+      border: none;
+      box-shadow: none;
+      text-align: center;
+      resize: none;
+      &::placeholder {
+        color: darkgrey;
+      }
+    }
+    .lock-unlock-icon {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      width: 20px;
+      height: 20px;
+      color: darkgrey;
+      &:hover {
+        color: dimgrey;
+      }
+    }
+  }
+  .import-by-qrcode {
+    font-weight: 600;
+  }
+`;
+
+export { BackgroundStyler, ImportTypeCardStyler, RPOrPKFormStyler };

@@ -21,7 +21,7 @@ class Warning extends PureComponent {
     return (
       <Card className='warning-content p-4'>
         <div className='full-width mt-3'>
-          <CardImg draggable src={warningIcon} />
+          <CardImg src={warningIcon} />
         </div>
         <CardBody className='text-center'>
           <CardTitle className='mb-4'>{`Let's secure your account`}</CardTitle>

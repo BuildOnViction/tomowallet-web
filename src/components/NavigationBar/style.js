@@ -8,7 +8,7 @@ const NavBarStyler = styled(Navbar)`
   .navbar-brand {
     > img {
       width: 50px;
-      heigth: 50px;
+      height: 50px;
       filter: grayscale(10);
       cursor: pointer;
     }

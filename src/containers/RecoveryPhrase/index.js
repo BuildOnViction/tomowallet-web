@@ -11,6 +11,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { isEqual as _isEqual, get as _get } from 'lodash';
 import { Container, Row, Col } from 'reactstrap';
+// import HDWalletProvider from 'truffle-hdwallet-provider';
 // Custom Components
 import Warning from './components/Warning';
 import PhraseGenerator from './components/PhraseGenerator';
@@ -42,8 +43,6 @@ import { injectReducer, shuffleArray } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { DOMAIN_KEY, FORM_STATES } from './constants';
 import { ROUTE, RPC_SERVER } from '../../constants';
-
-import HDWalletProvider from 'truffle-hdwallet-provider';
 
 // ===== MAIN COMPONENT =====
 class RecoveryPhrase extends PureComponent {
