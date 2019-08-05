@@ -34,7 +34,7 @@ module.exports = {
   node: {
     fs: 'empty',
     net: 'empty',
-    // child_process: 'empty',
+    child_process: 'empty',
   },
   plugins: [
     new HtmlWebpackPlugin({

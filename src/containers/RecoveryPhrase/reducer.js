@@ -16,6 +16,7 @@ import {
 
 const initialState = fromJS({
   mnemonic: {
+    // test: '',
     origin: [],
     compare: [],
     errors: [],
@@ -32,6 +33,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case GENERATE_MNEMONIC:
       return state.setIn(['mnemonic', 'origin'], action.mnemonic);
+    // .setIn(['mnemonic', 'test'], action.mnemonic);
     case ADD_MNEMONIC_WORD:
       return state.updateIn(['mnemonic', 'compare'], words =>
         words.concat(action.word),

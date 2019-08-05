@@ -22,17 +22,18 @@ class Web3Provider extends Component {
       web3: {},
       status: ENUM.WEB3_STATUSES.LOADING,
       error: null,
+      rpcServer: {},
     };
 
     this.handleTryProvider = this.handleTryProvider.bind(this);
-    this.handleUpdateWeb3 = this.handleUpdateWeb3.bind(this);
+    this.handleUpdateRpcServer = this.handleUpdateRpcServer.bind(this);
     this.handleSetWeb3 = this.handleSetWeb3.bind(this);
   }
 
   componentDidMount() {
     this.handleTryProvider(window.web3, () =>
       this.handleTryProvider(Web3.givenProvider, () =>
-        this.handleUpdateWeb3(Object.keys(RPC_SERVER)[0]),
+        this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]),
       ),
     );
   }
@@ -50,17 +51,20 @@ class Web3Provider extends Component {
     }
   }
 
-  handleUpdateWeb3(newKey) {
-    const newServer = _get(RPC_SERVER, [newKey], {});
-    let newWeb3;
-
-    if (newServer.type === 'http') {
-      newWeb3 = new Web3(Web3.givenProvider || newServer.host, null, {});
-    } else if (newServer.type === 'ws') {
-      newWeb3 = new Web3(Web3.givenProvider || newServer.host, null, {});
-    }
-
-    this.handleSetWeb3(newWeb3);
+  handleUpdateRpcServer(newKey) {
+    this.setState(
+      {
+        rpcServer: _get(RPC_SERVER, newKey, {}),
+      },
+      () => {
+        const newWeb3 = new Web3(
+          Web3.givenProvider || this.state.rpcServer.host,
+          null,
+          {},
+        );
+        this.handleSetWeb3(newWeb3);
+      },
+    );
   }
 
   handleSetWeb3(web3) {
@@ -78,14 +82,16 @@ class Web3Provider extends Component {
 
   render() {
     const { children } = this.props;
-    const { web3, status } = this.state;
+    const { web3, status, rpcServer } = this.state;
 
     return (
       <Web3Context.Provider
         value={{
           web3,
           web3Status: status,
-          switchRPCServer: this.handleUpdateWeb3,
+          rpcServer,
+          switchRPCServer: this.handleUpdateRpcServer,
+          updateWeb3: this.handleSetWeb3,
         }}
       >
         {children}
@@ -103,11 +109,13 @@ export const withWeb3 = WrappedComponent => {
     render() {
       return (
         <Web3Context.Consumer>
-          {({ web3, switchRPCServer }) => (
+          {({ web3, rpcServer, switchRPCServer, updateWeb3 }) => (
             <WrappedComponent
               {...this.props}
               web3={web3}
+              rpcServer={rpcServer}
               switchRPCServer={switchRPCServer}
+              updateWeb3={updateWeb3}
             />
           )}
         </Web3Context.Consumer>
@@ -127,7 +135,7 @@ export const withWeb3AndState = WrappedComponent => {
     render() {
       return (
         <Web3Context.Consumer>
-          {({ web3, web3Status, switchRPCServer }) =>
+          {({ web3, web3Status, rpcServer, switchRPCServer, updateWeb3 }) =>
             (web3Status === ENUM.WEB3_STATUSES.LOADING && (
               <LoadingComponent />
             )) ||
@@ -139,7 +147,9 @@ export const withWeb3AndState = WrappedComponent => {
                 {...this.props}
                 web3={web3}
                 web3Status={web3Status}
+                rpcServer={rpcServer}
                 switchRPCServer={switchRPCServer}
+                updateWeb3={updateWeb3}
               />
             ))
           }

@@ -1,7 +1,8 @@
 export default {
   DEFAULT: '/',
+  LOGIN: '/login',
   HOMEPAGE: '/homepage',
-  RECOVERY_PHRASE: '/recovery-phrase',
+  CREATE_WALLET: '/create-new-wallet',
   IMPORT_WALLET: '/import-wallet',
   MY_WALLET: '/my-wallet',
 };

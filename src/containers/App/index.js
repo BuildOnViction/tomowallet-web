@@ -5,26 +5,17 @@ import { createStructuredSelector } from 'reselect';
 import { get as _get } from 'lodash';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
 // Custom Components
-import PrivateRoute from './components/PrivateRoute';
 import NavigationBar from '../../components/NavigationBar';
-import HomePage from '../HomePage';
-import RecoveryPhrasePage from '../RecoveryPhrase';
-import ImportWalletPage from '../ImportWallet';
-import MyWallet from '../Homepage1';
-// Utilities, Constants & Styles
-import { Web3Provider } from '../../components/Web3';
-import { setLanguage } from '../Global/actions';
-import { selectAccount, selectLanguage } from '../Global/selectors';
-import { ROUTE } from '../../constants';
+import WelcomePage from '../v1.0/Welcome';
+import CreateWalletPage from '../v1.0/WalletCreation';
+// -- TO-DO: Update style for App component in the following styled component:
 import AppStyler from './style';
-
-// ===== PRE-INITIATION CONFIGURATION =====
-library.add(fas, far);
-// ========================================
+// Utilities & Constants
+import { Web3Provider } from '../../components/Web3';
+import { CustomIntlProvider } from '../../components/IntlProvider';
+import { selectAccount } from '../Global/selectors';
+import { ROUTE } from '../../constants';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -40,71 +31,58 @@ class App extends PureComponent {
   }
 
   render() {
-    const { language, onSetLanguage } = this.props;
     const isLoggedIn = this.handleCheckLoggedIn();
 
     return (
       <Router>
         <Web3Provider>
-          <AppStyler fluid className='px-0'>
-            <Row noGutters>
-              <Col
-                xs={12}
-                sm={12}
-                md={{ size: 10, offset: 1 }}
-                lg={{ size: 10, offset: 1 }}
-              >
-                <NavigationBar
-                  isLoggedIn={isLoggedIn}
-                  language={language}
-                  setLanguage={onSetLanguage}
-                />
-              </Col>
-            </Row>
-            <Row noGutters>
-              <Col>
-                <Route
-                  path={ROUTE.HOMEPAGE}
-                  render={() =>
-                    isLoggedIn ? (
-                      <Redirect strict to={ROUTE.MY_WALLET} />
-                    ) : (
-                      <HomePage />
-                    )
-                  }
-                />
-                <Route
-                  path={ROUTE.RECOVERY_PHRASE}
-                  render={() =>
-                    isLoggedIn ? (
-                      <Redirect strict to={ROUTE.MY_WALLET} />
-                    ) : (
-                      <RecoveryPhrasePage />
-                    )
-                  }
-                />
-                <Route
-                  path={ROUTE.IMPORT_WALLET}
-                  render={() =>
-                    isLoggedIn ? (
-                      <Redirect strict to={ROUTE.MY_WALLET} />
-                    ) : (
-                      <ImportWalletPage />
-                    )
-                  }
-                />
-                <PrivateRoute
-                  isLoggedIn={isLoggedIn}
-                  path={ROUTE.MY_WALLET}
-                  component={MyWallet}
-                />
-                <Route
-                  path={ROUTE.DEFAULT}
-                  render={() => <Redirect strict to={ROUTE.HOMEPAGE} />}
-                />
-              </Col>
-            </Row>
-          </AppStyler>
+          <CustomIntlProvider>
+            <AppStyler fluid className='px-0'>
+              <Row noGutters>
+                <Col
+                  xs={12}
+                  sm={12}
+                  md={{ size: 8, offset: 2 }}
+                  lg={{ size: 8, offset: 2 }}
+                >
+                  <NavigationBar isLoggedIn={isLoggedIn} />
+                </Col>
+              </Row>
+              <Row noGutters>
+                <Col
+                  xs={12}
+                  sm={12}
+                  md={{ size: 8, offset: 2 }}
+                  lg={{ size: 8, offset: 2 }}
+                >
+                  <Route
+                    path={ROUTE.LOGIN}
+                    render={() =>
+                      isLoggedIn ? (
+                        <Redirect strict to={ROUTE.MY_WALLET} />
+                      ) : (
+                        <WelcomePage />
+                      )
+                    }
+                  />
+                  <Route
+                    path={ROUTE.CREATE_WALLET}
+                    render={() =>
+                      isLoggedIn ? (
+                        <Redirect strict to={ROUTE.MY_WALLET} />
+                      ) : (
+                        <CreateWalletPage />
+                      )
+                    }
+                  />
+                  <Route
+                    path={ROUTE.DEFAULT}
+                    render={() => <Redirect strict to={ROUTE.LOGIN} />}
+                  />
+                </Col>
+              </Row>
+            </AppStyler>
+          </CustomIntlProvider>
         </Web3Provider>
       </Router>
     );
@@ -116,15 +94,7 @@ class App extends PureComponent {
 const mapStateToProps = () =>
   createStructuredSelector({
     account: selectAccount,
-    language: selectLanguage,
   });
-
-const mapDispatchToProps = dispatch => ({
-  onSetLanguage: language => dispatch(setLanguage(language)),
-});
 // ======================
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
+export default connect(mapStateToProps)(App);

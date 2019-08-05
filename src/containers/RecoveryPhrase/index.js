@@ -12,7 +12,7 @@ import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { isEqual as _isEqual, get as _get } from 'lodash';
 import { Container, Row, Col } from 'reactstrap';
-// import HDWalletProvider from 'truffle-hdwallet-provider';
+import HDWalletProvider from 'truffle-hdwallet-provider';
 // Custom Components
 import Warning from './components/Warning';
 import PhraseGenerator from './components/PhraseGenerator';
@@ -66,15 +66,13 @@ class RecoveryPhrase extends PureComponent {
 
   handleGenerateMnemonic() {
     const { onGenerateMnemonic } = this.props;
-    const newMnemonic = this.bip39
-      .generateMnemonic()
-      .trim()
-      .split(/\s+/g);
-    onGenerateMnemonic(shuffleArray(newMnemonic));
+    const newMnemonic = this.bip39.generateMnemonic();
+    onGenerateMnemonic(newMnemonic.trim().split(/\s+/g));
   }
 
   handleVerifyMnemonic() {
     const { mnemonic, onVerifyMnemonic, onUpdateErrors } = this.props;
+
     // if (_isEqual(_get(mnemonic, 'origin'), _get(mnemonic, 'compare'))) {
     //   onVerifyMnemonic(true);
     // } else {
@@ -96,17 +94,22 @@ class RecoveryPhrase extends PureComponent {
   }
 
   handleAccessNewWallet() {
-    const { mnemonic, web3 } = this.props;
+    const { mnemonic, web3, rpcServer, history, updateWeb3 } = this.props;
 
+    const mnemonicStr = _get(mnemonic, 'origin').join(' ');
     const provider = new HDWalletProvider(
-      _get(mnemonic, 'origin', []).join(' '),
-      RPC_SERVER.GANACHE.host,
+      mnemonicStr,
+      rpcServer.host,
       0,
       1,
       true,
-      RPC_SERVER.GANACHE.hdPath,
+      rpcServer.hdPath,
     );
     web3.setProvider(provider);
+    web3.eth.accounts.wallet.create(1);
+    console.warn('new web3', web3);
+    updateWeb3(web3);
+    history.push(ROUTE.MY_WALLET);
   }
 
   render() {

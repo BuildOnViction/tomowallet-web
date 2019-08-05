@@ -2,5 +2,6 @@ import RPC_SERVER from './rpcServers';
 import ENUM from './enums';
 import ROUTE from './routes';
 import LIST from './lists';
+import MSG from './messages';
 
-export { RPC_SERVER, ENUM, ROUTE, LIST };
+export { RPC_SERVER, ENUM, ROUTE, LIST, MSG };

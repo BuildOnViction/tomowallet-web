@@ -8,12 +8,8 @@ import {
 } from './constants';
 import { LIST } from '../../constants';
 
-const initialAccount = {
-  address: localStorage.getItem('account_address') || '',
-};
-
 const initialState = fromJS({
-  account: initialAccount,
+  account: null,
   language: _get(LIST, ['LANGUAGES', 0, 'value'], ''),
 });
 
@@ -22,7 +18,7 @@ export default (state = initialState, action) => {
     case STORE_ACCOUNT_INFO:
       return state.set('account', action.data);
     case RELEASE_ACCOUNT_INFO:
-      return state.set('account', initialAccount);
+      return state.set('account', null);
     case SET_LANGUAGE:
       return state.set(
         'language',

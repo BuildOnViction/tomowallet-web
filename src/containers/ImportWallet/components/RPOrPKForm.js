@@ -5,6 +5,7 @@
  */
 // Modules
 import React, { PureComponent } from 'react';
+import { get as _get } from 'lodash';
 import { Row, Col, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
@@ -14,7 +15,13 @@ import { ButtonStyler } from '../../../styles';
 // ===== MAIN COMPONENT =====
 class RPOrPKForm extends PureComponent {
   render() {
-    const { isLocked, toggleLock } = this.props;
+    const {
+      isLocked,
+      toggleLock,
+      formValues,
+      updateInput,
+      accessWallet,
+    } = this.props;
     return (
       <RPOrPKFormStyler fluid className='p-0'>
         <Row noGutters className='mb-2'>
@@ -33,7 +40,10 @@ class RPOrPKForm extends PureComponent {
               </div>
               <Input
                 type='textarea'
+                name='textValue'
                 placeholder='Enter your Recovery Phrase or Private Key.'
+                value={_get(formValues, 'textValue', '')}
+                onChange={e => updateInput('textValue', e.target.value)}
               />
             </div>
           </Col>
@@ -49,7 +59,7 @@ class RPOrPKForm extends PureComponent {
           <Col>
             <Row noGutters>
               <Col xs={12} sm={12} md={12} lg={{ size: 4, offset: 4 }}>
-                <ButtonStyler>Import</ButtonStyler>
+                <ButtonStyler onClick={accessWallet}>Import</ButtonStyler>
               </Col>
             </Row>
           </Col>

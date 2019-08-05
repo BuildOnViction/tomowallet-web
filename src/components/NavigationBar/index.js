@@ -2,6 +2,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   NavbarBrand,
   NavbarToggler,
@@ -16,11 +17,13 @@ import {
   CardImg,
 } from 'reactstrap';
 // Custom Components
+// -- TO-DO: Update style for Navigation Bar component into following styled component:
 import NavBarStyler from './style';
-// Utilities, Constants & Styles
+// Utilities & Constants
 import { withWeb3 } from '../Web3';
-import { ROUTE, RPC_SERVER, LIST } from '../../constants';
-import tomoIcon from '../../assets/images/tomo-icon.png';
+import { withIntl } from '../IntlProvider';
+import { ROUTE, RPC_SERVER, LIST, MSG } from '../../constants';
+// -- TO-DO: Import TomoWallet logo's source
 
 // ===== MAIN COMPONENT =====
 class NavigationBar extends PureComponent {
@@ -40,27 +43,30 @@ class NavigationBar extends PureComponent {
   }
 
   handleRenderPublicBar() {
-    const { language, setLanguage } = this.props;
+    const {
+      language,
+      changeLocale,
+      intl: { formatMessage },
+    } = this.props;
 
     return (
       <Fragment>
         <Nav className='ml-auto' navbar>
           <NavItem>
-            <NavLink>About</NavLink>
+            <NavLink>{formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink>FAQs</NavLink>
+            <NavLink>{formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}</NavLink>
           </NavItem>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggle nav caret>
-              {(LIST.LANGUAGES.find(opt => opt.value === language) || {})
-                .label || 'Ulala'}
+              {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
             </DropdownToggle>
             <DropdownMenu right>
               {LIST.LANGUAGES.map((opt, optIdx) => (
                 <DropdownItem
                   key={`language_${optIdx + 1}`}
-                  onClick={() => setLanguage(opt.value)}
+                  onClick={() => changeLocale(opt.value)}
                 >
                   {opt.label}
                 </DropdownItem>
@@ -73,6 +79,9 @@ class NavigationBar extends PureComponent {
   }
 
   handleRenderPrivateBar() {
+    const {
+      intl: { formatMessage },
+    } = this.props;
     const { networkTitle } = this.state;
 
     return (
@@ -95,14 +104,24 @@ class NavigationBar extends PureComponent {
           </UncontrolledDropdown>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggle nav caret>
-              My Wallet
+              {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem>Show Profile</DropdownItem>
-              <DropdownItem>Settings</DropdownItem>
+              <DropdownItem>
+                {formatMessage(
+                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_PROFILE,
+                )}
+              </DropdownItem>
+              <DropdownItem>
+                {formatMessage(
+                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SETTINGS,
+                )}
+              </DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={() => this.handleRedirectToHomepage()}>
-                Log out
+                {formatMessage(
+                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_LOG_OUT,
+                )}
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
@@ -131,13 +150,17 @@ class NavigationBar extends PureComponent {
   }
 
   render() {
-    const { isLoggedIn } = this.props;
+    const {
+      isLoggedIn,
+      intl: { formatMessage },
+    } = this.props;
     const { isExpandOptions } = this.state;
 
     return (
       <NavBarStyler light expand='lg'>
         <NavbarBrand onClick={this.handleRedirectToHomepage}>
-          <CardImg src={tomoIcon} />
+          {/* -- TO-DO: Add TomoChain logo's source */}
+          <CardImg src='' alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)} />
         </NavbarBrand>
         <NavbarToggler onClick={this.handleToggleOptions} />
         <Collapse isOpen={isExpandOptions} navbar>
@@ -151,7 +174,25 @@ class NavigationBar extends PureComponent {
 }
 // ==========================
 
+// ===== PROP TYPES =====
+NavigationBar.propTypes = {
+  /** React Intl's instance object */
+  intl: PropTypes.object,
+  /** Condition flag to check authentication state for proper option view */
+  isLoggedIn: PropTypes.bool,
+  /** Current chosen locale */
+  language: PropTypes.string,
+  /** Action to change locale */
+  changeLocale: PropTypes.func,
+  /** React Router's API object */
+  history: PropTypes.object,
+  /** Action to change current RPC Server */
+  switchRPCServer: PropTypes.func,
+};
+// ======================
+
 export default compose(
   withRouter,
   withWeb3,
+  withIntl,
 )(NavigationBar);

@@ -12,6 +12,7 @@ import { withRouter } from 'react-router-dom';
 import { get as _get } from 'lodash';
 import PropTypes from 'prop-types';
 import { Container, Row, Col, CardBody, CardImg, CardTitle } from 'reactstrap';
+import HDWalletProvider from 'truffle-hdwallet-provider';
 // Custom Components
 import { BackgroundStyler, ImportTypeCardStyler } from './style';
 import LedgerForm from './components/LedgerForm';
@@ -27,18 +28,22 @@ import {
   updateInput,
 } from './actions';
 import reducer from './reducer';
-import { ROUTE } from '../../constants';
+import { ROUTE, RPC_SERVER } from '../../constants';
 import tomoIcon from '../../assets/images/tomo-icon.png';
 import { injectReducer } from '../../utils';
+import { withWeb3 } from '../../components/Web3';
 
 // ===== MAIN COMPONENT =====
 class ImportWallet extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.bip39 = require('bip39');
+
     this.handleRedirect = this.handleRedirect.bind(this);
     this.handleChangeType = this.handleChangeType.bind(this);
     this.handleToggleLock = this.handleToggleLock.bind(this);
+    this.handleAccessWallet = this.handleAccessWallet.bind(this);
   }
 
   componentWillUnmount() {
@@ -61,8 +66,25 @@ class ImportWallet extends PureComponent {
     onToggleLock(!_get(importWallet, 'isLocked'));
   }
 
+  handleAccessWallet() {
+    const { web3, importWallet } = this.props;
+
+    console.warn('create wallet', _get(importWallet, 'input.textValue', ''));
+
+    const provider = new HDWalletProvider(
+      _get(importWallet, 'input.textValue', ''),
+      RPC_SERVER.TOMOCHAIN_TESTNET.host,
+      0,
+      1,
+      true,
+      RPC_SERVER.TOMOCHAIN_TESTNET.hdPath,
+    );
+    web3.setProvider(provider);
+    console.warn('Import wallet', web3);
+  }
+
   render() {
-    const { importWallet } = this.props;
+    const { importWallet, onUpdateInput } = this.props;
     return (
       <BackgroundStyler>
         <Container fluid>
@@ -153,6 +175,9 @@ class ImportWallet extends PureComponent {
                 <RPOrPKForm
                   isLocked={_get(importWallet, 'isLocked')}
                   toggleLock={this.handleToggleLock}
+                  updateInput={onUpdateInput}
+                  accessWallet={this.handleAccessWallet}
+                  formValues={_get(importWallet, 'input', {})}
                 />
               )}
             </Col>
@@ -200,4 +225,5 @@ export default compose(
   withConnect,
   withReducer,
   withRouter,
+  withWeb3,
 )(ImportWallet);
