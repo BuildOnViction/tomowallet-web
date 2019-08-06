@@ -38,9 +38,8 @@ class App extends PureComponent {
         <Web3Provider>
           <CustomIntlProvider>
             <AppStyler fluid className='px-0'>
-              <Row noGutters>
+              <Row>
                 <Col
-                  xs={12}
                   sm={12}
                   md={{ size: 8, offset: 2 }}
                   lg={{ size: 8, offset: 2 }}
@@ -48,9 +47,8 @@ class App extends PureComponent {
                   <NavigationBar isLoggedIn={isLoggedIn} />
                 </Col>
               </Row>
-              <Row noGutters>
+              <Row className='mt-5'>
                 <Col
-                  xs={12}
                   sm={12}
                   md={{ size: 8, offset: 2 }}
                   lg={{ size: 8, offset: 2 }}

@@ -14,11 +14,17 @@ import PropTypes from 'prop-types';
 import { Container, Row, Col, CardImg } from 'reactstrap';
 // Custom Component
 // -- TO-DO: Update style for button component
-import { BigButtonStyler } from '../../../styles';
+import {
+  BigButtonStyler,
+  BoxBtnStyler,
+  HeaderStyler,
+} from '../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../constants';
 // -- TO-DO: Add style for Welcome content component
+//IMG
+import imgvisual_login from '../../../assets/images/img-visual-login.png';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -40,40 +46,32 @@ class WelcomePage extends PureComponent {
     } = this.props;
     return (
       <Container fluid>
-        <Row>
-          <Col xs={12} sm={12} md={6} lg={6}>
-            <h1>{formatMessage(MSG.WELCOME_TITLE)}</h1>
-            <p>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
-            <Container fluid className='text-center'>
-              <Row>
-                <Col xs={12} sm={12} md={12} lg={8}>
-                  <BigButtonStyler
-                    onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
-                  >
-                    {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
-                  </BigButtonStyler>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} sm={12} md={12} lg={8}>
-                  {formatMessage(MSG.WELCOME_TEXT_BETWEEN_BUTTONS)}
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} sm={12} md={12} lg={8}>
-                  <BigButtonStyler
-                    btnBlue
-                    onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
-                  >
-                    {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
-                  </BigButtonStyler>
-                </Col>
-              </Row>
-            </Container>
+        <Row className='align-items-center'>
+          <Col xs={12} md={7}>
+            <HeaderStyler>{formatMessage(MSG.WELCOME_TITLE)}</HeaderStyler>
+            <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
+            <BoxBtnStyler className='mt-3'>
+              <div>
+                <BigButtonStyler
+                  onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}>
+                  {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
+                </BigButtonStyler>
+              </div>
+              <div className='m-3'>
+                {formatMessage(MSG.WELCOME_TEXT_BETWEEN_BUTTONS)}
+              </div>
+              <div>
+                <BigButtonStyler
+                  btnBlue
+                  onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}>
+                  {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
+                </BigButtonStyler>
+              </div>
+            </BoxBtnStyler>
           </Col>
-          <Col md={6} lg={6} className='d-none d-md-block'>
+          <Col xs={12} lg={5} className='d-none d-md-block'>
             {/* -- TO-DO: Add welcome page's image source */}
-            <CardImg src='' alt={formatMessage(MSG.WELCOME_IMAGE_ALT)} />
+            <CardImg src={imgvisual_login} alt={formatMessage(MSG.WELCOME_IMAGE_ALT)} />
           </Col>
         </Row>
       </Container>

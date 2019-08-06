@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 const BigButtonStyler = styled.button`
-  ${({ btnBlue }) => btnBlue ? 'background-color:#5692cd;color:#fff;' : 'background-color: #e4ae63;color: #444b64'}
+  ${({ btnBlue }) =>
+    btnBlue ? 'background-color:#5692cd;color:#fff;' : 'background-color:#e4ae63;color: #444b64'}
   border: 0px;
   border-radius: 8px;
   display: flex;
@@ -12,7 +13,8 @@ const BigButtonStyler = styled.button`
   transition: all .3s;
   width: 100%;
   &:hover {
-    background-color: dimgrey;
+    ${({ btnBlue }) =>
+  btnBlue ? 'background-color:#4076AC;color:#fff;' : 'background-color:#C59148;color:#444b64'}
   }
   &:focus {
     outline: none;
