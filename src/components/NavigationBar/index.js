@@ -9,7 +9,6 @@ import {
   Collapse,
   Nav,
   NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -19,11 +18,17 @@ import {
 // Custom Components
 // -- TO-DO: Update style for Navigation Bar component into following styled component:
 import NavBarStyler from './style';
+import {
+  LinkHeader,
+  DropdownToggleHeader,
+} from '../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
 import { withIntl } from '../IntlProvider';
 import { ROUTE, RPC_SERVER, LIST, MSG } from '../../constants';
 // -- TO-DO: Import TomoWallet logo's source
+// IMG
+import logo_tomochain from '../../assets/images/logo-tomochain.png';
 
 // ===== MAIN COMPONENT =====
 class NavigationBar extends PureComponent {
@@ -53,15 +58,15 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <Nav className='ml-auto' navbar>
           <NavItem>
-            <NavLink>{formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}</NavLink>
+            <LinkHeader>{formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}</LinkHeader>
           </NavItem>
           <NavItem>
-            <NavLink>{formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}</NavLink>
+            <LinkHeader>{formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}</LinkHeader>
           </NavItem>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret>
+            <DropdownToggleHeader nav caret>
               {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
-            </DropdownToggle>
+            </DropdownToggleHeader>
             <DropdownMenu right>
               {LIST.LANGUAGES.map((opt, optIdx) => (
                 <DropdownItem
@@ -160,7 +165,7 @@ class NavigationBar extends PureComponent {
       <NavBarStyler light expand='lg'>
         <NavbarBrand onClick={this.handleRedirectToHomepage}>
           {/* -- TO-DO: Add TomoChain logo's source */}
-          <CardImg src='' alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)} />
+          <CardImg src={logo_tomochain} alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)} />
         </NavbarBrand>
         <NavbarToggler onClick={this.handleToggleOptions} />
         <Collapse isOpen={isExpandOptions} navbar>

@@ -1,18 +1,20 @@
 import styled from 'styled-components';
-
 const BigButtonStyler = styled.button`
-  width: 600px;
-  min-width: 0px;
-  max-width: 100%;
-  height: 60px;
-  background-color: white;
-  color: black;
-  border: 1px solid dimgrey;
-  border-radius: 30px;
-  font-weight: 600;
+  ${({ btnBlue }) =>
+    btnBlue ? 'background-color:#5692cd;color:#fff;' : 'background-color:#e4ae63;color: #444b64'}
+  border: 0px;
+  border-radius: 8px;
+  display: flex;
+  height: 44px;
+  padding: 0 2em;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Nunito Sans', sans-serif;
+  transition: all .3s;
+  width: 100%;
   &:hover {
-    background-color: dimgrey;
-    color: white;
+    ${({ btnBlue }) =>
+  btnBlue ? 'background-color:#4076AC;color:#fff;' : 'background-color:#C59148;color:#444b64'}
   }
   &:focus {
     outline: none;
