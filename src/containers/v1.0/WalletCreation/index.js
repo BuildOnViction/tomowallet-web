@@ -12,27 +12,31 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { get as _get } from 'lodash';
 // Custom Component
 import Warning from './subcomponents/Warning';
 import RecoveryPhrase from './subcomponents/RecoveryPhrase';
 import ConfirmationPopup from './subcomponents/popups/ConfirmationPopup';
+import KeyViewPopup from './subcomponents/popups/KeyViewPopup';
 // Utilities
 import {
+  selectConfirmationState,
   selectFormState,
+  selectKeyViewState,
   selectMnemonic,
-  selectCompare,
-  selectIsConfirmed,
 } from './selectors';
 import {
   addWord,
   removeWord,
   resetState,
   setFormState,
+  setPrivateKey,
   storeMnemonic,
   toggleConfirmationPopup,
+  toggleKeyViewPopup,
+  toggleKeyVisibile,
 } from './actions';
 import reducer from './reducer';
-import { withIntl } from '../../../components/IntlProvider';
 import { injectReducer } from '../../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 // ===================
@@ -46,12 +50,15 @@ class WalletCreationPage extends PureComponent {
 
   render() {
     const {
+      confirmation,
       formState,
-      isConfirmed,
+      keyView,
       mnemonic,
       onSetFormState,
       onStoreMnemonic,
       onToggleConfirmationPopup,
+      onToggleKeyViewPopup,
+      onToggleKeyVisible,
     } = this.props;
 
     return (
@@ -61,16 +68,22 @@ class WalletCreationPage extends PureComponent {
         )) ||
           (formState === FORM_STATES.RECOVERY_PHRASE && (
             <RecoveryPhrase
-              mnemonic={mnemonic}
+              mnemonic={_get(mnemonic, 'origin')}
               setFormState={onSetFormState}
               storeMnemonic={onStoreMnemonic}
               toggleConfirmationPopup={onToggleConfirmationPopup}
+              toggleKeyViewPopup={onToggleKeyViewPopup}
             />
           ))}
         <ConfirmationPopup
-          isOpen={isConfirmed}
+          confirmation={confirmation}
           setFormState={onSetFormState}
-          toggleConfirmationPopup={onToggleConfirmationPopup}
+          togglePopup={onToggleConfirmationPopup}
+        />
+        <KeyViewPopup
+          keyView={keyView}
+          togglePopup={onToggleKeyViewPopup}
+          toggleKeyVisibile={onToggleKeyVisible}
         />
       </Fragment>
     );
@@ -80,43 +93,75 @@ class WalletCreationPage extends PureComponent {
 
 // ===== PROP TYPES =====
 WalletCreationPage.propTypes = {
+  /** Recovery phrase confirmation popup's data set */
+  confirmation: PropTypes.object,
   /** Current form state */
   formState: PropTypes.number,
-  /** Condition flag to show/hide recovery phrase confirmation popup */
-  isConfirmed: PropTypes.bool,
-  /** Generated recovery phrase (a string of 12 words) */
-  mnemonic: PropTypes.string,
-  /** Action to store generated mnemonic into state */
-  onStoreMnemonic: PropTypes.func,
+  /** Private key view popup's data set */
+  keyView: PropTypes.object,
+  /** Mnemonic data set (including original & comparison mnemonic) */
+  mnemonic: PropTypes.shape({
+    origin: PropTypes.string,
+    compare: PropTypes.arrayOf(PropTypes.string),
+  }),
+  /** Action to concatenate a word into comparison mnemonic array */
+  onAddWord: PropTypes.func,
+  /** Action to remove a word from a specific index from comparison mnemonic array */
+  onRemoveWord: PropTypes.func,
+  /** Action to reset all states */
+  onResetState: PropTypes.func,
   /** Action to set new form state */
   onSetFormState: PropTypes.func,
+  /** Action to store private key converted from generated mnemonic */
+  onSetPrivateKey: PropTypes.func,
+  /** Action to store generated mnemonic into state */
+  onStoreMnemonic: PropTypes.func,
   /** Action to toggle recovery phrase confirmation popup */
   onToggleConfirmationPopup: PropTypes.func,
+  /** Action to toggle private key view popup */
+  onToggleKeyViewPopup: PropTypes.func,
+  /** Action to show/hide private key's QR Code */
+  onToggleKeyVisible: PropTypes.func,
 };
 
 WalletCreationPage.defaultProps = {
+  confirmation: {},
   formState: 0,
-  mnemonic: '',
-  onStoreMnemonic: () => {},
+  keyView: {},
+  mnemonic: {
+    origin: '',
+    compare: [],
+  },
+  onAddWord: () => {},
+  onRemoveWord: () => {},
+  onResetState: () => {},
   onSetFormState: () => {},
+  onSetPrivateKey: () => {},
+  onStoreMnemonic: () => {},
+  onToggleConfirmationPopup: () => {},
+  onToggleKeyViewPopup: () => {},
+  onToggleKeyVisible: () => {},
 };
 // ======================
 
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
-    compare: selectCompare,
+    confirmation: selectConfirmationState,
     formState: selectFormState,
-    isConfirmed: selectIsConfirmed,
+    keyView: selectKeyViewState,
     mnemonic: selectMnemonic,
   });
 const mapDispatchToProps = dispatch => ({
   onAddWord: word => dispatch(addWord(word)),
   onRemoveWord: index => dispatch(removeWord(index)),
   onResetState: () => dispatch(resetState()),
-  onStoreMnemonic: mnemonic => dispatch(storeMnemonic(mnemonic)),
   onSetFormState: newState => dispatch(setFormState(newState)),
+  onSetPrivateKey: key => dispatch(setPrivateKey(key)),
+  onStoreMnemonic: mnemonic => dispatch(storeMnemonic(mnemonic)),
   onToggleConfirmationPopup: bool => dispatch(toggleConfirmationPopup(bool)),
+  onToggleKeyViewPopup: bool => dispatch(toggleKeyViewPopup(bool)),
+  onToggleKeyVisible: bool => dispatch(toggleKeyVisibile(bool)),
 });
 const withConnect = connect(
   mapStateToProps,

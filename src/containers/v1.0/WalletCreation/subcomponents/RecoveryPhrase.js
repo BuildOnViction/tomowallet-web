@@ -26,8 +26,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonStyler } from '../../../../styles';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
-import { MSG } from '../../../../constants';
+import { MSG, RPC_SERVER } from '../../../../constants';
 import { FORM_STATES } from '../constants';
+import { mnemonicToPrivateKey } from '../../../../utils';
 // -- TO-DO: Add style for Recovery Phrase generation page
 // ===================
 
@@ -43,6 +44,10 @@ class RecoveryPhrase extends PureComponent {
     const { storeMnemonic } = this.props;
     const newMnemonic = generateMnemonic();
     storeMnemonic(newMnemonic);
+    console.warn(
+      'after generate',
+      mnemonicToPrivateKey(newMnemonic, RPC_SERVER.TOMOCHAIN_TESTNET),
+    );
   }
 
   handleConvertMnemonic() {
@@ -55,6 +60,7 @@ class RecoveryPhrase extends PureComponent {
       intl: { formatMessage },
       setFormState,
       toggleConfirmationPopup,
+      toggleKeyViewPopup,
     } = this.props;
     const convertedMnemonic = this.handleConvertMnemonic();
     return (
@@ -101,8 +107,15 @@ class RecoveryPhrase extends PureComponent {
                     {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_SAVE)}
                   </Col>
                   <Col className='text-right'>
-                    {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_VIEW_PRIVATE_KEY)}
-                    <FontAwesomeIcon icon='arrow-right' className='ml-2' />
+                    <div
+                      role='presentation'
+                      onClick={() => toggleKeyViewPopup(true)}
+                    >
+                      {formatMessage(
+                        MSG.RECOVERY_PHRASE_BUTTON_VIEW_PRIVATE_KEY,
+                      )}
+                      <FontAwesomeIcon icon='arrow-right' className='ml-2' />
+                    </div>
                   </Col>
                 </Row>
               </Container>
@@ -147,6 +160,8 @@ RecoveryPhrase.propTypes = {
   storeMnemonic: PropTypes.func,
   /** Action to toggle recovery phrase confirmation popup */
   toggleConfirmationPopup: PropTypes.func,
+  /** Action to toggle private key view popup */
+  toggleKeyViewPopup: PropTypes.func,
 };
 
 RecoveryPhrase.defaultProps = {

@@ -10,8 +10,12 @@ import {
   REMOVE_WORD,
   RESET_STATE,
   SET_FORM_STATES,
+  SET_PRIVATE_KEY,
+  SHUFFLE_MNEMONIC,
   STORE_MNEMONIC,
   TOGGLE_CONFIRMATION_POPUP,
+  TOGGLE_KEY_VIEW_POPUP,
+  TOGGLE_KEY_VISIBLE,
 } from './constants';
 // ===================
 
@@ -35,6 +39,15 @@ export const setFormState = newState => ({
   newState,
 });
 
+export const setPrivateKey = key => ({
+  type: SET_PRIVATE_KEY,
+  key,
+});
+
+export const shuffleMnemonic = () => ({
+  type: SHUFFLE_MNEMONIC,
+});
+
 export const storeMnemonic = mnemonic => ({
   type: STORE_MNEMONIC,
   mnemonic,
@@ -42,6 +55,16 @@ export const storeMnemonic = mnemonic => ({
 
 export const toggleConfirmationPopup = bool => ({
   type: TOGGLE_CONFIRMATION_POPUP,
+  bool,
+});
+
+export const toggleKeyViewPopup = bool => ({
+  type: TOGGLE_KEY_VIEW_POPUP,
+  bool,
+});
+
+export const toggleKeyVisibile = bool => ({
+  type: TOGGLE_KEY_VISIBLE,
   bool,
 });
 // ===================

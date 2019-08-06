@@ -24,14 +24,19 @@ const selectMnemonic = createDeepEqualSelector(
   selectWalletCreationDomain,
   obj => obj.toJS().mnemonic,
 );
-const selectIsConfirmed = createDeepEqualSelector(
+const selectConfirmationState = createDeepEqualSelector(
   selectWalletCreationDomain,
-  obj => obj.toJS().isConfirmed,
+  obj => obj.toJS().confirmation,
 );
-const selectCompare = createDeepEqualSelector(
+const selectKeyViewState = createDeepEqualSelector(
   selectWalletCreationDomain,
-  obj => obj.toJS().compare,
+  obj => obj.toJS().keyView,
 );
 // =====================
 
-export { selectCompare, selectFormState, selectIsConfirmed, selectMnemonic };
+export {
+  selectConfirmationState,
+  selectFormState,
+  selectKeyViewState,
+  selectMnemonic,
+};

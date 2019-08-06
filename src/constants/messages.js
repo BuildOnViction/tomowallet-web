@@ -32,6 +32,10 @@ export default defineMessages({
     id: `${buttonPrefix}.next`,
     defaultMessage: 'Next',
   },
+  COMMON_BUTTON_SAVE: {
+    id: `${buttonPrefix}.save`,
+    defaultMessage: 'Save',
+  },
   // Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {
     id: `${navbarPrefix}.logo.alt`,
@@ -159,6 +163,23 @@ export default defineMessages({
   RECOVERY_PHRASE_POPUP_CONFIRMATION_CONTENT: {
     id: `${recoveryPhrasePrefix}.popup.confirmation.content`,
     defaultMessage: 'Are you sure you have noted down your Recovery Phrase?',
+  },
+  RECOVERY_PHRASE_POPUP_KEY_VIEW_HEADER: {
+    id: `${recoveryPhrasePrefix}.popup.keyview.header`,
+    defaultMessage: 'Private Key',
+  },
+  RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TITLE: {
+    id: `${recoveryPhrasePrefix}.popup.keyview.content.title`,
+    defaultMessage: 'Your private key',
+  },
+  RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TEXT: {
+    id: `${recoveryPhrasePrefix}.popup.keyview.content.text`,
+    defaultMessage:
+      'Back up the text below on paper and keep it somewhere secret and save.',
+  },
+  RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_QRCODE_ALT: {
+    id: `${recoveryPhrasePrefix}.popup.keyview.content.qrcode.alt`,
+    defaultMessage: 'Click here to view QR Code. Make sure no one is looking!',
   },
 });
 // ====================

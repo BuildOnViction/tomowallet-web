@@ -36,16 +36,34 @@ const Content = ({ formatMessage }) => (
 
 // ===== MAIN COMPONENT =====
 class ConfirmationPopup extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleClosePopup = this.handleClosePopup.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+  }
+
+  handleClosePopup() {
+    const { togglePopup } = this.props;
+    togglePopup(false);
+  }
+
+  handleNext() {
+    const { setFormState, togglePopup } = this.props;
+    togglePopup(false);
+    setFormState(FORM_STATES.VERIFICATION);
+  }
+
   render() {
     const {
+      confirmation,
       intl: { formatMessage },
-      isOpen,
-      setFormState,
-      toggleConfirmationPopup,
     } = this.props;
     return (
       <Popup
-        isOpen={isOpen}
+        isOpen={confirmation.isOpen}
+        toggle={this.handleClosePopup}
+        title={formatMessage(MSG.RECOVERY_PHRASE_POPUP_CONFIRMATION_HEADER)}
         Content={Content}
         getContentProps={{
           formatMessage,
@@ -53,11 +71,11 @@ class ConfirmationPopup extends PureComponent {
         button={{
           primary: {
             label: formatMessage(MSG.COMMON_BUTTON_NEXT),
-            action: () => setFormState(FORM_STATES.VERIFICATION),
+            action: this.handleNext,
           },
           secondary: {
             label: formatMessage(MSG.COMMON_BUTTON_BACK),
-            action: () => toggleConfirmationPopup(false),
+            action: this.handleClosePopup,
           },
         }}
       />
@@ -68,14 +86,21 @@ class ConfirmationPopup extends PureComponent {
 
 // ===== PROP TYPES =====
 ConfirmationPopup.propTypes = {
+  /** Popup's data set */
+  confirmation: PropTypes.bool,
   /** React Intl's instance object */
   intl: PropTypes.object,
-  /** Condition flag to show/hide popup */
-  isOpen: PropTypes.bool,
   /** Action to update wallet creation form state */
   setFormState: PropTypes.func,
   /** Action to toggle recovery phrase confirmation popup */
-  toggleConfirmationPopup: PropTypes.func,
+  togglePopup: PropTypes.func,
+};
+
+ConfirmationPopup.defaultProps = {
+  confirmation: {},
+  intl: {},
+  setFormState: () => {},
+  togglePopup: () => {},
 };
 // ======================
 
