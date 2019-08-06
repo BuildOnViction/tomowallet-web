@@ -62,6 +62,7 @@ class WelcomePage extends PureComponent {
               <Row>
                 <Col xs={12} sm={12} md={12} lg={8}>
                   <BigButtonStyler
+                    btnBlue
                     onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
                   >
                     {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
