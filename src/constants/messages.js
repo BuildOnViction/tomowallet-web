@@ -20,12 +20,17 @@ const navbarPrefix = `${componentPrefix}.navbar`;
 const welcomePagePrefix = `${containerPrefix}.welcome`;
 const createWalletPagePrefix = `${containerPrefix}.createwallet`;
 const warningPagePrefix = `${createWalletPagePrefix}.warning`;
+const recoveryPhrasePrefix = `${createWalletPagePrefix}.recoveryphrase`;
 
 export default defineMessages({
-  // Common
+  // Common - Button
   COMMON_BUTTON_BACK: {
     id: `${buttonPrefix}.back`,
     defaultMessage: 'Back',
+  },
+  COMMON_BUTTON_NEXT: {
+    id: `${buttonPrefix}.next`,
+    defaultMessage: 'Next',
   },
   // Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {
@@ -116,6 +121,44 @@ export default defineMessages({
   WARNING_BUTTON_NEXT_TO_RECOVERY_PHRASE: {
     id: `${warningPagePrefix}.button.nexttorecoveryphrase`,
     defaultMessage: 'Next to Recovery Phrase',
+  },
+  // Create Wallet - Recovery Phrase Page
+  RECOVERY_PHRASE_TITLE: {
+    id: `${recoveryPhrasePrefix}.title`,
+    defaultMessage: 'Recovery Phrase',
+  },
+  RECOVERY_PHRASE_NOTIFICATION_TITLE: {
+    id: `${recoveryPhrasePrefix}.notification.title`,
+    defaultMessage: 'Please back up recovery phrase',
+  },
+  RECOVERY_PHRASE_NOTIFICATION_DESCRIPTION: {
+    id: `${recoveryPhrasePrefix}.notification.description`,
+    defaultMessage:
+      'Back up the text below on paper and keep it somewhere secret and save.',
+  },
+  RECOVERY_PHRASE_BUTTON_SAVE: {
+    id: `${recoveryPhrasePrefix}.button.save`,
+    defaultMessage: 'Save Recovery Phrase',
+  },
+  RECOVERY_PHRASE_BUTTON_VIEW_PRIVATE_KEY: {
+    id: `${recoveryPhrasePrefix}.button.view.privatekey`,
+    defaultMessage: 'View my private key',
+  },
+  RECOVERY_PHRASE_BUTTON_CONFIRMATION: {
+    id: `${recoveryPhrasePrefix}.button.confirmation`,
+    defaultMessage: 'I Wrote My Recovery Phrase',
+  },
+  RECOVERY_PHRASE_POPUP_CONFIRMATION_IMAGE_ALT: {
+    id: `${recoveryPhrasePrefix}.popup.confirmation.image.alt`,
+    defaultMessage: 'Did you note down?',
+  },
+  RECOVERY_PHRASE_POPUP_CONFIRMATION_HEADER: {
+    id: `${recoveryPhrasePrefix}.popup.confirmation.header`,
+    defaultMessage: 'Recovery Phrase?',
+  },
+  RECOVERY_PHRASE_POPUP_CONFIRMATION_CONTENT: {
+    id: `${recoveryPhrasePrefix}.popup.confirmation.content`,
+    defaultMessage: 'Are you sure you have noted down your Recovery Phrase?',
   },
 });
 // ====================

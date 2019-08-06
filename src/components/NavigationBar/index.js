@@ -132,7 +132,7 @@ class NavigationBar extends PureComponent {
 
   handleRedirectToHomepage() {
     const { history } = this.props;
-    history.push(ROUTE.HOMEPAGE);
+    history.push(ROUTE.LOGIN);
   }
 
   handleToggleOptions() {
