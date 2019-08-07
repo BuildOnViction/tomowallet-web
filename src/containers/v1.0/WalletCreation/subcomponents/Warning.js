@@ -10,7 +10,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
   Card,
@@ -23,7 +22,6 @@ import {
   Container,
   Row,
   Col,
-  NavLink,
 } from 'reactstrap';
 // Custom Components
 // -- TO-DO: Update style for button & error text in the following styled components:
@@ -32,6 +30,7 @@ import { ButtonStyler } from '../../../../styles';
 import { FORM_STATES } from '../constants';
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../../constants';
+// -- TO-DO: Add style for Warning page
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -66,19 +65,19 @@ class Warning extends PureComponent {
                 <CardTitle>{formatMessage(MSG.WARNING_HEADER_TITLE)}</CardTitle>
                 <CardText>
                   {`${formatMessage(MSG.WARNING_HEADER_ALTERNATIVE_TEXT)} `}
-                  <div
+                  <span
                     role='presentation'
                     onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
                     className='d-inline-block'
                   >
                     {formatMessage(MSG.WARNING_HEADER_ALTERNATIVE_LINK)}
-                  </div>
+                  </span>
                 </CardText>
               </CardHeader>
               {/* -- TO-DO: Add warning image's source */}
-              <div className='full-width text-center'>
+              <span className='d-block full-width text-center'>
                 <CardImg src='' alt={formatMessage(MSG.WARNING_IMAGE_ALT)} />
-              </div>
+              </span>
               <CardBody>
                 <CardTitle>
                   {formatMessage(MSG.WARNING_CONTENT_TITLE)}
