@@ -17,7 +17,7 @@ const DropdownToggleHeader = styled(DropdownToggle)`
 `;
 
 const NavBarStyler = styled(Navbar)`
-  padding: 20px;
+  padding: 15px 0;
   width: 100%;
   text-align: center;
   .navbar-brand {

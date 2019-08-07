@@ -54,38 +54,36 @@ class Footer extends PureComponent {
 
   render() {
     return (
-      <Container fluid>
-        <Row className='align-items-center pt-5'>
-          <Col xs={12} md={7}>
-            <div>TomoWallet 2019 - v1.0</div>
-            <Row>
-              <Nav>
-                <NavItem>
-                  <LinkFooter href="#">Need help?</LinkFooter>
-                </NavItem>
-                <NavItem>
-                  <LinkFooter href="#">Privacy Policy</LinkFooter>
-                </NavItem>
-                <NavItem>
-                  <LinkFooter href="#">Terms of Service</LinkFooter>
-                </NavItem>
-                <NavItem>
-                  <LinkFooter disabled href="#">API Documentation</LinkFooter>
-                </NavItem>
-              </Nav>
-            </Row>
-          </Col>
-          <Col xs={12} md={5}>
-            <Nav className="footer-buttons">
-              {FooterButtons.map(item => (
-                <NavItem>
-                  <LinkFooter href="{item.link}" target="_blank"><i className={item.className} /></LinkFooter>
-                </NavItem>
-              ))}
+      <Row className='align-items-center pt-3 pb-3'>
+        <Col xs={12} md={7}>
+          <div>TomoWallet 2019 - v1.0</div>
+          <Row>
+            <Nav>
+              <NavItem>
+                <LinkFooter href="#">Need help?</LinkFooter>
+              </NavItem>
+              <NavItem>
+                <LinkFooter href="#">Privacy Policy</LinkFooter>
+              </NavItem>
+              <NavItem>
+                <LinkFooter href="#">Terms of Service</LinkFooter>
+              </NavItem>
+              <NavItem>
+                <LinkFooter disabled href="#">API Documentation</LinkFooter>
+              </NavItem>
             </Nav>
-          </Col>
-        </Row>
-      </Container>
+          </Row>
+        </Col>
+        <Col xs={12} md={5}>
+          <Nav className="footer-buttons">
+            {FooterButtons.map(item => (
+              <NavItem>
+                <LinkFooter href="{item.link}" target="_blank"><i className={item.className} /></LinkFooter>
+              </NavItem>
+            ))}
+          </Nav>
+        </Col>
+      </Row>
     );
   }
 }
