@@ -49,11 +49,21 @@ const generateWeb3 = (
   } catch (error) {
     callback(error);
     return null;
-  } finally {
-    if (provider) {
-      provider.engine.stop();
-    }
   }
+};
+
+/**
+ * getWalletInfo
+ *
+ * Retrieve some wallet's basic information from a Web3 object
+ * @param {Web3} web3 A Web3 object having provider
+ */
+const getWalletInfo = web3 => {
+  if (web3) {
+    const address = web3.currentProvider.addresses[0];
+    return web3.eth.getBalance(address).then(console.error);
+  }
+  return 'Ulala';
 };
 
 /**
@@ -74,4 +84,4 @@ const decryptWalletInfo = (web3, rawInfo) => {
 };
 // ===================
 
-export { mnemonicToPrivateKey, generateWeb3, decryptWalletInfo };
+export { mnemonicToPrivateKey, generateWeb3, decryptWalletInfo, getWalletInfo };

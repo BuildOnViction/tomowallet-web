@@ -19,6 +19,7 @@ import { Container, Row, Col } from 'reactstrap';
 import Warning from './subcomponents/Warning';
 import RecoveryPhrase from './subcomponents/RecoveryPhrase';
 import Verification from './subcomponents/Verification';
+import SuccessNotification from './subcomponents/Success';
 import ConfirmationPopup from './subcomponents/popups/ConfirmationPopup';
 import KeyViewPopup from './subcomponents/popups/KeyViewPopup';
 // Utilities
@@ -45,7 +46,7 @@ import {
 import reducer from './reducer';
 import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
-import { injectReducer, generateWeb3 } from '../../../utils';
+import { injectReducer, generateWeb3, getWalletInfo } from '../../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG } from '../../../constants';
 import { storeWallet } from '../../Global/actions';
@@ -55,6 +56,10 @@ import { storeWallet } from '../../Global/actions';
 class WalletCreationPage extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      test: '',
+    };
 
     this.handleVerifyMnemonic = this.handleVerifyMnemonic.bind(this);
   }
@@ -77,18 +82,27 @@ class WalletCreationPage extends PureComponent {
     } = this.props;
 
     if (
-      _isEqual(
-        _get(mnemonic, 'origin'),
-        _get(mnemonic, 'compare', []).join(' '),
-      )
+      // _isEqual(
+      //   _get(mnemonic, 'origin'),
+      //   _get(mnemonic, 'compare', []).join(' '),
+      // )
+      true
     ) {
       const newWeb3 = generateWeb3(_get(mnemonic, 'origin'), rpcServer);
-      const newWalletInfo = newWeb3.eth.accounts.wallet.encrypt(
-        process.env.REACT_APP_WALLET_ENCRYPT_PASSWORD,
-      );
-      Promise.all([onStoreWallet(newWalletInfo), updateWeb3(newWeb3)]).then(
-        () => onSetFormState(FORM_STATES.SUCCESS),
-      );
+      const address = newWeb3.currentProvider.addresses[0];
+
+      console.warn('getBalance', newWeb3, address);
+
+      newWeb3.eth.getBalance(address, console.error);
+
+      Promise.all([getWalletInfo(newWeb3)]).then(result => {
+        console.warn('result', result);
+      });
+      // getWalletInfo(newWeb3).then(newWalletInfo =>
+      //   Promise.all([onStoreWallet(newWalletInfo), updateWeb3(newWeb3)]).then(
+      //     () => onSetFormState(FORM_STATES.SUCCESS),
+      //   ),
+      // );
     } else {
       onUpdateErrors([formatMessage(MSG.VERIFICATION_ERROR_VERIFY_FAILED)]);
       onClearComparison();
@@ -113,6 +127,7 @@ class WalletCreationPage extends PureComponent {
       onToggleKeyVisible,
       onUpdateErrors,
     } = this.props;
+    console.warn('render', this.state);
 
     return (
       <Container fluid>
@@ -149,7 +164,8 @@ class WalletCreationPage extends PureComponent {
                   updateErrors={onUpdateErrors}
                   verifyMnemonic={this.handleVerifyMnemonic}
                 />
-              ))}
+              )) ||
+              (formState === FORM_STATES.SUCCESS && <SuccessNotification />)}
             <ConfirmationPopup
               confirmation={confirmation}
               setFormState={onSetFormState}

@@ -6,6 +6,7 @@ import {
   mnemonicToPrivateKey,
   generateWeb3,
   decryptWalletInfo,
+  getWalletInfo,
 } from './blockchain';
 
 export {
@@ -16,4 +17,5 @@ export {
   mnemonicToPrivateKey,
   generateWeb3,
   decryptWalletInfo,
+  getWalletInfo,
 };

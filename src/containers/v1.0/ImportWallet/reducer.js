@@ -18,7 +18,6 @@ const initialState = fromJS({
   importWallet: {
     errors: [],
     input: {},
-    isLocked: true,
     type: IMPORT_TYPES.RP_OR_PK,
   },
 });

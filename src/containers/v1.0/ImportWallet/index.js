@@ -38,8 +38,8 @@ import {
   updateInput,
 } from './actions';
 import reducer from './reducer';
-import { ROUTE, RPC_SERVER, MSG } from '../../../constants';
-import { injectReducer } from '../../../utils';
+import { ROUTE, MSG } from '../../../constants';
+import { injectReducer, generateWeb3 } from '../../../utils';
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
 // -- TO-DO: Add style for Import Wallet page
@@ -71,19 +71,10 @@ class ImportWallet extends PureComponent {
 
   handleAccessWallet() {
     const { web3, importWallet, onUpdateErrors, rpcServer } = this.props;
-    const { host, hdPath } = rpcServer;
     const inputText = _get(importWallet, 'input.textValue', '');
-    
+
     if (web3.utils.isHex(inputText) || inputText.split(' ').length === 12) {
-      const provider = new HDWalletProvider(
-        inputText,
-        host,
-        0,
-        1,
-        true,
-        hdPath,
-      );
-      web3.setProvider(provider);
+      const newWeb3 = generateWeb3(inputText, rpcServer);
       console.warn('Import wallet', provider, web3);
     } else {
       onUpdateErrors(['Invalid recovery phrase/private key.']);
