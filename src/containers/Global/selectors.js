@@ -2,13 +2,13 @@ import { createDeepEqualSelector } from '../../utils';
 
 const selectGlobalDomain = state => state.global;
 
-const selectAccount = createDeepEqualSelector(
+const selectWallet = createDeepEqualSelector(
   selectGlobalDomain,
-  obj => obj.toJS().account,
+  obj => obj.toJS().wallet,
 );
 const selectLanguage = createDeepEqualSelector(
   selectGlobalDomain,
   obj => obj.toJS().language,
 );
 
-export { selectAccount, selectLanguage };
+export { selectWallet, selectLanguage };

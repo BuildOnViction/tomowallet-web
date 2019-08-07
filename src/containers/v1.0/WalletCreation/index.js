@@ -7,12 +7,14 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
-import { get as _get } from 'lodash';
+import { get as _get, isEqual as _isEqual } from 'lodash';
+import { Container, Row, Col } from 'reactstrap';
 // Custom Component
 import Warning from './subcomponents/Warning';
 import RecoveryPhrase from './subcomponents/RecoveryPhrase';
@@ -38,17 +40,59 @@ import {
   toggleKeyViewPopup,
   toggleKeyVisibile,
   updateErrors,
+  clearComparisonMnemonic,
 } from './actions';
 import reducer from './reducer';
-import { injectReducer } from '../../../utils';
+import { withIntl } from '../../../components/IntlProvider';
+import { withWeb3 } from '../../../components/Web3';
+import { injectReducer, generateWeb3 } from '../../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
+import { MSG } from '../../../constants';
+import { storeWallet } from '../../Global/actions';
 // ===================
 
 // ===== MAIN COMPONENT =====
 class WalletCreationPage extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleVerifyMnemonic = this.handleVerifyMnemonic.bind(this);
+  }
+
   componentWillUnmount() {
     const { onResetState } = this.props;
     onResetState();
+  }
+
+  handleVerifyMnemonic() {
+    const {
+      intl: { formatMessage },
+      mnemonic,
+      onClearComparison,
+      onSetFormState,
+      onStoreWallet,
+      onUpdateErrors,
+      rpcServer,
+      updateWeb3,
+    } = this.props;
+
+    if (
+      _isEqual(
+        _get(mnemonic, 'origin'),
+        _get(mnemonic, 'compare', []).join(' '),
+      )
+    ) {
+      const newWeb3 = generateWeb3(_get(mnemonic, 'origin'), rpcServer);
+      const newWalletInfo = newWeb3.eth.accounts.wallet.encrypt(
+        process.env.REACT_APP_WALLET_ENCRYPT_PASSWORD,
+      );
+      Promise.all([onStoreWallet(newWalletInfo), updateWeb3(newWeb3)]).then(
+        () => onSetFormState(FORM_STATES.SUCCESS),
+      );
+    } else {
+      onUpdateErrors([formatMessage(MSG.VERIFICATION_ERROR_VERIFY_FAILED)]);
+      onClearComparison();
+    }
   }
 
   render() {
@@ -59,6 +103,7 @@ class WalletCreationPage extends PureComponent {
       keyView,
       mnemonic,
       onAddWord,
+      onClearComparison,
       onRemoveWord,
       onSetFormState,
       onSetPrivateKey,
@@ -70,41 +115,54 @@ class WalletCreationPage extends PureComponent {
     } = this.props;
 
     return (
-      <Fragment>
-        {(formState === FORM_STATES.WARNING && (
-          <Warning setFormState={onSetFormState} />
-        )) ||
-          (formState === FORM_STATES.RECOVERY_PHRASE && (
-            <RecoveryPhrase
-              mnemonic={_get(mnemonic, 'origin')}
+      <Container fluid>
+        <Row noGutters>
+          <Col
+            xs={12}
+            sm={12}
+            md={{ size: 10, offset: 1 }}
+            lg={{ size: 6, offset: 3 }}
+          >
+            {(formState === FORM_STATES.WARNING && (
+              <Warning
+                setFormState={onSetFormState}
+                setPrivateKey={onSetPrivateKey}
+                storeMnemonic={onStoreMnemonic}
+              />
+            )) ||
+              (formState === FORM_STATES.RECOVERY_PHRASE && (
+                <RecoveryPhrase
+                  mnemonic={_get(mnemonic, 'origin')}
+                  setFormState={onSetFormState}
+                  toggleKeyViewPopup={onToggleKeyViewPopup}
+                  toggleConfirmationPopup={onToggleConfirmationPopup}
+                />
+              )) ||
+              (formState === FORM_STATES.VERIFICATION && (
+                <Verification
+                  addWord={onAddWord}
+                  clearComparison={onClearComparison}
+                  errors={errors}
+                  mnemonic={mnemonic}
+                  removeWord={onRemoveWord}
+                  setFormState={onSetFormState}
+                  updateErrors={onUpdateErrors}
+                  verifyMnemonic={this.handleVerifyMnemonic}
+                />
+              ))}
+            <ConfirmationPopup
+              confirmation={confirmation}
               setFormState={onSetFormState}
-              setPrivateKey={onSetPrivateKey}
-              storeMnemonic={onStoreMnemonic}
-              toggleKeyViewPopup={onToggleKeyViewPopup}
-              toggleConfirmationPopup={onToggleConfirmationPopup}
+              togglePopup={onToggleConfirmationPopup}
             />
-          )) ||
-          (formState === FORM_STATES.VERIFICATION && (
-            <Verification
-              addWord={onAddWord}
-              errors={errors}
-              mnemonic={mnemonic}
-              removeWord={onRemoveWord}
-              setFormState={onSetFormState}
-              updateErrors={onUpdateErrors}
+            <KeyViewPopup
+              keyView={keyView}
+              toggleKeyVisibile={onToggleKeyVisible}
+              togglePopup={onToggleKeyViewPopup}
             />
-          ))}
-        <ConfirmationPopup
-          confirmation={confirmation}
-          setFormState={onSetFormState}
-          togglePopup={onToggleConfirmationPopup}
-        />
-        <KeyViewPopup
-          keyView={keyView}
-          toggleKeyVisibile={onToggleKeyVisible}
-          togglePopup={onToggleKeyViewPopup}
-        />
-      </Fragment>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
@@ -118,6 +176,10 @@ WalletCreationPage.propTypes = {
   errors: PropTypes.arrayOf(PropTypes.string),
   /** Current form state */
   formState: PropTypes.number,
+  /** React Router's API object */
+  history: PropTypes.object,
+  /** React Intl's instance object */
+  intl: PropTypes.object,
   /** Private key view popup's data set */
   keyView: PropTypes.object,
   /** Mnemonic data set (including original & comparison mnemonic) */
@@ -127,6 +189,8 @@ WalletCreationPage.propTypes = {
   }),
   /** Action to concatenate a word into comparison mnemonic array */
   onAddWord: PropTypes.func,
+  /** Action to clear comparison mnemonic array for verification retry */
+  onClearComparison: PropTypes.func,
   /** Action to remove a word from a specific index from comparison mnemonic array */
   onRemoveWord: PropTypes.func,
   /** Action to reset all states */
@@ -137,6 +201,8 @@ WalletCreationPage.propTypes = {
   onSetPrivateKey: PropTypes.func,
   /** Action to store generated mnemonic into state */
   onStoreMnemonic: PropTypes.func,
+  /** Action to store new wallet data */
+  onStoreWallet: PropTypes.func,
   /** Action to toggle recovery phrase confirmation popup */
   onToggleConfirmationPopup: PropTypes.func,
   /** Action to toggle private key view popup */
@@ -145,9 +211,15 @@ WalletCreationPage.propTypes = {
   onToggleKeyVisible: PropTypes.func,
   /** Action to update error message list */
   onUpdateErrors: PropTypes.func,
+  /** Current RPC server configuration */
+  rpcServer: PropTypes.object,
+  /** Action to set new Web3 object into context */
+  updateWeb3: PropTypes.func,
 };
 
 WalletCreationPage.defaultProps = {
+  history: {},
+  intl: {},
   confirmation: {},
   errors: [],
   formState: 0,
@@ -157,15 +229,19 @@ WalletCreationPage.defaultProps = {
     compare: [],
   },
   onAddWord: () => {},
+  onClearComparison: () => {},
   onRemoveWord: () => {},
   onResetState: () => {},
   onSetFormState: () => {},
   onSetPrivateKey: () => {},
   onStoreMnemonic: () => {},
+  onStoreWallet: () => {},
   onToggleConfirmationPopup: () => {},
   onToggleKeyViewPopup: () => {},
   onToggleKeyVisible: () => {},
   onUpdateErrors: () => {},
+  rpcServer: {},
+  updateWeb3: () => {},
 };
 // ======================
 
@@ -180,11 +256,13 @@ const mapStateToProps = () =>
   });
 const mapDispatchToProps = dispatch => ({
   onAddWord: word => dispatch(addWord(word)),
+  onClearComparison: () => dispatch(clearComparisonMnemonic()),
   onRemoveWord: index => dispatch(removeWord(index)),
   onResetState: () => dispatch(resetState()),
   onSetFormState: newState => dispatch(setFormState(newState)),
   onSetPrivateKey: key => dispatch(setPrivateKey(key)),
   onStoreMnemonic: mnemonic => dispatch(storeMnemonic(mnemonic)),
+  onStoreWallet: wallet => dispatch(storeWallet(wallet)),
   onToggleConfirmationPopup: bool => dispatch(toggleConfirmationPopup(bool)),
   onToggleKeyViewPopup: bool => dispatch(toggleKeyViewPopup(bool)),
   onToggleKeyVisible: bool => dispatch(toggleKeyVisibile(bool)),
@@ -200,4 +278,7 @@ const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 export default compose(
   withConnect,
   withReducer,
+  withIntl,
+  withWeb3,
+  withRouter,
 )(WalletCreationPage);

@@ -1,24 +1,19 @@
 import {
-  STORE_ACCOUNT_INFO,
-  RELEASE_ACCOUNT_INFO,
+  STORE_WALLET_INFO,
+  RELEASE_WALLET_INFO,
   SET_LANGUAGE,
-  RESET_GLOBAL_STATE,
 } from './constants';
 
-export const storeAccount = data => ({
-  type: STORE_ACCOUNT_INFO,
+export const storeWallet = data => ({
+  type: STORE_WALLET_INFO,
   data,
 });
 
-export const releaseAccount = () => ({
-  type: RELEASE_ACCOUNT_INFO,
+export const releaseWallet = () => ({
+  type: RELEASE_WALLET_INFO,
 });
 
 export const setLanguage = language => ({
   type: SET_LANGUAGE,
   language,
-});
-
-export const resetState = () => ({
-  type: RESET_GLOBAL_STATE,
 });

@@ -22,6 +22,8 @@ const createWalletPagePrefix = `${containerPrefix}.createwallet`;
 const warningPagePrefix = `${createWalletPagePrefix}.warning`;
 const recoveryPhrasePrefix = `${createWalletPagePrefix}.recoveryphrase`;
 const verificationPrefix = `${createWalletPagePrefix}.verification`;
+const successNotificationPrefix = `${createWalletPagePrefix}.successnotification`;
+const importWalletPagePrefix = `${containerPrefix}.importwallet`;
 
 export default defineMessages({
   // Common - Button
@@ -36,6 +38,10 @@ export default defineMessages({
   COMMON_BUTTON_SAVE: {
     id: `${buttonPrefix}.save`,
     defaultMessage: 'Save',
+  },
+  COMMON_BUTTON_IMPORT: {
+    id: `${buttonPrefix}.import`,
+    defaultMessage: 'Import',
   },
   // Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {
@@ -187,6 +193,73 @@ export default defineMessages({
   VERIFICATION_TITLE: {
     id: `${verificationPrefix}.title`,
     defaultMessage: 'Verification',
+  },
+  VERIFICATION_DESCRIPTION: {
+    id: `${verificationPrefix}.description`,
+    defaultMessage:
+      'Verify your Recovery Phrase. Choose each word in the correct order',
+  },
+  VERIFICATION_BUTTON_VERIFY: {
+    id: `${verificationPrefix}.button.verify`,
+    defaultMessage: 'Verify',
+  },
+  VERIFICATION_ERROR_VERIFY_FAILED: {
+    id: `${verificationPrefix}.error.verify.failed`,
+    defaultMessage: 'Incorrect recovery phrase order.',
+  },
+  // Create Wallet - Success Notification Page
+  SUCCESS_NOTIFICATION_IMAGE_ALT: {
+    id: `${successNotificationPrefix}.image.alt`,
+    defaultMessage: 'Success!',
+  },
+  SUCCESS_NOTIFICATION_CONTENT_TITLE: {
+    id: `${successNotificationPrefix}.content.title`,
+    defaultMessage: 'Successful',
+  },
+  SUCCESS_NOTIFICATION_CONTENT_DESCRIPTION: {
+    id: `${successNotificationPrefix}.content.description`,
+    defaultMessage: "You've created your new wallet successfully",
+  },
+  SUCCESS_NOTIFICATION_BUTTON_ACCESS_WALLET: {
+    id: `${successNotificationPrefix}.button.accesswallet`,
+    defaultMessage: 'Access your wallet now',
+  },
+  // Import Wallet Page
+  IMPORT_WALLET_HEADER_TITLE: {
+    id: `${importWalletPagePrefix}.header.title`,
+    defaultMessage: ' Import Your Wallet',
+  },
+  IMPORT_WALLET_ALTERNATIVE_TEXT: {
+    id: `${importWalletPagePrefix}.alternative.text`,
+    defaultMessage: 'Do not have a wallet?',
+  },
+  IMPORT_WALLET_ALTERNATIVE_LINK: {
+    id: `${importWalletPagePrefix}.alternative.link`,
+    defaultMessage: 'Create a new wallet',
+  },
+  IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT: {
+    id: `${importWalletPagePrefix}.tab.ledger.image.alt`,
+    defaultMessage: 'Ledger',
+  },
+  IMPORT_WALLET_TAB_LEDGER_TEXT: {
+    id: `${importWalletPagePrefix}.tab.ledger.text`,
+    defaultMessage: 'Ledger Wallet',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.text`,
+    defaultMessage: 'Recovery Phrase/ Private Key',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_LABEL: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.input.label`,
+    defaultMessage: 'Enter your Recovery Phrase or Private Key',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_PLACEHOLDER: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.input.placeholder`,
+    defaultMessage: 'Enter your Recovery Phrase or Private Key...',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_OPTION_IMPORT_VIA_QRCODE: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.option.importviaqrcode`,
+    defaultMessage: 'Import Private Key via QR code',
   },
 });
 // ====================

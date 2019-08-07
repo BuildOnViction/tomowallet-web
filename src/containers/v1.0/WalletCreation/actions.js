@@ -7,6 +7,7 @@
 // Constants
 import {
   ADD_WORD,
+  CLEAR_COMPARISON,
   REMOVE_WORD,
   RESET_STATE,
   SET_FORM_STATES,
@@ -24,6 +25,10 @@ import {
 export const addWord = word => ({
   type: ADD_WORD,
   word,
+});
+
+export const clearComparisonMnemonic = () => ({
+  type: CLEAR_COMPARISON,
 });
 
 export const removeWord = index => ({

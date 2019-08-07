@@ -9,6 +9,7 @@ import { fromJS } from 'immutable';
 // Utilities & Constants
 import {
   ADD_WORD,
+  CLEAR_COMPARISON,
   REMOVE_WORD,
   FORM_STATES,
   RESET_STATE,
@@ -38,7 +39,6 @@ const initialState = fromJS({
   },
   mnemonic: {
     origin: '',
-    shuffled: [],
     compare: [],
   },
 });
@@ -51,6 +51,8 @@ export default (state = initialState, action) => {
       return state.updateIn(['mnemonic', 'compare'], words =>
         words.concat(action.word),
       );
+    case CLEAR_COMPARISON:
+      return state.setIn(['mnemonic', 'compare'], []);
     case REMOVE_WORD:
       return state.updateIn(['mnemonic', 'compare'], words =>
         words.filter((_, index) => index !== action.index),

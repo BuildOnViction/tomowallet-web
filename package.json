@@ -64,6 +64,7 @@
     "babel-loader": "^8.0.6",
     "child_process": "^1.0.2",
     "css-loader": "^3.2.0",
+    "dotenv": "^8.0.0",
     "file-loader": "^4.1.0",
     "fs": "0.0.1-security",
     "html-loader": "^0.5.5",

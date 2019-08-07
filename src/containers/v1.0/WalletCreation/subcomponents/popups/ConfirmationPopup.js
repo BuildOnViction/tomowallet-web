@@ -87,7 +87,7 @@ class ConfirmationPopup extends PureComponent {
 // ===== PROP TYPES =====
 ConfirmationPopup.propTypes = {
   /** Popup's data set */
-  confirmation: PropTypes.bool,
+  confirmation: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Action to update wallet creation form state */
