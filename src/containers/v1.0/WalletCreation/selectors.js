@@ -16,26 +16,31 @@ import { DOMAIN_KEY } from './constants';
 const selectWalletCreationDomain = state =>
   _get(state, [DOMAIN_KEY], fromJS({}));
 
-const selectFormState = createDeepEqualSelector(
-  selectWalletCreationDomain,
-  obj => obj.toJS().formState,
-);
-const selectMnemonic = createDeepEqualSelector(
-  selectWalletCreationDomain,
-  obj => obj.toJS().mnemonic,
-);
 const selectConfirmationState = createDeepEqualSelector(
   selectWalletCreationDomain,
   obj => obj.toJS().confirmation,
+);
+const selectErrors = createDeepEqualSelector(
+  selectWalletCreationDomain,
+  obj => obj.toJS().errors,
+);
+const selectFormState = createDeepEqualSelector(
+  selectWalletCreationDomain,
+  obj => obj.toJS().formState,
 );
 const selectKeyViewState = createDeepEqualSelector(
   selectWalletCreationDomain,
   obj => obj.toJS().keyView,
 );
+const selectMnemonic = createDeepEqualSelector(
+  selectWalletCreationDomain,
+  obj => obj.toJS().mnemonic,
+);
 // =====================
 
 export {
   selectConfirmationState,
+  selectErrors,
   selectFormState,
   selectKeyViewState,
   selectMnemonic,

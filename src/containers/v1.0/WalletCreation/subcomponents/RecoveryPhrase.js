@@ -8,6 +8,7 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { generateMnemonic } from 'bip39';
 import {
   Container,
@@ -26,7 +27,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonStyler } from '../../../../styles';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
-import { MSG, RPC_SERVER } from '../../../../constants';
+import { withWeb3 } from '../../../../components/Web3';
+import { MSG } from '../../../../constants';
 import { FORM_STATES } from '../constants';
 import { mnemonicToPrivateKey } from '../../../../utils';
 // -- TO-DO: Add style for Recovery Phrase generation page
@@ -41,13 +43,10 @@ class RecoveryPhrase extends PureComponent {
   }
 
   componentDidMount() {
-    const { storeMnemonic } = this.props;
+    const { storeMnemonic, rpcServer, setPrivateKey } = this.props;
     const newMnemonic = generateMnemonic();
     storeMnemonic(newMnemonic);
-    console.warn(
-      'after generate',
-      mnemonicToPrivateKey(newMnemonic, RPC_SERVER.TOMOCHAIN_TESTNET),
-    );
+    setPrivateKey(mnemonicToPrivateKey(newMnemonic, rpcServer));
   }
 
   handleConvertMnemonic() {
@@ -154,8 +153,12 @@ RecoveryPhrase.propTypes = {
   intl: PropTypes.object,
   /** Recovery phrase string (12 words) */
   mnemonic: PropTypes.string,
+  /** Current RPC server configuration */
+  rpcServer: PropTypes.object,
   /** Action to update Recovery Phrase form state */
   setFormState: PropTypes.func,
+  /** Action to store private key */
+  setPrivateKey: PropTypes.func,
   /** Action to store mnemonic into state */
   storeMnemonic: PropTypes.func,
   /** Action to toggle recovery phrase confirmation popup */
@@ -167,9 +170,13 @@ RecoveryPhrase.propTypes = {
 RecoveryPhrase.defaultProps = {
   intl: {},
   mnemonic: '',
+  rpcServer: {},
   storeMnemonic: () => {},
   toggleConfirmationPopup: () => {},
 };
 // ======================
 
-export default withIntl(RecoveryPhrase);
+export default compose(
+  withIntl,
+  withWeb3,
+)(RecoveryPhrase);

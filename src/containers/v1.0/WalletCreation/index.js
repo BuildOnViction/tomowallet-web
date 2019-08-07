@@ -16,6 +16,7 @@ import { get as _get } from 'lodash';
 // Custom Component
 import Warning from './subcomponents/Warning';
 import RecoveryPhrase from './subcomponents/RecoveryPhrase';
+import Verification from './subcomponents/Verification';
 import ConfirmationPopup from './subcomponents/popups/ConfirmationPopup';
 import KeyViewPopup from './subcomponents/popups/KeyViewPopup';
 // Utilities
@@ -24,6 +25,7 @@ import {
   selectFormState,
   selectKeyViewState,
   selectMnemonic,
+  selectErrors,
 } from './selectors';
 import {
   addWord,
@@ -35,6 +37,7 @@ import {
   toggleConfirmationPopup,
   toggleKeyViewPopup,
   toggleKeyVisibile,
+  updateErrors,
 } from './actions';
 import reducer from './reducer';
 import { injectReducer } from '../../../utils';
@@ -51,14 +54,19 @@ class WalletCreationPage extends PureComponent {
   render() {
     const {
       confirmation,
+      errors,
       formState,
       keyView,
       mnemonic,
+      onAddWord,
+      onRemoveWord,
       onSetFormState,
+      onSetPrivateKey,
       onStoreMnemonic,
       onToggleConfirmationPopup,
       onToggleKeyViewPopup,
       onToggleKeyVisible,
+      onUpdateErrors,
     } = this.props;
 
     return (
@@ -70,9 +78,20 @@ class WalletCreationPage extends PureComponent {
             <RecoveryPhrase
               mnemonic={_get(mnemonic, 'origin')}
               setFormState={onSetFormState}
+              setPrivateKey={onSetPrivateKey}
               storeMnemonic={onStoreMnemonic}
-              toggleConfirmationPopup={onToggleConfirmationPopup}
               toggleKeyViewPopup={onToggleKeyViewPopup}
+              toggleConfirmationPopup={onToggleConfirmationPopup}
+            />
+          )) ||
+          (formState === FORM_STATES.VERIFICATION && (
+            <Verification
+              addWord={onAddWord}
+              errors={errors}
+              mnemonic={mnemonic}
+              removeWord={onRemoveWord}
+              setFormState={onSetFormState}
+              updateErrors={onUpdateErrors}
             />
           ))}
         <ConfirmationPopup
@@ -82,8 +101,8 @@ class WalletCreationPage extends PureComponent {
         />
         <KeyViewPopup
           keyView={keyView}
-          togglePopup={onToggleKeyViewPopup}
           toggleKeyVisibile={onToggleKeyVisible}
+          togglePopup={onToggleKeyViewPopup}
         />
       </Fragment>
     );
@@ -95,6 +114,8 @@ class WalletCreationPage extends PureComponent {
 WalletCreationPage.propTypes = {
   /** Recovery phrase confirmation popup's data set */
   confirmation: PropTypes.object,
+  /** List of error messages */
+  errors: PropTypes.arrayOf(PropTypes.string),
   /** Current form state */
   formState: PropTypes.number,
   /** Private key view popup's data set */
@@ -122,10 +143,13 @@ WalletCreationPage.propTypes = {
   onToggleKeyViewPopup: PropTypes.func,
   /** Action to show/hide private key's QR Code */
   onToggleKeyVisible: PropTypes.func,
+  /** Action to update error message list */
+  onUpdateErrors: PropTypes.func,
 };
 
 WalletCreationPage.defaultProps = {
   confirmation: {},
+  errors: [],
   formState: 0,
   keyView: {},
   mnemonic: {
@@ -141,6 +165,7 @@ WalletCreationPage.defaultProps = {
   onToggleConfirmationPopup: () => {},
   onToggleKeyViewPopup: () => {},
   onToggleKeyVisible: () => {},
+  onUpdateErrors: () => {},
 };
 // ======================
 
@@ -148,6 +173,7 @@ WalletCreationPage.defaultProps = {
 const mapStateToProps = () =>
   createStructuredSelector({
     confirmation: selectConfirmationState,
+    errors: selectErrors,
     formState: selectFormState,
     keyView: selectKeyViewState,
     mnemonic: selectMnemonic,
@@ -162,6 +188,7 @@ const mapDispatchToProps = dispatch => ({
   onToggleConfirmationPopup: bool => dispatch(toggleConfirmationPopup(bool)),
   onToggleKeyViewPopup: bool => dispatch(toggleKeyViewPopup(bool)),
   onToggleKeyVisible: bool => dispatch(toggleKeyVisibile(bool)),
+  onUpdateErrors: errors => dispatch(updateErrors(errors)),
 });
 const withConnect = connect(
   mapStateToProps,

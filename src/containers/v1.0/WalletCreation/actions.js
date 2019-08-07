@@ -16,6 +16,7 @@ import {
   TOGGLE_CONFIRMATION_POPUP,
   TOGGLE_KEY_VIEW_POPUP,
   TOGGLE_KEY_VISIBLE,
+  UPDATE_ERRORS,
 } from './constants';
 // ===================
 
@@ -66,5 +67,10 @@ export const toggleKeyViewPopup = bool => ({
 export const toggleKeyVisibile = bool => ({
   type: TOGGLE_KEY_VISIBLE,
   bool,
+});
+
+export const updateErrors = errors => ({
+  type: UPDATE_ERRORS,
+  errors,
 });
 // ===================

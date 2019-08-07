@@ -16,7 +16,12 @@ const mnemonicToPrivateKey = (mnemonic = '', serverConfig = {}) => {
   try {
     provider = new HDWalletProvider(mnemonic, host, 0, 1, true, hdPath);
     const web3 = new Web3(provider);
-    console.warn('find private key', web3);
+    const pkInBytes =
+      web3._provider.wallets[web3._provider.addresses[0]]._privKey;
+
+    return web3.utils.bytesToHex(pkInBytes);
+  } catch {
+    return '';
   } finally {
     if (provider) {
       provider.engine.stop();
