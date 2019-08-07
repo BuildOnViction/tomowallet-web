@@ -1,14 +1,21 @@
 import {
   BigButtonStyler,
-  ButtonStyler
+  ButtonStyler,
 } from './Buttons';
+
+import {
+  HeadingOneStyler,
+  BoxBtnStyler,
+} from './Common';
+import {
+  LinkHeader,
+  DropdownToggleHeader
+} from './Header';
+import {
+  WarningImages,
+} from './LoginWallet';
 import {
   ErrorTextStyler,
-  BoxBtnStyler,
-  LinkHeader,
-  DropdownToggleHeader,
-  HeaderStyler,
-  WarningImages,
 } from './Texts';
 
 export {
@@ -18,6 +25,6 @@ export {
   BoxBtnStyler,
   LinkHeader,
   DropdownToggleHeader,
-  HeaderStyler,
-  WarningImages
+  HeadingOneStyler,
+  WarningImages,
 };

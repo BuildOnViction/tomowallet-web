@@ -16,6 +16,7 @@ import { Web3Provider } from '../../components/Web3';
 import { CustomIntlProvider } from '../../components/IntlProvider';
 import { selectAccount } from '../Global/selectors';
 import { ROUTE } from '../../constants';
+import './app.scss';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
