@@ -46,7 +46,7 @@ class WelcomePage extends PureComponent {
     } = this.props;
     return (
       <Row className='align-items-center'>
-        <Col xs={12} md={7}>
+        <Col xs={12} md={6} lg={7}>
           <HeadingOneStyler>{formatMessage(MSG.WELCOME_TITLE)}</HeadingOneStyler>
           <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
           <BoxBtnStyler className='mt-3'>
@@ -68,7 +68,7 @@ class WelcomePage extends PureComponent {
             </div>
           </BoxBtnStyler>
         </Col>
-        <Col xs={12} lg={5} className='d-none d-md-block'>
+        <Col xs={12} md={6} lg={5} className='d-none d-md-block'>
           {/* -- TO-DO: Add welcome page's image source */}
           <CardImg src={imgvisual_login} alt={formatMessage(MSG.WELCOME_IMAGE_ALT)} />
         </Col>

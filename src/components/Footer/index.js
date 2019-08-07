@@ -54,10 +54,10 @@ class Footer extends PureComponent {
 
   render() {
     return (
-      <Row className='align-items-center pt-3 pb-3'>
-        <Col xs={12} md={7}>
-          <div>TomoWallet 2019 - v1.0</div>
-          <Row>
+      <Row className='align-items-center pt-5 pb-3'>
+        <Col xs={12} lg={7}>
+          <div className='mb-text-center'>TomoWallet 2019 - v1.0</div>
+          <Row className='footer-menu'>
             <Nav>
               <NavItem>
                 <LinkFooter href="#">Need help?</LinkFooter>
@@ -74,7 +74,7 @@ class Footer extends PureComponent {
             </Nav>
           </Row>
         </Col>
-        <Col xs={12} md={5}>
+        <Col xs={12} lg={5}>
           <Nav className="footer-buttons">
             {FooterButtons.map(item => (
               <NavItem>
