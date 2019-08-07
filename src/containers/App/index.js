@@ -40,67 +40,45 @@ class App extends PureComponent {
       <Router>
         <Web3Provider>
           <CustomIntlProvider>
-            <AppStyler fluid className='px-0'>
-              <Row>
-                <Col
-                  sm={12}
-                  md={{ size: 8, offset: 2 }}
-                  lg={{ size: 8, offset: 2 }}
-                >
-                  <NavigationBar isLoggedIn={isLoggedIn} />
-                </Col>
-              </Row>
-              <Row className='pt-5'>
-                <Col
-                  sm={12}
-                  md={{ size: 8, offset: 2 }}
-                  lg={{ size: 8, offset: 2 }}
-                >
-                  <Route
-                    path={ROUTE.LOGIN}
-                    render={() =>
-                      isLoggedIn ? (
-                        <Redirect strict to={ROUTE.MY_WALLET} />
-                      ) : (
-                        <WelcomePage />
-                      )
-                    }
-                  />
-                  <Route
-                    path={ROUTE.CREATE_WALLET}
-                    render={() =>
-                      isLoggedIn ? (
-                        <Redirect strict to={ROUTE.MY_WALLET} />
-                      ) : (
-                        <CreateWalletPage />
-                      )
-                    }
-                  />
-                  <Route
-                    path={ROUTE.IMPORT_WALLET}
-                    render={() =>
-                      isLoggedIn ? (
-                        <Redirect strict to={ROUTE.MY_WALLET} />
-                      ) : (
-                        <ImportWallet />
-                      )
-                    }
-                  />
-                  <Route
-                    path={ROUTE.DEFAULT}
-                    render={() => <Redirect strict to={ROUTE.LOGIN} />}
-                  />
-                </Col>
-              </Row>
-              <Row className='mt-5'>
-                <Col
-                  sm={12}
-                  md={{ size: 8, offset: 2 }}
-                  lg={{ size: 8, offset: 2 }}
-                >
-                  <Footer isLoggedIn={isLoggedIn} />
-                </Col>
-              </Row>
+            <AppStyler className='px-0'>
+              <NavigationBar isLoggedIn={isLoggedIn} />
+              <div className='maincontent pt-3 pb-3'>
+                <Route
+                  path={ROUTE.LOGIN}
+                  render={() =>
+                    isLoggedIn ? (
+                      <Redirect strict to={ROUTE.MY_WALLET} />
+                    ) : (
+                      <WelcomePage />
+                    )
+                  }
+                />
+                <Route
+                  path={ROUTE.CREATE_WALLET}
+                  render={() =>
+                    isLoggedIn ? (
+                      <Redirect strict to={ROUTE.MY_WALLET} />
+                    ) : (
+                      <CreateWalletPage />
+                    )
+                  }
+                />
+                <Route
+                  path={ROUTE.IMPORT_WALLET}
+                  render={() =>
+                    isLoggedIn ? (
+                      <Redirect strict to={ROUTE.MY_WALLET} />
+                    ) : (
+                      <ImportWallet />
+                    )
+                  }
+                />
+                <Route
+                  path={ROUTE.DEFAULT}
+                  render={() => <Redirect strict to={ROUTE.LOGIN} />}
+                />
+              </div>
+              <Footer className='mt-5' isLoggedIn={isLoggedIn} />
             </AppStyler>
           </CustomIntlProvider>
         </Web3Provider>
