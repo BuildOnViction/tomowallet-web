@@ -45,36 +45,34 @@ class WelcomePage extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <Container fluid>
-        <Row className='align-items-center'>
-          <Col xs={12} md={7}>
-            <HeadingOneStyler>{formatMessage(MSG.WELCOME_TITLE)}</HeadingOneStyler>
-            <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
-            <BoxBtnStyler className='mt-3'>
-              <div>
-                <BigButtonStyler
-                  btnBlue
-                  onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}>
-                  {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
-                </BigButtonStyler>
-              </div>
-              <div className='m-3'>
-                {formatMessage(MSG.WELCOME_TEXT_BETWEEN_BUTTONS)}
-              </div>
-              <div>
-                <BigButtonStyler
-                  onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}>
-                  {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
-                </BigButtonStyler>
-              </div>
-            </BoxBtnStyler>
-          </Col>
-          <Col xs={12} lg={5} className='d-none d-md-block'>
-            {/* -- TO-DO: Add welcome page's image source */}
-            <CardImg src={imgvisual_login} alt={formatMessage(MSG.WELCOME_IMAGE_ALT)} />
-          </Col>
-        </Row>
-      </Container>
+      <Row className='align-items-center'>
+        <Col xs={12} md={6} lg={7}>
+          <HeadingOneStyler>{formatMessage(MSG.WELCOME_TITLE)}</HeadingOneStyler>
+          <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
+          <BoxBtnStyler className='mt-3'>
+            <div>
+              <BigButtonStyler
+                btnBlue
+                onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}>
+                {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
+              </BigButtonStyler>
+            </div>
+            <div className='m-3'>
+              {formatMessage(MSG.WELCOME_TEXT_BETWEEN_BUTTONS)}
+            </div>
+            <div>
+              <BigButtonStyler
+                onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}>
+                {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
+              </BigButtonStyler>
+            </div>
+          </BoxBtnStyler>
+        </Col>
+        <Col xs={12} md={6} lg={5} className='d-none d-md-block'>
+          {/* -- TO-DO: Add welcome page's image source */}
+          <CardImg src={imgvisual_login} alt={formatMessage(MSG.WELCOME_IMAGE_ALT)} />
+        </Col>
+      </Row>
     );
   }
 }
