@@ -73,8 +73,7 @@ class ImportWallet extends PureComponent {
     const { web3, importWallet, onUpdateErrors, rpcServer } = this.props;
     const { host, hdPath } = rpcServer;
     const inputText = _get(importWallet, 'input.textValue', '');
-    console.warn('create wallet', inputText);
-
+    
     if (web3.utils.isHex(inputText) || inputText.split(' ').length === 12) {
       const provider = new HDWalletProvider(
         inputText,

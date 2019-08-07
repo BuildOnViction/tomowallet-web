@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
 // Custom Components
 import NavigationBar from '../../components/NavigationBar';
+import Footer from '../../components/Footer';
 import WelcomePage from '../v1.0/Welcome';
 import CreateWalletPage from '../v1.0/WalletCreation';
 import ImportWallet from '../v1.0/ImportWallet';
@@ -17,6 +18,7 @@ import { Web3Provider } from '../../components/Web3';
 import { CustomIntlProvider } from '../../components/IntlProvider';
 import { selectWallet } from '../Global/selectors';
 import { ROUTE } from '../../constants';
+import './app.scss';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -48,7 +50,7 @@ class App extends PureComponent {
                   <NavigationBar isLoggedIn={isLoggedIn} />
                 </Col>
               </Row>
-              <Row className='mt-5'>
+              <Row className='pt-5'>
                 <Col
                   sm={12}
                   md={{ size: 8, offset: 2 }}
@@ -88,6 +90,15 @@ class App extends PureComponent {
                     path={ROUTE.DEFAULT}
                     render={() => <Redirect strict to={ROUTE.LOGIN} />}
                   />
+                </Col>
+              </Row>
+              <Row className='mt-5'>
+                <Col
+                  sm={12}
+                  md={{ size: 8, offset: 2 }}
+                  lg={{ size: 8, offset: 2 }}
+                >
+                  <Footer isLoggedIn={isLoggedIn} />
                 </Col>
               </Row>
             </AppStyler>

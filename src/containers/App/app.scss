@@ -1,0 +1,40 @@
+// Style Global
+@import './iconfont/style.css';
+
+body {
+    background-color: #202533;
+    font-size: 14px;
+    color: #9eaacc;
+    line-height: 1.7;
+    min-height: 100vh;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+// Footer
+.footer-buttons {
+  padding-top: 15px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  li {
+    display: inline-block;
+    padding: 5px;
+    a {
+      background: #323252;
+      border-radius: 8px;
+      color: #525275;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      &:hover {
+        i {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
