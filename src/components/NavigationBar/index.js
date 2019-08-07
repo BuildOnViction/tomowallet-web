@@ -17,11 +17,11 @@ import {
 } from 'reactstrap';
 // Custom Components
 // -- TO-DO: Update style for Navigation Bar component into following styled component:
-import NavBarStyler from './style';
 import {
+  NavBarStyler,
   LinkHeader,
   DropdownToggleHeader,
-} from '../../styles';
+} from './style';
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
 import { withIntl } from '../IntlProvider';

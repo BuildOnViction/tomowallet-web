@@ -8,12 +8,11 @@ import {
   BoxBtnStyler,
 } from './Common';
 import {
-  LinkHeader,
-  DropdownToggleHeader
-} from './Header';
-import {
   WarningImages,
 } from './LoginWallet';
+import {
+
+} from './CreateNewWallet';
 import {
   ErrorTextStyler,
 } from './Texts';
@@ -23,8 +22,6 @@ export {
   ButtonStyler,
   ErrorTextStyler,
   BoxBtnStyler,
-  LinkHeader,
-  DropdownToggleHeader,
   HeadingOneStyler,
   WarningImages,
 };

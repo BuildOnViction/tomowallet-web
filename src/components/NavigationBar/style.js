@@ -1,5 +1,20 @@
 import styled from 'styled-components';
-import { Navbar } from 'reactstrap';
+import {
+  Navbar,
+  NavLink,
+  DropdownToggle
+} from 'reactstrap'
+// Style Component//
+
+const LinkHeader = styled(NavLink)`
+  color: #9eaacc !important;
+  font-weight: normal;
+`;
+
+const DropdownToggleHeader = styled(DropdownToggle)`
+  color: #9eaacc !important;
+  font-weight: normal;
+`;
 
 const NavBarStyler = styled(Navbar)`
   padding: 20px;
@@ -24,4 +39,8 @@ const NavBarStyler = styled(Navbar)`
   }
 `;
 
-export default NavBarStyler;
+export {
+  NavBarStyler,
+  LinkHeader,
+  DropdownToggleHeader,
+};
