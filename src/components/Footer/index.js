@@ -24,27 +24,27 @@ import {
 
 const FooterButtons = [
   {
-    className: 'tomorelayer-icon-facebook',
+    className: 'font-icon-facebook',
     link: 'https://www.facebook.com/tomochainofficial',
   },
   {
-    className: 'tomorelayer-icon-twitter',
+    className: 'font-icon-twitter',
     link: 'https://twitter.com/TomoChainANN',
   },
   {
-    className: 'tomorelayer-icon-telegram',
+    className: 'font-icon-telegram',
     link: 'https://t.me/tomochain',
   },
   {
-    className: 'tomorelayer-icon-github',
+    className: 'font-icon-github',
     link: 'https://github.com/tomochain/',
   },
   {
-    className: 'tomorelayer-icon-linkedin',
+    className: 'font-icon-linkedin',
     link: 'https://www.linkedin.com/company/tomochain',
   },
   {
-    className: 'tomorelayer-icon-reddit',
+    className: 'font-icon-reddit',
     link: 'https://www.reddit.com/r/Tomochain/',
   },
 ]
