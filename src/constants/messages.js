@@ -21,6 +21,7 @@ const welcomePagePrefix = `${containerPrefix}.welcome`;
 const createWalletPagePrefix = `${containerPrefix}.createwallet`;
 const warningPagePrefix = `${createWalletPagePrefix}.warning`;
 const recoveryPhrasePrefix = `${createWalletPagePrefix}.recoveryphrase`;
+const verificationPrefix = `${createWalletPagePrefix}.verification`;
 
 export default defineMessages({
   // Common - Button
@@ -179,7 +180,13 @@ export default defineMessages({
   },
   RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_QRCODE_ALT: {
     id: `${recoveryPhrasePrefix}.popup.keyview.content.qrcode.alt`,
-    defaultMessage: 'Click here to view QR Code. Make sure no one is looking!',
+    defaultMessage:
+      'Click here to view QR Code. Make sure no one else is looking!',
+  },
+  // Create Wallet - Mnemonic Verification Page
+  VERIFICATION_TITLE: {
+    id: `${verificationPrefix}.title`,
+    defaultMessage: 'Verification',
   },
 });
 // ====================

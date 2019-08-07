@@ -19,25 +19,27 @@ import {
   TOGGLE_CONFIRMATION_POPUP,
   TOGGLE_KEY_VIEW_POPUP,
   TOGGLE_KEY_VISIBLE,
+  UPDATE_ERRORS,
 } from './constants';
 import { shuffleArray } from '../../../utils';
 // ===================
 
 // ===== PRE-DEFINED VARIABLES =====
 const initialState = fromJS({
-  formState: FORM_STATES.WARNING,
-  mnemonic: {
-    origin: '',
-    shuffled: [],
-    compare: [],
-  },
   confirmation: {
     isOpen: false,
   },
+  errors: [],
+  formState: FORM_STATES.WARNING,
   keyView: {
     isOpen: false,
     key: '',
     isPKVisible: false,
+  },
+  mnemonic: {
+    origin: '',
+    shuffled: [],
+    compare: [],
   },
 });
 // =================================
@@ -73,6 +75,8 @@ export default (state = initialState, action) => {
       return state.setIn(['keyView', 'isOpen'], action.bool);
     case TOGGLE_KEY_VISIBLE:
       return state.setIn(['keyView', 'isPKVisible'], action.bool);
+    case UPDATE_ERRORS:
+      return state.set('errors', action.errors);
     default:
       return state;
   }
