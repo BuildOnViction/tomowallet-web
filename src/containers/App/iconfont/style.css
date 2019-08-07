@@ -1,17 +1,17 @@
 @font-face {
-  font-family: 'tomorelayer';
-  src:  url('fonts/tomorelayer.eot?n095s7');
-  src:  url('fonts/tomorelayer.eot?n095s7#iefix') format('embedded-opentype'),
-    url('fonts/tomorelayer.ttf?n095s7') format('truetype'),
-    url('fonts/tomorelayer.woff?n095s7') format('woff'),
-    url('fonts/tomorelayer.svg?n095s7#tomorelayer') format('svg');
+  font-family: 'tomowallet';
+  src:  url('fonts/tomowallet.eot?s26itu');
+  src:  url('fonts/tomowallet.eot?s26itu#iefix') format('embedded-opentype'),
+    url('fonts/tomowallet.ttf?s26itu') format('truetype'),
+    url('fonts/tomowallet.woff?s26itu') format('woff'),
+    url('fonts/tomowallet.svg?s26itu#tomowallet') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 i {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'tomorelayer' !important;
+  font-family: 'tomowallet' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -24,60 +24,60 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.tomorelayer-icon-edit-pencil:before {
-  content: "\e913";
-}
-.tomorelayer-icon-checkmark-outline:before {
-  content: "\e912";
-}
-.tomorelayer-icon-startup:before {
-  content: "\e911";
-}
-.tomorelayer-icon-next-right:before {
-  content: "\e910";
-}
-.tomorelayer-icon-reddit:before {
-  content: "\e90f";
-}
-.tomorelayer-icon-angle-double-left:before {
+.font-icon-angle-double-left:before {
   content: "\e900";
 }
-.tomorelayer-icon-angle-double-right:before {
+.font-icon-angle-double-right:before {
   content: "\e901";
 }
-.tomorelayer-icon-angle-down:before {
+.font-icon-angle-down:before {
   content: "\e902";
 }
-.tomorelayer-icon-angle-left:before {
+.font-icon-angle-left:before {
   content: "\e903";
 }
-.tomorelayer-icon-angle-right:before {
+.font-icon-angle-right:before {
   content: "\e904";
 }
-.tomorelayer-icon-angle-up:before {
+.font-icon-angle-up:before {
   content: "\e905";
 }
-.tomorelayer-icon-email:before {
+.font-icon-email:before {
   content: "\e906";
 }
-.tomorelayer-icon-facebook:before {
+.font-icon-facebook:before {
   content: "\e907";
 }
-.tomorelayer-icon-github:before {
+.font-icon-github:before {
   content: "\e908";
 }
-.tomorelayer-icon-linkedin:before {
+.font-icon-linkedin:before {
   content: "\e909";
 }
-.tomorelayer-icon-telegram:before {
+.font-icon-telegram:before {
   content: "\e90b";
 }
-.tomorelayer-icon-tomoz:before {
+.font-icon-tomoz:before {
   content: "\e90c";
 }
-.tomorelayer-icon-twitter:before {
+.font-icon-twitter:before {
   content: "\e90d";
 }
-.tomorelayer-icon-wallet:before {
+.font-icon-wallet:before {
   content: "\e90e";
+}
+.font-icon-reddit:before {
+  content: "\e90f";
+}
+.font-icon-next-right:before {
+  content: "\e910";
+}
+.font-icon-startup:before {
+  content: "\e911";
+}
+.font-icon-checkmark-outline:before {
+  content: "\e912";
+}
+.font-icon-edit-pencil:before {
+  content: "\e913";
 }
