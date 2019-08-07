@@ -1,21 +1,23 @@
 import {
-    BigButtonStyler,
-    ButtonStyler
+  BigButtonStyler,
+  ButtonStyler
 } from './Buttons';
 import {
-    ErrorTextStyler,
-    BoxBtnStyler,
-    LinkHeader,
-    DropdownToggleHeader,
-    HeaderStyler
+  ErrorTextStyler,
+  BoxBtnStyler,
+  LinkHeader,
+  DropdownToggleHeader,
+  HeaderStyler,
+  WarningImages,
 } from './Texts';
 
 export {
-    BigButtonStyler,
-    ButtonStyler,
-    ErrorTextStyler,
-    BoxBtnStyler,
-    LinkHeader,
-    DropdownToggleHeader,
-    HeaderStyler
+  BigButtonStyler,
+  ButtonStyler,
+  ErrorTextStyler,
+  BoxBtnStyler,
+  LinkHeader,
+  DropdownToggleHeader,
+  HeaderStyler,
+  WarningImages
 };

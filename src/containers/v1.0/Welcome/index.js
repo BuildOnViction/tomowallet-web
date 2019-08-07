@@ -23,7 +23,7 @@ import {
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../constants';
 // -- TO-DO: Add style for Welcome content component
-//IMG
+// IMAGES
 import imgvisual_login from '../../../assets/images/img-visual-login.png';
 // ===================
 
@@ -53,8 +53,9 @@ class WelcomePage extends PureComponent {
             <BoxBtnStyler className='mt-3'>
               <div>
                 <BigButtonStyler
-                  onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}>
-                  {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
+                  btnBlue
+                  onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}>
+                  {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
                 </BigButtonStyler>
               </div>
               <div className='m-3'>
@@ -62,9 +63,8 @@ class WelcomePage extends PureComponent {
               </div>
               <div>
                 <BigButtonStyler
-                  btnBlue
-                  onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}>
-                  {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
+                  onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}>
+                  {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
                 </BigButtonStyler>
               </div>
             </BoxBtnStyler>

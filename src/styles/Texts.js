@@ -25,4 +25,20 @@ const HeaderStyler = styled.h1`
   color: #ffffff;
   font-family: 'Bai Jamjuree', sans-serif;
 `;
-export { ErrorTextStyler, BoxBtnStyler, LinkHeader, DropdownToggleHeader, HeaderStyler };
+const WarningImages = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    max-width: 150px;
+  }
+`;
+
+export {
+  ErrorTextStyler,
+  BoxBtnStyler,
+  LinkHeader,
+  DropdownToggleHeader,
+  HeaderStyler,
+  WarningImages,
+};

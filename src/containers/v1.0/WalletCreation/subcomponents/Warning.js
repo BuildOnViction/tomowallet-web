@@ -25,12 +25,17 @@ import {
 } from 'reactstrap';
 // Custom Components
 // -- TO-DO: Update style for button & error text in the following styled components:
-import { ButtonStyler } from '../../../../styles';
+import {
+  ButtonStyler,
+  WarningImages,
+} from '../../../../styles';
 // Utilities & Constants
 import { FORM_STATES } from '../constants';
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../../constants';
 // -- TO-DO: Add style for Warning page
+// IMAGES
+import img_warning from '../../../../assets/images/img-warning.png';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -75,9 +80,9 @@ class Warning extends PureComponent {
                 </CardText>
               </CardHeader>
               {/* -- TO-DO: Add warning image's source */}
-              <span className='d-block full-width text-center'>
-                <CardImg src='' alt={formatMessage(MSG.WARNING_IMAGE_ALT)} />
-              </span>
+              <WarningImages>
+                <CardImg src={ img_warning } alt={formatMessage(MSG.WARNING_IMAGE_ALT)} />
+              </WarningImages>
               <CardBody>
                 <CardTitle>
                   {formatMessage(MSG.WARNING_CONTENT_TITLE)}
