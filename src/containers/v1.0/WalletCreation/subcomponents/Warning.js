@@ -13,16 +13,14 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { generateMnemonic } from 'bip39';
 import {
-  Card,
   CardHeader,
   CardBody,
   CardImg,
-  CardTitle,
   CardText,
   CardFooter,
-  Container,
   Row,
   Col,
+  Card,
 } from 'reactstrap';
 // Custom Components
 // -- TO-DO: Update style for button & error text in the following styled components:
@@ -81,8 +79,8 @@ class Warning extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <div className='screen-st1'>
-        <CardHeader className='text-center'>
+      <Card>
+        <CardHeader>
           <HeadingLarge>{formatMessage(MSG.WARNING_HEADER_TITLE)}</HeadingLarge>
           <CardText>
             {`${formatMessage(MSG.WARNING_HEADER_ALTERNATIVE_TEXT)} `}
@@ -111,7 +109,7 @@ class Warning extends PureComponent {
             </NoticeTextRed>
           </CardText>
         </CardBody>
-        <CardFooter className='mt-5'>
+        <CardFooter className='mt-3'>
           <Row>
             <Col size={6}>
               <ButtonStyler onClick={() => this.handleRedirect(ROUTE.LOGIN)}>
@@ -125,7 +123,7 @@ class Warning extends PureComponent {
             </Col>
           </Row>
         </CardFooter>
-      </div>
+        </Card>
     );
   }
 }

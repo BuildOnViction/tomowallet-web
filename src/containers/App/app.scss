@@ -11,19 +11,38 @@ body {
     min-height: 100vh;
     font-family: 'Nunito Sans', sans-serif;
 }
-
+a {
+  transition: all .3s;
+  &:hover {
+    text-decoration: none!important;
+  }
+}
 //maincontent
 .maincontent {
   min-height: calc(100vh -  179px);
   @media (max-width: 768px) {
     min-height: calc(100vh -  134px - 85px);
   }
-  .card-header,
-  .card-body,
-  .card-footer {
+  .card {
     background: transparent;
-    padding: 0;
     border: 0;
+    .card-header,
+    .card-body,
+    .card-footer {
+      background: transparent;
+      padding: 0;
+      border: 0;
+    }
+    .card-header {
+      text-align: center;
+    }
+    .card-body {
+      padding: 3em 0;
+    }
+    .box-recovery {
+      border-radius: 8px;
+      border: 1px solid #444b64;
+    }
   }
 }
 
