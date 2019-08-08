@@ -26,7 +26,14 @@ import {
 } from 'reactstrap';
 // Custom Components
 // -- TO-DO: Update style for button & error text in the following styled components:
-import { ButtonStyler, WarningImages } from '../../../../styles';
+import {
+  ButtonStyler,
+  WarningImages,
+  HeadingLarge,
+  HeadingMedium,
+  TextBlue,
+  NoticeTextRed,
+} from '../../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import { withWeb3 } from '../../../../components/Web3';
@@ -74,18 +81,18 @@ class Warning extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{formatMessage(MSG.WARNING_HEADER_TITLE)}</CardTitle>
+      <div className='screen-st1'>
+        <CardHeader className='text-center'>
+          <HeadingLarge>{formatMessage(MSG.WARNING_HEADER_TITLE)}</HeadingLarge>
           <CardText>
             {`${formatMessage(MSG.WARNING_HEADER_ALTERNATIVE_TEXT)} `}
-            <span
+            <TextBlue
               role='presentation'
               onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
               className='d-inline-block'
             >
               {formatMessage(MSG.WARNING_HEADER_ALTERNATIVE_LINK)}
-            </span>
+            </TextBlue>
           </CardText>
         </CardHeader>
         {/* -- TO-DO: Add warning image's source */}
@@ -96,29 +103,29 @@ class Warning extends PureComponent {
           />
         </WarningImages>
         <CardBody>
-          <CardTitle>{formatMessage(MSG.WARNING_CONTENT_TITLE)}</CardTitle>
+          <HeadingMedium>{formatMessage(MSG.WARNING_CONTENT_TITLE)}</HeadingMedium>
           <CardText>{formatMessage(MSG.WARNING_CONTENT_DESCRIPTION)}</CardText>
           <CardText>
-            {formatMessage(MSG.WARNING_CONTENT_DESCRIPTION_DANGER)}
+            <NoticeTextRed>
+              {formatMessage(MSG.WARNING_CONTENT_DESCRIPTION_DANGER)}
+            </NoticeTextRed>
           </CardText>
         </CardBody>
-        <CardFooter>
-          <Container fluid className='px-0'>
-            <Row>
-              <Col size={6}>
-                <ButtonStyler onClick={() => this.handleRedirect(ROUTE.LOGIN)}>
-                  {formatMessage(MSG.COMMON_BUTTON_BACK)}
-                </ButtonStyler>
-              </Col>
-              <Col size={6}>
-                <ButtonStyler onClick={this.handlePrepareMnemonic}>
-                  {formatMessage(MSG.WARNING_BUTTON_NEXT_TO_RECOVERY_PHRASE)}
-                </ButtonStyler>
-              </Col>
-            </Row>
-          </Container>
+        <CardFooter className='mt-5'>
+          <Row>
+            <Col size={6}>
+              <ButtonStyler onClick={() => this.handleRedirect(ROUTE.LOGIN)}>
+                {formatMessage(MSG.COMMON_BUTTON_BACK)}
+              </ButtonStyler>
+            </Col>
+            <Col size={6}>
+              <ButtonStyler btnYellow onClick={this.handlePrepareMnemonic}>
+                {formatMessage(MSG.WARNING_BUTTON_NEXT_TO_RECOVERY_PHRASE)}
+              </ButtonStyler>
+            </Col>
+          </Row>
         </CardFooter>
-      </Card>
+      </div>
     );
   }
 }

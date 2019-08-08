@@ -15,6 +15,16 @@ body {
 //maincontent
 .maincontent {
   min-height: calc(100vh -  179px);
+  @media (max-width: 768px) {
+    min-height: calc(100vh -  134px - 85px);
+  }
+  .card-header,
+  .card-body,
+  .card-footer {
+    background: transparent;
+    padding: 0;
+    border: 0;
+  }
 }
 
 // Footer

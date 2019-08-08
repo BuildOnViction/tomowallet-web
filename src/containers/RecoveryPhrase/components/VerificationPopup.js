@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { VerificationPopupStyler } from '../style';
 // Utilities
 import { shuffleArray } from '../../../utils';
-import { ButtonStyler, ErrorTextStyler } from '../../../styles';
+import { ButtonStyler, NoticeTextRed } from '../../../styles';
 
 // ===== SUB-COMPONENTS =====
 const VerificationContent = ({
@@ -39,9 +39,9 @@ const VerificationContent = ({
       <Nav>
         {_get(mnemonic, 'errors', []).map((error, errorIdx) => (
           <NavItem>
-            <ErrorTextStyler key={`error_${errorIdx + 1}`}>
+            <NoticeTextRed key={`error_${errorIdx + 1}`}>
               {`* ${error}`}
-            </ErrorTextStyler>
+            </NoticeTextRed>
           </NavItem>
         ))}
       </Nav>
