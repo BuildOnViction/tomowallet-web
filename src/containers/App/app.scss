@@ -46,6 +46,20 @@ a {
   }
 }
 
+//MODAL
+.modal-content {
+  border-radius: 8px;
+  background-color: #272d40;
+  .modal-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: 'Bai Jamjuree', sans-serif;
+  }
+}
+
 // Footer
 .mb-text-center {
   @media (max-width: 768px) {
