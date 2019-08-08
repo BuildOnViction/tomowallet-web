@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { get as _get, isEqual as _isEqual } from 'lodash';
-import { Container, Row, Col } from 'reactstrap';
 // Custom Component
 import Warning from './subcomponents/Warning';
 import RecoveryPhrase from './subcomponents/RecoveryPhrase';
@@ -50,6 +49,9 @@ import { injectReducer, generateWeb3, getWalletInfo } from '../../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG } from '../../../constants';
 import { storeWallet } from '../../Global/actions';
+import {
+  ContainerMin,
+} from '../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -130,55 +132,46 @@ class WalletCreationPage extends PureComponent {
     console.warn('render', this.state);
 
     return (
-      <Container fluid>
-        <Row noGutters>
-          <Col
-            xs={12}
-            sm={12}
-            md={{ size: 10, offset: 1 }}
-            lg={{ size: 6, offset: 3 }}
-          >
-            {(formState === FORM_STATES.WARNING && (
-              <Warning
-                setFormState={onSetFormState}
-                setPrivateKey={onSetPrivateKey}
-                storeMnemonic={onStoreMnemonic}
-              />
-            )) ||
-              (formState === FORM_STATES.RECOVERY_PHRASE && (
-                <RecoveryPhrase
-                  mnemonic={_get(mnemonic, 'origin')}
-                  setFormState={onSetFormState}
-                  toggleKeyViewPopup={onToggleKeyViewPopup}
-                  toggleConfirmationPopup={onToggleConfirmationPopup}
-                />
-              )) ||
-              (formState === FORM_STATES.VERIFICATION && (
-                <Verification
-                  addWord={onAddWord}
-                  clearComparison={onClearComparison}
-                  errors={errors}
-                  mnemonic={mnemonic}
-                  removeWord={onRemoveWord}
-                  setFormState={onSetFormState}
-                  updateErrors={onUpdateErrors}
-                  verifyMnemonic={this.handleVerifyMnemonic}
-                />
-              )) ||
-              (formState === FORM_STATES.SUCCESS && <SuccessNotification />)}
-            <ConfirmationPopup
-              confirmation={confirmation}
+      <ContainerMin>
+        {(formState === FORM_STATES.WARNING && (
+          <Warning
+            setFormState={onSetFormState}
+            setPrivateKey={onSetPrivateKey}
+            storeMnemonic={onStoreMnemonic}
+          />
+        )) ||
+          (formState === FORM_STATES.RECOVERY_PHRASE && (
+            <RecoveryPhrase
+              mnemonic={_get(mnemonic, 'origin')}
               setFormState={onSetFormState}
-              togglePopup={onToggleConfirmationPopup}
+              toggleKeyViewPopup={onToggleKeyViewPopup}
+              toggleConfirmationPopup={onToggleConfirmationPopup}
             />
-            <KeyViewPopup
-              keyView={keyView}
-              toggleKeyVisibile={onToggleKeyVisible}
-              togglePopup={onToggleKeyViewPopup}
+          )) ||
+          (formState === FORM_STATES.VERIFICATION && (
+            <Verification
+              addWord={onAddWord}
+              clearComparison={onClearComparison}
+              errors={errors}
+              mnemonic={mnemonic}
+              removeWord={onRemoveWord}
+              setFormState={onSetFormState}
+              updateErrors={onUpdateErrors}
+              verifyMnemonic={this.handleVerifyMnemonic}
             />
-          </Col>
-        </Row>
-      </Container>
+          )) ||
+          (formState === FORM_STATES.SUCCESS && <SuccessNotification />)}
+        <ConfirmationPopup
+          confirmation={confirmation}
+          setFormState={onSetFormState}
+          togglePopup={onToggleConfirmationPopup}
+        />
+        <KeyViewPopup
+          keyView={keyView}
+          toggleKeyVisibile={onToggleKeyVisible}
+          togglePopup={onToggleKeyViewPopup}
+        />
+      </ContainerMin>
     );
   }
 }

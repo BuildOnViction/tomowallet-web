@@ -17,7 +17,7 @@ import { Container, Row, Col, CardImg } from 'reactstrap';
 import {
   BigButtonStyler,
   BoxBtnStyler,
-  HeadingOneStyler,
+  HeadingBig,
 } from '../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../components/IntlProvider';
@@ -47,7 +47,7 @@ class WelcomePage extends PureComponent {
     return (
       <Row className='align-items-center'>
         <Col xs={12} md={6} lg={7}>
-          <HeadingOneStyler>{formatMessage(MSG.WELCOME_TITLE)}</HeadingOneStyler>
+          <HeadingBig>{formatMessage(MSG.WELCOME_TITLE)}</HeadingBig>
           <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
           <BoxBtnStyler className='mt-3'>
             <div>
