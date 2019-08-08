@@ -40,9 +40,10 @@ import {
 } from './actions';
 import reducer from './reducer';
 import { ROUTE, MSG } from '../../../constants';
-import { injectReducer, generateWeb3 } from '../../../utils';
+import { injectReducer, generateWeb3, getWalletInfo } from '../../../utils';
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
+import { storeWallet } from '../../Global/actions';
 // -- TO-DO: Add style for Import Wallet page
 
 // ===== MAIN COMPONENT =====
@@ -72,15 +73,16 @@ class ImportWallet extends PureComponent {
 
   handleAccessWallet() {
     const {
-      web3,
+      history,
       importWallet,
+      intl: { formatMessage },
+      onStoreWallet,
       onUpdateErrors,
       rpcServer,
-      intl: { formatMessage },
+      web3,
     } = this.props;
     if (_get(importWallet, 'type') === IMPORT_TYPES.LEDGER) {
       const hdPath = _get(importWallet, 'input.hdPath', '');
-      console.warn('Ledger access', hdPath);
       if (!hdPath) {
         onUpdateErrors([
           formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH),
@@ -94,25 +96,17 @@ class ImportWallet extends PureComponent {
         (web3.utils.isHex(recoveryPhrase) ||
           recoveryPhrase.split(' ').length === 12)
       ) {
-        const newWeb3 = new Web3(
-          new HDWalletProvider(
-            recoveryPhrase,
-            rpcServer.host,
-            0,
-            1,
-            true,
-            rpcServer.hdPath,
-          ),
-        );
-        console.warn('defaultAccount', newWeb3.eth.defaultAccount);
-
-        newWeb3.eth
+        const walletProvider = generateWeb3(recoveryPhrase, rpcServer);
+        new Web3(walletProvider).eth
           .getBalance('0x7097c085489b4d87c56DE7816fF90f1098082B12')
           .then(balance => {
             console.warn('balance', balance);
           })
           .catch(error => console.error('getBalance error', error));
-        console.warn('Import wallet', newWeb3);
+        console.warn('Import wallet', walletProvider);
+        Promise.all([onStoreWallet(getWalletInfo(walletProvider))]).then(() =>
+          history.push(ROUTE.MY_WALLET),
+        );
       } else {
         onUpdateErrors([
           formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
@@ -244,6 +238,8 @@ ImportWallet.propTypes = {
   importWallet: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to save wallet information in global store */
+  onStoreWallet: PropTypes.func,
   /** Action to set error messages */
   onUpdateErrors: PropTypes.func,
   /** Action to change import tab */
@@ -256,6 +252,7 @@ ImportWallet.defaultProps = {
   history: {},
   importWallet: {},
   intl: {},
+  onStoreWallet: () => {},
   onUpdateErrors: () => {},
   onUpdateImportType: () => {},
   onUpdateInput: () => {},
@@ -269,6 +266,7 @@ const mapStateToProps = () =>
   });
 const mapDispatchToProps = dispatch => ({
   onResetState: () => dispatch(resetState()),
+  onStoreWallet: wallet => dispatch(storeWallet(wallet)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onUpdateImportType: type => dispatch(updateImportType(type)),
   onUpdateInput: (name, value) => dispatch(updateInput(name, value)),

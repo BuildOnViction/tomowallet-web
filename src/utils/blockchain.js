@@ -61,9 +61,11 @@ const generateWeb3 = (
 const getWalletInfo = web3 => {
   if (web3) {
     const address = web3.currentProvider.addresses[0];
-    return web3.eth.getBalance(address).then(console.error);
+    return {
+      address,
+    };
   }
-  return 'Ulala';
+  return null;
 };
 
 /**

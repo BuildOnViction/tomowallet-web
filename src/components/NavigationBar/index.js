@@ -93,9 +93,9 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <Nav className='ml-auto' navbar>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret>
+            <DropdownToggleHeader nav caret>
               {networkTitle}
-            </DropdownToggle>
+            </DropdownToggleHeader>
             <DropdownMenu right>
               {Object.keys(RPC_SERVER).map((title, titleIdx) => (
                 <DropdownItem
@@ -108,9 +108,9 @@ class NavigationBar extends PureComponent {
             </DropdownMenu>
           </UncontrolledDropdown>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret>
+            <DropdownToggleHeader nav caret>
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
-            </DropdownToggle>
+            </DropdownToggleHeader>
             <DropdownMenu right>
               <DropdownItem>
                 {formatMessage(
