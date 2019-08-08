@@ -17,7 +17,6 @@ const HeadingLarge = styled.h2`
 const HeadingMedium = styled.h3`
   color: #ffffff;
   font-size: 16px;
-  font-weight: 600;
 `;
 const NoticeTextRed = styled.span`
   color: #be445e;
@@ -28,6 +27,17 @@ const TextLinkBlue = styled.a`
 const TextBlue = styled.span`
   color: #5692CD;
   cursor: pointer;
+  transition: all .3s;
+  &:hover {
+    color: #0056b3;
+  }
+`;
+const TextYellow = styled.span`
+  color: #e4ae63;
+`;
+const TextLinkYellow = styled.a`
+  color: #e4ae63;
+  cursor: pointer;
 `;
 export {
   HeadingBig,
@@ -36,4 +46,6 @@ export {
   NoticeTextRed,
   TextLinkBlue,
   TextBlue,
+  TextYellow,
+  TextLinkYellow,
 };

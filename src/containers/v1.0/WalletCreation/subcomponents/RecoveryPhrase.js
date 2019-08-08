@@ -22,7 +22,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Component
 // -- TO-DO: Update style for buttons
-import { ButtonStyler } from '../../../../styles';
+import {
+  ButtonStyler,
+  HeadingLarge,
+  HeadingMedium,
+  TextLinkYellow,
+  TextBlue,
+} from '../../../../styles';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
@@ -54,18 +60,16 @@ class RecoveryPhrase extends PureComponent {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{formatMessage(MSG.RECOVERY_PHRASE_TITLE)}</CardTitle>
+          <HeadingLarge>{formatMessage(MSG.RECOVERY_PHRASE_TITLE)}</HeadingLarge>
         </CardHeader>
         <CardBody>
-          <CardTitle>
+          <HeadingMedium>
             {formatMessage(MSG.RECOVERY_PHRASE_NOTIFICATION_TITLE)}
-          </CardTitle>
+          </HeadingMedium>
           <CardText>
             {formatMessage(MSG.RECOVERY_PHRASE_NOTIFICATION_DESCRIPTION)}
           </CardText>
-        </CardBody>
-        <Container fluid className='px-3'>
-          <Row noGutters className='mb-3 border rounded'>
+          <Row noGutters className='mb-4 mt-4 box-recovery'>
             {convertedMnemonic.map((word, wordIdx) => (
               <Col
                 key={`word_${wordIdx + 1}`}
@@ -79,34 +83,34 @@ class RecoveryPhrase extends PureComponent {
               </Col>
             ))}
           </Row>
-          <Row noGutters className='mb-5'>
+          <Row noGutters>
             <Col>
-              <FontAwesomeIcon icon={['far', 'save']} className='mr-2' />
-              {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_SAVE)}
+              <TextLinkYellow href="#">
+                <FontAwesomeIcon icon={['far', 'save']} className='mr-2' />
+                {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_SAVE)}
+              </TextLinkYellow>
             </Col>
             <Col className='text-right'>
-              <div role='presentation' onClick={() => toggleKeyViewPopup(true)}>
+              <TextBlue role='presentation' onClick={() => toggleKeyViewPopup(true)}>
                 {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_VIEW_PRIVATE_KEY)}
                 <FontAwesomeIcon icon='arrow-right' className='ml-2' />
-              </div>
+              </TextBlue>
             </Col>
           </Row>
-        </Container>
+        </CardBody>
         <CardFooter>
-          <Container fluid className='px-0'>
-            <Row noGutters>
-              <Col className='pr-2'>
-                <ButtonStyler onClick={() => setFormState(FORM_STATES.WARNING)}>
-                  {formatMessage(MSG.COMMON_BUTTON_BACK)}
-                </ButtonStyler>
-              </Col>
-              <Col className='pl-2'>
-                <ButtonStyler onClick={() => toggleConfirmationPopup(true)}>
-                  {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_CONFIRMATION)}
-                </ButtonStyler>
-              </Col>
-            </Row>
-          </Container>
+          <Row>
+            <Col size={6}>
+              <ButtonStyler onClick={() => setFormState(FORM_STATES.WARNING)}>
+                {formatMessage(MSG.COMMON_BUTTON_BACK)}
+              </ButtonStyler>
+            </Col>
+            <Col size={6}>
+              <ButtonStyler btnYellow onClick={() => toggleConfirmationPopup(true)}>
+                {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_CONFIRMATION)}
+              </ButtonStyler>
+            </Col>
+          </Row>
         </CardFooter>
       </Card>
     );
