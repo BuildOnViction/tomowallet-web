@@ -40,7 +40,7 @@ class App extends PureComponent {
       <Router>
         <Web3Provider>
           <CustomIntlProvider>
-            <AppStyler className='px-0'>
+            <AppStyler>
               <NavigationBar isLoggedIn={isLoggedIn} />
               <div className='maincontent pt-3 pb-3'>
                 <Route

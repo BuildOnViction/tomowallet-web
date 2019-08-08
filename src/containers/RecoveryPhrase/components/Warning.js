@@ -9,7 +9,7 @@ import {
   CardText,
 } from 'reactstrap';
 // Custom Components
-import { ButtonStyler, ErrorTextStyler } from '../../../styles';
+import { ButtonStyler, NoticeTextRed } from '../../../styles';
 // Styles
 import warningIcon from '../../../assets/images/warning-icon.png';
 import { FORM_STATES } from '../constants';
@@ -34,10 +34,10 @@ class Warning extends PureComponent {
             this will be your safety net.
           </CardText>
           <CardText className='text-left mb-4'>
-            <ErrorTextStyler>
+            <NoticeTextRed>
               If you lose your recovery phrase, you will be unable to recover
               access to your account
-            </ErrorTextStyler>
+            </NoticeTextRed>
           </CardText>
           <CardText>
             <ButtonStyler onClick={() => updateFormState(FORM_STATES.PHRASE)}>

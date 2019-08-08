@@ -26,7 +26,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Component
-import { ButtonStyler, ErrorTextStyler } from '../../../../styles';
+import { ButtonStyler, NoticeTextRed } from '../../../../styles';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
 import { shuffleArray } from '../../../../utils';
@@ -87,9 +87,9 @@ class Verification extends PureComponent {
           <Nav>
             {errors.map((error, errorIdx) => (
               <NavItem key={`error_${errorIdx + 1}`}>
-                <ErrorTextStyler
+                <NoticeTextRed
                   key={`error_${errorIdx + 1}`}
-                >{`* ${error}`}</ErrorTextStyler>
+                >{`* ${error}`}</NoticeTextRed>
               </NavItem>
             ))}
           </Nav>
