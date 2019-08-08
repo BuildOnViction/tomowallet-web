@@ -69,10 +69,10 @@ class ImportWallet extends PureComponent {
   handleAccessWallet() {
     const { web3, importWallet } = this.props;
 
-    console.warn('create wallet', _get(importWallet, 'input.textValue', ''));
+    console.warn('create wallet', _get(importWallet, 'input.recoveryPhrase', ''));
 
     const provider = new HDWalletProvider(
-      _get(importWallet, 'input.textValue', ''),
+      _get(importWallet, 'input.recoveryPhrase', ''),
       RPC_SERVER.TOMOCHAIN_TESTNET.host,
       0,
       1,

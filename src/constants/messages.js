@@ -245,6 +245,19 @@ export default defineMessages({
     id: `${importWalletPagePrefix}.tab.ledger.text`,
     defaultMessage: 'Ledger Wallet',
   },
+  IMPORT_WALLET_TAB_LEDGER_INPUT_LABEL: {
+    id: `${importWalletPagePrefix}.tab.ledger.input.label`,
+    defaultMessage: 'Select HD derivation path',
+  },
+  IMPORT_WALLET_TAB_LEDGER_INPUT_PLACEHOLDER: {
+    id: `${importWalletPagePrefix}.tab.ledger.input.placeholder`,
+    defaultMessage: 'Select HD derivation path...',
+  },
+  IMPORT_WALLET_TAB_LEDGER_INPUT_DESCRIPTION: {
+    id: `${importWalletPagePrefix}.tab.ledger.input.description`,
+    defaultMessage:
+      "To unlock the wallet, try paths m/44'/60'/0 or m/44'/60'/0'/0 with Ethereum App, or try path m/44'/889'/0'/0 with TomoChain App (on Ledger)",
+  },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.text`,
     defaultMessage: 'Recovery Phrase/ Private Key',
@@ -260,6 +273,14 @@ export default defineMessages({
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_OPTION_IMPORT_VIA_QRCODE: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.option.importviaqrcode`,
     defaultMessage: 'Import Private Key via QR code',
+  },
+  IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE: {
+    id: `${importWalletPagePrefix}.error.invalid.recoveryphrase`,
+    defaultMessage: 'Invalid recovery phrase/private key',
+  },
+  IMPORT_WALLET_ERROR_INVALID_HD_PATH: {
+    id: `${importWalletPagePrefix}.error.invalid.hdpath`,
+    defaultMessage: 'Invalid HD Path',
   },
 });
 // ====================

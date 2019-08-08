@@ -23,6 +23,7 @@ import {
   CardFooter,
 } from 'reactstrap';
 import HDWalletProvider from 'truffle-hdwallet-provider';
+import Web3 from 'web3';
 // Custom Components
 import { ImportTypeCardStyler } from './style';
 import { ButtonStyler } from '../../../styles';
@@ -70,14 +71,53 @@ class ImportWallet extends PureComponent {
   }
 
   handleAccessWallet() {
-    const { web3, importWallet, onUpdateErrors, rpcServer } = this.props;
-    const inputText = _get(importWallet, 'input.textValue', '');
+    const {
+      web3,
+      importWallet,
+      onUpdateErrors,
+      rpcServer,
+      intl: { formatMessage },
+    } = this.props;
+    if (_get(importWallet, 'type') === IMPORT_TYPES.LEDGER) {
+      const hdPath = _get(importWallet, 'input.hdPath', '');
+      console.warn('Ledger access', hdPath);
+      if (!hdPath) {
+        onUpdateErrors([
+          formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH),
+        ]);
+      }
+    } else if (_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK) {
+      const recoveryPhrase = _get(importWallet, 'input.recoveryPhrase', '');
 
-    if (web3.utils.isHex(inputText) || inputText.split(' ').length === 12) {
-      const newWeb3 = generateWeb3(inputText, rpcServer);
-      console.warn('Import wallet', provider, web3);
-    } else {
-      onUpdateErrors(['Invalid recovery phrase/private key.']);
+      if (
+        recoveryPhrase &&
+        (web3.utils.isHex(recoveryPhrase) ||
+          recoveryPhrase.split(' ').length === 12)
+      ) {
+        const newWeb3 = new Web3(
+          new HDWalletProvider(
+            recoveryPhrase,
+            rpcServer.host,
+            0,
+            1,
+            true,
+            rpcServer.hdPath,
+          ),
+        );
+        console.warn('defaultAccount', newWeb3.eth.defaultAccount);
+
+        newWeb3.eth
+          .getBalance('0x7097c085489b4d87c56DE7816fF90f1098082B12')
+          .then(balance => {
+            console.warn('balance', balance);
+          })
+          .catch(error => console.error('getBalance error', error));
+        console.warn('Import wallet', newWeb3);
+      } else {
+        onUpdateErrors([
+          formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
+        ]);
+      }
     }
   }
 
@@ -113,7 +153,7 @@ class ImportWallet extends PureComponent {
               </CardHeader>
               <Container fluid className='px-0'>
                 <Row noGutters>
-                  <Col className='pr-4'>
+                  <Col className='pr-4 text-center'>
                     <ImportTypeCardStyler
                       isActive={
                         _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
@@ -133,7 +173,7 @@ class ImportWallet extends PureComponent {
                       </CardTitle>
                     </ImportTypeCardStyler>
                   </Col>
-                  <Col className='pl-4'>
+                  <Col className='pl-4 text-center'>
                     <ImportTypeCardStyler
                       isActive={
                         _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
@@ -153,12 +193,17 @@ class ImportWallet extends PureComponent {
                 <Row noGutters>
                   <Col>
                     {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
-                      <LedgerForm />
+                      <LedgerForm
+                        errors={_get(importWallet, 'errors', [])}
+                        formValues={_get(importWallet, 'input', {})}
+                        updateInput={onUpdateInput}
+                      />
                     )}
                     {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
                       <RPOrPKForm
-                        updateInput={onUpdateInput}
+                        errors={_get(importWallet, 'errors', [])}
                         formValues={_get(importWallet, 'input', {})}
+                        updateInput={onUpdateInput}
                       />
                     )}
                   </Col>
