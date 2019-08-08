@@ -125,7 +125,6 @@ class ImportWallet extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-<<<<<<< HEAD
       <ContainerMin>
         <Card>
           <CardHeader>
@@ -182,85 +181,6 @@ class ImportWallet extends PureComponent {
                   <CardTitle>
                     {formatMessage(
                       MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
-=======
-      <Container fluid>
-        <Row noGutters>
-          <Col
-            xs={12}
-            sm={12}
-            md={{ size: 10, offset: 1 }}
-            lg={{ size: 6, offset: 3 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
-                </CardTitle>
-                <CardText>
-                  {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
-                  <span
-                    role='presentation'
-                    onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
-                  >
-                    {formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_LINK)}
-                  </span>
-                </CardText>
-              </CardHeader>
-              <Container fluid className='px-0'>
-                <Row noGutters>
-                  <Col className='pr-4 text-center'>
-                    <ImportTypeCardStyler
-                      isActive={
-                        _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
-                      }
-                      onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
-                    >
-                      <div className='full-width mt-4'>
-                        <CardImg
-                          src=''
-                          alt={formatMessage(
-                            MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
-                          )}
-                        />
-                      </div>
-                      <CardTitle>
-                        {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
-                      </CardTitle>
-                    </ImportTypeCardStyler>
-                  </Col>
-                  <Col className='pl-4 text-center'>
-                    <ImportTypeCardStyler
-                      isActive={
-                        _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
-                      }
-                      onClick={() =>
-                        this.handleChangeType(IMPORT_TYPES.RP_OR_PK)
-                      }
-                    >
-                      <CardTitle>
-                        {formatMessage(
-                          MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
-                        )}
-                      </CardTitle>
-                    </ImportTypeCardStyler>
-                  </Col>
-                </Row>
-                <Row noGutters>
-                  <Col>
-                    {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
-                      <LedgerForm
-                        errors={_get(importWallet, 'errors', [])}
-                        formValues={_get(importWallet, 'input', {})}
-                        updateInput={onUpdateInput}
-                      />
-                    )}
-                    {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
-                      <RPOrPKForm
-                        errors={_get(importWallet, 'errors', [])}
-                        formValues={_get(importWallet, 'input', {})}
-                        updateInput={onUpdateInput}
-                      />
->>>>>>> eed8f17656288978276e835a18811da21b391746
                     )}
                   </CardTitle>
                 </ImportTypeCardStyler>
