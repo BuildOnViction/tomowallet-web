@@ -22,8 +22,6 @@ import {
   CardText,
   CardFooter,
 } from 'reactstrap';
-import HDWalletProvider from 'truffle-hdwallet-provider';
-import Web3 from 'web3';
 // Custom Components
 import { ImportTypeCardStyler } from './style';
 import { ButtonStyler } from '../../../styles';
@@ -79,6 +77,7 @@ class ImportWallet extends PureComponent {
       onStoreWallet,
       onUpdateErrors,
       rpcServer,
+      updateWeb3,
       web3,
     } = this.props;
     if (_get(importWallet, 'type') === IMPORT_TYPES.LEDGER) {
@@ -96,17 +95,12 @@ class ImportWallet extends PureComponent {
         (web3.utils.isHex(recoveryPhrase) ||
           recoveryPhrase.split(' ').length === 12)
       ) {
-        const walletProvider = generateWeb3(recoveryPhrase, rpcServer);
-        new Web3(walletProvider).eth
-          .getBalance('0x7097c085489b4d87c56DE7816fF90f1098082B12')
-          .then(balance => {
-            console.warn('balance', balance);
-          })
-          .catch(error => console.error('getBalance error', error));
-        console.warn('Import wallet', walletProvider);
-        Promise.all([onStoreWallet(getWalletInfo(walletProvider))]).then(() =>
-          history.push(ROUTE.MY_WALLET),
-        );
+        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+        getWalletInfo(newWeb3).then(walletInfo => {
+          onStoreWallet(walletInfo);
+          updateWeb3(newWeb3);
+          history.push(ROUTE.MY_WALLET);
+        });
       } else {
         onUpdateErrors([
           formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),

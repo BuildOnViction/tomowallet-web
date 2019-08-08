@@ -10,7 +10,6 @@ import { connectRouter } from 'connected-react-router';
 import { persistReducer, createTransform } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import hardSet from 'redux-persist/es/stateReconciler/hardSet';
-import autoMerge2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import { fromJS } from 'immutable';
 // Utilities
 import { history } from '../utils';

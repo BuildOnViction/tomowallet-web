@@ -8,9 +8,11 @@ import { Row, Col } from 'reactstrap';
 // Custom Components
 import NavigationBar from '../../components/NavigationBar';
 import Footer from '../../components/Footer';
+import PrivateRoute from './components/PrivateRoute';
 import WelcomePage from '../v1.0/Welcome';
 import CreateWalletPage from '../v1.0/WalletCreation';
 import ImportWallet from '../v1.0/ImportWallet';
+import MyWallet from '../v1.0/MyWallet';
 // -- TO-DO: Update style for App component in the following styled component:
 import AppStyler from './style';
 // Utilities & Constants
@@ -73,9 +75,15 @@ class App extends PureComponent {
                     )
                   }
                 />
+                <PrivateRoute
+                  isLoggedIn={isLoggedIn}
+                  path={ROUTE.MY_WALLET}
+                  component={MyWallet}
+                />
                 <Route
+                  strict
                   path={ROUTE.DEFAULT}
-                  render={() => <Redirect strict to={ROUTE.LOGIN} />}
+                  render={() => <Redirect to={ROUTE.LOGIN} />}
                 />
               </div>
               <Footer className='mt-5' isLoggedIn={isLoggedIn} />
