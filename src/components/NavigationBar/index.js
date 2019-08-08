@@ -1,6 +1,7 @@
 // Modules
 import React, { PureComponent, Fragment } from 'react';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -10,21 +11,17 @@ import {
   Nav,
   NavItem,
   UncontrolledDropdown,
-  DropdownToggle,
   DropdownMenu,
   DropdownItem,
   CardImg,
 } from 'reactstrap';
 // Custom Components
 // -- TO-DO: Update style for Navigation Bar component into following styled component:
-import {
-  NavBarStyler,
-  LinkHeader,
-  DropdownToggleHeader,
-} from './style';
+import { NavBarStyler, LinkHeader, DropdownToggleHeader } from './style';
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
 import { withIntl } from '../IntlProvider';
+import { releaseWallet } from '../../containers/Global/actions';
 import { ROUTE, RPC_SERVER, LIST, MSG } from '../../constants';
 // -- TO-DO: Import TomoWallet logo's source
 // IMG
@@ -45,6 +42,7 @@ class NavigationBar extends PureComponent {
     this.handleRedirectToHomepage = this.handleRedirectToHomepage.bind(this);
     this.handleToggleOptions = this.handleToggleOptions.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   handleRenderPublicBar() {
@@ -58,10 +56,14 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <Nav className='ml-auto' navbar>
           <NavItem>
-            <LinkHeader>{formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}</LinkHeader>
+            <LinkHeader>
+              {formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}
+            </LinkHeader>
           </NavItem>
           <NavItem>
-            <LinkHeader>{formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}</LinkHeader>
+            <LinkHeader>
+              {formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}
+            </LinkHeader>
           </NavItem>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggleHeader nav caret>
@@ -93,9 +95,9 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <Nav className='ml-auto' navbar>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret>
+            <DropdownToggleHeader nav caret>
               {networkTitle}
-            </DropdownToggle>
+            </DropdownToggleHeader>
             <DropdownMenu right>
               {Object.keys(RPC_SERVER).map((title, titleIdx) => (
                 <DropdownItem
@@ -108,9 +110,9 @@ class NavigationBar extends PureComponent {
             </DropdownMenu>
           </UncontrolledDropdown>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret>
+            <DropdownToggleHeader nav caret>
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
-            </DropdownToggle>
+            </DropdownToggleHeader>
             <DropdownMenu right>
               <DropdownItem>
                 {formatMessage(
@@ -123,7 +125,7 @@ class NavigationBar extends PureComponent {
                 )}
               </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem onClick={() => this.handleRedirectToHomepage()}>
+              <DropdownItem onClick={this.handleLogout}>
                 {formatMessage(
                   MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_LOG_OUT,
                 )}
@@ -154,6 +156,14 @@ class NavigationBar extends PureComponent {
     switchRPCServer(title);
   }
 
+  handleLogout() {
+    const { onReleaseWallet } = this.props;
+    console.warn('handle log out');
+
+    onReleaseWallet();
+    this.handleRedirectToHomepage();
+  }
+
   render() {
     const {
       isLoggedIn,
@@ -165,13 +175,15 @@ class NavigationBar extends PureComponent {
       <NavBarStyler light expand='lg'>
         <NavbarBrand onClick={this.handleRedirectToHomepage}>
           {/* -- TO-DO: Add TomoChain logo's source */}
-          <CardImg src={logo_tomochain} alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)} />
+          <CardImg
+            src={logo_tomochain}
+            alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
+          />
         </NavbarBrand>
         <NavbarToggler onClick={this.handleToggleOptions} />
         <Collapse isOpen={isExpandOptions} navbar>
-          {isLoggedIn
-            ? this.handleRenderPrivateBar()
-            : this.handleRenderPublicBar()}
+          {isLoggedIn && this.handleRenderPrivateBar()}
+          {this.handleRenderPublicBar()}
         </Collapse>
       </NavBarStyler>
     );
@@ -181,22 +193,35 @@ class NavigationBar extends PureComponent {
 
 // ===== PROP TYPES =====
 NavigationBar.propTypes = {
+  /** Action to change locale */
+  changeLocale: PropTypes.func,
+  /** React Router's API object */
+  history: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Condition flag to check authentication state for proper option view */
   isLoggedIn: PropTypes.bool,
   /** Current chosen locale */
   language: PropTypes.string,
-  /** Action to change locale */
-  changeLocale: PropTypes.func,
-  /** React Router's API object */
-  history: PropTypes.object,
+  /** Action to remove current wallet's data */
+  onReleaseWallet: PropTypes.func,
   /** Action to change current RPC Server */
   switchRPCServer: PropTypes.func,
 };
 // ======================
 
+// ===== INJECTIONS =====
+const mapDispatchToProps = dispatch => ({
+  onReleaseWallet: () => dispatch(releaseWallet()),
+});
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+// ======================
+
 export default compose(
+  withConnect,
   withRouter,
   withWeb3,
   withIntl,

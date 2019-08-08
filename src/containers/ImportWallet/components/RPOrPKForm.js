@@ -40,10 +40,10 @@ class RPOrPKForm extends PureComponent {
               </div>
               <Input
                 type='textarea'
-                name='textValue'
+                name='recoveryPhrase'
                 placeholder='Enter your Recovery Phrase or Private Key.'
-                value={_get(formValues, 'textValue', '')}
-                onChange={e => updateInput('textValue', e.target.value)}
+                value={_get(formValues, 'recoveryPhrase', '')}
+                onChange={e => updateInput('recoveryPhrase', e.target.value)}
               />
             </div>
           </Col>

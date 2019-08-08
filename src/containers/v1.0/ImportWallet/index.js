@@ -22,7 +22,6 @@ import {
   CardText,
   CardFooter,
 } from 'reactstrap';
-import HDWalletProvider from 'truffle-hdwallet-provider';
 // Custom Components
 import { ImportTypeCardStyler, BoxInner } from './style';
 import {
@@ -44,9 +43,10 @@ import {
 } from './actions';
 import reducer from './reducer';
 import { ROUTE, MSG } from '../../../constants';
-import { injectReducer, generateWeb3 } from '../../../utils';
+import { injectReducer, generateWeb3, getWalletInfo } from '../../../utils';
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
+import { storeWallet } from '../../Global/actions';
 // -- TO-DO: Add style for Import Wallet page
 
 // IMAGES
@@ -79,14 +79,42 @@ class ImportWallet extends PureComponent {
   }
 
   handleAccessWallet() {
-    const { web3, importWallet, onUpdateErrors, rpcServer } = this.props;
-    const inputText = _get(importWallet, 'input.textValue', '');
+    const {
+      history,
+      importWallet,
+      intl: { formatMessage },
+      onStoreWallet,
+      onUpdateErrors,
+      rpcServer,
+      updateWeb3,
+      web3,
+    } = this.props;
+    if (_get(importWallet, 'type') === IMPORT_TYPES.LEDGER) {
+      const hdPath = _get(importWallet, 'input.hdPath', '');
+      if (!hdPath) {
+        onUpdateErrors([
+          formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH),
+        ]);
+      }
+    } else if (_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK) {
+      const recoveryPhrase = _get(importWallet, 'input.recoveryPhrase', '');
 
-    if (web3.utils.isHex(inputText) || inputText.split(' ').length === 12) {
-      const newWeb3 = generateWeb3(inputText, rpcServer);
-      console.warn('Import wallet', provider, web3);
-    } else {
-      onUpdateErrors(['Invalid recovery phrase/private key.']);
+      if (
+        recoveryPhrase &&
+        (web3.utils.isHex(recoveryPhrase) ||
+          recoveryPhrase.split(' ').length === 12)
+      ) {
+        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+        getWalletInfo(newWeb3).then(walletInfo => {
+          onStoreWallet(walletInfo);
+          updateWeb3(newWeb3);
+          history.push(ROUTE.MY_WALLET);
+        });
+      } else {
+        onUpdateErrors([
+          formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
+        ]);
+      }
     }
   }
 
@@ -97,6 +125,7 @@ class ImportWallet extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
+<<<<<<< HEAD
       <ContainerMin>
         <Card>
           <CardHeader>
@@ -153,6 +182,85 @@ class ImportWallet extends PureComponent {
                   <CardTitle>
                     {formatMessage(
                       MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+=======
+      <Container fluid>
+        <Row noGutters>
+          <Col
+            xs={12}
+            sm={12}
+            md={{ size: 10, offset: 1 }}
+            lg={{ size: 6, offset: 3 }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
+                </CardTitle>
+                <CardText>
+                  {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
+                  <span
+                    role='presentation'
+                    onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
+                  >
+                    {formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_LINK)}
+                  </span>
+                </CardText>
+              </CardHeader>
+              <Container fluid className='px-0'>
+                <Row noGutters>
+                  <Col className='pr-4 text-center'>
+                    <ImportTypeCardStyler
+                      isActive={
+                        _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
+                      }
+                      onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
+                    >
+                      <div className='full-width mt-4'>
+                        <CardImg
+                          src=''
+                          alt={formatMessage(
+                            MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
+                          )}
+                        />
+                      </div>
+                      <CardTitle>
+                        {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
+                      </CardTitle>
+                    </ImportTypeCardStyler>
+                  </Col>
+                  <Col className='pl-4 text-center'>
+                    <ImportTypeCardStyler
+                      isActive={
+                        _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
+                      }
+                      onClick={() =>
+                        this.handleChangeType(IMPORT_TYPES.RP_OR_PK)
+                      }
+                    >
+                      <CardTitle>
+                        {formatMessage(
+                          MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+                        )}
+                      </CardTitle>
+                    </ImportTypeCardStyler>
+                  </Col>
+                </Row>
+                <Row noGutters>
+                  <Col>
+                    {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
+                      <LedgerForm
+                        errors={_get(importWallet, 'errors', [])}
+                        formValues={_get(importWallet, 'input', {})}
+                        updateInput={onUpdateInput}
+                      />
+                    )}
+                    {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
+                      <RPOrPKForm
+                        errors={_get(importWallet, 'errors', [])}
+                        formValues={_get(importWallet, 'input', {})}
+                        updateInput={onUpdateInput}
+                      />
+>>>>>>> eed8f17656288978276e835a18811da21b391746
                     )}
                   </CardTitle>
                 </ImportTypeCardStyler>
@@ -203,6 +311,8 @@ ImportWallet.propTypes = {
   importWallet: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to save wallet information in global store */
+  onStoreWallet: PropTypes.func,
   /** Action to set error messages */
   onUpdateErrors: PropTypes.func,
   /** Action to change import tab */
@@ -215,6 +325,7 @@ ImportWallet.defaultProps = {
   history: {},
   importWallet: {},
   intl: {},
+  onStoreWallet: () => {},
   onUpdateErrors: () => {},
   onUpdateImportType: () => {},
   onUpdateInput: () => {},
@@ -228,6 +339,7 @@ const mapStateToProps = () =>
   });
 const mapDispatchToProps = dispatch => ({
   onResetState: () => dispatch(resetState()),
+  onStoreWallet: wallet => dispatch(storeWallet(wallet)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onUpdateImportType: type => dispatch(updateImportType(type)),
   onUpdateInput: (name, value) => dispatch(updateInput(name, value)),

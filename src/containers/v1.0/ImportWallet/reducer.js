@@ -29,9 +29,14 @@ export default (state = initialState, action) => {
     case UPDATE_ERRORS:
       return state.setIn(['importWallet', 'errors'], action.errors);
     case UPDATE_INPUT:
-      return state.setIn(['importWallet', 'input', action.name], action.value);
+      return state
+        .setIn(['importWallet', 'input', action.name], action.value)
+        .setIn(['importWallet', 'errors'], []);
     case UPDATE_TYPE:
-      return state.setIn(['importWallet', 'type'], action.importType);
+      return state
+        .setIn(['importWallet', 'type'], action.importType)
+        .setIn(['importWallet', 'input'], {})
+        .setIn(['importWallet', 'errors'], []);
     default:
       return state;
   }

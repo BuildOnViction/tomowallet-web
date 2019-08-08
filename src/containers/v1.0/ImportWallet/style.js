@@ -61,15 +61,6 @@ const RPOrPKFormStyler = styled.div`
   height: 130px;
   padding: 45px 20px 20px 20px;
   background-color: white;
-  textarea {
-    border: none;
-    box-shadow: none;
-    text-align: center;
-    resize: none;
-    &::placeholder {
-      color: darkgrey;
-    }
-  }
   .lock-unlock-icon {
     position: absolute;
     top: 10px;

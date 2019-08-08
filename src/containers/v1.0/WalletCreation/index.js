@@ -49,9 +49,7 @@ import { injectReducer, generateWeb3, getWalletInfo } from '../../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG } from '../../../constants';
 import { storeWallet } from '../../Global/actions';
-import {
-  ContainerMin,
-} from '../../../styles';
+import { ContainerMin } from '../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -84,11 +82,10 @@ class WalletCreationPage extends PureComponent {
     } = this.props;
 
     if (
-      // _isEqual(
-      //   _get(mnemonic, 'origin'),
-      //   _get(mnemonic, 'compare', []).join(' '),
-      // )
-      true
+      _isEqual(
+        _get(mnemonic, 'origin'),
+        _get(mnemonic, 'compare', []).join(' '),
+      )
     ) {
       const newWeb3 = generateWeb3(_get(mnemonic, 'origin'), rpcServer);
       const address = newWeb3.currentProvider.addresses[0];

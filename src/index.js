@@ -9,6 +9,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 // Custom Component
 import App from './containers/App';
 // Utilities & Constants
@@ -25,11 +27,17 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 // ===== PRE-INITIATION CONFIGURATION =====
 library.add(fas, far);
 addLocaleData([...locale_en, ...locale_fr]);
+
+// Configure Redux store
+const store = configureStore({}, history);
+const persistor = persistStore(store);
 // ========================================
 
 ReactDOM.render(
-  <Provider store={configureStore({}, history)}>
-    <App />
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root'),
 );
