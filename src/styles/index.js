@@ -20,6 +20,8 @@ import {
   NoticeTextRed,
   TextLinkBlue,
   TextBlue,
+  TextYellow,
+  TextLinkYellow,
 } from './StyleTypo';
 
 export {
@@ -34,4 +36,6 @@ export {
   NoticeTextRed,
   TextLinkBlue,
   TextBlue,
+  TextYellow,
+  TextLinkYellow,
 };

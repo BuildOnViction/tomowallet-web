@@ -69,7 +69,7 @@ class Footer extends PureComponent {
                 <LinkFooter href="#">Terms of Service</LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter disabled href="#">API Documentation</LinkFooter>
+                <LinkFooter href="#">API Documentation</LinkFooter>
               </NavItem>
             </Nav>
           </Row>
