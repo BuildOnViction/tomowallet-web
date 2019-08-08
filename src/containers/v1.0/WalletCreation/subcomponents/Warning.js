@@ -123,7 +123,7 @@ class Warning extends PureComponent {
             </Col>
           </Row>
         </CardFooter>
-        </Card>
+      </Card>
     );
   }
 }

@@ -24,20 +24,22 @@ const BackgroundStyler = styled(Jumbotron)`
   }
 `;
 
-const ImportTypeCardStyler = styled(({ isActive, ...remains }) => (
-  <Card {...remains} />
-))`
-  ${({ isActive }) =>
-    isActive
-      ? 'box-shadow: 2px 2px 3px lightgrey, -2px 2px 3px lightgrey;'
-      : 'opacity: 0.5;'}
+const ImportTypeCardStyler = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
   width: 100%;
-  height: 100%;
   position: relative;
   transition: 0.1s;
+  text-align: center;
+  ${({ isActive }) =>
+    isActive
+    ? 'background-color: #2d344a;border-top: 5px solid #e4ae63;'
+      : 'opacity: 0.5;'
+  }
   .card-img {
-    width: 70px;
-    height: 70px;
+    width: 40px;
   }
   .card-body {
     .card-title {
@@ -46,6 +48,11 @@ const ImportTypeCardStyler = styled(({ isActive, ...remains }) => (
       ${({ isActive }) => isActive && 'font-weight: bold;'}
     }
   }
+`;
+
+const BoxInner = styled.div`
+  border-radius: 8px;
+  border: solid 1px #444b64;
 `;
 
 const RPOrPKFormStyler = styled.div`
@@ -70,4 +77,4 @@ const RPOrPKFormStyler = styled.div`
   }
 `;
 
-export { BackgroundStyler, ImportTypeCardStyler, RPOrPKFormStyler };
+export { BackgroundStyler, ImportTypeCardStyler, RPOrPKFormStyler, BoxInner };
