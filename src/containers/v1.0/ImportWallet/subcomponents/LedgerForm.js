@@ -7,8 +7,11 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, Label, Input, FormText, FormFeedback } from 'reactstrap';
+import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { get as _get } from 'lodash';
+import {
+  FormTextStyled,
+} from '../style';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
@@ -41,9 +44,9 @@ class LedgerForm extends PureComponent {
             <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
           ))}
         </FormFeedback>
-        <FormText>
+        <FormTextStyled>
           {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_INPUT_DESCRIPTION)}
-        </FormText>
+        </FormTextStyled>
       </FormGroup>
     );
   }
