@@ -7,12 +7,13 @@
 // Modules
 import { fromJS } from 'immutable';
 // Constants
-import { SET_TABLE_TYPE, TABLE_TYPE } from './constants';
+import { SET_TABLE_TYPE } from './constants';
+import { LIST } from '../../../constants';
 // ===================
 
 // ===== PRE-INITIATION VARIABLES =====
 const initialState = fromJS({
-  tableType: TABLE_TYPE.PORFOLIO,
+  tableType: LIST.TABLE_TYPES[0].value,
 });
 // ====================================
 

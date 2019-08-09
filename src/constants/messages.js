@@ -300,10 +300,6 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.porfolio.title`,
     defaultMessage: 'Porfolio',
   },
-  MY_WALLET_TABLE_TRANSACTIONS_TITLE: {
-    id: `${myWalletPagePrefix}.table.transactions.title`,
-    defaultMessage: 'Transactions',
-  },
   MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME: {
     id: `${myWalletPagePrefix}.table.porfolio.header.tokenname`,
     defaultMessage: 'Token name',
@@ -319,6 +315,10 @@ export default defineMessages({
   MY_WALLET_TABLE_PORFOLIO_HEADER_PRICE: {
     id: `${myWalletPagePrefix}.table.porfolio.header.price`,
     defaultMessage: 'Price (USD)',
+  },
+  MY_WALLET_TABLE_TRANSACTIONS_TITLE: {
+    id: `${myWalletPagePrefix}.table.transactions.title`,
+    defaultMessage: 'Transactions',
   },
 });
 // ====================
