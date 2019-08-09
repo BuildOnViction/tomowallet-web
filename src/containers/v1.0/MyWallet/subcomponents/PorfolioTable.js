@@ -9,20 +9,45 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+// Custom Components
+import CommonTable from '../../../../components/Table';
+// Utilities
+import { withIntl } from '../../../../components/IntlProvider';
+import porfolio from '../../../../utils/tableConfigurations/porfolio';
 // ===================
 
 // ===== MAIN COMPONENT =====
-class TransactionTable extends PureComponent {
+class PorfolioTable extends PureComponent {
   render() {
-    return <div />;
+    const {
+      intl: { formatMessage },
+    } = this.props;
+    return (
+      <CommonTable
+        data={[
+          {
+            tokenName: 'TOMO',
+          },
+        ]}
+        setConfig={porfolio}
+        getConfigProps={{
+          formatMessage,
+        }}
+      />
+    );
   }
 }
 // ==========================
 
 // ===== PROP TYPES =====
-TransactionTable.propTypes = {};
+PorfolioTable.propTypes = {
+  /** React Intl's instance object */
+  intl: PropTypes.object,
+};
 
-TransactionTable.defaultProps = {};
+PorfolioTable.defaultProps = {
+  intl: {},
+};
 // ======================
 
-export default TransactionTable;
+export default withIntl(PorfolioTable);

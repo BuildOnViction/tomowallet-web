@@ -70,3 +70,5 @@ CommonTable.defaultProps = {
   setConfig: () => [],
 };
 // ======================
+
+export default CommonTable;

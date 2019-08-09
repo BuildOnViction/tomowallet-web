@@ -23,17 +23,19 @@ class DataTables extends PureComponent {
   render() {
     const { setTableType, tableType } = this.props;
     return (
-      <Nav tabs>
-        {LIST.TABLE_TYPES.map((tab, tabIdx) => (
-          <NavItem key={`table_tab_${tabIdx + 1}`}>
-            <NavLink
-              active={tab.value === tableType}
-              onClick={() => setTableType(tab.value)}
-            >
-              {tab.label}
-            </NavLink>
-          </NavItem>
-        ))}
+      <div>
+        <Nav tabs>
+          {LIST.TABLE_TYPES.map((tab, tabIdx) => (
+            <NavItem key={`table_tab_${tabIdx + 1}`}>
+              <NavLink
+                active={tab.value === tableType}
+                onClick={() => setTableType(tab.value)}
+              >
+                {tab.label}
+              </NavLink>
+            </NavItem>
+          ))}
+        </Nav>
         <TabContent activeTab={tableType}>
           <TabPane tabId={LIST.TABLE_TYPES[0].value}>
             <PorfolioTable />
@@ -42,7 +44,7 @@ class DataTables extends PureComponent {
             <TransactionTable />
           </TabPane>
         </TabContent>
-      </Nav>
+      </div>
     );
   }
 }
