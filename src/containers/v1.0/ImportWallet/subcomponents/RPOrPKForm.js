@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // -- TO-DO: Update style for Recovery Phrase/Private Key form
 import {
   FormTextStyled,
-} from '../style';
+} from '../../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';

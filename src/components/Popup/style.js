@@ -1,27 +1,29 @@
 import styled from 'styled-components';
-import { Modal } from 'reactstrap';
+import {
+  Modal
+} from 'reactstrap';
 
 const ModalStyles = styled(Modal)`
-  margin-top: 25vh;
-  width: 550px;
-  min-width: 0px;
-  max-width: 90vw;
-  font-size: 16px;
-  color: dimgrey;
+  .modal-content {
+    padding: 2em;
+  }
   .modal-header {
-    ${({ title }) => !title && 'border: none;'}
+    justify-content: center;
+    border: 0;
+    padding: 0;
     button.close {
-      font-size: 26px;
+      display: none;
+      position: absolute;
+      top: 15px;
+      right: 15px;
     }
   }
   .modal-body {
-    padding: 0px;
+    padding: 3em 0;
   }
   .modal-footer {
-    border: none;
-    margin: 10px 50px 40px 50px;
-    padding: 0px;
+    border: 0;
+    padding: 0;
   }
 `;
-
-export default ModalStyles;
+export default ModalStyles

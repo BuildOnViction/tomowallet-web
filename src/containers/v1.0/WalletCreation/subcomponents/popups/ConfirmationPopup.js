@@ -16,6 +16,11 @@ import Popup from '../../../../../components/Popup';
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
 import { FORM_STATES } from '../../constants';
+import {
+  BoxImages
+} from '../../../../../styles';
+// IMAGES
+import imgRecovery from '../../../../../assets/images/img-recovery.png';
 // -- TO-DO: Add style for Confirmation popup
 // ===================
 
@@ -23,13 +28,16 @@ import { FORM_STATES } from '../../constants';
 const Content = ({ formatMessage }) => (
   <div className='text-center'>
     {/* -- TO-DO: Add confirmation image's source */}
-    <div>
+    <BoxImages>
       <CardImg
-        src=''
+        className='w-80'
+        src={imgRecovery}
         alt={formatMessage(MSG.RECOVERY_PHRASE_POPUP_CONFIRMATION_IMAGE_ALT)}
       />
+    </BoxImages>
+    <div className='mt-3'>
+      {formatMessage(MSG.RECOVERY_PHRASE_POPUP_CONFIRMATION_CONTENT)}
     </div>
-    <span>{formatMessage(MSG.RECOVERY_PHRASE_POPUP_CONFIRMATION_CONTENT)}</span>
   </div>
 );
 // =========================
