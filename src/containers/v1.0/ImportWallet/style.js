@@ -1,6 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
-import { Jumbotron, Card } from 'reactstrap';
+import {
+  Jumbotron,
+  Card,
+  FormText,
+} from 'reactstrap';
 
 const BackgroundStyler = styled(Jumbotron)`
   min-height: 100vh;
@@ -24,19 +27,30 @@ const BackgroundStyler = styled(Jumbotron)`
   }
 `;
 
-const ImportTypeCardStyler = styled.div`
-  display: flex;
+const BoxCardStyled = styled(Card)`
+  padding: 0 3em;
+`;
+
+const FormTextStyled = styled(FormText)`
+  font-size: 14px;
+  color: #9eaacc !important;
+  line-height: 1.7;
+  margin-top: 30px;
+`;
+
+const ImporWalletStyler = styled.div`
   align-items: center;
-  justify-content: center;
-  height: 200px;
+  border-radius: 8px;
+  cursor: pointer;
   width: 100%;
+  height: 100%;
+  padding: 2.5em 1.5em;
   position: relative;
-  transition: 0.1s;
+  transition: 0.3s;
   text-align: center;
   ${({ isActive }) =>
     isActive
-    ? 'background-color: #2d344a;border-top: 5px solid #e4ae63;'
-      : 'opacity: 0.5;'
+    ? 'background-color: #2d344a;border: solid 1px #2d344a;border-top: 5px solid #e4ae63;' : 'border: solid 1px #444b64;border-top: solid 5px #444b64;'
   }
   .card-img {
     width: 40px;
@@ -50,31 +64,9 @@ const ImportTypeCardStyler = styled.div`
   }
 `;
 
-const BoxInner = styled.div`
-  border-radius: 8px;
-  border: solid 1px #444b64;
-`;
-
-const RPOrPKFormStyler = styled.div`
-  position: relative;
-  width: 100%;
-  height: 130px;
-  padding: 45px 20px 20px 20px;
-  background-color: white;
-  .lock-unlock-icon {
-    position: absolute;
-    top: 10px;
-    left: 15px;
-    width: 20px;
-    height: 20px;
-    color: darkgrey;
-    &:hover {
-      color: dimgrey;
-    }
-  }
-  .import-by-qrcode {
-    font-weight: 600;
-  }
-`;
-
-export { BackgroundStyler, ImportTypeCardStyler, RPOrPKFormStyler, BoxInner };
+export {
+  BackgroundStyler,
+  ImporWalletStyler,
+  BoxCardStyled,
+  FormTextStyled,
+};

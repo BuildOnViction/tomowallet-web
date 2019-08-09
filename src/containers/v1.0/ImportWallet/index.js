@@ -18,12 +18,14 @@ import {
   Card,
   CardHeader,
   CardImg,
-  CardTitle,
   CardText,
   CardFooter,
 } from 'reactstrap';
 // Custom Components
-import { ImportTypeCardStyler, BoxInner } from './style';
+import {
+  ImporWalletStyler,
+  BoxCardStyled,
+} from './style';
 import {
   ContainerMin,
   ButtonStyler,
@@ -126,7 +128,7 @@ class ImportWallet extends PureComponent {
     } = this.props;
     return (
       <ContainerMin>
-        <Card>
+        <BoxCardStyled>
           <CardHeader>
             <HeadingLarge>{formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}</HeadingLarge>
             <CardText>
@@ -141,28 +143,26 @@ class ImportWallet extends PureComponent {
           </CardHeader>
           <CardBody>
             <Row noGutters>
-              <Col className='pr-4'>
-                <ImportTypeCardStyler
+              <Col className='pr-5'>
+                <ImporWalletStyler
                   isActive={
                     _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
                   }
                   onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
                 >
-                  <BoxInner>
-                    <CardImg
-                      src={LogoLedger}
-                      alt={formatMessage(
-                        MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
-                      )}
-                    />
-                    <CardTitle>
-                      {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
-                    </CardTitle>
-                  </BoxInner>
-                </ImportTypeCardStyler>
+                  <CardImg
+                    src={LogoLedger}
+                    alt={formatMessage(
+                      MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
+                    )}
+                  />
+                  <CardText className='mt-3'>
+                    {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
+                  </CardText>
+                </ImporWalletStyler>
               </Col>
-              <Col className='pl-4'>
-                <ImportTypeCardStyler
+              <Col className='pl-5'>
+                <ImporWalletStyler
                   isActive={
                     _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
                   }
@@ -170,23 +170,21 @@ class ImportWallet extends PureComponent {
                     this.handleChangeType(IMPORT_TYPES.RP_OR_PK)
                   }
                 >
-                  <div className='full-width mt-4'>
-                    <CardImg
-                      src={LogoKey}
-                      alt={formatMessage(
-                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
-                      )}
-                    />
-                  </div>
-                  <CardTitle>
+                  <CardImg
+                    src={LogoKey}
+                    alt={formatMessage(
+                      MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+                    )}
+                  />
+                  <CardText className='mt-3'>
                     {formatMessage(
                       MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
                     )}
-                  </CardTitle>
-                </ImportTypeCardStyler>
+                  </CardText>
+                </ImporWalletStyler>
               </Col>
             </Row>
-            <Row noGutters>
+            <Row noGutters className='mt-5'>
               <Col>
                 {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
                   <LedgerForm />
@@ -216,7 +214,7 @@ class ImportWallet extends PureComponent {
               </Col>
             </Row>
           </CardFooter>
-        </Card>
+        </BoxCardStyled>
       </ContainerMin>
     );
   }
