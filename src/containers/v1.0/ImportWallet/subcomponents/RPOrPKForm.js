@@ -7,11 +7,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get as _get } from 'lodash';
-import { FormGroup, Label, Input, FormText, FormFeedback } from 'reactstrap';
+import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 // -- TO-DO: Update style for Recovery Phrase/Private Key form
-import { RPOrPKFormStyler } from '../style';
+import {
+  FormTextStyled,
+} from '../style';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
@@ -26,36 +28,32 @@ class RPOrPKForm extends PureComponent {
       updateInput,
     } = this.props;
     return (
-      <RPOrPKFormStyler className='p-0'>
-        <FormGroup>
-          <Label>
-            <span>
-              {formatMessage(MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_LABEL)}
-            </span>
-            <FontAwesomeIcon icon='unlock' />
-          </Label>
-          <Input
-            type='textarea'
-            name='recoveryPhrase'
-            placeholder={formatMessage(
-              MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_PLACEHOLDER,
-            )}
-            value={_get(formValues, 'recoveryPhrase', '')}
-            onChange={e => updateInput('recoveryPhrase', e.target.value)}
-            invalid={errors.length > 0}
-          />
-          <FormFeedback>
-            {errors.map((err, errIdx) => (
-              <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
-            ))}
-          </FormFeedback>
-          <FormText className='import-by-qrcode'>
-            {formatMessage(
-              MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_OPTION_IMPORT_VIA_QRCODE,
-            )}
-          </FormText>
-        </FormGroup>
-      </RPOrPKFormStyler>
+      <FormGroup>
+        <Label>
+          {formatMessage(MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_LABEL)}
+          <FontAwesomeIcon icon='unlock' />
+        </Label>
+        <Input
+          type='textarea'
+          name='recoveryPhrase'
+          placeholder={formatMessage(
+            MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_PLACEHOLDER,
+          )}
+          value={_get(formValues, 'recoveryPhrase', '')}
+          onChange={e => updateInput('recoveryPhrase', e.target.value)}
+          invalid={errors.length > 0}
+        />
+        <FormFeedback>
+          {errors.map((err, errIdx) => (
+            <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
+          ))}
+        </FormFeedback>
+        <FormTextStyled className='import-by-qrcode'>
+          {formatMessage(
+            MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_OPTION_IMPORT_VIA_QRCODE,
+          )}
+        </FormTextStyled>
+      </FormGroup>
     );
   }
 }

@@ -12,19 +12,26 @@ import { withRouter } from 'react-router-dom';
 import { get as _get } from 'lodash';
 import PropTypes from 'prop-types';
 import {
-  Container,
+  CardBody,
   Row,
   Col,
   Card,
   CardHeader,
   CardImg,
-  CardTitle,
   CardText,
   CardFooter,
 } from 'reactstrap';
 // Custom Components
-import { ImportTypeCardStyler } from './style';
-import { ButtonStyler } from '../../../styles';
+import {
+  ImporWalletStyler,
+  BoxCardStyled,
+} from './style';
+import {
+  ContainerMin,
+  ButtonStyler,
+  HeadingLarge,
+  TextBlue,
+} from '../../../styles';
 import LedgerForm from './subcomponents/LedgerForm';
 import RPOrPKForm from './subcomponents/RPOrPKForm';
 // Utilities, Constants & Styles
@@ -43,6 +50,10 @@ import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
 import { storeWallet } from '../../Global/actions';
 // -- TO-DO: Add style for Import Wallet page
+
+// IMAGES
+import LogoLedger from '../../../assets/images/logo-ledger.png';
+import LogoKey from '../../../assets/images/logo-key.png';
 
 // ===== MAIN COMPONENT =====
 class ImportWallet extends PureComponent {
@@ -116,109 +127,95 @@ class ImportWallet extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <Container fluid>
-        <Row noGutters>
-          <Col
-            xs={12}
-            sm={12}
-            md={{ size: 10, offset: 1 }}
-            lg={{ size: 6, offset: 3 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
-                </CardTitle>
-                <CardText>
-                  {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
-                  <span
-                    role='presentation'
-                    onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
-                  >
-                    {formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_LINK)}
-                  </span>
-                </CardText>
-              </CardHeader>
-              <Container fluid className='px-0'>
-                <Row noGutters>
-                  <Col className='pr-4 text-center'>
-                    <ImportTypeCardStyler
-                      isActive={
-                        _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
-                      }
-                      onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
-                    >
-                      <div className='full-width mt-4'>
-                        <CardImg
-                          src=''
-                          alt={formatMessage(
-                            MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
-                          )}
-                        />
-                      </div>
-                      <CardTitle>
-                        {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
-                      </CardTitle>
-                    </ImportTypeCardStyler>
-                  </Col>
-                  <Col className='pl-4 text-center'>
-                    <ImportTypeCardStyler
-                      isActive={
-                        _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
-                      }
-                      onClick={() =>
-                        this.handleChangeType(IMPORT_TYPES.RP_OR_PK)
-                      }
-                    >
-                      <CardTitle>
-                        {formatMessage(
-                          MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
-                        )}
-                      </CardTitle>
-                    </ImportTypeCardStyler>
-                  </Col>
-                </Row>
-                <Row noGutters>
-                  <Col>
-                    {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
-                      <LedgerForm
-                        errors={_get(importWallet, 'errors', [])}
-                        formValues={_get(importWallet, 'input', {})}
-                        updateInput={onUpdateInput}
-                      />
+      <ContainerMin>
+        <BoxCardStyled>
+          <CardHeader>
+            <HeadingLarge>{formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}</HeadingLarge>
+            <CardText>
+              {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
+              <TextBlue
+                role='presentation'
+                onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
+              >
+                {formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_LINK)}
+              </TextBlue>
+            </CardText>
+          </CardHeader>
+          <CardBody>
+            <Row noGutters>
+              <Col className='pr-5'>
+                <ImporWalletStyler
+                  isActive={
+                    _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
+                  }
+                  onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
+                >
+                  <CardImg
+                    src={LogoLedger}
+                    alt={formatMessage(
+                      MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
                     )}
-                    {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
-                      <RPOrPKForm
-                        errors={_get(importWallet, 'errors', [])}
-                        formValues={_get(importWallet, 'input', {})}
-                        updateInput={onUpdateInput}
-                      />
+                  />
+                  <CardText className='mt-3'>
+                    {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
+                  </CardText>
+                </ImporWalletStyler>
+              </Col>
+              <Col className='pl-5'>
+                <ImporWalletStyler
+                  isActive={
+                    _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
+                  }
+                  onClick={() =>
+                    this.handleChangeType(IMPORT_TYPES.RP_OR_PK)
+                  }
+                >
+                  <CardImg
+                    src={LogoKey}
+                    alt={formatMessage(
+                      MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
                     )}
-                  </Col>
-                </Row>
-              </Container>
-              <CardFooter>
-                <Container fluid className='px-0'>
-                  <Row noGutters>
-                    <Col className='pr-2'>
-                      <ButtonStyler
-                        onClick={() => this.handleRedirect(ROUTE.LOGIN)}
-                      >
-                        {formatMessage(MSG.COMMON_BUTTON_BACK)}
-                      </ButtonStyler>
-                    </Col>
-                    <Col className='pl-2'>
-                      <ButtonStyler onClick={this.handleAccessWallet}>
-                        {formatMessage(MSG.COMMON_BUTTON_IMPORT)}
-                      </ButtonStyler>
-                    </Col>
-                  </Row>
-                </Container>
-              </CardFooter>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                  />
+                  <CardText className='mt-3'>
+                    {formatMessage(
+                      MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+                    )}
+                  </CardText>
+                </ImporWalletStyler>
+              </Col>
+            </Row>
+            <Row noGutters className='mt-4'>
+              <Col>
+                {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
+                  <LedgerForm />
+                )}
+                {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
+                  <RPOrPKForm
+                    updateInput={onUpdateInput}
+                    formValues={_get(importWallet, 'input', {})}
+                  />
+                )}
+              </Col>
+            </Row>
+          </CardBody>
+          <CardFooter>
+            <Row>
+              <Col size={6}>
+                <ButtonStyler
+                  onClick={() => this.handleRedirect(ROUTE.LOGIN)}
+                >
+                  {formatMessage(MSG.COMMON_BUTTON_BACK)}
+                </ButtonStyler>
+              </Col>
+              <Col size={6}>
+                <ButtonStyler btnYellow onClick={this.handleAccessWallet}>
+                  {formatMessage(MSG.COMMON_BUTTON_IMPORT)}
+                </ButtonStyler>
+              </Col>
+            </Row>
+          </CardFooter>
+        </BoxCardStyled>
+      </ContainerMin>
     );
   }
 }

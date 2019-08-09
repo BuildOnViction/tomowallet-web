@@ -44,6 +44,53 @@ a {
       border: 1px solid #444b64;
     }
   }
+  .form-group {
+    margin-bottom: 0;
+    label {
+      display: block;
+      color: #5e677f;
+      svg {
+        width: 12px;
+        margin-left: 5px;
+        color: #e4ae63;
+      }
+    }
+    input,
+    textarea {
+      border-radius: 8px;
+      background-color: #2d344a;
+      border: 0;
+      color: #ffffff;
+      font-size: 14px;
+      &::placeholder {
+        color: #9eaacc;
+        font-size: 13px;
+        font-family: 'Nunito Sans', sans-serif;
+      }
+      &:focus {
+        box-shadow: 0 0 0 1px  #5692cd;
+      }
+    }
+    textarea {
+      padding: 1em;
+      height: 120px;
+    }
+  }
+}
+
+
+//MODAL
+.modal-content {
+  border-radius: 8px;
+  background-color: #272d40;
+  .modal-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: 'Bai Jamjuree', sans-serif;
+  }
 }
 
 // Footer
