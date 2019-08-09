@@ -184,7 +184,7 @@ class ImportWallet extends PureComponent {
                 </ImporWalletStyler>
               </Col>
             </Row>
-            <Row noGutters className='mt-5'>
+            <Row noGutters className='mt-4'>
               <Col>
                 {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
                   <LedgerForm />
@@ -198,7 +198,7 @@ class ImportWallet extends PureComponent {
               </Col>
             </Row>
           </CardBody>
-          <CardFooter className='mt-3'>
+          <CardFooter>
             <Row>
               <Col size={6}>
                 <ButtonStyler

@@ -109,7 +109,7 @@ class Warning extends PureComponent {
             </NoticeTextRed>
           </CardText>
         </CardBody>
-        <CardFooter className='mt-3'>
+        <CardFooter>
           <Row>
             <Col size={6}>
               <ButtonStyler onClick={() => this.handleRedirect(ROUTE.LOGIN)}>
