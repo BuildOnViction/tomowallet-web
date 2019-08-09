@@ -26,6 +26,7 @@ class Popup extends PureComponent {
     const {
       backdrop,
       button,
+      centered,
       className,
       Content,
       Footer,
@@ -41,11 +42,14 @@ class Popup extends PureComponent {
       <ModalStyles
         backdrop={backdrop}
         className={className}
+        centered={centered}
         isOpen={isOpen}
         title={title}
         toggle={toggle}
       >
-        {!noHeader && <ModalHeader toggle={toggle}>{title}</ModalHeader>}
+        {!noHeader &&
+          <ModalHeader toggle={toggle}>{title}</ModalHeader>
+        }
         <ModalBody>
           <Content {...getContentProps} />
         </ModalBody>
@@ -54,18 +58,10 @@ class Popup extends PureComponent {
             <Footer {...getFooterProps} />
           ) : (
             (_get(button, 'primary') || _get(button, 'secondary')) && (
-              <Container fluid className='px-0'>
+              <Container className='px-0'>
                 <Row>
                   {_get(button, 'secondary') && (
-                    <Col
-                      xs={_get(button, 'primary') ? 6 : 12}
-                      sm={_get(button, 'primary') ? 6 : 12}
-                      md={_get(button, 'primary') ? { size: 5, offset: 1 } : 12}
-                      lg={_get(button, 'primary') ? { size: 4, offset: 2 } : 12}
-                      className={`popup-btn--secondary${
-                        _get(button, 'primary') ? ' text-right pr-3' : ''
-                      }`}
-                    >
+                    <Col size={6}>
                       <ButtonStyler
                         outline
                         onClick={_get(button, 'secondary.action', () => {})}
@@ -76,16 +72,9 @@ class Popup extends PureComponent {
                     </Col>
                   )}
                   {_get(button, 'primary') && (
-                    <Col
-                      xs={_get(button, 'secondary') ? 6 : 12}
-                      sm={_get(button, 'secondary') ? 6 : 12}
-                      md={_get(button, 'secondary') ? 5 : 12}
-                      lg={_get(button, 'secondary') ? 4 : 12}
-                      className={`popup-btn--primary${
-                        _get(button, 'secondary') ? ' pl-3' : ''
-                      }`}
-                    >
+                      <Col size={6}>
                       <ButtonStyler
+                        btnYellow
                         onClick={_get(button, 'primary.action', () => {})}
                         disabled={_get(button, 'primary.disabled')}
                       >
@@ -118,7 +107,10 @@ Popup.propTypes = {
     primary: PropTypes.object,
     secondary: PropTypes.object,
   }),
+  // if modal should be centered vertically in viewport
+  centered: PropTypes.bool,
   /** Pop-up custom class */
+  onClosed: PropTypes.func,
   className: PropTypes.string,
   /** Pop-up body component */
   Content: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
@@ -148,6 +140,7 @@ Popup.defaultProps = {
   className: '',
   Content: () => null,
   getContentProps: {},
+  centered: true,
   isOpen: false,
   noHeader: false,
   title: '',

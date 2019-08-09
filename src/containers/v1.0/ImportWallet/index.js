@@ -15,7 +15,6 @@ import {
   CardBody,
   Row,
   Col,
-  Card,
   CardHeader,
   CardImg,
   CardText,
@@ -23,14 +22,12 @@ import {
 } from 'reactstrap';
 // Custom Components
 import {
-  ImporWalletStyler,
-  BoxCardStyled,
-} from './style';
-import {
   ContainerMin,
   ButtonStyler,
   HeadingLarge,
   TextBlue,
+  ImporWalletStyler,
+  BoxCardStyled,
 } from '../../../styles';
 import LedgerForm from './subcomponents/LedgerForm';
 import RPOrPKForm from './subcomponents/RPOrPKForm';

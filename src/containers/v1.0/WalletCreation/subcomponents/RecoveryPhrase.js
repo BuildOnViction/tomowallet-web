@@ -9,12 +9,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Container,
   Row,
   Col,
   Card,
   CardHeader,
-  CardTitle,
   CardBody,
   CardText,
   CardFooter,

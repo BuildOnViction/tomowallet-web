@@ -93,7 +93,12 @@ a {
     font-family: 'Bai Jamjuree', sans-serif;
   }
 }
-
+.border {
+  border: 1px solid #444b64!important;
+}
+.w-80 {
+  width: 80px;
+}
 // Footer
 .mb-text-center {
   @media (max-width: 768px) {

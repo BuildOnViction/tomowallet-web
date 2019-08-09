@@ -40,7 +40,7 @@ import { FORM_STATES } from '../constants';
 import { MSG, ROUTE } from '../../../../constants';
 // -- TO-DO: Add style for Warning page
 // IMAGES
-import img_warning from '../../../../assets/images/img-warning.png';
+import imgWarning from '../../../../assets/images/img-warning.png';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -96,7 +96,7 @@ class Warning extends PureComponent {
         {/* -- TO-DO: Add warning image's source */}
         <WarningImages>
           <CardImg
-            src={img_warning}
+            src={imgWarning}
             alt={formatMessage(MSG.WARNING_IMAGE_ALT)}
           />
         </WarningImages>

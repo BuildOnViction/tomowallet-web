@@ -17,16 +17,27 @@ import Popup from '../../../../../components/Popup';
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
 // -- TO-DO: Add style for Private Key view popup
+import {
+  CardText,
+} from 'reactstrap';
+import {
+  HeadingMedium,
+  BoxImages
+} from '../../../../../styles';
 // ===================
 
 // ===== SUB-COMPONENT =====
 const Content = ({ formatMessage, keyView, toggleKeyVisibile }) => (
-  <div>
-    <h5>{formatMessage(MSG.RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TITLE)}</h5>
-    <div>{formatMessage(MSG.RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TEXT)}</div>
+  <div className='padding'>
+    <HeadingMedium>
+      {formatMessage(MSG.RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TITLE)}
+    </HeadingMedium>
+    <CardText>
+      {formatMessage(MSG.RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TEXT)}
+    </CardText>
     {/* -- TO-DO: Rewrite style for this QR code cover box */}
     {/* -- NOTE: There hasn't been any UI design for it yet. Please use your imagination! :) */}
-    <div className='text-center' style={{ width: '60%', marginLeft: '20%' }}>
+    <BoxImages>
       {_get(keyView, 'isPKVisible') ? (
         <QRCode value={_get(keyView, 'key')} />
       ) : (
@@ -38,7 +49,7 @@ const Content = ({ formatMessage, keyView, toggleKeyVisibile }) => (
           {formatMessage(MSG.RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_QRCODE_ALT)}
         </div>
       )}
-    </div>
+    </BoxImages>
     <div className='text-center'>{_get(keyView, 'key')}</div>
   </div>
 );

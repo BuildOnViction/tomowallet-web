@@ -11,7 +11,7 @@ import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { get as _get } from 'lodash';
 import {
   FormTextStyled,
-} from '../style';
+} from '../../../../styles';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';

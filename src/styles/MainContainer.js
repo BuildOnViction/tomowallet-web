@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import {
+  Card,
+} from 'reactstrap';
 // Style Component//
 
 const BoxBtnStyler = styled.div`
@@ -12,8 +15,19 @@ const ContainerMin = styled.div`
   max-width: 600px;
   margin: 0 auto;
 `;
+const BoxCardStyled = styled(Card)`
+  padding: 0 3em;
+`;
+
+const BoxImages = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 export {
   BoxBtnStyler,
   ContainerMin,
+  BoxCardStyled,
+  BoxImages
 };

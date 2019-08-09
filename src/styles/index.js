@@ -1,17 +1,21 @@
 import {
   BigButtonStyler,
   ButtonStyler,
-} from './Buttons';
-
+} from './StyleButtons';
+import {
+  FormTextStyled,
+} from './StyleForm';
 import {
   BoxBtnStyler,
   ContainerMin,
+  BoxCardStyled,
+  BoxImages,
 } from './MainContainer';
 import {
-  WarningImages,
-} from './LoginWallet';
+  ImporWalletStyler,
+} from './ImportWallet';
 import {
-
+  WarningImages,
 } from './CreateNewWallet';
 import {
   HeadingBig,
@@ -25,11 +29,21 @@ import {
 } from './StyleTypo';
 
 export {
+  //StyleButtons
   BigButtonStyler,
   ButtonStyler,
+  //StyleForm
+  FormTextStyled,
+  //MainContainer
   BoxBtnStyler,
-  WarningImages,
   ContainerMin,
+  BoxCardStyled,
+  BoxImages,
+  //ImportWallet
+  ImporWalletStyler,
+  //CreateNewWallet
+  WarningImages,
+  //StyleTypo
   HeadingBig,
   HeadingLarge,
   HeadingMedium,
