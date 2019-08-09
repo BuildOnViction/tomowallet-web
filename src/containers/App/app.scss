@@ -62,6 +62,7 @@ a {
       border: 0;
       color: #ffffff;
       font-size: 14px;
+      padding: 1.5em 1em;
       &::placeholder {
         color: #9eaacc;
         font-size: 13px;
@@ -118,14 +119,17 @@ a {
     display: inline-block;
     padding: 5px;
     a {
-      background: #323252;
+      background: #272d40;
       border-radius: 8px;
-      color: #525275;
+      color: #5e677f;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 30px;
       height: 30px;
+      i {
+        transition: all .3s;
+      }
       &:hover {
         i {
           color: #fff;
