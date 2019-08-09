@@ -7,23 +7,23 @@
  */
 // ==== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { get as _get } from 'lodash';
-import { Container, Row, Col } from 'reactstrap';
+// Custom Components
+import AddressInfo from './subcomponents/AddressInfo';
+import DataTables from './subcomponents/DataTables';
 // Utilities
-import {} from './actions';
-import {} from './selectors';
+import { setTableType } from './actions';
+import { selectTableType } from './selectors';
 import reducer from './reducer';
 import { DOMAIN_KEY } from './constants';
 import { injectReducer } from '../../../utils';
 import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
-import { MSG } from '../../../constants';
 import { selectWallet } from '../../Global/selectors';
 // -- TO-DO: Add style for My Wallet page component
 // ==================
@@ -31,21 +31,12 @@ import { selectWallet } from '../../Global/selectors';
 // ===== MAIN COMPONENT =====
 class MyWallet extends PureComponent {
   render() {
-    const {
-      intl: { formatMessage },
-      wallet,
-    } = this.props;
+    const { onSetTableType, tableType, wallet } = this.props;
     return (
-      <Container fluid className='px-0'>
-        <Row noGutters>
-          <Col>
-            <h3>{formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}</h3>
-            <div>
-              <span>{_get(wallet, 'address')}</span>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <Fragment>
+        <AddressInfo wallet={wallet} />
+        <DataTables setTableType={onSetTableType} tableType={tableType} />
+      </Fragment>
     );
   }
 }
@@ -55,12 +46,17 @@ class MyWallet extends PureComponent {
 MyWallet.propTypes = {
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to set current table tab */
+  onSetTableType: PropTypes.func,
+  /** Current highlighted table tab */
+  tableType: PropTypes.string,
   /** Current wallet's data */
   wallet: PropTypes.object,
 };
 
 MyWallet.defaultProps = {
   intl: {},
+  onSetTableType: () => {},
   wallet: {},
 };
 // ======================
@@ -68,9 +64,16 @@ MyWallet.defaultProps = {
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
+    tableType: selectTableType,
     wallet: selectWallet,
   });
-const withConnect = connect(mapStateToProps);
+const mapDispatchToProps = dispatch => ({
+  onSetTableType: type => dispatch(setTableType(type)),
+});
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 // ======================

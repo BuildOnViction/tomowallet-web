@@ -9,8 +9,11 @@ export const SET_TABLE_TYPE = 'TOMOWALLET/MY_WALLET/SET_TABLE_TYPE';
 // Domain Key
 export const DOMAIN_KEY = 'myWallet';
 
-// Table Types
-export const TABLE_TYPE = {
-  PORFOLIO: 1,
-  TRANSACTION: 2,
+// Tables' Column Names
+export const PORFOLIO_COLUMNS = {
+  TOKEN_NAME: 'tokenName',
+  BALANCE: 'balance',
+  VALUE: 'value',
+  PRICE: 'price',
+  ACTIONS: 'actions',
 };
