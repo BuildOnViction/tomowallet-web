@@ -31,14 +31,14 @@ class AddressInfo extends PureComponent {
         <div>{_get(wallet, 'address')}</div>
         <div>{`${_get(wallet, 'balance')} TOMO`}</div>
         <Row noGutters>
-          <Col xs={6} sm={6} md={6} lg={6}>
+          <Col xs={12} sm={12} md={8} lg={6}>
             <Row>
-              <Col xs={6} sm={6} md={6} lg={6} className='mr-2'>
+              <Col xs={6} sm={6} md={6} lg={6} className='pr-2'>
                 <ButtonStyler>
                   {formatMessage(MSG.COMMON_BUTTON_SEND)}
                 </ButtonStyler>
               </Col>
-              <Col xs={6} sm={6} md={6} lg={6} className='ml-2'>
+              <Col xs={6} sm={6} md={6} lg={6} className='pl-2'>
                 <ButtonStyler>
                   {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
                 </ButtonStyler>
