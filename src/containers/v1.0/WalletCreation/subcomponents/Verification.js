@@ -18,12 +18,15 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardTitle,
   CardText,
   CardFooter,
   Nav,
   NavItem,
 } from 'reactstrap';
+import {
+  HeadingLarge,
+  ButtonLineStyler
+} from '../../../../styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Component
 import { ButtonStyler, NoticeTextRed } from '../../../../styles';
@@ -78,12 +81,10 @@ class Verification extends PureComponent {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>{formatMessage(MSG.VERIFICATION_TITLE)}</CardTitle>
+          <HeadingLarge>{formatMessage(MSG.VERIFICATION_TITLE)}</HeadingLarge>
+          <CardText>{formatMessage(MSG.VERIFICATION_DESCRIPTION)}</CardText>
         </CardHeader>
         <CardBody>
-          <CardText>{formatMessage(MSG.VERIFICATION_DESCRIPTION)}</CardText>
-        </CardBody>
-        <div className='my-3'>
           <Nav>
             {errors.map((error, errorIdx) => (
               <NavItem key={`error_${errorIdx + 1}`}>
@@ -93,19 +94,15 @@ class Verification extends PureComponent {
               </NavItem>
             ))}
           </Nav>
-        </div>
-        <Container fluid className='mb-3 px-0 py-2 phrase-box'>
-          <Row noGutters>
+          <Row noGutters className='box-border'>
             {Array(wordNumber)
               .fill(null)
               .map((_, index) => (
                 <Col
                   key={`word_${index + 1}`}
                   xs={6}
-                  sm={6}
-                  md={6}
-                  lg={6}
-                  className='px-4 py-2'
+                  md={4}
+                  className='col-6 col-md-4 p-4'
                 >
                   {`${index + 1}. `}
                   {_get(mnemonic, ['compare', index], '') && (
@@ -114,56 +111,51 @@ class Verification extends PureComponent {
                       onClick={() => removeWord(index)}
                       className='d-inline-block phrase-word'
                     >
-                      <b>{_get(mnemonic, ['compare', index], '')}</b>
+                      <span className='pr-1'>{_get(mnemonic, ['compare', index], '')}</span>
                       <FontAwesomeIcon icon='times-circle' />
                     </div>
                   )}
                 </Col>
               ))}
           </Row>
-        </Container>
-        <Container fluid className='p-0'>
-          <Row>
+          <Row className='mt-4'>
             {shuffledMnemonic.map((word, wordIdx) => (
               <Col
                 key={`word_button_${wordIdx + 1}`}
                 xs={6}
-                sm={6}
                 md={4}
-                lg={3}
                 className='py-2'
               >
-                <ButtonStyler
+                <ButtonLineStyler
                   outline
                   onClick={() => addWord(word)}
                   disabled={_get(mnemonic, 'compare', []).includes(word)}
                 >
                   {word}
-                </ButtonStyler>
+                </ButtonLineStyler>
               </Col>
             ))}
           </Row>
-        </Container>
+        </CardBody>
         <CardFooter>
-          <Container fluid className='px-0'>
-            <Row noGutters>
-              <Col xs={6} sm={6} md={6} lg={6} className='pr-2'>
-                <ButtonStyler
-                  onClick={() => setFormState(FORM_STATES.RECOVERY_PHRASE)}
-                >
-                  {formatMessage(MSG.COMMON_BUTTON_BACK)}
-                </ButtonStyler>
-              </Col>
-              <Col xs={6} sm={6} md={6} lg={6} className='pl-2'>
-                <ButtonStyler
-                  onClick={verifyMnemonic}
-                  disabled={_get(mnemonic, 'compare', []).length !== wordNumber}
-                >
-                  {formatMessage(MSG.VERIFICATION_BUTTON_VERIFY)}
-                </ButtonStyler>
-              </Col>
-            </Row>
-          </Container>
+          <Row>
+            <Col size={6}>
+              <ButtonStyler
+                onClick={() => setFormState(FORM_STATES.RECOVERY_PHRASE)}
+              >
+                {formatMessage(MSG.COMMON_BUTTON_BACK)}
+              </ButtonStyler>
+            </Col>
+            <Col size={6}>
+              <ButtonStyler
+                btnYellow
+                onClick={verifyMnemonic}
+                disabled={_get(mnemonic, 'compare', []).length !== wordNumber}
+              >
+                {formatMessage(MSG.VERIFICATION_BUTTON_VERIFY)}
+              </ButtonStyler>
+            </Col>
+          </Row>
         </CardFooter>
       </Card>
     );

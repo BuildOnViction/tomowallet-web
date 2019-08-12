@@ -67,7 +67,7 @@ class RecoveryPhrase extends PureComponent {
           <CardText>
             {formatMessage(MSG.RECOVERY_PHRASE_NOTIFICATION_DESCRIPTION)}
           </CardText>
-          <Row noGutters className='mb-4 mt-4 box-recovery'>
+          <Row noGutters className='mb-4 mt-4 box-border'>
             {convertedMnemonic.map((word, wordIdx) => (
               <Col
                 key={`word_${wordIdx + 1}`}
