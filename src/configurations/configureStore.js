@@ -14,14 +14,10 @@ import createReducer from './rootReducer';
 // ==================
 
 // ===== CONFIGURATION =====
-export default (initialState = {}, history) => {
+export default history => {
   const middlewares = [thunkMiddleware, logger, routerMiddleware(history)];
   const enhancers = [applyMiddleware(...middlewares)];
-  const store = createStore(
-    createReducer(),
-    initialState,
-    compose(...enhancers),
-  );
+  const store = createStore(createReducer(), undefined, compose(...enhancers));
 
   store.injectedReducers = {};
 

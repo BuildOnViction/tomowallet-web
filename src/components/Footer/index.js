@@ -9,16 +9,8 @@
 // ===== IMPORTS =====
 // Modules
 import React, { PureComponent } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Nav,
-  NavItem
-} from 'reactstrap';
-import {
-  LinkFooter,
-} from './style';
+import { Row, Col, Nav, NavItem } from 'reactstrap';
+import { LinkFooter } from './style';
 // -- TO-DO: Add style for Welcome content component
 // ===================
 
@@ -47,11 +39,10 @@ const FooterButtons = [
     className: 'font-icon-reddit',
     link: 'https://www.reddit.com/r/Tomochain/',
   },
-]
+];
 
 // ===== MAIN COMPONENT =====
 class Footer extends PureComponent {
-
   render() {
     return (
       <Row className='align-items-center pt-3 pb-3'>
@@ -60,25 +51,27 @@ class Footer extends PureComponent {
           <Row className='footer-menu'>
             <Nav>
               <NavItem>
-                <LinkFooter href="#">Need help?</LinkFooter>
+                <LinkFooter href='#'>Need help?</LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter href="#">Privacy Policy</LinkFooter>
+                <LinkFooter href='#'>Privacy Policy</LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter href="#">Terms of Service</LinkFooter>
+                <LinkFooter href='#'>Terms of Service</LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter href="#">API Documentation</LinkFooter>
+                <LinkFooter href='#'>API Documentation</LinkFooter>
               </NavItem>
             </Nav>
           </Row>
         </Col>
         <Col xs={12} lg={5}>
-          <Nav className="footer-buttons">
-            {FooterButtons.map(item => (
-              <NavItem>
-                <LinkFooter href="{item.link}" target="_blank"><i className={item.className} /></LinkFooter>
+          <Nav className='footer-buttons'>
+            {FooterButtons.map((item, itemIdx) => (
+              <NavItem key={`footer_button_${itemIdx + 1}`}>
+                <LinkFooter href='{item.link}' target='_blank'>
+                  <i className={item.className} />
+                </LinkFooter>
               </NavItem>
             ))}
           </Nav>
@@ -89,4 +82,3 @@ class Footer extends PureComponent {
 }
 
 export default Footer;
-

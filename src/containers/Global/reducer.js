@@ -9,13 +9,14 @@ import { LIST } from '../../constants';
 
 const initialState = fromJS({
   wallet: null,
+  test: '',
   language: _get(LIST, ['LANGUAGES', 0, 'value'], ''),
 });
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case STORE_WALLET_INFO:
-      return state.set('wallet', action.data);
+      return state.set('wallet', fromJS(action.data)).set('test', 'newString');
     case RELEASE_WALLET_INFO:
       return state.set('wallet', null);
     case SET_LANGUAGE:

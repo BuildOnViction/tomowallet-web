@@ -29,7 +29,7 @@ library.add(fas, far);
 addLocaleData([...locale_en, ...locale_fr]);
 
 // Configure Redux store
-const store = configureStore({}, history);
+const store = configureStore(history);
 const persistor = persistStore(store);
 // ========================================
 
