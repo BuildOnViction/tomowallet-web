@@ -40,7 +40,7 @@ class DataTables extends PureComponent {
           <TabPane tabId={LIST.TABLE_TYPES[0].value}>
             <PorfolioTable />
           </TabPane>
-          <TabPane tabId={LIST.TABLE_TYPES[0].value}>
+          <TabPane tabId={LIST.TABLE_TYPES[1].value}>
             <TransactionTable />
           </TabPane>
         </TabContent>

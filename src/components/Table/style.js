@@ -27,6 +27,12 @@ const CommonTableStyler = styled(ReactTable)`
 `;
 
 const PaginationStyler = styled(Pagination)``;
+
+const EllipsisCellStyler = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 // =================
 
-export { CommonTableStyler, PaginationStyler };
+export { CommonTableStyler, PaginationStyler, EllipsisCellStyler };

@@ -328,5 +328,29 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.transactions.title`,
     defaultMessage: 'Transactions',
   },
+  MY_WALLET_TABLE_TRANSACTIONS_HEADER_TOKEN_TYPE: {
+    id: `${myWalletPagePrefix}.table.transactions.header.tokentype`,
+    defaultMessage: 'Token',
+  },
+  MY_WALLET_TABLE_TRANSACTIONS_HEADER_TX_HASH: {
+    id: `${myWalletPagePrefix}.table.transactions.header.txhash`,
+    defaultMessage: 'Txn Hash',
+  },
+  MY_WALLET_TABLE_TRANSACTIONS_HEADER_CREATE_TIME: {
+    id: `${myWalletPagePrefix}.table.transactions.header.createtime`,
+    defaultMessage: 'Age',
+  },
+  MY_WALLET_TABLE_TRANSACTIONS_HEADER_FROM: {
+    id: `${myWalletPagePrefix}.table.transactions.header.from`,
+    defaultMessage: 'From',
+  },
+  MY_WALLET_TABLE_TRANSACTIONS_HEADER_TO: {
+    id: `${myWalletPagePrefix}.table.transactions.header.to`,
+    defaultMessage: 'To',
+  },
+  MY_WALLET_TABLE_TRANSACTIONS_HEADER_QUANTITY: {
+    id: `${myWalletPagePrefix}.table.transactions.header.quantity`,
+    defaultMessage: 'Quantity',
+  },
 });
 // ====================

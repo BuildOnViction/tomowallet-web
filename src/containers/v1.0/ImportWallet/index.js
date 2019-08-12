@@ -104,12 +104,13 @@ class ImportWallet extends PureComponent {
           recoveryPhrase.split(' ').length === 12)
       ) {
         const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
-        getWalletInfo(newWeb3).then(walletInfo => {
-          onStoreWallet(walletInfo);
-          updateWeb3(newWeb3);
-          localStorage.setItem('recoveryPhrase', recoveryPhrase);
-          history.push(ROUTE.MY_WALLET);
-        });
+        getWalletInfo(newWeb3)
+          .then(walletInfo => {
+            onStoreWallet(walletInfo);
+            updateWeb3(newWeb3);
+            localStorage.setItem('recoveryPhrase', recoveryPhrase);
+          })
+          .then(() => history.push(ROUTE.MY_WALLET));
       } else {
         onUpdateErrors([
           formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),

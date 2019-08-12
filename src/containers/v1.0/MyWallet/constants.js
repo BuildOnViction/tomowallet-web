@@ -17,3 +17,11 @@ export const PORFOLIO_COLUMNS = {
   PRICE: 'price',
   ACTIONS: 'actions',
 };
+export const TRANSACTION_COLUMNS = {
+  TOKEN_TYPE: 'tokenType',
+  TX_HASH: 'txHash',
+  CREATE_TIME: 'createTime',
+  FROM: 'from',
+  TO: 'to',
+  QUANTITY: 'quantity',
+};
