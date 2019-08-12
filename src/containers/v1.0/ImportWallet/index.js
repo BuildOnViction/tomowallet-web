@@ -107,6 +107,7 @@ class ImportWallet extends PureComponent {
         getWalletInfo(newWeb3).then(walletInfo => {
           onStoreWallet(walletInfo);
           updateWeb3(newWeb3);
+          localStorage.setItem('recoveryPhrase', recoveryPhrase);
           history.push(ROUTE.MY_WALLET);
         });
       } else {
@@ -127,7 +128,9 @@ class ImportWallet extends PureComponent {
       <ContainerMin>
         <BoxCardStyled>
           <CardHeader>
-            <HeadingLarge>{formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}</HeadingLarge>
+            <HeadingLarge>
+              {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
+            </HeadingLarge>
             <CardText>
               {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
               <TextBlue
@@ -142,16 +145,12 @@ class ImportWallet extends PureComponent {
             <Row noGutters>
               <Col className='pr-5'>
                 <ImporWalletStyler
-                  isActive={
-                    _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
-                  }
+                  isActive={_get(importWallet, 'type') === IMPORT_TYPES.LEDGER}
                   onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
                 >
                   <CardImg
                     src={LogoLedger}
-                    alt={formatMessage(
-                      MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
-                    )}
+                    alt={formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT)}
                   />
                   <CardText className='mt-3'>
                     {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
@@ -163,9 +162,7 @@ class ImportWallet extends PureComponent {
                   isActive={
                     _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
                   }
-                  onClick={() =>
-                    this.handleChangeType(IMPORT_TYPES.RP_OR_PK)
-                  }
+                  onClick={() => this.handleChangeType(IMPORT_TYPES.RP_OR_PK)}
                 >
                   <CardImg
                     src={LogoKey}
@@ -174,9 +171,7 @@ class ImportWallet extends PureComponent {
                     )}
                   />
                   <CardText className='mt-3'>
-                    {formatMessage(
-                      MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
-                    )}
+                    {formatMessage(MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT)}
                   </CardText>
                 </ImporWalletStyler>
               </Col>
@@ -198,9 +193,7 @@ class ImportWallet extends PureComponent {
           <CardFooter>
             <Row>
               <Col size={6}>
-                <ButtonStyler
-                  onClick={() => this.handleRedirect(ROUTE.LOGIN)}
-                >
+                <ButtonStyler onClick={() => this.handleRedirect(ROUTE.LOGIN)}>
                   {formatMessage(MSG.COMMON_BUTTON_BACK)}
                 </ButtonStyler>
               </Col>

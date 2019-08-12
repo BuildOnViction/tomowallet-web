@@ -32,7 +32,7 @@ class App extends PureComponent {
 
   handleCheckLoggedIn() {
     const { wallet } = this.props;
-    return !_isEmpty(wallet);
+    return !_isEmpty(wallet) || localStorage.getItem('recoveryPhrase');
   }
 
   render() {

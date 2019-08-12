@@ -7,6 +7,7 @@
 // Modules
 import ReactTable from 'react-table';
 import styled from 'styled-components';
+import { Pagination } from 'reactstrap';
 // ===================
 
 // ===== STYLE =====
@@ -17,12 +18,15 @@ const CommonTableStyler = styled(ReactTable)`
         display: inline-block;
       }
     }
+    .rt-tbody {
+      .rt-td {
+        display: inline-block;
+      }
+    }
   }
 `;
 
-const TokenCellStyler = styled.div`
-  display: flex;
-`;
+const PaginationStyler = styled(Pagination)``;
 // =================
 
-export { CommonTableStyler };
+export { CommonTableStyler, PaginationStyler };

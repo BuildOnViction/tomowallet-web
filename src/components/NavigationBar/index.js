@@ -158,10 +158,11 @@ class NavigationBar extends PureComponent {
 
   handleLogout() {
     const { onReleaseWallet } = this.props;
-    console.warn('handle log out');
 
-    onReleaseWallet();
-    this.handleRedirectToHomepage();
+    Promise.all([
+      onReleaseWallet(),
+      localStorage.removeItem('recoveryPhrase'),
+    ]).then(() => this.handleRedirectToHomepage());
   }
 
   render() {

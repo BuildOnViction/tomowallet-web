@@ -10,10 +10,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get as _get, isEqual as _isEqual } from 'lodash';
-import ReactTable from 'react-table';
 // Custom Components
 // -- TO-DO: Update style for common Table component
-import { CommonTableStyler } from './style';
+import { CommonTableStyler, PaginationStyler } from './style';
 
 // ===================
 
@@ -53,11 +52,11 @@ class CommonTable extends PureComponent {
     const { columns } = this.state;
     return (
       <CommonTableStyler
-        manual
         columns={columns}
         data={data}
         defaultPageSize={5}
         height={150}
+        PaginationComponent={PaginationStyler}
         {...getTableProps}
       />
     );

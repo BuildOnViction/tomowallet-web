@@ -10,10 +10,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 // Custom Components
-import CommonTable from '../../../../components/Table';
+import CommonTable from '../../../../../components/Table';
 // Utilities
-import { withIntl } from '../../../../components/IntlProvider';
-import porfolio from '../../../../utils/tableConfigurations/porfolio';
+import { withIntl } from '../../../../../components/IntlProvider';
+import porfolio from './configuration';
 // ===================
 
 // ===== MAIN COMPONENT =====

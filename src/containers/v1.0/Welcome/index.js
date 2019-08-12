@@ -11,14 +11,10 @@ import React, { PureComponent } from 'react';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Container, Row, Col, CardImg } from 'reactstrap';
+import { Row, Col, CardImg } from 'reactstrap';
 // Custom Component
 // -- TO-DO: Update style for button component
-import {
-  BigButtonStyler,
-  BoxBtnStyler,
-  HeadingBig,
-} from '../../../styles';
+import { BigButtonStyler, BoxBtnStyler, HeadingBig } from '../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../constants';
@@ -53,7 +49,8 @@ class WelcomePage extends PureComponent {
             <div>
               <BigButtonStyler
                 btnBlue
-                onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}>
+                onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
+              >
                 {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
               </BigButtonStyler>
             </div>
@@ -62,7 +59,8 @@ class WelcomePage extends PureComponent {
             </div>
             <div>
               <BigButtonStyler
-                onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}>
+                onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
+              >
                 {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
               </BigButtonStyler>
             </div>
@@ -70,7 +68,10 @@ class WelcomePage extends PureComponent {
         </Col>
         <Col xs={12} md={6} lg={5} className='d-none d-md-block'>
           {/* -- TO-DO: Add welcome page's image source */}
-          <CardImg src={imgvisual_login} alt={formatMessage(MSG.WELCOME_IMAGE_ALT)} />
+          <CardImg
+            src={imgvisual_login}
+            alt={formatMessage(MSG.WELCOME_IMAGE_ALT)}
+          />
         </Col>
       </Row>
     );
