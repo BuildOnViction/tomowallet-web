@@ -1,6 +1,7 @@
 import {
   BigButtonStyler,
   ButtonStyler,
+  ButtonLineStyler
 } from './StyleButtons';
 import {
   FormTextStyled,
@@ -32,6 +33,7 @@ export {
   //StyleButtons
   BigButtonStyler,
   ButtonStyler,
+  ButtonLineStyler,
   //StyleForm
   FormTextStyled,
   //MainContainer

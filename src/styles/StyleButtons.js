@@ -47,4 +47,25 @@ const ButtonStyler = styled.button`
   }
 `;
 
-export { BigButtonStyler, ButtonStyler };
+const ButtonLineStyler = styled.button`
+  background: transparent;
+  border: 1px solid #444b64;
+  border-radius: 8px;
+  display: flex;
+  height: 44px;
+  padding: 0 2em;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Nunito Sans', sans-serif;
+  transition: all .3s;
+  width: 100%;
+  color: #9eaacc;
+  &:focus {
+    outline: none;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+`;
+
+export { BigButtonStyler, ButtonStyler, ButtonLineStyler };
