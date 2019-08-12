@@ -27,6 +27,15 @@ class PorfolioTable extends PureComponent {
         data={[
           {
             tokenName: 'TOMO',
+            balance: 1000,
+            value: 3600,
+            price: 15000,
+          },
+          {
+            tokenName: 'TIIT',
+            balance: 800,
+            value: 2400,
+            price: 12000,
           },
         ]}
         setConfig={porfolio}

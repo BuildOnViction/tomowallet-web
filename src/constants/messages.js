@@ -316,6 +316,10 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.porfolio.header.price`,
     defaultMessage: 'Price (USD)',
   },
+  MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_PUBLISHER: {
+    id: `${myWalletPagePrefix}.table.porfolio.cell.tokenname.publisher`,
+    defaultMessage: 'TomoChain',
+  },
   MY_WALLET_TABLE_TRANSACTIONS_TITLE: {
     id: `${myWalletPagePrefix}.table.transactions.title`,
     defaultMessage: 'Transactions',
