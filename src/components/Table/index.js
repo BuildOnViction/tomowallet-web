@@ -11,8 +11,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get as _get, isEqual as _isEqual } from 'lodash';
 // Custom Components
+import CustomPagination from './subcomponents/Pagination';
 // -- TO-DO: Update style for common Table component
-import { CommonTableStyler, PaginationStyler } from './style';
+import { CommonTableStyler } from './style';
 
 // ===================
 
@@ -54,9 +55,11 @@ class CommonTable extends PureComponent {
       <CommonTableStyler
         columns={columns}
         data={data}
-        defaultPageSize={5}
-        height={150}
-        PaginationComponent={PaginationStyler}
+        defaultPageSize={3}
+        minRows={3}
+        loading={false}
+        loadingText={null}
+        PaginationComponent={CustomPagination}
         {...getTableProps}
       />
     );
@@ -75,7 +78,7 @@ CommonTable.propTypes = {
   /** Action to generate table configuration */
   setConfig: PropTypes.func,
   /** Object of React Table configuration properties */
-  tableConfig: PropTypes.object,
+  getTableProps: PropTypes.object,
 };
 
 CommonTable.defaultProps = {
@@ -83,7 +86,7 @@ CommonTable.defaultProps = {
   data: [],
   getConfigProps: {},
   setConfig: () => [],
-  tableConfig: {},
+  getTableProps: {},
 };
 // ======================
 

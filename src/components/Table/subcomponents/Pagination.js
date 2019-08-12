@@ -8,7 +8,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { PaginationItem, PaginationLink } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
+// -- TO-DO: Update style for custom Pagination component
 import { PaginationStyler } from '../style';
 // ===================
 
@@ -27,11 +29,13 @@ class CustomPagination extends PureComponent {
   }
 
   handleChangePage(newPage) {
-    const { onChangePage } = this.props;
-    Promise.all([
-      this.setState({ currentPage: newPage }),
-      onChangePage(newPage),
-    ]);
+    const { onChangePage, totalPages } = this.props;
+    if (newPage >= 1 && newPage <= totalPages) {
+      Promise.all([
+        this.setState({ currentPage: newPage }),
+        onChangePage(newPage),
+      ]);
+    }
   }
 
   isFirstPage() {
@@ -46,10 +50,50 @@ class CustomPagination extends PureComponent {
   }
 
   render() {
+    const { totalPages } = this.props;
+    const { currentPage } = this.state;
     return (
       <PaginationStyler>
-        <PaginationItem>
-          <PaginationLink />
+        <PaginationItem disabled={this.isFirstPage()}>
+          <PaginationLink first onClick={() => this.handleChangePage(1)}>
+            <FontAwesomeIcon icon='angle-double-left' />
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem disabled={this.isFirstPage()}>
+          <PaginationLink
+            previous
+            onClick={() => this.handleChangePage(currentPage - 1)}
+          >
+            <FontAwesomeIcon icon='chevron-left' />
+          </PaginationLink>
+        </PaginationItem>
+        {Array(totalPages)
+          .fill(null)
+          .map((_, index) => (
+            <PaginationItem
+              key={`page_${index + 1}`}
+              active={currentPage === index + 1}
+            >
+              <PaginationLink onClick={() => this.handleChangePage(index + 1)}>
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+        <PaginationItem disabled={this.isLastPage()}>
+          <PaginationLink
+            next
+            onClick={() => this.handleChangePage(currentPage + 1)}
+          >
+            <FontAwesomeIcon icon='chevron-right' />
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem disabled={this.isLastPage()}>
+          <PaginationLink
+            last
+            onClick={() => this.handleChangePage(totalPages)}
+          >
+            <FontAwesomeIcon icon='angle-double-right' />
+          </PaginationLink>
         </PaginationItem>
       </PaginationStyler>
     );
@@ -67,5 +111,8 @@ CustomPagination.propTypes = {
 
 CustomPagination.defaultProps = {
   onChangePage: () => {},
+  totalPages: 5,
 };
 // ======================
+
+export default CustomPagination;
