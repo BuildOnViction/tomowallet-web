@@ -20,7 +20,7 @@ class ActionCell extends PureComponent {
     const { formatMessage } = this.props;
     return (
       <ActionCellStyler>
-        <div className='block-send'>
+        {/* <div className='block-send'>
           <div role='presentation' onClick={() => {}}>
             {formatMessage(MSG.COMMON_BUTTON_SEND)}
           </div>
@@ -29,7 +29,7 @@ class ActionCell extends PureComponent {
           <div role='presentation' onClick={() => {}}>
             {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
           </div>
-        </div>
+        </div> */}
         <div className='block-details'>
           <FontAwesomeIcon icon='ellipsis-v' />
         </div>

@@ -23,8 +23,8 @@ class DataTables extends PureComponent {
   render() {
     const { setTableType, tableType } = this.props;
     return (
-      <div>
-        <Nav tabs>
+      <div className='main_tab'>
+        <Nav tabs className='mt-5 mb-4'>
           {LIST.TABLE_TYPES.map((tab, tabIdx) => (
             <NavItem key={`table_tab_${tabIdx + 1}`}>
               <NavLink

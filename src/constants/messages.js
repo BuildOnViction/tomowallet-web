@@ -316,6 +316,14 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.porfolio.header.price`,
     defaultMessage: 'Price (USD)',
   },
+  MY_WALLET_TABLE_PORFOLIO_HEADER_SEND: {
+    id: `${myWalletPagePrefix}.table.porfolio.header.send`,
+    defaultMessage: 'Send',
+  },
+  MY_WALLET_TABLE_PORFOLIO_HEADER_RECEIVE: {
+    id: `${myWalletPagePrefix}.table.porfolio.header.receive`,
+    defaultMessage: 'Receive',
+  },
   MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_IMAGE_ALT: {
     id: `${myWalletPagePrefix}.table.porfolio.cell.tokenname.image.alt`,
     defaultMessage: '{name} Symbol',

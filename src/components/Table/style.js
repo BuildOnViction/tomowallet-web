@@ -13,15 +13,20 @@ import { Pagination } from 'reactstrap';
 // ===== STYLE =====
 const CommonTableStyler = styled(ReactTable)`
   .rt-table {
-    .rt-thead {
-      .rt-th {
-        display: inline-block;
-      }
+    .rt-tr {
+      display: grid;
+      grid-template-columns: 20% 15% 15% 15% 15% 15% 5%;
     }
-    .rt-tbody {
-      .rt-td {
-        display: inline-block;
-      }
+    .rt-th {
+      display: inline-block;
+      padding: 1em .7em;
+      width: auto !important;
+      color: #5e677f;
+    }
+    .rt-td {
+      display: inline-block;
+      padding: 1.5em .7em;
+      width: auto !important;
     }
   }
 `;

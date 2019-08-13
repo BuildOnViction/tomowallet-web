@@ -4,13 +4,17 @@
       "tokenName": "TOMO",
       "balance": 1000,
       "value": 3600,
-      "price": 15000
+      "price": 15000,
+      "send": "Send",
+      "receive": "Receive"
     },
     {
       "tokenName": "TIIT",
       "balance": 800,
       "value": 2400,
-      "price": 12000
+      "price": 12000,
+      "send": "Send",
+      "receive": "Receive"
     }
   ],
   "transactions": [
