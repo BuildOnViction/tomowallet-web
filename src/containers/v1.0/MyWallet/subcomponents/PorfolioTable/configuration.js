@@ -17,7 +17,7 @@ import { MSG } from '../../../../../constants';
 // ===================
 
 // ===== CONFIGURATION =====
-export default ({ formatMessage }) => [
+export default ({ formatMessage, openSendTokenPopup }) => [
   {
     headerClassName: 'd-none',
     columns: [
@@ -59,7 +59,13 @@ export default ({ formatMessage }) => [
           </InputGroup>
         ),
         accessor: PORFOLIO_COLUMNS.ACTIONS,
-        Cell: () => <ActionCell formatMessage={formatMessage} />,
+        Cell: ({ original }) => (
+          <ActionCell
+            formatMessage={formatMessage}
+            openSendTokenPopup={openSendTokenPopup}
+            rowValues={original}
+          />
+        ),
         width: 300,
       },
     ],

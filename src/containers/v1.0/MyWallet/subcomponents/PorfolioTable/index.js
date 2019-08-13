@@ -9,6 +9,7 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
 // Utilities
@@ -23,6 +24,7 @@ class PorfolioTable extends PureComponent {
   render() {
     const {
       intl: { formatMessage },
+      openSendTokenPopup,
     } = this.props;
     return (
       <CommonTable
@@ -30,6 +32,7 @@ class PorfolioTable extends PureComponent {
         setConfig={porfolioConfig}
         getConfigProps={{
           formatMessage,
+          openSendTokenPopup,
         }}
         getTableProps={{
           minRows: 3,
@@ -45,11 +48,14 @@ class PorfolioTable extends PureComponent {
 PorfolioTable.propTypes = {
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to show/hide send token popup */
+  openSendTokenPopup: PropTypes.func,
 };
 
 PorfolioTable.defaultProps = {
   intl: {},
+  openSendTokenPopup: () => {},
 };
 // ======================
 
-export default withIntl(PorfolioTable);
+export default compose(withIntl)(PorfolioTable);

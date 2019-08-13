@@ -8,6 +8,7 @@ import {
   decryptWalletInfo,
   getWalletInfo,
 } from './blockchain';
+import getValidations, { mergeErrors } from './validations';
 
 export {
   injectReducer,
@@ -18,4 +19,6 @@ export {
   generateWeb3,
   decryptWalletInfo,
   getWalletInfo,
+  getValidations,
+  mergeErrors,
 };

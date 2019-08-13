@@ -56,7 +56,6 @@ const generateWeb3 = (
  * getWalletInfo
  *
  * Retrieve some wallet's basic information from a Web3 object
- * @param {Web3} web3 A Web3 object having provider
  */
 const getWalletInfo = web3 => {
   if (web3) {

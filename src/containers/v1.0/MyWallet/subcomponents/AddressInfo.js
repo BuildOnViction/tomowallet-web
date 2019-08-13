@@ -16,6 +16,7 @@ import { ButtonStyler } from '../../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
+// -- TO-DO: Add style for Address Information section
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -23,6 +24,7 @@ class AddressInfo extends PureComponent {
   render() {
     const {
       intl: { formatMessage },
+      openSendTokenPopup,
       wallet,
     } = this.props;
     return (
@@ -34,7 +36,7 @@ class AddressInfo extends PureComponent {
           <Col xs={12} sm={12} md={8} lg={6}>
             <Row>
               <Col xs={6} sm={6} md={6} lg={6} className='pr-2'>
-                <ButtonStyler>
+                <ButtonStyler onClick={() => openSendTokenPopup()}>
                   {formatMessage(MSG.COMMON_BUTTON_SEND)}
                 </ButtonStyler>
               </Col>
@@ -56,12 +58,15 @@ class AddressInfo extends PureComponent {
 AddressInfo.propTypes = {
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to show send token popup */
+  openSendTokenPopup: PropTypes.func,
   /** Wallet's data */
   wallet: PropTypes.object,
 };
 
 AddressInfo.defaultProps = {
   intl: {},
+  openSendTokenPopup: () => {},
   wallet: {},
 };
 // ======================
