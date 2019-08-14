@@ -52,6 +52,10 @@ export default defineMessages({
     id: `${buttonPrefix}.receive`,
     defaultMessage: 'Receive',
   },
+  COMMON_BUTTON_MAXIMUM: {
+    id: `${buttonPrefix}.maximum`,
+    defaultMessage: 'Max',
+  },
   // Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {
     id: `${navbarPrefix}.logo.alt`,
@@ -359,6 +363,70 @@ export default defineMessages({
   MY_WALLET_TABLE_TRANSACTIONS_HEADER_QUANTITY: {
     id: `${myWalletPagePrefix}.table.transactions.header.quantity`,
     defaultMessage: 'Quantity',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_TITLE: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.title`,
+    defaultMessage: 'Send',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.token.label`,
+    defaultMessage: 'Token',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.token.placeholder`,
+    defaultMessage: 'Select token...',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.recipient.label`,
+    defaultMessage: 'Recipient',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_PLACEHOLDER: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.recipient.placeholder`,
+    defaultMessage: 'Paste or scan an address...',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.transferamount.label`,
+    defaultMessage: 'Transfer Amount',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_PLACEHOLDER: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.transferamount.placeholder`,
+    defaultMessage: 'Add amount token...',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.message.label`,
+    defaultMessage: 'Message',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_PLACEHOLDER: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.message.placeholder`,
+    defaultMessage: 'Write message...',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.info.transactionfee.label`,
+    defaultMessage: 'Transaction fee',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_TOKEN_REQUIRED: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.token.required`,
+    defaultMessage: 'Please choose a token',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.recipient.required`,
+    defaultMessage: 'Please enter a recipient address',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_INVALID: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.recipient.invalid`,
+    defaultMessage: 'This recipient is invalid',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.amount.required`,
+    defaultMessage: 'Please enter an amount of token',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.amount.invalid`,
+    defaultMessage: 'Transfer amount is not correct',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_MESSAGE_MAXLENGTH: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.message.maxlength`,
+    defaultMessage: 'Message exceeds maximum 255 characters',
   },
 });
 // ====================

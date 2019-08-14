@@ -17,55 +17,79 @@ import { MSG } from '../../../../../constants';
 // ===================
 
 // ===== CONFIGURATION =====
-export default ({ formatMessage }) => [
+export default ({ formatMessage, openSendTokenPopup }) => [
   {
-    headerClassName: 'd-none',
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME),
     columns: [
       {
-        Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME),
+        headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.TOKEN_NAME,
         Cell: ({ value }) => (
           <TokenCell formatMessage={formatMessage} value={value} />
         ),
-      },
+      }
+    ]
+  },
+  {
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_BALANCE),
+    columns: [
       {
-        Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_BALANCE),
+        headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.BALANCE,
         Cell: ({ value }) => value,
-      },
+      }
+    ]
+  },
+  {
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_VALUE),
+    columns: [
       {
-        Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_VALUE),
+        headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.VALUE,
         Cell: ({ value }) => value,
-      },
+      }
+    ]
+  },
+  {
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_PRICE),
+    columns: [
       {
-        Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_PRICE),
+        headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.PRICE,
         Cell: ({ value }) => value,
-      },
+      }
+    ]
+  },
+  {
+    Header: ({ searchToken }) => (
+      <InputGroup size='sm'>
+        <Input name='searchToken' value={searchToken} />
+        <InputGroupAddon addonType='append'>
+          <InputGroupText>
+            <FontAwesomeIcon icon='search' />
+          </InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    ),
+    accessor: 'abc',
+    columns: [
       {
+        headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.SEND,
-        Cell: ({ value }) => value,
+        Cell: ({ value }) => 'Send',
       },
       {
+        headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.RECEIVE,
         Cell: ({ value }) => value,
       },
       {
-        // Header: ({ searchToken }) => (
-        //   <InputGroup size='sm'>
-        //     <Input name='searchToken' value={searchToken} />
-        //     <InputGroupAddon addonType='append'>
-        //       <InputGroupText>
-        //         <FontAwesomeIcon icon='search' />
-        //       </InputGroupText>
-        //     </InputGroupAddon>
-        //   </InputGroup>
-        // ),
-        // accessor: PORFOLIO_COLUMNS.ACTIONS,
-        Cell: () => <ActionCell formatMessage={formatMessage} />,
+        Cell: () =>
+          <div className='block-details'>
+            <FontAwesomeIcon icon='ellipsis-v' />
+          </div>
       },
     ],
   },
-];
+]
 // =========================

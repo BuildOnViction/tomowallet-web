@@ -13,29 +13,203 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { get as _get, isEmpty as _isEmpty } from 'lodash';
 // Custom Components
 import AddressInfo from './subcomponents/AddressInfo';
 import DataTables from './subcomponents/DataTables';
+import SendTokenPopup from './subcomponents/popups/SendToken';
 // Utilities
-import { setTableType } from './actions';
-import { selectTableType } from './selectors';
+import {
+  setTableType,
+  toggleSendTokenPopup,
+  loadTokenOptions,
+  loadTokenOptionsSuccess,
+  updateSendTokenInput,
+  updateSendTokenErrors,
+} from './actions';
+import {
+  selectTableType,
+  selectReceiveToKenPopup,
+  selectSendTokenPopup,
+  selectSendTokenForm,
+  selectSuccessPopup,
+  selectTokenOptions,
+} from './selectors';
 import reducer from './reducer';
-import { DOMAIN_KEY } from './constants';
-import { injectReducer } from '../../../utils';
+import { DOMAIN_KEY, SEND_TOKEN_FIELDS, PORFOLIO_COLUMNS } from './constants';
+import { injectReducer, getValidations, mergeErrors } from '../../../utils';
 import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
 import { selectWallet } from '../../Global/selectors';
+import { MSG } from '../../../constants';
 // -- TO-DO: Add style for My Wallet page component
 // ==================
 
 // ===== MAIN COMPONENT =====
 class MyWallet extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleAddFullAmount = this.handleAddFullAmount.bind(this);
+    this.handleCloseSendTokenPopup = this.handleCloseSendTokenPopup.bind(this);
+    this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
+    this.handleSubmitSendToken = this.handleSubmitSendToken.bind(this);
+    this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
+  }
+
+  componentDidMount() {
+    const { onLoadTokenOptionsSuccess } = this.props;
+    onLoadTokenOptionsSuccess([
+      {
+        label: 'TOMO',
+        value: 'TOMO',
+      },
+      {
+        label: 'KBS',
+        value: 'KBS',
+      },
+      {
+        label: 'KYC',
+        value: 'KYC',
+      },
+    ]);
+  }
+
+  handleAddFullAmount() {
+    const { onUpdateSendTokenInput, sendTokenForm } = this.props;
+    console.warn('Add full amount', sendTokenForm);
+
+    onUpdateSendTokenInput(
+      SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+      _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN, 'balance'], ''),
+    );
+  }
+
+  handleCloseSendTokenPopup() {
+    const { onToggleSendTokenPopup } = this.props;
+    onToggleSendTokenPopup(false);
+  }
+
+  handleOpenSendTokenPopup(initialValues) {
+    const { onToggleSendTokenPopup } = this.props;
+    onToggleSendTokenPopup(true, initialValues);
+  }
+
+  handleSubmitSendToken() {
+    const { onUpdateSendTokenErrors } = this.props;
+    const errorList = this.handleValidationSendForm();
+    if (!_isEmpty(errorList)) {
+      onUpdateSendTokenErrors(errorList);
+    } else {
+      console.warn('Begin submitting...');
+    }
+  }
+
+  handleValidationSendForm() {
+    const {
+      intl: { formatMessage },
+      sendTokenForm,
+      web3,
+    } = this.props;
+    const {
+      isRequired,
+      isAddress,
+      isMaxNumber,
+      isMinNumber,
+      isMaxLength,
+    } = getValidations(web3);
+
+    const errorList = mergeErrors([
+      isRequired(
+        {
+          name: SEND_TOKEN_FIELDS.TOKEN,
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN, 'value']),
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_TOKEN_REQUIRED),
+      ),
+      isRequired(
+        {
+          name: SEND_TOKEN_FIELDS.RECIPIENT,
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT]),
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED),
+      ),
+      isAddress(
+        {
+          name: SEND_TOKEN_FIELDS.RECIPIENT,
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT]),
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_INVALID),
+      ),
+      isRequired(
+        {
+          name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED),
+      ),
+      isMaxNumber(
+        {
+          name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+          max: _get(sendTokenForm, [
+            SEND_TOKEN_FIELDS.TOKEN,
+            PORFOLIO_COLUMNS.BALANCE,
+          ]),
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID),
+      ),
+      isMinNumber(
+        {
+          name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+          min: 1,
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID),
+      ),
+      isMaxLength(
+        {
+          name: SEND_TOKEN_FIELDS.MESSAGE,
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.MESSAGE]),
+          max: 255,
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_MESSAGE_MAXLENGTH),
+      ),
+    ]);
+
+    return errorList;
+  }
+
   render() {
-    const { onSetTableType, tableType, wallet } = this.props;
+    const {
+      onSetTableType,
+      onUpdateSendTokenInput,
+      sendTokenForm,
+      sendToKenPopup,
+      tableType,
+      tokenOptions,
+      wallet,
+    } = this.props;
     return (
       <Fragment>
-        <AddressInfo wallet={wallet} />
-        <DataTables setTableType={onSetTableType} tableType={tableType} />
+        <AddressInfo
+          wallet={wallet}
+          openSendTokenPopup={this.handleOpenSendTokenPopup}
+        />
+        <DataTables
+          setTableType={onSetTableType}
+          tableType={tableType}
+          openSendTokenPopup={this.handleOpenSendTokenPopup}
+        />
+        <SendTokenPopup
+          addFullAmount={this.handleAddFullAmount}
+          closePopup={this.handleCloseSendTokenPopup}
+          formValues={sendTokenForm}
+          popupData={sendToKenPopup}
+          submitSendToken={this.handleSubmitSendToken}
+          tokenOptions={tokenOptions}
+          updateInput={onUpdateSendTokenInput}
+        />
       </Fragment>
     );
   }
@@ -44,19 +218,39 @@ class MyWallet extends PureComponent {
 
 // ===== PROP TYPES =====
 MyWallet.propTypes = {
+  sendTokenForm: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to request for token list by address */
+  onLoadTokenOptions: PropTypes.func,
+  /** Action to store token options (TO-BE-REMOVED)*/
+  onLoadTokenOptionsSuccess: PropTypes.func,
   /** Action to set current table tab */
   onSetTableType: PropTypes.func,
+  /** Action to show/hide send token popup */
+  onToggleSendTokenPopup: PropTypes.func,
+  /** Action to store send token form errors */
+  onUpdateSendTokenErrors: PropTypes.func,
+  /** Action to handle input change in send token form */
+  onUpdateSendTokenInput: PropTypes.func,
   /** Current highlighted table tab */
   tableType: PropTypes.string,
+  /** List of token's data */
+  tokenOptions: [],
   /** Current wallet's data */
   wallet: PropTypes.object,
 };
 
 MyWallet.defaultProps = {
   intl: {},
+  onLoadTokenOptions: () => {},
+  onLoadTokenOptionsSuccess: () => {},
   onSetTableType: () => {},
+  onToggleSendTokenPopup: () => {},
+  onUpdateSendTokenErrors: () => {},
+  onUpdateSendTokenInput: () => {},
+  sendTokenForm: {},
+  tokenOptions: [],
   wallet: {},
 };
 // ======================
@@ -64,11 +258,24 @@ MyWallet.defaultProps = {
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
+    receivePopup: selectReceiveToKenPopup,
+    sendTokenForm: selectSendTokenForm,
+    sendToKenPopup: selectSendTokenPopup,
+    successPopup: selectSuccessPopup,
     tableType: selectTableType,
+    tokenOptions: selectTokenOptions,
     wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
+  onLoadTokenOptions: address => dispatch(loadTokenOptions(address)),
+  onLoadTokenOptionsSuccess: tokens =>
+    dispatch(loadTokenOptionsSuccess(tokens)),
   onSetTableType: type => dispatch(setTableType(type)),
+  onToggleSendTokenPopup: (bool, initialValues) =>
+    dispatch(toggleSendTokenPopup(bool, initialValues)),
+  onUpdateSendTokenErrors: errors => dispatch(updateSendTokenErrors(errors)),
+  onUpdateSendTokenInput: (name, value) =>
+    dispatch(updateSendTokenInput(name, value)),
 });
 const withConnect = connect(
   mapStateToProps,

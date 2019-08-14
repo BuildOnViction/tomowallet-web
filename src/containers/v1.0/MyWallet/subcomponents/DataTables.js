@@ -21,7 +21,7 @@ import { LIST } from '../../../../constants';
 // ===== MAIN COMPONENT =====
 class DataTables extends PureComponent {
   render() {
-    const { setTableType, tableType } = this.props;
+    const { setTableType, tableType, openSendTokenPopup } = this.props;
     return (
       <div className='main_tab'>
         <Nav tabs className='mt-5 mb-4'>
@@ -38,7 +38,7 @@ class DataTables extends PureComponent {
         </Nav>
         <TabContent activeTab={tableType}>
           <TabPane tabId={LIST.TABLE_TYPES[0].value}>
-            <PorfolioTable />
+            <PorfolioTable openSendTokenPopup={openSendTokenPopup} />
           </TabPane>
           <TabPane tabId={LIST.TABLE_TYPES[1].value}>
             <TransactionTable />

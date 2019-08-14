@@ -9,7 +9,8 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { persistReducer, createTransform } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
+import hardSet from 'redux-persist/es/stateReconciler/hardSet';
+// import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import { fromJS } from 'immutable';
 import { get as _get, isEmpty as _isEmpty } from 'lodash';
 // Utilities
@@ -52,7 +53,7 @@ const rootPersistConfig = {
   storage,
   whitelist: ['global'],
   transforms: [GlobalTransform],
-  stateReconciler: autoMergeLevel2,
+  stateReconciler: hardSet,
 };
 
 export default (injectedReducers = {}) =>
