@@ -43,7 +43,7 @@ const TokenOption = props => {
           <span>{`${data.tokenName} (${data.publisher})`}</span>
         </Col>
         <Col xs={6} sm={6} md={6} lg={6} className='text-right'>
-          {`${data.balance} ${data.tokenName}`}
+          {`${data.balance.toLocaleString()} ${data.tokenName}`}
         </Col>
       </Row>
     </Container>
@@ -63,7 +63,7 @@ const TokenInputValue = props => {
           <span>{`${data.tokenName} (${data.publisher})`}</span>
         </Col>
         <Col xs={5} sm={5} md={5} lg={5} className='text-right'>
-          {`${data.balance} ${data.tokenName}`}
+          {`${data.balance.toLocaleString()} ${data.tokenName}`}
         </Col>
       </Row>
     </Container>

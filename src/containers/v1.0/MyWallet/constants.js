@@ -4,6 +4,7 @@
  *
  */
 // Actions
+export const ADD_NATIVE_CURRENCY = 'TOMOWALLET/MY_WALLET/ADD_NATIVE_CURRENCY';
 export const LOAD_TOKEN_OPTIONS = 'TOMOWALLET/MY_WALLET/LOAD_TOKEN_OPTIONS';
 export const LOAD_TOKEN_OPTIONS_SUCCESS =
   'TOMOWALLET/MY_WALLET/LOAD_TOKEN_OPTIONS_SUCCESS';
@@ -31,6 +32,8 @@ export const PORFOLIO_COLUMNS = {
   TOKEN_NAME: 'tokenName',
   TRANSACTION_FEE: 'txFee',
   VALUE: 'value',
+  DECIMALS: 'decimals',
+  TOKEN_ADDRESS: 'tokenAddress',
 };
 export const TRANSACTION_COLUMNS = {
   TOKEN_TYPE: 'tokenType',

@@ -6,6 +6,7 @@
 // ===== IMPORTS =====
 // Constants
 import {
+  ADD_NATIVE_CURRENCY,
   LOAD_TOKEN_OPTIONS,
   LOAD_TOKEN_OPTIONS_SUCCESS,
   SET_TABLE_TYPE,
@@ -18,6 +19,10 @@ import {
 // ===================
 
 // ===== ACTIONS =====
+export const addNativeCurrency = token => ({
+  type: ADD_NATIVE_CURRENCY,
+  token,
+});
 export const loadTokenOptions = address => ({
   type: LOAD_TOKEN_OPTIONS,
   address,

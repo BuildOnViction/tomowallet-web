@@ -38,10 +38,15 @@ class DataTables extends PureComponent {
         </Nav>
         <TabContent activeTab={tableType}>
           <TabPane tabId={LIST.TABLE_TYPES[0].value}>
-            <PorfolioTable openSendTokenPopup={openSendTokenPopup} />
+            <PorfolioTable
+              openSendTokenPopup={openSendTokenPopup}
+              isActive={tableType === LIST.TABLE_TYPES[0].value}
+            />
           </TabPane>
           <TabPane tabId={LIST.TABLE_TYPES[1].value}>
-            <TransactionTable />
+            <TransactionTable
+              isActive={tableType === LIST.TABLE_TYPES[0].value}
+            />
           </TabPane>
         </TabContent>
       </div>

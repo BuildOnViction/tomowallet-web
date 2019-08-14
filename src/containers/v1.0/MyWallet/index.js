@@ -26,6 +26,7 @@ import {
   loadTokenOptionsSuccess,
   updateSendTokenInput,
   updateSendTokenErrors,
+  addNativeCurrency,
 } from './actions';
 import {
   selectTableType,
@@ -61,11 +62,6 @@ class MyWallet extends PureComponent {
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
     this.handleSubmitSendToken = this.handleSubmitSendToken.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
-  }
-
-  componentDidMount() {
-    const { onLoadTokenOptions, onLoadTokenOptionsSuccess } = this.props;
-    onLoadTokenOptions('0xec6c16a19d6f799b1d2bc4b0df128ff39df00bfb');
   }
 
   handleAddFullAmount() {
@@ -214,10 +210,6 @@ MyWallet.propTypes = {
   sendTokenForm: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
-  /** Action to request for token list by address */
-  onLoadTokenOptions: PropTypes.func,
-  /** Action to store token options (TO-BE-REMOVED)*/
-  onLoadTokenOptionsSuccess: PropTypes.func,
   /** Action to set current table tab */
   onSetTableType: PropTypes.func,
   /** Action to show/hide send token popup */
@@ -236,8 +228,6 @@ MyWallet.propTypes = {
 
 MyWallet.defaultProps = {
   intl: {},
-  onLoadTokenOptions: () => {},
-  onLoadTokenOptionsSuccess: () => {},
   onSetTableType: () => {},
   onToggleSendTokenPopup: () => {},
   onUpdateSendTokenErrors: () => {},
@@ -260,9 +250,6 @@ const mapStateToProps = () =>
     wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
-  onLoadTokenOptions: address => dispatch(loadTokenOptions(address)),
-  onLoadTokenOptionsSuccess: tokens =>
-    dispatch(loadTokenOptionsSuccess(tokens)),
   onSetTableType: type => dispatch(setTableType(type)),
   onToggleSendTokenPopup: (bool, initialValues) =>
     dispatch(toggleSendTokenPopup(bool, initialValues)),

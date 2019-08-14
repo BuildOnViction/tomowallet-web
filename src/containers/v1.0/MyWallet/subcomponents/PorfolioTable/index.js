@@ -15,6 +15,7 @@ import { createStructuredSelector } from 'reselect';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
 // Utilities
+import { addNativeCurrency, loadTokenOptions } from '../../actions';
 import { selectTokenOptions } from '../../selectors';
 import { withIntl } from '../../../../../components/IntlProvider';
 import porfolioConfig from './configuration';
@@ -22,6 +23,21 @@ import porfolioConfig from './configuration';
 
 // ===== MAIN COMPONENT =====
 class PorfolioTable extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleLoadData = this.handleLoadData.bind(this);
+  }
+
+  componentDidMount() {
+    this.handleLoadData();
+  }
+
+  handleLoadData() {
+    const { onAddNativeCurrency, onLoadTokenOptions } = this.props;
+    onLoadTokenOptions('0xec6c16a19d6f799b1d2bc4b0df128ff39df00bfb');
+  }
+
   render() {
     const {
       data,
@@ -54,6 +70,12 @@ PorfolioTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Condition flag to trigger data reload */
+  isActive: PropTypes.bool,
+  /** Action to add native currency at the beginning of the porfolio table */
+  onAddNativeCurrency: PropTypes.func,
+  /** Action to request for token list by address */
+  onLoadTokenOptions: PropTypes.func,
   /** Action to show/hide send token popup */
   openSendTokenPopup: PropTypes.func,
 };
@@ -61,6 +83,9 @@ PorfolioTable.propTypes = {
 PorfolioTable.defaultProps = {
   data: [],
   intl: {},
+  isActive: false,
+  onAddNativeCurrency: () => {},
+  onLoadTokenOptions: () => {},
   openSendTokenPopup: () => {},
 };
 // ======================
@@ -70,7 +95,14 @@ const mapStateToProps = () =>
   createStructuredSelector({
     data: selectTokenOptions,
   });
-const withConnect = connect(mapStateToProps);
+const mapDispatchToProps = dispatch => ({
+  onAddNativeCurrency: token => dispatch(addNativeCurrency(token)),
+  onLoadTokenOptions: address => dispatch(loadTokenOptions(address)),
+});
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 // ======================
 
 export default compose(

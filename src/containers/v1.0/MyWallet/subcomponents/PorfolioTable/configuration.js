@@ -8,6 +8,7 @@
 import React from 'react';
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { get as _get } from 'lodash';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
 import ActionCell from './subcomponents/ActionCell';

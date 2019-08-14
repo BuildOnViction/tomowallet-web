@@ -9,6 +9,7 @@ import { fromJS } from 'immutable';
 import { omit as _omit, get as _get } from 'lodash';
 // Constants
 import {
+  ADD_NATIVE_CURRENCY,
   LOAD_TOKEN_OPTIONS_SUCCESS,
   PORFOLIO_COLUMNS,
   SEND_TOKEN_FIELDS,
@@ -50,6 +51,10 @@ const initialState = fromJS({
 // ===== REDUCER =====
 export default (state = initialState, action) => {
   switch (action.type) {
+    case ADD_NATIVE_CURRENCY:
+      return state.update('tokenOptions', tokens =>
+        tokens.unshift(action.token),
+      );
     case LOAD_TOKEN_OPTIONS_SUCCESS:
       return state.set(
         'tokenOptions',
@@ -62,9 +67,12 @@ export default (state = initialState, action) => {
             [PORFOLIO_COLUMNS.SYMBOL]: _get(token, 'symbol', ''),
             [PORFOLIO_COLUMNS.ICON]: _get(token, 'icon', ''),
             [PORFOLIO_COLUMNS.BALANCE]: balance,
+            [PORFOLIO_COLUMNS.DECIMALS]: _get(token, 'decimals', 0),
             [PORFOLIO_COLUMNS.PRICE]: _get(token, 'usdPrice', 0),
             [PORFOLIO_COLUMNS.VALUE]: balance * _get(token, 'usdPrice', 0),
+            [PORFOLIO_COLUMNS.TOKEN_ADDRESS]: _get(token, 'tokenAddress', ''),
             [PORFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
+            [PORFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
           };
         }),
       );
