@@ -17,17 +17,11 @@ import logoKyper from '../../../../../../assets/images/logo-kyper.png';
 import logoKucoin from '../../../../../../assets/images/logo-tomo.png';
 // ===================
 
-const LogoToken = [
-  {
-    logo: logoTomo,
-  },
-  {
-    logo: logoKyper,
-  },
-  {
-    logo: logoKucoin,
-  },
-];
+const LogoToken = {
+  TOMO: logoTomo,
+  KYPER: logoKyper,
+  KUCOIN: logoKucoin
+};
 
 // ===== MAIN COMPONENT =====
 class TokenCell extends PureComponent {
@@ -37,9 +31,8 @@ class TokenCell extends PureComponent {
       <TokenCellStyler>
         <div className='block-symbol'>
           {/* -- TO-DO: Add token's image source */}
-          {/* {LogoToken.map((item) => ())} */}
           <img
-            src={ logoTomo }
+            src={LogoToken[value]}
             alt={formatMessage(
               MSG.MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_IMAGE_ALT,
               { name: value },
