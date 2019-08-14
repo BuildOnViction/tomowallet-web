@@ -12,9 +12,11 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
+
 // Utilities
 import { withIntl } from '../../../../../components/IntlProvider';
 import porfolioConfig from './configuration';
+import { BoxPorfolio } from './style';
 // Mock Data
 import { porfolio } from '../../mockData.json';
 // ===================
@@ -27,19 +29,21 @@ class PorfolioTable extends PureComponent {
       openSendTokenPopup,
     } = this.props;
     return (
-      <CommonTable
-        data={porfolio}
-        setConfig={porfolioConfig}
-        getConfigProps={{
-          formatMessage,
-          openSendTokenPopup,
-        }}
-        getTableProps={{
-          minRows: 3,
-          showPagination: false,
-          TheadComponent: props => props.className !== '-header' && props.children
-        }}
-      />
+      <BoxPorfolio>
+        <CommonTable
+          data={porfolio}
+          setConfig={porfolioConfig}
+          getConfigProps={{
+            formatMessage,
+            openSendTokenPopup,
+          }}
+          getTableProps={{
+            minRows: 3,
+            showPagination: false,
+            TheadComponent: props => props.className !== '-header' && props.children
+          }}
+        />
+      </BoxPorfolio>
     );
   }
 }

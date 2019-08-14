@@ -14,7 +14,7 @@ import { MSG } from '../../../../../../constants';
 // IMAGES
 import logoTomo from '../../../../../../assets/images/logo-tomo.png';
 import logoKyper from '../../../../../../assets/images/logo-kyper.png';
-import logoKucoin from '../../../../../../assets/images/logo-tomo.png';
+import logoKucoin from '../../../../../../assets/images/logo-kucoin.png';
 // ===================
 
 const LogoToken = {
