@@ -10,20 +10,24 @@ import styled from 'styled-components';
 
 // ===== STYLE =====
 const TokenCellStyler = styled.div`
-  width: 100%;
   display: flex;
   align-items: center;
   .block-symbol {
-    flex: 0 1 auto;
+    img {
+      width: 34px;
+    }
   }
   .block-token {
-    flex: 0 1 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: space-between;
-    .block-token__name,
+    padding-left: 10px;
+    line-height: 1;
+    .block-token__name {
+      font-size: 16px;
+      color: #9eaacc;
+    }
     .block-token__publisher {
-      flex: 0 1 auto;
+      font-size: 14px;
+      color: #5e677f;
+      margin-top: 5px;
     }
   }
 `;
@@ -32,7 +36,7 @@ const ActionCellStyler = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   .block-send,
   .block-receive,
   .block-details {

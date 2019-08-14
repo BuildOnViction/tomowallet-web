@@ -22,20 +22,8 @@ class ActionCell extends PureComponent {
     const { formatMessage, openSendTokenPopup, rowValues } = this.props;
     return (
       <ActionCellStyler>
-        <div className='block-send'>
-          <div
-            role='presentation'
-            onClick={() =>
-              openSendTokenPopup({
-                [SEND_TOKEN_FIELDS.TOKEN]: {
-                  ...rowValues,
-                  label: rowValues[PORFOLIO_COLUMNS.TOKEN_NAME],
-                  value: rowValues[PORFOLIO_COLUMNS.TOKEN_NAME],
-                },
-                isTokenSpecific: true,
-              })
-            }
-          >
+        {/* <div className='block-send'>
+          <div role='presentation' onClick={() => {}}>
             {formatMessage(MSG.COMMON_BUTTON_SEND)}
           </div>
         </div>
@@ -43,10 +31,10 @@ class ActionCell extends PureComponent {
           <div role='presentation' onClick={() => {}}>
             {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
           </div>
-        </div>
-        <div className='block-details'>
+        </div> */}
+        {/* <div className='block-details'>
           <FontAwesomeIcon icon='ellipsis-v' />
-        </div>
+        </div> */}
       </ActionCellStyler>
     );
   }

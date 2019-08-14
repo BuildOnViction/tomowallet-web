@@ -28,7 +28,7 @@ class AddressInfo extends PureComponent {
       wallet,
     } = this.props;
     return (
-      <div>
+      <div className='box-address'>
         <h3>{formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}</h3>
         <div>{_get(wallet, 'address')}</div>
         <div>{`${_get(wallet, 'balance')} TOMO`}</div>

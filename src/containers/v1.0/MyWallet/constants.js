@@ -28,6 +28,8 @@ export const PORFOLIO_COLUMNS = {
   PRICE: 'price',
   TRANSACTION_FEE: 'txFee',
   ACTIONS: 'actions',
+  SEND: 'send',
+  RECEIVE: 'receive',
 };
 export const TRANSACTION_COLUMNS = {
   TOKEN_TYPE: 'tokenType',
