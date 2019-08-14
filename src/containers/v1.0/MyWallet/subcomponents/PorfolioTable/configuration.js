@@ -36,7 +36,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       {
         headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.BALANCE,
-        Cell: ({ value }) => value,
+        Cell: ({ value }) => value.toLocaleString(),
       },
     ],
   },

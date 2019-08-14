@@ -36,14 +36,18 @@ import {
   selectTokenOptions,
 } from './selectors';
 import reducer from './reducer';
+import saga from './saga';
 import { DOMAIN_KEY, SEND_TOKEN_FIELDS, PORFOLIO_COLUMNS } from './constants';
-import { injectReducer, getValidations, mergeErrors } from '../../../utils';
+import {
+  injectReducer,
+  getValidations,
+  mergeErrors,
+  injectSaga,
+} from '../../../utils';
 import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
 import { selectWallet } from '../../Global/selectors';
 import { MSG } from '../../../constants';
-// Mock Data
-import { porfolio } from './mockData.json';
 // -- TO-DO: Add style for My Wallet page component
 // ==================
 
@@ -60,14 +64,8 @@ class MyWallet extends PureComponent {
   }
 
   componentDidMount() {
-    const { onLoadTokenOptionsSuccess } = this.props;
-    onLoadTokenOptionsSuccess(
-      porfolio.map(item => ({
-        ...item,
-        value: item.tokenName,
-        label: item.tokenName,
-      })),
-    );
+    const { onLoadTokenOptions, onLoadTokenOptionsSuccess } = this.props;
+    onLoadTokenOptions('0xec6c16a19d6f799b1d2bc4b0df128ff39df00bfb');
   }
 
   handleAddFullAmount() {
@@ -278,11 +276,13 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
+const withSaga = injectSaga({ key: DOMAIN_KEY, saga });
 // ======================
 
 export default compose(
   withConnect,
   withReducer,
+  withSaga,
   withIntl,
   withRouter,
   withWeb3,

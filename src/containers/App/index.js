@@ -32,7 +32,7 @@ class App extends PureComponent {
 
   handleCheckLoggedIn() {
     const { wallet } = this.props;
-    return !_isEmpty(wallet) || localStorage.getItem('recoveryPhrase');
+    return !_isEmpty(wallet) || localStorage.getItem('address');
   }
 
   render() {
@@ -51,7 +51,7 @@ class App extends PureComponent {
                     isLoggedIn ? (
                       <Redirect strict to={ROUTE.MY_WALLET} />
                     ) : (
-                      <WelcomePage />
+                      <MyWallet />
                     )
                   }
                 />

@@ -10,25 +10,27 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
 // Utilities
+import { selectTokenOptions } from '../../selectors';
 import { withIntl } from '../../../../../components/IntlProvider';
 import porfolioConfig from './configuration';
-// Mock Data
-import { porfolio } from '../../mockData.json';
 // ===================
 
 // ===== MAIN COMPONENT =====
 class PorfolioTable extends PureComponent {
   render() {
     const {
+      data,
       intl: { formatMessage },
       openSendTokenPopup,
     } = this.props;
     return (
       <CommonTable
-        data={porfolio}
+        data={data}
         setConfig={porfolioConfig}
         getConfigProps={{
           formatMessage,
@@ -37,7 +39,8 @@ class PorfolioTable extends PureComponent {
         getTableProps={{
           minRows: 3,
           showPagination: false,
-          TheadComponent: props => props.className !== '-header' && props.children
+          TheadComponent: props =>
+            props.className !== '-header' && props.children,
         }}
       />
     );
@@ -47,6 +50,8 @@ class PorfolioTable extends PureComponent {
 
 // ===== PROP TYPES =====
 PorfolioTable.propTypes = {
+  /** Table data */
+  data: PropTypes.arrayOf(PropTypes.object),
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Action to show/hide send token popup */
@@ -54,9 +59,21 @@ PorfolioTable.propTypes = {
 };
 
 PorfolioTable.defaultProps = {
+  data: [],
   intl: {},
   openSendTokenPopup: () => {},
 };
 // ======================
 
-export default compose(withIntl)(PorfolioTable);
+// ===== INJECTIONS =====
+const mapStateToProps = () =>
+  createStructuredSelector({
+    data: selectTokenOptions,
+  });
+const withConnect = connect(mapStateToProps);
+// ======================
+
+export default compose(
+  withConnect,
+  withIntl,
+)(PorfolioTable);

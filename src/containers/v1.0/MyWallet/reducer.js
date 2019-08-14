@@ -6,10 +6,11 @@
 // ===== IMPORTS =====
 // Modules
 import { fromJS } from 'immutable';
-import { omit as _omit } from 'lodash';
+import { omit as _omit, get as _get } from 'lodash';
 // Constants
 import {
   LOAD_TOKEN_OPTIONS_SUCCESS,
+  PORFOLIO_COLUMNS,
   SEND_TOKEN_FIELDS,
   SET_TABLE_TYPE,
   TOGGLE_SEND_TOKEN_POPUP,
@@ -50,7 +51,23 @@ const initialState = fromJS({
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOAD_TOKEN_OPTIONS_SUCCESS:
-      return state.set('tokenOptions', action.tokens);
+      return state.set(
+        'tokenOptions',
+        action.tokens.map(token => {
+          const balance =
+            Number(_get(token, 'balance', 0)) /
+            Math.pow(10, _get(token, 'decimals', 0));
+          return {
+            [PORFOLIO_COLUMNS.TOKEN_NAME]: _get(token, 'name', ''),
+            [PORFOLIO_COLUMNS.SYMBOL]: _get(token, 'symbol', ''),
+            [PORFOLIO_COLUMNS.ICON]: _get(token, 'icon', ''),
+            [PORFOLIO_COLUMNS.BALANCE]: balance,
+            [PORFOLIO_COLUMNS.PRICE]: _get(token, 'usdPrice', 0),
+            [PORFOLIO_COLUMNS.VALUE]: balance * _get(token, 'usdPrice', 0),
+            [PORFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
+          };
+        }),
+      );
     case SET_TABLE_TYPE:
       return state.set('tableType', action.tableType);
     case TOGGLE_SEND_TOKEN_POPUP: {

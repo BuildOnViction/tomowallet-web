@@ -336,6 +336,10 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.porfolio.cell.tokenname.publisher`,
     defaultMessage: 'TomoChain',
   },
+  MY_WALLET_TABLE_PORFOLIO_ERROR_LOAD_FAILED: {
+    id: `${myWalletPagePrefix}.table.porfolio.error.load.failed`,
+    defaultMessage: 'Cannot load token list!',
+  },
   MY_WALLET_TABLE_TRANSACTIONS_TITLE: {
     id: `${myWalletPagePrefix}.table.transactions.title`,
     defaultMessage: 'Transactions',

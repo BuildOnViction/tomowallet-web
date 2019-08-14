@@ -1,4 +1,5 @@
 import injectReducer from './injectReducer';
+import injectSaga from './injectSaga';
 import history from './history';
 import createDeepEqualSelector from './deepSelector';
 import { shuffleArray } from './miscellaneous';
@@ -12,6 +13,7 @@ import getValidations, { mergeErrors } from './validations';
 
 export {
   injectReducer,
+  injectSaga,
   history,
   createDeepEqualSelector,
   shuffleArray,

@@ -22,14 +22,15 @@ export const DOMAIN_KEY = 'myWallet';
 
 // Tables' Column Names
 export const PORFOLIO_COLUMNS = {
-  TOKEN_NAME: 'tokenName',
-  BALANCE: 'balance',
-  VALUE: 'value',
-  PRICE: 'price',
-  TRANSACTION_FEE: 'txFee',
   ACTIONS: 'actions',
-  SEND: 'send',
-  RECEIVE: 'receive',
+  BALANCE: 'balance',
+  ICON: 'icon',
+  PRICE: 'price',
+  PUBLISHER: 'publisher',
+  SYMBOL: 'symbol',
+  TOKEN_NAME: 'tokenName',
+  TRANSACTION_FEE: 'txFee',
+  VALUE: 'value',
 };
 export const TRANSACTION_COLUMNS = {
   TOKEN_TYPE: 'tokenType',
