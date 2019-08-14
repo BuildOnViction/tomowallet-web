@@ -6,6 +6,7 @@
 // ===== IMPORTS =====
 // Modules
 import { fromJS } from 'immutable';
+import { omit as _omit } from 'lodash';
 // Constants
 import {
   LOAD_TOKEN_OPTIONS_SUCCESS,
@@ -25,7 +26,6 @@ const initialSendForm = {
   [SEND_TOKEN_FIELDS.RECIPIENT]: '',
   [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: '',
   [SEND_TOKEN_FIELDS.MESSAGE]: '',
-  [SEND_TOKEN_FIELDS.TRANSACTION_FEE]: '',
 };
 
 const initialState = fromJS({
@@ -71,7 +71,11 @@ export default (state = initialState, action) => {
     case UPDATE_SEND_TOKEN_ERRORS:
       return state.setIn(['sendTokenPopup', 'errors'], action.errors);
     case UPDATE_SEND_TOKEN_INPUT:
-      return state.setIn(['sendForm', action.name], action.value);
+      return state
+        .setIn(['sendForm', action.name], action.value)
+        .updateIn(['sendTokenPopup', 'errors'], errors =>
+          _omit(errors, action.name),
+        );
     default:
       return state;
   }

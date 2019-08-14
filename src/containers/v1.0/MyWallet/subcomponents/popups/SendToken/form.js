@@ -25,24 +25,45 @@ import {
 } from 'reactstrap';
 import Select from 'react-select';
 // Constants
-import { SEND_TOKEN_FIELDS } from '../../../constants';
+import { SEND_TOKEN_FIELDS, PORFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../../constants';
 // ===================
 
 // ===== SUB-COMPONENTS =====
 const TokenOption = props => {
   console.warn('TokenOption', props);
+  const { innerProps, data } = props;
 
   return (
-    <Container {...props.innerProps} role='presentation' fluid className='px-0'>
+    <Container {...innerProps} role='presentation' fluid className='px-0'>
       <Row noGutters>
         <Col xs={6} sm={6} md={6} lg={6}>
           {/* -- TO-DO: Add token's image source */}
-          <img src='' alt='' />
-          <span>{'eghwehw'}</span>
+          <img src='' alt={data.tokenName} />
+          <span>{`${data.tokenName} (${data.publisher})`}</span>
         </Col>
         <Col xs={6} sm={6} md={6} lg={6} className='text-right'>
-          {`${1311} ${'TOMO'}`}
+          {`${data.balance} ${data.tokenName}`}
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+const TokenInputValue = props => {
+  console.warn('TokenInputValue', props);
+  const { data } = props;
+
+  return (
+    <Container className='px-0' style={{ width: '95%' }}>
+      <Row noGutters>
+        <Col xs={7} sm={7} md={7} lg={7}>
+          {/* -- TO-DO: Add token's image source */}
+          <img src='' alt={data.tokenName} />
+          <span>{`${data.tokenName} (${data.publisher})`}</span>
+        </Col>
+        <Col xs={5} sm={5} md={5} lg={5} className='text-right'>
+          {`${data.balance} ${data.tokenName}`}
         </Col>
       </Row>
     </Container>
@@ -91,6 +112,11 @@ class FormContent extends PureComponent {
       tokenOptions,
       updateInput,
     } = this.props;
+    console.warn(
+      'render',
+      _get(formValues, [SEND_TOKEN_FIELDS.TRANSACTION_FEE], 0),
+    );
+
     return (
       <Form onSubmit={submitForm}>
         <FormGroup>
@@ -105,7 +131,7 @@ class FormContent extends PureComponent {
               MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER,
             )}
             onChange={value => updateInput(SEND_TOKEN_FIELDS.TOKEN, value)}
-            components={{ Option: TokenOption }}
+            components={{ Option: TokenOption, SingleValue: TokenInputValue }}
             isDisabled={_get(formValues, 'isTokenSpecific')}
           />
           {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TOKEN)}
@@ -181,9 +207,13 @@ class FormContent extends PureComponent {
             MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,
           )}: ${_get(
             formValues,
-            [SEND_TOKEN_FIELDS.TRANSACTION_FEE],
+            [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TRANSACTION_FEE],
             0,
-          )} ${_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}`}
+          )} ${_get(
+            formValues,
+            [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TOKEN_NAME],
+            '',
+          )}`}
         </Label>
       </Form>
     );

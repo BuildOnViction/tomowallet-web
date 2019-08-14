@@ -42,6 +42,8 @@ import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
 import { selectWallet } from '../../Global/selectors';
 import { MSG } from '../../../constants';
+// Mock Data
+import { porfolio } from './mockData.json';
 // -- TO-DO: Add style for My Wallet page component
 // ==================
 
@@ -59,20 +61,13 @@ class MyWallet extends PureComponent {
 
   componentDidMount() {
     const { onLoadTokenOptionsSuccess } = this.props;
-    onLoadTokenOptionsSuccess([
-      {
-        label: 'TOMO',
-        value: 'TOMO',
-      },
-      {
-        label: 'KBS',
-        value: 'KBS',
-      },
-      {
-        label: 'KYC',
-        value: 'KYC',
-      },
-    ]);
+    onLoadTokenOptionsSuccess(
+      porfolio.map(item => ({
+        ...item,
+        value: item.tokenName,
+        label: item.tokenName,
+      })),
+    );
   }
 
   handleAddFullAmount() {

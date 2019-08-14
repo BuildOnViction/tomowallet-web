@@ -26,6 +26,7 @@ export const PORFOLIO_COLUMNS = {
   BALANCE: 'balance',
   VALUE: 'value',
   PRICE: 'price',
+  TRANSACTION_FEE: 'txFee',
   ACTIONS: 'actions',
 };
 export const TRANSACTION_COLUMNS = {
@@ -43,5 +44,4 @@ export const SEND_TOKEN_FIELDS = {
   RECIPIENT: 'recipient',
   TRANSFER_AMOUNT: 'amount',
   MESSAGE: 'message',
-  TRANSACTION_FEE: 'txFee',
 };
