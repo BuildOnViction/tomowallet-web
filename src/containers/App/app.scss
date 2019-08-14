@@ -99,6 +99,47 @@ a {
 .w-80 {
   width: 80px;
 }
+
+//box-address
+.box-address {
+  border-radius: 8px;
+  background-color: #272d40;
+  padding: 1em;
+}
+//main_tab
+.main_tab {
+  ul.nav-tabs {
+    border: 0;
+    .nav-link {
+      background: transparent!important;
+      border: 0;
+      color: #5e677f;
+      margin-right: 50px;
+      padding: 0 0 5px;
+      cursor: pointer;
+      position: relative;
+      &.active {
+         color: #9eaacc;
+         &::before {
+            content: '';
+            background-color: #5692cd;
+            border-radius: 25px;
+            width: 30px;
+            height: 2px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+         }
+      }
+    }
+  }
+  .tab-content {
+    border-radius: 8px;
+    background-color: #272d40;
+    padding: 1em;
+  }
+}
+
 // Footer
 .mb-text-center {
   @media (max-width: 768px) {

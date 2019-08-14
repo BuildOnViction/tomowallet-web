@@ -11,7 +11,17 @@ import React, { PureComponent } from 'react';
 import { TokenCellStyler } from '../style';
 // Constants
 import { MSG } from '../../../../../../constants';
+// IMAGES
+import logoTomo from '../../../../../../assets/images/logo-tomo.png';
+import logoKyper from '../../../../../../assets/images/logo-kyper.png';
+import logoKucoin from '../../../../../../assets/images/logo-tomo.png';
 // ===================
+
+const LogoToken = {
+  TOMO: logoTomo,
+  KYPER: logoKyper,
+  KUCOIN: logoKucoin
+};
 
 // ===== MAIN COMPONENT =====
 class TokenCell extends PureComponent {
@@ -22,7 +32,7 @@ class TokenCell extends PureComponent {
         <div className='block-symbol'>
           {/* -- TO-DO: Add token's image source */}
           <img
-            src=''
+            src={LogoToken[value]}
             alt={formatMessage(
               MSG.MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_IMAGE_ALT,
               { name: value },

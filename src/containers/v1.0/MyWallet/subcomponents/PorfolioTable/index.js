@@ -37,6 +37,7 @@ class PorfolioTable extends PureComponent {
         getTableProps={{
           minRows: 3,
           showPagination: false,
+          TheadComponent: props => props.className !== '-header' && props.children
         }}
       />
     );

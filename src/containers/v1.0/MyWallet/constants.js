@@ -27,6 +27,8 @@ export const PORFOLIO_COLUMNS = {
   VALUE: 'value',
   PRICE: 'price',
   ACTIONS: 'actions',
+  SEND: 'send',
+  RECEIVE: 'receive',
 };
 export const TRANSACTION_COLUMNS = {
   TOKEN_TYPE: 'tokenType',
