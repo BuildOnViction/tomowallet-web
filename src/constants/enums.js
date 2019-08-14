@@ -21,9 +21,15 @@ const MESSAGE_SET = {
   en: message_en,
   fr: message_fr,
 };
+
+const TOKEN_TYPE = {
+  TRC20: 'TRC20',
+  TRC21: 'TRC21',
+};
 // =================
 
 export default {
-  WEB3_STATUSES,
   MESSAGE_SET,
+  TOKEN_TYPE,
+  WEB3_STATUSES,
 };

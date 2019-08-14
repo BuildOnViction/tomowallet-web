@@ -90,12 +90,12 @@ class WalletCreationPage extends PureComponent {
       const newWeb3 = generateWeb3(_get(mnemonic, 'origin'), rpcServer);
       const address = newWeb3.currentProvider.addresses[0];
 
-      console.warn('getBalance', newWeb3, address);
+      // console.warn('getBalance', newWeb3, address);
 
       newWeb3.eth.getBalance(address, console.error);
 
       Promise.all([getWalletInfo(newWeb3)]).then(result => {
-        console.warn('result', result);
+        // console.warn('result', result);
       });
       // getWalletInfo(newWeb3).then(newWalletInfo =>
       //   Promise.all([onStoreWallet(newWalletInfo), updateWeb3(newWeb3)]).then(
@@ -126,7 +126,6 @@ class WalletCreationPage extends PureComponent {
       onToggleKeyVisible,
       onUpdateErrors,
     } = this.props;
-    console.warn('render', this.state);
 
     return (
       <ContainerMin>

@@ -4,10 +4,12 @@ import history from './history';
 import createDeepEqualSelector from './deepSelector';
 import { shuffleArray } from './miscellaneous';
 import {
-  mnemonicToPrivateKey,
-  generateWeb3,
   decryptWalletInfo,
+  estimateTRC20Gas,
+  generateWeb3,
   getWalletInfo,
+  mnemonicToPrivateKey,
+  sendToken,
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
 
@@ -23,4 +25,6 @@ export {
   getWalletInfo,
   getValidations,
   mergeErrors,
+  estimateTRC20Gas,
+  sendToken,
 };

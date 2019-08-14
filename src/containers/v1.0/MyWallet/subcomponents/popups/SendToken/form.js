@@ -31,7 +31,6 @@ import { MSG } from '../../../../../../constants';
 
 // ===== SUB-COMPONENTS =====
 const TokenOption = props => {
-  console.warn('TokenOption', props);
   const { innerProps, data } = props;
 
   return (
@@ -51,7 +50,6 @@ const TokenOption = props => {
 };
 
 const TokenInputValue = props => {
-  console.warn('TokenInputValue', props);
   const { data } = props;
 
   return (
@@ -112,10 +110,6 @@ class FormContent extends PureComponent {
       tokenOptions,
       updateInput,
     } = this.props;
-    console.warn(
-      'render',
-      _get(formValues, [SEND_TOKEN_FIELDS.TRANSACTION_FEE], 0),
-    );
 
     return (
       <Form onSubmit={submitForm} className='cm_form'>
@@ -123,7 +117,8 @@ class FormContent extends PureComponent {
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
-          <Select className='box_select'
+          <Select
+            className='box_select'
             name={SEND_TOKEN_FIELDS.TOKEN}
             value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
             options={tokenOptions}

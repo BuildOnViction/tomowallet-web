@@ -108,7 +108,7 @@ class ImportWallet extends PureComponent {
           .then(walletInfo => {
             onStoreWallet(walletInfo);
             updateWeb3(newWeb3);
-            localStorage.setItem('address', walletInfo.address);
+            Cookies;
           })
           .then(() => history.push(ROUTE.MY_WALLET));
       } else {

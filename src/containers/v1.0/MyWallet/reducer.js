@@ -71,6 +71,7 @@ export default (state = initialState, action) => {
             [PORFOLIO_COLUMNS.PRICE]: _get(token, 'usdPrice', 0),
             [PORFOLIO_COLUMNS.VALUE]: balance * _get(token, 'usdPrice', 0),
             [PORFOLIO_COLUMNS.TOKEN_ADDRESS]: _get(token, 'tokenAddress', ''),
+            [PORFOLIO_COLUMNS.TYPE]: _get(token, 'type', 'TRC20'),
             [PORFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
             [PORFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
           };

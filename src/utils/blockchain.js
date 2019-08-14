@@ -7,6 +7,11 @@
 // Modules
 import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
+import { isEqual as _isEqual } from 'lodash';
+// Utilities & Constants
+import { ENUM } from '../constants';
+import trc20 from '../contractABIs/trc20.json';
+import trc21 from '../contractABIs/trc21.json';
 // ===================
 
 // ===== METHODS =====
@@ -84,6 +89,68 @@ const decryptWalletInfo = (web3, rawInfo) => {
   }
   return null;
 };
+
+/**
+ * estimateTRC20Gas
+ *
+ * Retrieve gas price for the specific transaction
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Object} txData A transaction object (including from, to, value, ...)
+ */
+const estimateTRC20Gas = (web3, txData) => {
+  return web3.eth.estimateGas(txData);
+};
+
+/**
+ * sendToken
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {*} contractData An object which contains contract data
+ */
+const sendToken = (web3, contractData) => {
+  const { amount, contractAddress, decimals, from, to, type } = contractData;
+
+  const contract = new web3.eth.Contract(
+    _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
+    contractAddress,
+  );
+  const weiAmount = web3.utils
+    .toBN(amount)
+    .mul(web3.utils.toBN(10 ** decimals))
+    .toString();
+  if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
+    return contract.methods
+      .estimateFee(weiAmount)
+      .call({ from, to })
+      .then(gasPrice => {
+        return contract.methods
+          .transfer(to, weiAmount)
+          .send({ from, gasPrice });
+      });
+  } else {
+    return estimateTRC20Gas(web3, { from, to, value: weiAmount }).then(
+      gasPrice => {
+        console.warn('sendToken - transfer', gasPrice, contractData, weiAmount);
+
+        return contract.methods
+          .transfer(to, weiAmount)
+          .send({ from, to: contractAddress, gasPrice, gasLimit: '50000' })
+          .then(hash => console.log(hash))
+          .catch(ex => {
+            console.log(ex);
+          });
+      },
+    );
+  }
+};
 // ===================
 
-export { mnemonicToPrivateKey, generateWeb3, decryptWalletInfo, getWalletInfo };
+export {
+  decryptWalletInfo,
+  estimateTRC20Gas,
+  generateWeb3,
+  getWalletInfo,
+  mnemonicToPrivateKey,
+  sendToken,
+};

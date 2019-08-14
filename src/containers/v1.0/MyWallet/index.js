@@ -44,6 +44,7 @@ import {
   getValidations,
   mergeErrors,
   injectSaga,
+  sendToken,
 } from '../../../utils';
 import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
@@ -56,6 +57,10 @@ import { MSG } from '../../../constants';
 class MyWallet extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      txHash: '',
+    };
 
     this.handleAddFullAmount = this.handleAddFullAmount.bind(this);
     this.handleCloseSendTokenPopup = this.handleCloseSendTokenPopup.bind(this);
@@ -85,12 +90,31 @@ class MyWallet extends PureComponent {
   }
 
   handleSubmitSendToken() {
-    const { onUpdateSendTokenErrors, sendTokenForm } = this.props;
+    const { onUpdateSendTokenErrors, sendTokenForm, web3 } = this.props;
     const errorList = this.handleValidationSendForm();
     if (!_isEmpty(errorList)) {
       onUpdateSendTokenErrors(errorList);
     } else {
       console.warn('Begin submitting...');
+      sendToken(web3, {
+        amount: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
+        contractAddress: _get(
+          sendTokenForm,
+          [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TOKEN_ADDRESS],
+          '',
+        ),
+        decimals: _get(
+          sendTokenForm,
+          [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.DECIMALS],
+          0,
+        ),
+        from: localStorage.getItem('address'),
+        to: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT], ''),
+        type: _get(sendTokenForm, [
+          SEND_TOKEN_FIELDS.TOKEN,
+          PORFOLIO_COLUMNS.TYPE,
+        ]),
+      }).then(result => this.setState({ txHash: result }));
     }
   }
 
@@ -179,6 +203,8 @@ class MyWallet extends PureComponent {
       tokenOptions,
       wallet,
     } = this.props;
+    console.warn('render', this.state.txHash);
+
     return (
       <Fragment>
         <AddressInfo

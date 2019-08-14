@@ -34,6 +34,7 @@ export const PORFOLIO_COLUMNS = {
   VALUE: 'value',
   DECIMALS: 'decimals',
   TOKEN_ADDRESS: 'tokenAddress',
+  TYPE: 'type',
 };
 export const TRANSACTION_COLUMNS = {
   TOKEN_TYPE: 'tokenType',

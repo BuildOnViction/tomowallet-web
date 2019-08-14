@@ -31,26 +31,24 @@ class Web3Provider extends Component {
   }
 
   componentDidMount() {
-    // this.handleTryProvider(window.web3, () =>
-    //   this.handleTryProvider(Web3.givenProvider, () =>
-    //     this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]),
-    //   ),
-    // );
-    this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
+    this.handleTryProvider(localStorage.getItem('web3'), () =>
+      this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]),
+    );
+    // this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
   }
 
-  // handleTryProvider(web3, next = null) {
-  //   if (web3) {
-  //     this.handleSetWeb3(web3);
-  //   } else if (next) {
-  //     next();
-  //   } else {
-  //     this.setState({
-  //       status: ENUM.WEB3_STATUSES.FAILED,
-  //       error: 'Unexpected Web3 error!',
-  //     });
-  //   }
-  // }
+  handleTryProvider(web3, next = null) {
+    if (web3) {
+      this.handleSetWeb3(web3);
+    } else if (next) {
+      next();
+    } else {
+      this.setState({
+        status: ENUM.WEB3_STATUSES.FAILED,
+        error: 'Unexpected Web3 error!',
+      });
+    }
+  }
 
   handleUpdateRpcServer(newKey) {
     this.setState(

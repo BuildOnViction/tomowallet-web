@@ -7,7 +7,7 @@ export default class extends PureComponent {
     const { isLoggedIn, ...remains } = this.props;
 
     return !isLoggedIn ? (
-      <Redirect strict to={ROUTE.HOMEPAGE} />
+      <Redirect strict to={ROUTE.LOGIN} />
     ) : (
       <Route {...remains} />
     );

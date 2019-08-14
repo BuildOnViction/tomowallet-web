@@ -25,7 +25,6 @@ const GlobalTransform = createTransform(
   // Inbound transformation
   inboundState => {
     const objState = inboundState.toJS();
-    console.warn('inbound', objState);
     const rawWallet = _get(objState, 'wallet.toJS', () => null)();
 
     return {
@@ -37,8 +36,6 @@ const GlobalTransform = createTransform(
   },
   // Outbound transformation
   outboundState => {
-    console.warn('outbound', outboundState);
-
     return fromJS({
       ...outboundState,
       wallet: fromJS(JSON.parse(outboundState.wallet)),

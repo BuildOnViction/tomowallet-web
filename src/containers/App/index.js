@@ -32,11 +32,12 @@ class App extends PureComponent {
 
   handleCheckLoggedIn() {
     const { wallet } = this.props;
-    return !_isEmpty(wallet) || localStorage.getItem('address');
+    return !_isEmpty(wallet) && localStorage.getItem('web3');
   }
 
   render() {
     const isLoggedIn = this.handleCheckLoggedIn();
+    console.warn('App', isLoggedIn);
 
     return (
       <Router>
@@ -51,7 +52,7 @@ class App extends PureComponent {
                     isLoggedIn ? (
                       <Redirect strict to={ROUTE.MY_WALLET} />
                     ) : (
-                      <MyWallet />
+                      <WelcomePage />
                     )
                   }
                 />
