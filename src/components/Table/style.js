@@ -13,25 +13,50 @@ import { Pagination } from 'reactstrap';
 // ===== STYLE =====
 const CommonTableStyler = styled(ReactTable)`
   .rt-table {
-    .rt-tr {
-      display: grid;
-      grid-template-columns: 20% 15% 15% 15% 15% 15% 5%;
-    }
+    border-radius: 8px;
+    background-color: #272d40;
+    padding: 1em;
     .rt-th {
       display: inline-block;
-      padding: 1em .7em;
+      padding: 1em;
       width: auto !important;
       color: #5e677f;
+      &.box_search {
+        width: 100%!important;
+      }
     }
     .rt-td {
       display: inline-block;
-      padding: 1.5em .7em;
+      padding: 1.5em 1em;
       width: auto !important;
     }
   }
 `;
 
-const PaginationStyler = styled(Pagination)``;
+const PaginationStyler = styled(Pagination)`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  .page-link {
+    color: #5e677f;
+    &:focus {
+      box-shadow: 0 0 0;
+    }
+  }
+  .disabled {
+    .page-link {
+      opacity: .3;
+    }
+  }
+  ul {
+    margin: 0;
+    * {
+      background: transparent !important;
+      border: 0;
+    }
+
+  }
+`;
 
 const EllipsisCellStyler = styled.div`
   overflow: hidden;

@@ -118,12 +118,12 @@ class FormContent extends PureComponent {
     );
 
     return (
-      <Form onSubmit={submitForm}>
+      <Form onSubmit={submitForm} className='cm_form'>
         <FormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
-          <Select
+          <Select className='box_select'
             name={SEND_TOKEN_FIELDS.TOKEN}
             value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
             options={tokenOptions}

@@ -85,7 +85,7 @@ class MyWallet extends PureComponent {
   }
 
   handleSubmitSendToken() {
-    const { onUpdateSendTokenErrors } = this.props;
+    const { onUpdateSendTokenErrors, sendTokenForm } = this.props;
     const errorList = this.handleValidationSendForm();
     if (!_isEmpty(errorList)) {
       onUpdateSendTokenErrors(errorList);

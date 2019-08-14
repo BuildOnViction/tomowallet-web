@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as _get } from 'lodash';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
-import ActionCell from './subcomponents/ActionCell';
 // Constants
 import { PORFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG } from '../../../../../constants';
@@ -97,7 +96,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       },
       {
         Cell: () => (
-          <div className='block-details'>
+          <div className='text-right'>
             <FontAwesomeIcon icon='ellipsis-v' />
           </div>
         ),

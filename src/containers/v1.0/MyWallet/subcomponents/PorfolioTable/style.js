@@ -43,6 +43,19 @@ const ActionCellStyler = styled.div`
     flex: 0 1 auto;
   }
 `;
+
+const BoxPorfolio = styled.div`
+  .rt-tr {
+      display: grid;
+      grid-template-columns: 20% 15% 15% 15% 35%;
+    }
+    .rt-tbody {
+      .rt-tr {
+        grid-template-columns: 20% 15% 15% 15% 15% 15% 5%;
+      }
+    }
+`;
+
 // =================
 
-export { TokenCellStyler, ActionCellStyler };
+export { TokenCellStyler, ActionCellStyler, BoxPorfolio };

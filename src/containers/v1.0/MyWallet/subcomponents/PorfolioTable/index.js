@@ -14,11 +14,13 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
+
 // Utilities
 import { addNativeCurrency, loadTokenOptions } from '../../actions';
 import { selectTokenOptions } from '../../selectors';
 import { withIntl } from '../../../../../components/IntlProvider';
 import porfolioConfig from './configuration';
+import { BoxPorfolio } from './style';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -45,20 +47,22 @@ class PorfolioTable extends PureComponent {
       openSendTokenPopup,
     } = this.props;
     return (
-      <CommonTable
-        data={data}
-        setConfig={porfolioConfig}
-        getConfigProps={{
-          formatMessage,
-          openSendTokenPopup,
-        }}
-        getTableProps={{
-          minRows: 3,
-          showPagination: false,
-          TheadComponent: props =>
-            props.className !== '-header' && props.children,
-        }}
-      />
+      <BoxPorfolio>
+        <CommonTable
+          data={data}
+          setConfig={porfolioConfig}
+          getConfigProps={{
+            formatMessage,
+            openSendTokenPopup,
+          }}
+          getTableProps={{
+            minRows: 3,
+            showPagination: false,
+            TheadComponent: props =>
+              props.className !== '-header' && props.children,
+          }}
+        />
+      </BoxPorfolio>
     );
   }
 }
