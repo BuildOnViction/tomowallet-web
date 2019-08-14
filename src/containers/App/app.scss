@@ -44,41 +44,66 @@ a {
       border: 1px solid #444b64;
     }
   }
-  .form-group {
-    margin-bottom: 0;
-    label {
-      display: block;
-      color: #5e677f;
-      svg {
-        width: 12px;
-        margin-left: 5px;
-        color: #e4ae63;
-      }
-    }
-    input,
-    textarea {
-      border-radius: 8px;
-      background-color: #2d344a;
-      border: 0;
-      color: #ffffff;
-      font-size: 14px;
-      padding: 1.5em 1em;
-      &::placeholder {
-        color: #9eaacc;
-        font-size: 13px;
-        font-family: 'Nunito Sans', sans-serif;
-      }
-      &:focus {
-        box-shadow: 0 0 0 1px  #5692cd;
-      }
-    }
-    textarea {
-      padding: 1em;
-      height: 120px;
+}
+.form-group {
+  margin-bottom: 0;
+  label {
+    display: block;
+    color: #5e677f;
+    svg {
+      width: 12px;
+      margin-left: 5px;
+      color: #e4ae63;
     }
   }
+  .box_select {
+    color: #9eaacc;
+    >div {
+      background-color: #39415c!important;
+      border-radius: 8px;
+      border: 0;
+    }
+  }
+  .input-group-append button {
+    background-color: #2d344a!important;
+    border-radius: 0 8px 8px 0!important;
+    border: 0;
+    border-left: 1px solid #272d40;
+    color: #9eaacc;
+    font-size: 14px;
+    &:focus {
+      box-shadow: 0 0 0 1px  #5692cd;
+      background-color: transparent;
+    }
+  }
+  input,
+  textarea {
+    border-radius: 8px;
+    background-color: #2d344a;
+    border: 0;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 1.5em 1em;
+    &::placeholder {
+      color: #9eaacc;
+      font-size: 13px;
+      font-family: 'Nunito Sans', sans-serif;
+    }
+    &:focus {
+      box-shadow: 0 0 0 1px  #5692cd;
+      background-color: transparent;
+    }
+  }
+  textarea {
+    padding: 1em;
+    height: 120px;
+  }
 }
-
+.cm_form {
+  .form-group {
+    margin-bottom: 2em;
+  }
+}
 
 //MODAL
 .modal-content {
@@ -104,7 +129,7 @@ a {
 .box-address {
   border-radius: 8px;
   background-color: #272d40;
-  padding: 1em;
+  padding: 1em 2em;
 }
 //main_tab
 .main_tab {
@@ -132,11 +157,6 @@ a {
          }
       }
     }
-  }
-  .tab-content {
-    border-radius: 8px;
-    background-color: #272d40;
-    padding: 1em;
   }
 }
 

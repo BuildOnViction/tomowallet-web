@@ -12,6 +12,7 @@ import CommonTable from '../../../../../components/Table';
 // Utilities
 import { withIntl } from '../../../../../components/IntlProvider';
 import transactionConfig from './configuration';
+import { BoxTransction } from './style';
 // Mock Data
 import { transactions } from '../../mockData.json';
 // ===================
@@ -23,16 +24,18 @@ class TransactionTable extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <CommonTable
-        data={transactions}
-        setConfig={transactionConfig}
-        getConfigProps={{
-          formatMessage,
-        }}
-        getTableProps={{
-          defaultPageSize: 5,
-        }}
-      />
+      <BoxTransction>
+        <CommonTable
+          data={transactions}
+          setConfig={transactionConfig}
+          getConfigProps={{
+            formatMessage,
+          }}
+          getTableProps={{
+            defaultPageSize: 5,
+          }}
+        />
+      </BoxTransction>
     );
   }
 }

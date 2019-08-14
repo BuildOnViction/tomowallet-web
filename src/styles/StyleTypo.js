@@ -18,6 +18,11 @@ const HeadingMedium = styled.h3`
   color: #ffffff;
   font-size: 16px;
 `;
+const HeadingSmall = styled.h2`
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+`;
 const NoticeTextRed = styled.span`
   color: #be445e;
 `;
@@ -43,6 +48,7 @@ export {
   HeadingBig,
   HeadingLarge,
   HeadingMedium,
+  HeadingSmall,
   NoticeTextRed,
   TextLinkBlue,
   TextBlue,
