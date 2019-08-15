@@ -16,12 +16,16 @@ import {
   CardImg,
 } from 'reactstrap';
 // Custom Components
+import WalletPopup from './subcomponents/WalletPopup';
 // -- TO-DO: Update style for Navigation Bar component into following styled component:
 import { NavBarStyler, LinkHeader, DropdownToggleHeader } from './style';
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
 import { withIntl } from '../IntlProvider';
-import { releaseWallet } from '../../containers/Global/actions';
+import {
+  releaseWallet,
+  toggleWalletPopup,
+} from '../../containers/Global/actions';
 import { ROUTE, RPC_SERVER, LIST, MSG } from '../../constants';
 // -- TO-DO: Import TomoWallet logo's source
 // IMG
@@ -89,6 +93,7 @@ class NavigationBar extends PureComponent {
   handleRenderPrivateBar() {
     const {
       intl: { formatMessage },
+      onToggleWalletPopup,
     } = this.props;
     const { networkTitle } = this.state;
 
@@ -115,15 +120,13 @@ class NavigationBar extends PureComponent {
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
             </DropdownToggleHeader>
             <DropdownMenu right>
-              <DropdownItem>
+              <DropdownItem onClick={() => onToggleWalletPopup(true)}>
                 {formatMessage(
-                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_PROFILE,
+                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,
                 )}
               </DropdownItem>
               <DropdownItem>
-                {formatMessage(
-                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SETTINGS,
-                )}
+                {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
               </DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={this.handleLogout}>
@@ -175,20 +178,23 @@ class NavigationBar extends PureComponent {
     const { isExpandOptions } = this.state;
 
     return (
-      <NavBarStyler light expand='lg'>
-        <NavbarBrand onClick={this.handleRedirectToHomepage}>
-          {/* -- TO-DO: Add TomoChain logo's source */}
-          <CardImg
-            src={logo_tomochain}
-            alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
-          />
-        </NavbarBrand>
-        <NavbarToggler onClick={this.handleToggleOptions} />
-        <Collapse isOpen={isExpandOptions} navbar>
-          {isLoggedIn && this.handleRenderPrivateBar()}
-          {this.handleRenderPublicBar()}
-        </Collapse>
-      </NavBarStyler>
+      <Fragment>
+        <NavBarStyler light expand='lg'>
+          <NavbarBrand onClick={this.handleRedirectToHomepage}>
+            {/* -- TO-DO: Add TomoChain logo's source */}
+            <CardImg
+              src={logo_tomochain}
+              alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
+            />
+          </NavbarBrand>
+          <NavbarToggler onClick={this.handleToggleOptions} />
+          <Collapse isOpen={isExpandOptions} navbar>
+            {isLoggedIn && this.handleRenderPrivateBar()}
+            {this.handleRenderPublicBar()}
+          </Collapse>
+        </NavBarStyler>
+        <WalletPopup />
+      </Fragment>
     );
   }
 }
@@ -208,14 +214,28 @@ NavigationBar.propTypes = {
   language: PropTypes.string,
   /** Action to remove current wallet's data */
   onReleaseWallet: PropTypes.func,
+  /** Action to show/hide show-wallet popup */
+  onToggleWalletPopup: PropTypes.func,
   /** Action to change current RPC Server */
   switchRPCServer: PropTypes.func,
+};
+
+NavigationBar.defaultProps = {
+  changeLocaleL: () => {},
+  history: {},
+  intl: {},
+  isLoggedIn: false,
+  language: 'en',
+  onReleaseWallet: () => {},
+  onToggleWalletPopup: () => {},
+  switchRPCServer: () => {},
 };
 // ======================
 
 // ===== INJECTIONS =====
 const mapDispatchToProps = dispatch => ({
   onReleaseWallet: () => dispatch(releaseWallet()),
+  onToggleWalletPopup: bool => dispatch(toggleWalletPopup(bool)),
 });
 const withConnect = connect(
   null,

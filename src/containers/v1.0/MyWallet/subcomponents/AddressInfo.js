@@ -12,6 +12,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { get as _get } from 'lodash';
 import { Row, Col } from 'reactstrap';
+import QRCode from 'qrcode.react';
 // Custom Components
 import { BigButtonStyler, HeadingSmall } from '../../../../styles';
 // Utilities & Constants
@@ -38,9 +39,7 @@ class AddressInfo extends PureComponent {
         <div className='box-address'>
           <Row>
             <Col sm={12} md={8} className='pr-5'>
-              <div className=''>
-                {_get(web3, ['currentProvider', 'addresses', 0], '')}
-              </div>
+              <div className=''>{_get(wallet, 'address', '')}</div>
               <div className='my-3'>{`${_get(wallet, 'balance')} TOMO`}</div>
               <Row className='my-3'>
                 <Col xs={6} sm={6} md={6} lg={6} className='pr-2'>
@@ -56,7 +55,7 @@ class AddressInfo extends PureComponent {
               </Row>
             </Col>
             <Col sm={12} md={4}>
-              IMG
+              <QRCode value={_get(wallet, 'address', '')} />
             </Col>
           </Row>
         </div>

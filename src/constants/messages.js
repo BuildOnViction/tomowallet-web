@@ -77,13 +77,13 @@ export default defineMessages({
     id: `${navbarPrefix}.option.mywallet`,
     defaultMessage: 'My Wallet',
   },
-  HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_PROFILE: {
+  HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET: {
     id: `${navbarPrefix}.option.mywallet.option.showprofile`,
-    defaultMessage: 'Show Profile',
+    defaultMessage: 'Show Wallet',
   },
-  HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SETTINGS: {
+  HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP: {
     id: `${navbarPrefix}.option.mywallet.option.settings`,
-    defaultMessage: 'Settings',
+    defaultMessage: 'Help',
   },
   HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_LOG_OUT: {
     id: `${navbarPrefix}.option.mywallet.option.logout`,
