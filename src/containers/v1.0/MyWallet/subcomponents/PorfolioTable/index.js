@@ -7,37 +7,76 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { isEqual as _isEqual, get as _get, isEmpty as _isEmpty } from 'lodash';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
-
 // Utilities
-import { addNativeCurrency, loadTokenOptions } from '../../actions';
-import { selectTokenOptions } from '../../selectors';
+import { loadTokenOptions, prependTokenOptions } from '../../actions';
+import { selectTokenOptions, selectSuccessPopup } from '../../selectors';
+import { withWeb3 } from '../../../../../components/Web3';
 import { withIntl } from '../../../../../components/IntlProvider';
 import porfolioConfig from './configuration';
 import { BoxPorfolio } from './style';
+import { PORFOLIO_COLUMNS } from '../../constants';
+import tomoIcon from '../../../../../assets/images/logo-tomo.png';
+import { selectWallet } from '../../../../Global/selectors';
 // ===================
 
 // ===== MAIN COMPONENT =====
-class PorfolioTable extends PureComponent {
+class PorfolioTable extends Component {
   constructor(props) {
     super(props);
 
-    this.handleLoadData = this.handleLoadData.bind(this);
+    this.handleGetNativeCurrency = this.handleGetNativeCurrency.bind(this);
+    this.handleLoadTokenOptions = this.handleLoadTokenOptions.bind(this);
   }
 
   componentDidMount() {
-    this.handleLoadData();
+    const { wallet } = this.props;
+    if (!_isEmpty(wallet)) {
+      this.handleLoadTokenOptions();
+    }
   }
 
-  handleLoadData() {
-    const { onAddNativeCurrency, onLoadTokenOptions } = this.props;
-    onLoadTokenOptions('0xec6c16a19d6f799b1d2bc4b0df128ff39df00bfb');
+  componentDidUpdate(prevProps) {
+    if (
+      !_isEqual(_get(prevProps, 'wallet'), _get(this.props, 'wallet')) ||
+      (!_get(prevProps, 'successPopup.isOpen') &&
+        _get(this.props, 'successPopup.isOpen'))
+    ) {
+      this.handleLoadTokenOptions();
+    }
+  }
+
+  handleGetNativeCurrency() {
+    const { wallet } = this.props;
+    return [
+      {
+        [PORFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
+        [PORFOLIO_COLUMNS.SYMBOL]: 'TOMO',
+        [PORFOLIO_COLUMNS.ICON]: tomoIcon,
+        [PORFOLIO_COLUMNS.BALANCE]: _get(wallet, 'balance', 0),
+        [PORFOLIO_COLUMNS.DECIMALS]: 18,
+        [PORFOLIO_COLUMNS.PRICE]: 0.4,
+        [PORFOLIO_COLUMNS.VALUE]: _get(wallet, 'balance', 0) * 0.4,
+        [PORFOLIO_COLUMNS.TYPE]: 'TRC20',
+        [PORFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
+        [PORFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
+      },
+    ];
+  }
+
+  handleLoadTokenOptions() {
+    const { onLoadTokenOptions, wallet } = this.props;
+    onLoadTokenOptions(
+      _get(wallet, 'address', ''),
+      this.handleGetNativeCurrency(),
+    );
   }
 
   render() {
@@ -76,8 +115,8 @@ PorfolioTable.propTypes = {
   intl: PropTypes.object,
   /** Condition flag to trigger data reload */
   isActive: PropTypes.bool,
-  /** Action to add native currency at the beginning of the porfolio table */
-  onAddNativeCurrency: PropTypes.func,
+  /** Success popup's data */
+  successPopup: PropTypes.object,
   /** Action to request for token list by address */
   onLoadTokenOptions: PropTypes.func,
   /** Action to show/hide send token popup */
@@ -88,7 +127,7 @@ PorfolioTable.defaultProps = {
   data: [],
   intl: {},
   isActive: false,
-  onAddNativeCurrency: () => {},
+  successPopup: {},
   onLoadTokenOptions: () => {},
   openSendTokenPopup: () => {},
 };
@@ -98,10 +137,12 @@ PorfolioTable.defaultProps = {
 const mapStateToProps = () =>
   createStructuredSelector({
     data: selectTokenOptions,
+    successPopup: selectSuccessPopup,
+    wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
-  onAddNativeCurrency: token => dispatch(addNativeCurrency(token)),
-  onLoadTokenOptions: address => dispatch(loadTokenOptions(address)),
+  onLoadTokenOptions: (address, initialTokens) =>
+    dispatch(loadTokenOptions(address, initialTokens)),
 });
 const withConnect = connect(
   mapStateToProps,
@@ -112,4 +153,5 @@ const withConnect = connect(
 export default compose(
   withConnect,
   withIntl,
+  withWeb3,
 )(PorfolioTable);

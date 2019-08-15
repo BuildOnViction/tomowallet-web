@@ -1,10 +1,10 @@
 // Modules
 import React, { PureComponent } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { isEmpty as _isEmpty } from 'lodash';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
 // Custom Components
 import NavigationBar from '../../components/NavigationBar';
 import Footer from '../../components/Footer';
@@ -16,11 +16,13 @@ import MyWallet from '../v1.0/MyWallet';
 // -- TO-DO: Update style for App component in the following styled component:
 import AppStyler from './style';
 // Utilities & Constants
-import { Web3Provider } from '../../components/Web3';
-import { CustomIntlProvider } from '../../components/IntlProvider';
+import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
+import { storeWallet } from '../Global/actions';
 import { ROUTE } from '../../constants';
 import './app.scss';
+import { getWeb3Info } from '../../utils';
+import { initiateWallet } from '../../utils/blockchain';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -30,67 +32,74 @@ class App extends PureComponent {
     this.handleCheckLoggedIn = this.handleCheckLoggedIn.bind(this);
   }
 
+  componentDidMount() {
+    const { onStoreWallet, updateWeb3 } = this.props;
+    const walletParams = getWeb3Info();
+    if (walletParams) {
+      const { recoveryPhrase, rpcServer } = walletParams;
+      initiateWallet(recoveryPhrase, rpcServer).then(({ web3, walletInfo }) => {
+        updateWeb3(web3);
+        onStoreWallet(walletInfo);
+      });
+    }
+  }
+
   handleCheckLoggedIn() {
     const { wallet } = this.props;
-    return !_isEmpty(wallet) && localStorage.getItem('web3');
+    return !_isEmpty(wallet) || !!getWeb3Info();
   }
 
   render() {
     const isLoggedIn = this.handleCheckLoggedIn();
-    console.warn('App', isLoggedIn);
 
     return (
       <Router>
-        <Web3Provider>
-          <CustomIntlProvider>
-            <AppStyler>
-              <NavigationBar isLoggedIn={isLoggedIn} />
-              <div className='maincontent pt-3 pb-3'>
-                <Route
-                  path={ROUTE.LOGIN}
-                  render={() =>
-                    isLoggedIn ? (
-                      <Redirect strict to={ROUTE.MY_WALLET} />
-                    ) : (
-                      <WelcomePage />
-                    )
-                  }
-                />
-                <Route
-                  path={ROUTE.CREATE_WALLET}
-                  render={() =>
-                    isLoggedIn ? (
-                      <Redirect strict to={ROUTE.MY_WALLET} />
-                    ) : (
-                      <CreateWalletPage />
-                    )
-                  }
-                />
-                <Route
-                  path={ROUTE.IMPORT_WALLET}
-                  render={() =>
-                    isLoggedIn ? (
-                      <Redirect strict to={ROUTE.MY_WALLET} />
-                    ) : (
-                      <ImportWallet />
-                    )
-                  }
-                />
-                <PrivateRoute
-                  isLoggedIn={isLoggedIn}
-                  path={ROUTE.MY_WALLET}
-                  component={MyWallet}
-                />
-                <Route
-                  strict
-                  path={ROUTE.DEFAULT}
-                  render={() => <Redirect to={ROUTE.LOGIN} />}
-                />
-              </div>
-              <Footer className='mt-5' isLoggedIn={isLoggedIn} />
-            </AppStyler>
-          </CustomIntlProvider>
-        </Web3Provider>
+        <AppStyler>
+          <NavigationBar isLoggedIn={isLoggedIn} />
+          <div className='maincontent pt-3 pb-3'>
+            <Route
+              path={ROUTE.LOGIN}
+              render={() =>
+                isLoggedIn ? (
+                  <Redirect strict to={ROUTE.MY_WALLET} />
+                ) : (
+                  <WelcomePage />
+                )
+              }
+            />
+            <Route
+              path={ROUTE.CREATE_WALLET}
+              render={() =>
+                isLoggedIn ? (
+                  <Redirect strict to={ROUTE.MY_WALLET} />
+                ) : (
+                  <CreateWalletPage />
+                )
+              }
+            />
+            <Route
+              path={ROUTE.IMPORT_WALLET}
+              render={() =>
+                isLoggedIn ? (
+                  <Redirect strict to={ROUTE.MY_WALLET} />
+                ) : (
+                  <ImportWallet />
+                )
+              }
+            />
+            <PrivateRoute
+              isLoggedIn={isLoggedIn}
+              path={ROUTE.MY_WALLET}
+              component={MyWallet}
+            />
+            <Route
+              strict
+              path={ROUTE.DEFAULT}
+              render={() => <Redirect to={ROUTE.LOGIN} />}
+            />
+          </div>
+          <Footer className='mt-5' isLoggedIn={isLoggedIn} />
+        </AppStyler>
       </Router>
     );
   }
@@ -102,6 +111,16 @@ const mapStateToProps = () =>
   createStructuredSelector({
     wallet: selectWallet,
   });
+const mapDispatchToProps = dispatch => ({
+  onStoreWallet: wallet => dispatch(storeWallet(wallet)),
+});
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 // ======================
 
-export default connect(mapStateToProps)(App);
+export default compose(
+  withWeb3,
+  withConnect,
+)(App);

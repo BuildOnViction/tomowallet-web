@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import { get as _get } from 'lodash';
 import { FailureComponent, LoadingComponent } from './';
 import { RPC_SERVER, ENUM } from '../../constants';
+import { getWeb3Info, generateWeb3 } from '../../utils';
 
 // ===== Web3 Context =====
 const Web3Context = createContext({
@@ -31,10 +32,19 @@ class Web3Provider extends Component {
   }
 
   componentDidMount() {
-    this.handleTryProvider(localStorage.getItem('web3'), () =>
-      this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]),
-    );
-    // this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
+    // this.handleTryProvider(localStorage.getItem('web3'), () =>
+    //   this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]),
+    // );
+    const web3Info = getWeb3Info();
+    if (web3Info) {
+      const { recoveryPhrase, rpcServer } = web3Info;
+      const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+      console.warn('get Web3 from storage', newWeb3);
+
+      this.handleSetWeb3(newWeb3);
+    } else {
+      this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
+    }
   }
 
   handleTryProvider(web3, next = null) {

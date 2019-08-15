@@ -8,15 +8,14 @@
 // ===== IMPORTS =====
 // Modules
 import React, { PureComponent } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { get as _get } from 'lodash';
 import { Row, Col } from 'reactstrap';
 // Custom Components
-import {
-  BigButtonStyler,
-  HeadingSmall,
-} from '../../../../styles';
+import { BigButtonStyler, HeadingSmall } from '../../../../styles';
 // Utilities & Constants
+import { withWeb3 } from '../../../../components/Web3';
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
 // -- TO-DO: Add style for Address Information section
@@ -29,19 +28,23 @@ class AddressInfo extends PureComponent {
       intl: { formatMessage },
       openSendTokenPopup,
       wallet,
+      web3,
     } = this.props;
     return (
       <div>
-        <HeadingSmall>{formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}</HeadingSmall>
+        <HeadingSmall>
+          {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
+        </HeadingSmall>
         <div className='box-address'>
           <Row>
             <Col sm={12} md={8} className='pr-5'>
-              <div className=''>{_get(wallet, 'address')}</div>
+              <div className=''>
+                {_get(web3, ['currentProvider', 'addresses', 0], '')}
+              </div>
               <div className='my-3'>{`${_get(wallet, 'balance')} TOMO`}</div>
               <Row className='my-3'>
                 <Col xs={6} sm={6} md={6} lg={6} className='pr-2'>
-                  <BigButtonStyler
-                    onClick={() => openSendTokenPopup()}>
+                  <BigButtonStyler onClick={() => openSendTokenPopup()}>
                     {formatMessage(MSG.COMMON_BUTTON_SEND)}
                   </BigButtonStyler>
                 </Col>
@@ -80,4 +83,7 @@ AddressInfo.defaultProps = {
 };
 // ======================
 
-export default withIntl(AddressInfo);
+export default compose(
+  withIntl,
+  withWeb3,
+)(AddressInfo);

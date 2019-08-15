@@ -204,11 +204,7 @@ class FormContent extends PureComponent {
             formValues,
             [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TRANSACTION_FEE],
             0,
-          )} ${_get(
-            formValues,
-            [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TOKEN_NAME],
-            '',
-          )}`}
+          )} TOMO`}
         </Label>
       </Form>
     );

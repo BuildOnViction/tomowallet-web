@@ -61,6 +61,7 @@ const generateWeb3 = (
  * getWalletInfo
  *
  * Retrieve some wallet's basic information from a Web3 object
+ * @param {Web3} web3 A Web3 object with supported APIs
  */
 const getWalletInfo = web3 => {
   if (web3) {
@@ -71,6 +72,22 @@ const getWalletInfo = web3 => {
     }));
   }
   return null;
+};
+
+/**
+ * initiateWallet
+ *
+ * Initiate Web3 & wallet information when refreshing page
+ * @param {String} mnemonic A string of recovery phrase for wallet access
+ * @param {Object} serverConfig RPC server configuration properties
+ * @param {Function} callback Method to catch exception
+ */
+const initiateWallet = (mnemonic, serverConfig, callback = () => {}) => {
+  const web3 = generateWeb3(mnemonic, serverConfig, callback);
+  return getWalletInfo(web3).then(walletInfo => ({
+    web3,
+    walletInfo,
+  }));
 };
 
 /**
@@ -135,14 +152,42 @@ const sendToken = (web3, contractData) => {
 
         return contract.methods
           .transfer(to, weiAmount)
-          .send({ from, to: contractAddress, gasPrice, gasLimit: '50000' })
-          .then(hash => console.log(hash))
+          .send({
+            from,
+            to: contractAddress,
+            gasPrice: '250000000',
+            gas: 50000,
+          })
+          .then(hash => console.log('Hash', hash))
           .catch(ex => {
-            console.log(ex);
+            console.log('[ERROR] -- ', ex);
           });
       },
     );
   }
+};
+
+/**
+ * sendMoney
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {*} contractData An object which contains contract data
+ */
+const sendMoney = (web3, transactionData) => {
+  const { amount, decimals, from, to } = transactionData;
+
+  const weiAmount = web3.utils
+    .toBN(amount)
+    .mul(web3.utils.toBN(10 ** decimals))
+    .toString();
+  return web3.eth.sendTransaction({
+    from,
+    to,
+    value: weiAmount,
+    gasPrice: '250000000',
+    gas: 50000,
+  });
 };
 // ===================
 
@@ -151,6 +196,8 @@ export {
   estimateTRC20Gas,
   generateWeb3,
   getWalletInfo,
+  initiateWallet,
   mnemonicToPrivateKey,
+  sendMoney,
   sendToken,
 };

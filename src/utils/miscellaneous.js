@@ -1,3 +1,13 @@
+/**
+ *
+ * TomoWallet - Other Utilities
+ *
+ */
+// ===== IMPORTS =====
+// Modules
+import { isObject as _isObject, isString as _isString } from 'lodash';
+// ===================
+
 export const shuffleArray = array => {
   let original = array;
   const result = [];
@@ -17,4 +27,18 @@ export const shuffleArray = array => {
   }
 
   return result;
+};
+
+export const setWeb3Info = web3Info => {
+  console.warn('setWeb3Info', web3Info);
+
+  localStorage.setItem('web3Info', JSON.stringify(web3Info));
+};
+
+export const getWeb3Info = () => {
+  return JSON.parse(localStorage.getItem('web3Info'));
+};
+
+export const removeWeb3Info = () => {
+  localStorage.removeItem('web3Info');
 };

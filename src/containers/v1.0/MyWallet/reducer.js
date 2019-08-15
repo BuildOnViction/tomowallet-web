@@ -9,15 +9,19 @@ import { fromJS } from 'immutable';
 import { omit as _omit, get as _get } from 'lodash';
 // Constants
 import {
-  ADD_NATIVE_CURRENCY,
+  LOAD_TOKEN_OPTIONS,
   LOAD_TOKEN_OPTIONS_SUCCESS,
   PORFOLIO_COLUMNS,
+  PREPEND_TOKEN_OPTION,
+  RESET_SEND_TOKEN_FORM,
   SEND_TOKEN_FIELDS,
   SET_TABLE_TYPE,
   TOGGLE_SEND_TOKEN_POPUP,
   TOGGLE_SUCCESS_POPUP,
   UPDATE_SEND_TOKEN_ERRORS,
   UPDATE_SEND_TOKEN_INPUT,
+  UPDATE_SEND_TOKEN_POPUP_STAGE,
+  SEND_TOKEN_STAGES,
 } from './constants';
 import { LIST } from '../../../constants';
 // ===================
@@ -38,10 +42,11 @@ const initialState = fromJS({
   sendTokenPopup: {
     errors: {},
     isOpen: false,
+    stage: SEND_TOKEN_STAGES.FORM,
   },
   successPopup: {
     isOpen: false,
-    message: '',
+    txHash: '',
   },
   tableType: LIST.TABLE_TYPES[0].value,
   tokenOptions: [],
@@ -51,32 +56,37 @@ const initialState = fromJS({
 // ===== REDUCER =====
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ADD_NATIVE_CURRENCY:
+    case LOAD_TOKEN_OPTIONS:
+      return state.set('tokenOptions', action.initialTokens);
+    case LOAD_TOKEN_OPTIONS_SUCCESS:
+      return state.update('tokenOptions', tokens =>
+        tokens.concat(
+          action.tokens.map(token => {
+            const balance =
+              Number(_get(token, 'balance', 0)) /
+              Math.pow(10, _get(token, 'decimals', 0));
+            return {
+              [PORFOLIO_COLUMNS.TOKEN_NAME]: _get(token, 'name', ''),
+              [PORFOLIO_COLUMNS.SYMBOL]: _get(token, 'symbol', ''),
+              [PORFOLIO_COLUMNS.ICON]: _get(token, 'icon', ''),
+              [PORFOLIO_COLUMNS.BALANCE]: balance,
+              [PORFOLIO_COLUMNS.DECIMALS]: _get(token, 'decimals', 0),
+              [PORFOLIO_COLUMNS.PRICE]: _get(token, 'usdPrice', 0),
+              [PORFOLIO_COLUMNS.VALUE]: balance * _get(token, 'usdPrice', 0),
+              [PORFOLIO_COLUMNS.TOKEN_ADDRESS]: _get(token, 'tokenAddress', ''),
+              [PORFOLIO_COLUMNS.TYPE]: _get(token, 'type', 'TRC20'),
+              [PORFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
+              [PORFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
+            };
+          }),
+        ),
+      );
+    case PREPEND_TOKEN_OPTION:
       return state.update('tokenOptions', tokens =>
         tokens.unshift(action.token),
       );
-    case LOAD_TOKEN_OPTIONS_SUCCESS:
-      return state.set(
-        'tokenOptions',
-        action.tokens.map(token => {
-          const balance =
-            Number(_get(token, 'balance', 0)) /
-            Math.pow(10, _get(token, 'decimals', 0));
-          return {
-            [PORFOLIO_COLUMNS.TOKEN_NAME]: _get(token, 'name', ''),
-            [PORFOLIO_COLUMNS.SYMBOL]: _get(token, 'symbol', ''),
-            [PORFOLIO_COLUMNS.ICON]: _get(token, 'icon', ''),
-            [PORFOLIO_COLUMNS.BALANCE]: balance,
-            [PORFOLIO_COLUMNS.DECIMALS]: _get(token, 'decimals', 0),
-            [PORFOLIO_COLUMNS.PRICE]: _get(token, 'usdPrice', 0),
-            [PORFOLIO_COLUMNS.VALUE]: balance * _get(token, 'usdPrice', 0),
-            [PORFOLIO_COLUMNS.TOKEN_ADDRESS]: _get(token, 'tokenAddress', ''),
-            [PORFOLIO_COLUMNS.TYPE]: _get(token, 'type', 'TRC20'),
-            [PORFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
-            [PORFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
-          };
-        }),
-      );
+    case RESET_SEND_TOKEN_FORM:
+      return state.set('sendForm', initialSendForm);
     case SET_TABLE_TYPE:
       return state.set('tableType', action.tableType);
     case TOGGLE_SEND_TOKEN_POPUP: {
@@ -88,12 +98,20 @@ export default (state = initialState, action) => {
             ...(action.initialValues || {}),
           });
       }
-      return state
-        .setIn(['sendTokenPopup', 'isOpen'], action.bool)
-        .set('sendForm', initialSendForm);
+      return state.setIn(['sendTokenPopup', 'isOpen'], action.bool);
     }
-    case TOGGLE_SUCCESS_POPUP:
-      return state.setIn(['successPopup', 'isOpen'], action.bool);
+    case TOGGLE_SUCCESS_POPUP: {
+      const newState = state
+        .setIn(['successPopup', 'isOpen'], action.bool)
+        .setIn(['successPopup', 'txHash'], action.hash);
+      if (!action.bool) {
+        return newState.setIn(
+          ['sendTokenPopup', 'stage'],
+          SEND_TOKEN_STAGES.FORM,
+        );
+      }
+      return newState;
+    }
     case UPDATE_SEND_TOKEN_ERRORS:
       return state.setIn(['sendTokenPopup', 'errors'], action.errors);
     case UPDATE_SEND_TOKEN_INPUT:
@@ -102,6 +120,8 @@ export default (state = initialState, action) => {
         .updateIn(['sendTokenPopup', 'errors'], errors =>
           _omit(errors, action.name),
         );
+    case UPDATE_SEND_TOKEN_POPUP_STAGE:
+      return state.setIn(['sendTokenPopup', 'stage'], action.stage);
     default:
       return state;
   }

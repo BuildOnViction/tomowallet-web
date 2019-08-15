@@ -42,7 +42,12 @@ import {
 } from './actions';
 import reducer from './reducer';
 import { ROUTE, MSG } from '../../../constants';
-import { injectReducer, generateWeb3, getWalletInfo } from '../../../utils';
+import {
+  injectReducer,
+  generateWeb3,
+  getWalletInfo,
+  setWeb3Info,
+} from '../../../utils';
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
 import { storeWallet } from '../../Global/actions';
@@ -108,7 +113,7 @@ class ImportWallet extends PureComponent {
           .then(walletInfo => {
             onStoreWallet(walletInfo);
             updateWeb3(newWeb3);
-            Cookies;
+            setWeb3Info({ recoveryPhrase, rpcServer });
           })
           .then(() => history.push(ROUTE.MY_WALLET));
       } else {

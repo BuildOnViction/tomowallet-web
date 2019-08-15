@@ -26,6 +26,7 @@ import { ROUTE, RPC_SERVER, LIST, MSG } from '../../constants';
 // -- TO-DO: Import TomoWallet logo's source
 // IMG
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
+import { removeWeb3Info } from '../../utils';
 
 // ===== MAIN COMPONENT =====
 class NavigationBar extends PureComponent {
@@ -157,11 +158,12 @@ class NavigationBar extends PureComponent {
   }
 
   handleLogout() {
-    const { onReleaseWallet } = this.props;
+    const { onReleaseWallet, switchRPCServer } = this.props;
 
     Promise.all([
       onReleaseWallet(),
-      localStorage.removeItem('recoveryPhrase'),
+      removeWeb3Info(),
+      switchRPCServer(Object.keys(RPC_SERVER)[0]),
     ]).then(() => this.handleRedirectToHomepage());
   }
 

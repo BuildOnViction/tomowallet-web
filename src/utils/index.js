@@ -2,7 +2,12 @@ import injectReducer from './injectReducer';
 import injectSaga from './injectSaga';
 import history from './history';
 import createDeepEqualSelector from './deepSelector';
-import { shuffleArray } from './miscellaneous';
+import {
+  shuffleArray,
+  getWeb3Info,
+  setWeb3Info,
+  removeWeb3Info,
+} from './miscellaneous';
 import {
   decryptWalletInfo,
   estimateTRC20Gas,
@@ -27,4 +32,7 @@ export {
   mergeErrors,
   estimateTRC20Gas,
   sendToken,
+  getWeb3Info,
+  setWeb3Info,
+  removeWeb3Info,
 };

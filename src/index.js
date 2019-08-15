@@ -17,6 +17,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 // Custom Component
 import App from './containers/App';
 // Utilities & Constants
+import { Web3Provider } from './components/Web3';
+import { CustomIntlProvider } from './components/IntlProvider';
 import configureStore from './configurations/configureStore';
 import { history } from './utils';
 import { addLocaleData } from 'react-intl';
@@ -39,7 +41,11 @@ const persistor = persistStore(store);
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <App />
+      <Web3Provider>
+        <CustomIntlProvider>
+          <App />
+        </CustomIntlProvider>
+      </Web3Provider>
     </PersistGate>
   </Provider>,
   document.getElementById('root'),

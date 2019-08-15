@@ -45,7 +45,7 @@ class DataTables extends PureComponent {
           </TabPane>
           <TabPane tabId={LIST.TABLE_TYPES[1].value}>
             <TransactionTable
-              isActive={tableType === LIST.TABLE_TYPES[0].value}
+              isActive={tableType === LIST.TABLE_TYPES[1].value}
             />
           </TabPane>
         </TabContent>

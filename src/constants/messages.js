@@ -56,6 +56,10 @@ export default defineMessages({
     id: `${buttonPrefix}.maximum`,
     defaultMessage: 'Max',
   },
+  COMMON_BUTTON_CONFIRM: {
+    id: `${buttonPrefix}.confirm`,
+    defaultMessage: 'Confirm',
+  },
   // Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {
     id: `${navbarPrefix}.logo.alt`,
@@ -404,6 +408,18 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.popup.sendtoken.input.message.placeholder`,
     defaultMessage: 'Write message...',
   },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.amount.label`,
+    defaultMessage: 'Amount',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_FROM_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.from.label`,
+    defaultMessage: 'From',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_INPUT_TO_LABEL: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.input.to.label`,
+    defaultMessage: 'To',
+  },
   MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL: {
     id: `${myWalletPagePrefix}.popup.sendtoken.info.transactionfee.label`,
     defaultMessage: 'Transaction fee',
@@ -431,6 +447,14 @@ export default defineMessages({
   MY_WALLET_POPUP_SEND_TOKEN_ERROR_MESSAGE_MAXLENGTH: {
     id: `${myWalletPagePrefix}.popup.sendtoken.error.message.maxlength`,
     defaultMessage: 'Message exceeds maximum 255 characters',
+  },
+  MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_SENT: {
+    id: `${myWalletPagePrefix}.popup.success.info.amountsent`,
+    defaultMessage: 'You have sent',
+  },
+  MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH: {
+    id: `${myWalletPagePrefix}.popup.success.info.transactionhash`,
+    defaultMessage: 'Transaction hash',
   },
 });
 // ====================
