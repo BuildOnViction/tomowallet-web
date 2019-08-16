@@ -89,6 +89,31 @@ export default defineMessages({
     id: `${navbarPrefix}.option.mywallet.option.logout`,
     defaultMessage: 'Log out',
   },
+  HEADER_NAVBAR_POPUP_SHOW_WALLET_TITLE: {
+    id: `${navbarPrefix}.popup.showwallet.title`,
+    defaultMessage: 'Show Wallet',
+  },
+  HEADER_NAVBAR_POPUP_SHOW_WALLET_WARNING_IMAGE_ALT: {
+    id: `${navbarPrefix}.popup.showwallet.warning.image.alt`,
+    defaultMessage: 'Warning image',
+  },
+  HEADER_NAVBAR_POPUP_SHOW_WALLET_WARNING_TEXT: {
+    id: `${navbarPrefix}.popup.showwallet.warning.text`,
+    defaultMessage:
+      'We are about to show your recovery phrase and private key, please ensure that no one else is looking at your screen.',
+  },
+  HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_RECOVERY_PHRASE: {
+    id: `${navbarPrefix}.popup.showwallet.tab.recoveryphrase`,
+    defaultMessage: 'Recovery phrase',
+  },
+  HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY: {
+    id: `${navbarPrefix}.popup.showwallet.tab.privatekey`,
+    defaultMessage: 'Private key',
+  },
+  HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE: {
+    id: `${navbarPrefix}.popup.showwallet.tab.privatekey.note`,
+    defaultMessage: 'Remove all spaces to use private key, please',
+  },
   // Welcome Page
   WELCOME_TITLE: {
     id: `${welcomePagePrefix}.title`,

@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { get as _get } from 'lodash';
 import {
-  Container,
   Row,
   Col,
   Card,
@@ -23,10 +22,7 @@ import {
   Nav,
   NavItem,
 } from 'reactstrap';
-import {
-  HeadingLarge,
-  ButtonLineStyler
-} from '../../../../styles';
+import { HeadingLarge, ButtonLineStyler } from '../../../../styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Component
 import { ButtonStyler, NoticeTextRed } from '../../../../styles';
@@ -35,7 +31,22 @@ import { withIntl } from '../../../../components/IntlProvider';
 import { shuffleArray } from '../../../../utils';
 import { MSG } from '../../../../constants';
 import { FORM_STATES } from '../constants';
+import MnemonicBox from '../../../../components/MnemonicBox';
 // ===================
+
+// ===== SUB-COMPONENTS =====
+const WordCell = ({ removeWord, wordList, wordIdx }) =>
+  _get(wordList, [wordIdx], '') && (
+    <div
+      role='presentation'
+      onClick={() => removeWord(wordIdx)}
+      className='d-inline-block phrase-word'
+    >
+      <span className='pr-1'>{_get(wordList, [wordIdx], '')}</span>
+      <FontAwesomeIcon icon='times-circle' />
+    </div>
+  );
+// ==========================
 
 // ===== MAIN COMPONENT =====
 class Verification extends PureComponent {
@@ -94,30 +105,14 @@ class Verification extends PureComponent {
               </NavItem>
             ))}
           </Nav>
-          <Row noGutters className='box-border'>
-            {Array(wordNumber)
-              .fill(null)
-              .map((_, index) => (
-                <Col
-                  key={`word_${index + 1}`}
-                  xs={6}
-                  md={4}
-                  className='col-6 col-md-4 p-4'
-                >
-                  {`${index + 1}. `}
-                  {_get(mnemonic, ['compare', index], '') && (
-                    <div
-                      role='presentation'
-                      onClick={() => removeWord(index)}
-                      className='d-inline-block phrase-word'
-                    >
-                      <span className='pr-1'>{_get(mnemonic, ['compare', index], '')}</span>
-                      <FontAwesomeIcon icon='times-circle' />
-                    </div>
-                  )}
-                </Col>
-              ))}
-          </Row>
+          <MnemonicBox
+            getCellProps={{
+              wordList: _get(mnemonic, 'compare', []),
+              removeWord,
+            }}
+            mnemonic={_get(mnemonic, 'compare', [])}
+            WordCell={WordCell}
+          />
           <Row className='mt-4'>
             {shuffledMnemonic.map((word, wordIdx) => (
               <Col

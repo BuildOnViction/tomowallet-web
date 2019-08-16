@@ -45,9 +45,15 @@ import {
 import reducer from './reducer';
 import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
-import { injectReducer, generateWeb3, getWalletInfo } from '../../../utils';
+import {
+  injectReducer,
+  generateWeb3,
+  getWalletInfo,
+  setWeb3Info,
+  withLoading,
+} from '../../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
-import { MSG } from '../../../constants';
+import { MSG, ROUTE } from '../../../constants';
 import { storeWallet } from '../../Global/actions';
 import { ContainerMin } from '../../../styles';
 // ===================
@@ -71,38 +77,33 @@ class WalletCreationPage extends PureComponent {
 
   handleVerifyMnemonic() {
     const {
+      history,
       intl: { formatMessage },
       mnemonic,
       onClearComparison,
-      onSetFormState,
       onStoreWallet,
       onUpdateErrors,
       rpcServer,
+      toggleLoading,
       updateWeb3,
     } = this.props;
+    const recoveryPhrase = _get(mnemonic, 'origin');
 
-    if (
-      _isEqual(
-        _get(mnemonic, 'origin'),
-        _get(mnemonic, 'compare', []).join(' '),
-      )
-    ) {
-      const newWeb3 = generateWeb3(_get(mnemonic, 'origin'), rpcServer);
-      const address = newWeb3.currentProvider.addresses[0];
-
-      // console.warn('getBalance', newWeb3, address);
-
-      newWeb3.eth.getBalance(address, console.error);
-
-      Promise.all([getWalletInfo(newWeb3)]).then(result => {
-        // console.warn('result', result);
-      });
-      // getWalletInfo(newWeb3).then(newWalletInfo =>
-      //   Promise.all([onStoreWallet(newWalletInfo), updateWeb3(newWeb3)]).then(
-      //     () => onSetFormState(FORM_STATES.SUCCESS),
-      //   ),
-      // );
+    if (_isEqual(recoveryPhrase, _get(mnemonic, 'compare', []).join(' '))) {
+      toggleLoading(true);
+      const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+      getWalletInfo(newWeb3)
+        .then(walletInfo => {
+          onStoreWallet(walletInfo);
+          updateWeb3(newWeb3);
+          setWeb3Info({ recoveryPhrase, rpcServer });
+        })
+        .then(() => {
+          toggleLoading(false);
+          history.push(ROUTE.MY_WALLET);
+        });
     } else {
+      toggleLoading(false);
       onUpdateErrors([formatMessage(MSG.VERIFICATION_ERROR_VERIFY_FAILED)]);
       onClearComparison();
     }
@@ -218,6 +219,8 @@ WalletCreationPage.propTypes = {
   onUpdateErrors: PropTypes.func,
   /** Current RPC server configuration */
   rpcServer: PropTypes.object,
+  /** Action to show/hide loading screen */
+  toggleLoading: PropTypes.func,
   /** Action to set new Web3 object into context */
   updateWeb3: PropTypes.func,
 };
@@ -246,6 +249,7 @@ WalletCreationPage.defaultProps = {
   onToggleKeyVisible: () => {},
   onUpdateErrors: () => {},
   rpcServer: {},
+  toggleLoading: () => {},
   updateWeb3: () => {},
 };
 // ======================
@@ -286,4 +290,5 @@ export default compose(
   withIntl,
   withWeb3,
   withRouter,
+  withLoading,
 )(WalletCreationPage);

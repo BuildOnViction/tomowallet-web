@@ -39,7 +39,6 @@ class Web3Provider extends Component {
     if (web3Info) {
       const { recoveryPhrase, rpcServer } = web3Info;
       const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
-      console.warn('get Web3 from storage', newWeb3);
 
       this.handleSetWeb3(newWeb3);
     } else {
@@ -47,18 +46,18 @@ class Web3Provider extends Component {
     }
   }
 
-  handleTryProvider(web3, next = null) {
-    if (web3) {
-      this.handleSetWeb3(web3);
-    } else if (next) {
-      next();
-    } else {
-      this.setState({
-        status: ENUM.WEB3_STATUSES.FAILED,
-        error: 'Unexpected Web3 error!',
-      });
-    }
-  }
+  // handleTryProvider(web3, next = null) {
+  //   if (web3) {
+  //     this.handleSetWeb3(web3);
+  //   } else if (next) {
+  //     next();
+  //   } else {
+  //     this.setState({
+  //       status: ENUM.WEB3_STATUSES.FAILED,
+  //       error: 'Unexpected Web3 error!',
+  //     });
+  //   }
+  // }
 
   handleUpdateRpcServer(newKey) {
     this.setState(

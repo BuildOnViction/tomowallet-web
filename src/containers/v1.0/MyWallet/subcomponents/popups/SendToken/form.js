@@ -24,7 +24,7 @@ import {
   NavItem,
 } from 'reactstrap';
 import Select from 'react-select';
-// Constants
+// Constants & Styles
 import { SEND_TOKEN_FIELDS, PORFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../../constants';
 // ===================
@@ -38,11 +38,22 @@ const TokenOption = props => {
       <Row noGutters>
         <Col xs={6} sm={6} md={6} lg={6}>
           {/* -- TO-DO: Add token's image source */}
-          <img src='' alt={data.tokenName} />
-          <span>{`${data.tokenName} (${data.publisher})`}</span>
+          <img
+            src={_get(data, [PORFOLIO_COLUMNS.ICON], '')}
+            alt={_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')}
+          />
+          <span>{`${_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+            data,
+            [PORFOLIO_COLUMNS.PUBLISHER],
+            '',
+          )})`}</span>
         </Col>
         <Col xs={6} sm={6} md={6} lg={6} className='text-right'>
-          {`${data.balance.toLocaleString()} ${data.tokenName}`}
+          {`${_get(
+            data,
+            [PORFOLIO_COLUMNS.BALANCE],
+            0,
+          ).toLocaleString()} ${_get(data, [PORFOLIO_COLUMNS.SYMBOL], '')}`}
         </Col>
       </Row>
     </Container>
@@ -57,11 +68,22 @@ const TokenInputValue = props => {
       <Row noGutters>
         <Col xs={7} sm={7} md={7} lg={7}>
           {/* -- TO-DO: Add token's image source */}
-          <img src='' alt={data.tokenName} />
-          <span>{`${data.tokenName} (${data.publisher})`}</span>
+          <img
+            src={_get(data, [PORFOLIO_COLUMNS.ICON], '')}
+            alt={_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')}
+          />
+          <span>{`${_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+            data,
+            [PORFOLIO_COLUMNS.PUBLISHER],
+            '',
+          )})`}</span>
         </Col>
         <Col xs={5} sm={5} md={5} lg={5} className='text-right'>
-          {`${data.balance.toLocaleString()} ${data.tokenName}`}
+          {`${_get(
+            data,
+            [PORFOLIO_COLUMNS.BALANCE],
+            0,
+          ).toLocaleString()} ${_get(data, [PORFOLIO_COLUMNS.SYMBOL], '')}`}
         </Col>
       </Row>
     </Container>

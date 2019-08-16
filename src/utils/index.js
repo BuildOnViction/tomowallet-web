@@ -17,6 +17,7 @@ import {
   sendToken,
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
+import { withLoading } from './injectLoading';
 
 export {
   injectReducer,
@@ -35,4 +36,5 @@ export {
   getWeb3Info,
   setWeb3Info,
   removeWeb3Info,
+  withLoading,
 };

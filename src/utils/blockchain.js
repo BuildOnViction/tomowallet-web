@@ -140,17 +140,19 @@ const sendToken = (web3, contractData) => {
     return contract.methods
       .estimateFee(weiAmount)
       .call({ from, to })
-      .then(gasPrice => {
-        return contract.methods
+      .then(gasPrice =>
+        contract.methods
           .transfer(to, weiAmount)
-          .send({ from, gasPrice });
-      });
+          .send({ from, gasPrice: '250000000' })
+          .then(hash => hash)
+          .catch(ex => {
+            console.log('[ERROR] -- ', ex);
+          }),
+      );
   } else {
     return estimateTRC20Gas(web3, { from, to, value: weiAmount }).then(
-      gasPrice => {
-        console.warn('sendToken - transfer', gasPrice, contractData, weiAmount);
-
-        return contract.methods
+      gasPrice =>
+        contract.methods
           .transfer(to, weiAmount)
           .send({
             from,
@@ -158,11 +160,10 @@ const sendToken = (web3, contractData) => {
             gasPrice: '250000000',
             gas: 50000,
           })
-          .then(hash => console.log('Hash', hash))
+          .then(hash => hash)
           .catch(ex => {
             console.log('[ERROR] -- ', ex);
-          });
-      },
+          }),
     );
   }
 };

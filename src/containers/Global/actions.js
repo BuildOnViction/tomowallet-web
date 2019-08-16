@@ -10,11 +10,11 @@ import {
   RESET_WALLET_POPUP,
   SET_LANGUAGE,
   STORE_WALLET_INFO,
+  TOGGLE_LOADING_SCREEN,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
 } from './constants';
-import { TOGGLE_SEND_TOKEN_POPUP } from '../v1.0/MyWallet/constants';
 // ===================
 
 // ===== ACTIONS =====
@@ -36,8 +36,13 @@ export const storeWallet = data => ({
   data,
 });
 
+export const toggleLoading = bool => ({
+  type: TOGGLE_LOADING_SCREEN,
+  bool,
+});
+
 export const toggleWalletPopup = bool => ({
-  type: TOGGLE_SEND_TOKEN_POPUP,
+  type: TOGGLE_WALLET_POPUP,
   bool,
 });
 

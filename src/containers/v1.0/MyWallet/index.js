@@ -51,6 +51,7 @@ import {
   mergeErrors,
   injectSaga,
   sendToken,
+  withLoading,
 } from '../../../utils';
 import { withIntl } from '../../../components/IntlProvider';
 import { withWeb3 } from '../../../components/Web3';
@@ -136,22 +137,34 @@ class MyWallet extends PureComponent {
   }
 
   handleSubmitSendToken() {
-    const { onStoreWallet, onToggleSuccessPopup, web3 } = this.props;
+    const {
+      onStoreWallet,
+      onToggleSuccessPopup,
+      toggleLoading,
+      web3,
+    } = this.props;
+    toggleLoading(true);
     const contractData = this.handleGetContractData();
     if (contractData.contractAddress) {
-      sendToken(web3, contractData).then(result =>
-        this.setState({ txHash: result }),
-      );
+      sendToken(web3, contractData)
+        .then(hash => {
+          toggleLoading(false);
+          return hash;
+        })
+        .then(hash => {
+          this.handleCloseSendTokenPopup();
+          onToggleSuccessPopup(true, hash);
+        });
     } else {
       sendMoney(web3, contractData)
         .then(hash => {
-          console.warn('sendMoney successful!', hash);
           getWalletInfo(web3).then(walletInfo => {
             onStoreWallet(walletInfo);
           });
           return hash;
         })
         .then(hash => {
+          toggleLoading(false);
           this.handleCloseSendTokenPopup();
           onToggleSuccessPopup(true, hash);
         });
@@ -311,6 +324,8 @@ MyWallet.propTypes = {
   successPopup: PropTypes.object,
   /** Current highlighted table tab */
   tableType: PropTypes.string,
+  /** Action to show/hide loading screen */
+  toggleLoading: PropTypes.func,
   /** List of token's data */
   tokenOptions: PropTypes.arrayOf(PropTypes.object),
   /** Current wallet's data */
@@ -330,6 +345,7 @@ MyWallet.defaultProps = {
   sendToKenPopup: {},
   successPopup: {},
   tableType: LIST.TABLE_TYPES[0].value,
+  toggleLoading: () => {},
   tokenOptions: [],
   wallet: {},
 };
@@ -376,4 +392,5 @@ export default compose(
   withIntl,
   withRouter,
   withWeb3,
+  withLoading,
 )(MyWallet);

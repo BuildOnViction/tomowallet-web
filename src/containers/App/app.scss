@@ -1,27 +1,27 @@
 // Style Global
 @import './iconfont/style.css';
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 body {
-    background-color: #202533;
-    font-size: 14px;
-    color: #9eaacc;
-    line-height: 1.7;
-    min-height: 100vh;
-    font-family: 'Nunito Sans', sans-serif;
+  background-color: #202533;
+  font-size: 14px;
+  color: #9eaacc;
+  line-height: 1.7;
+  min-height: 100vh;
+  font-family: 'Nunito Sans', sans-serif;
 }
 a {
-  transition: all .3s;
+  transition: all 0.3s;
   &:hover {
-    text-decoration: none!important;
+    text-decoration: none !important;
   }
 }
 //maincontent
 .maincontent {
-  min-height: calc(100vh -  179px);
+  min-height: calc(100vh - 179px);
   @media (max-width: 768px) {
-    min-height: calc(100vh -  134px - 85px);
+    min-height: calc(100vh - 134px - 85px);
   }
   .card {
     background: transparent;
@@ -58,21 +58,21 @@ a {
   }
   .box_select {
     color: #9eaacc;
-    >div {
-      background-color: #39415c!important;
+    > div {
+      background-color: #39415c !important;
       border-radius: 8px;
       border: 0;
     }
   }
   .input-group-append button {
-    background-color: #2d344a!important;
-    border-radius: 0 8px 8px 0!important;
+    background-color: #2d344a !important;
+    border-radius: 0 8px 8px 0 !important;
     border: 0;
     border-left: 1px solid #272d40;
     color: #9eaacc;
     font-size: 14px;
     &:focus {
-      box-shadow: 0 0 0 1px  #5692cd;
+      box-shadow: 0 0 0 1px #5692cd;
       background-color: transparent;
     }
   }
@@ -90,7 +90,7 @@ a {
       font-family: 'Nunito Sans', sans-serif;
     }
     &:focus {
-      box-shadow: 0 0 0 1px  #5692cd;
+      box-shadow: 0 0 0 1px #5692cd;
       background-color: transparent;
     }
   }
@@ -119,7 +119,7 @@ a {
   }
 }
 .border {
-  border: 1px solid #444b64!important;
+  border: 1px solid #444b64 !important;
 }
 .w-80 {
   width: 80px;
@@ -136,7 +136,7 @@ a {
   ul.nav-tabs {
     border: 0;
     .nav-link {
-      background: transparent!important;
+      background: transparent !important;
       border: 0;
       color: #5e677f;
       margin-right: 50px;
@@ -144,17 +144,17 @@ a {
       cursor: pointer;
       position: relative;
       &.active {
-         color: #9eaacc;
-         &::before {
-            content: '';
-            background-color: #5692cd;
-            border-radius: 25px;
-            width: 30px;
-            height: 2px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-         }
+        color: #9eaacc;
+        &::before {
+          content: '';
+          background-color: #5692cd;
+          border-radius: 25px;
+          width: 30px;
+          height: 2px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+        }
       }
     }
   }
@@ -194,7 +194,7 @@ a {
       width: 30px;
       height: 30px;
       i {
-        transition: all .3s;
+        transition: all 0.3s;
       }
       &:hover {
         i {

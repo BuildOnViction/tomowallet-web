@@ -47,6 +47,7 @@ import {
   generateWeb3,
   getWalletInfo,
   setWeb3Info,
+  withLoading,
 } from '../../../utils';
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
@@ -90,6 +91,7 @@ class ImportWallet extends PureComponent {
       onStoreWallet,
       onUpdateErrors,
       rpcServer,
+      toggleLoading,
       updateWeb3,
       web3,
     } = this.props;
@@ -108,15 +110,27 @@ class ImportWallet extends PureComponent {
         (web3.utils.isHex(recoveryPhrase) ||
           recoveryPhrase.split(' ').length === 12)
       ) {
-        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
-        getWalletInfo(newWeb3)
-          .then(walletInfo => {
-            onStoreWallet(walletInfo);
-            updateWeb3(newWeb3);
-            setWeb3Info({ recoveryPhrase, rpcServer });
-          })
-          .then(() => history.push(ROUTE.MY_WALLET));
+        try {
+          toggleLoading(true);
+          const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+          getWalletInfo(newWeb3)
+            .then(walletInfo => {
+              onStoreWallet(walletInfo);
+              updateWeb3(newWeb3);
+              setWeb3Info({ recoveryPhrase, rpcServer });
+            })
+            .then(() => {
+              toggleLoading(false);
+              history.push(ROUTE.MY_WALLET);
+            });
+        } catch {
+          toggleLoading(false);
+          onUpdateErrors([
+            formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
+          ]);
+        }
       } else {
+        toggleLoading(false);
         onUpdateErrors([
           formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
         ]);
@@ -191,6 +205,7 @@ class ImportWallet extends PureComponent {
                   <RPOrPKForm
                     updateInput={onUpdateInput}
                     formValues={_get(importWallet, 'input', {})}
+                    errors={_get(importWallet, 'errors', [])}
                   />
                 )}
               </Col>
@@ -233,6 +248,8 @@ ImportWallet.propTypes = {
   onUpdateImportType: PropTypes.func,
   /** Action to handle input change */
   onUpdateInput: PropTypes.func,
+  /** Action to show/hide loading screen */
+  toggleLoading: PropTypes.func,
 };
 
 ImportWallet.defaultProps = {
@@ -243,6 +260,7 @@ ImportWallet.defaultProps = {
   onUpdateErrors: () => {},
   onUpdateImportType: () => {},
   onUpdateInput: () => {},
+  toggleLoading: () => {},
 };
 // ======================
 
@@ -273,4 +291,5 @@ export default compose(
   withRouter,
   withWeb3,
   withIntl,
+  withLoading,
 )(ImportWallet);

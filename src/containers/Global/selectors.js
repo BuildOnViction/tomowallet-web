@@ -11,13 +11,17 @@ import { createDeepEqualSelector } from '../../utils';
 // ===== SELECTORS =====
 const selectGlobalDomain = state => state.global;
 
-const selectWallet = createDeepEqualSelector(
-  selectGlobalDomain,
-  obj => obj.toJS().wallet,
-);
 const selectLanguage = createDeepEqualSelector(
   selectGlobalDomain,
   obj => obj.toJS().language,
+);
+const selectLoading = createDeepEqualSelector(
+  selectGlobalDomain,
+  obj => obj.toJS().loading,
+);
+const selectWallet = createDeepEqualSelector(
+  selectGlobalDomain,
+  obj => obj.toJS().wallet,
 );
 const selectWalletPopup = createDeepEqualSelector(
   selectGlobalDomain,
@@ -25,4 +29,4 @@ const selectWalletPopup = createDeepEqualSelector(
 );
 // =====================
 
-export { selectWallet, selectLanguage, selectWalletPopup };
+export { selectLanguage, selectLoading, selectWallet, selectWalletPopup };

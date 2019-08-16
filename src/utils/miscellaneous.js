@@ -30,8 +30,6 @@ export const shuffleArray = array => {
 };
 
 export const setWeb3Info = web3Info => {
-  console.warn('setWeb3Info', web3Info);
-
   localStorage.setItem('web3Info', JSON.stringify(web3Info));
 };
 

@@ -19,6 +19,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Component
+import MnemonicBox from '../../../../components/MnemonicBox';
 // -- TO-DO: Update style for buttons
 import {
   ButtonStyler,
@@ -58,7 +59,9 @@ class RecoveryPhrase extends PureComponent {
     return (
       <Card>
         <CardHeader>
-          <HeadingLarge>{formatMessage(MSG.RECOVERY_PHRASE_TITLE)}</HeadingLarge>
+          <HeadingLarge>
+            {formatMessage(MSG.RECOVERY_PHRASE_TITLE)}
+          </HeadingLarge>
         </CardHeader>
         <CardBody>
           <HeadingMedium>
@@ -67,29 +70,22 @@ class RecoveryPhrase extends PureComponent {
           <CardText>
             {formatMessage(MSG.RECOVERY_PHRASE_NOTIFICATION_DESCRIPTION)}
           </CardText>
-          <Row noGutters className='mb-4 mt-4 box-border'>
-            {convertedMnemonic.map((word, wordIdx) => (
-              <Col
-                key={`word_${wordIdx + 1}`}
-                xs={6}
-                sm={6}
-                md={4}
-                lg={4}
-                className='p-4'
-              >
-                {`${wordIdx + 1}. ${word}`}
-              </Col>
-            ))}
-          </Row>
+          <MnemonicBox
+            className='mb-4 mt-4 box-border'
+            mnemonic={convertedMnemonic}
+          />
           <Row noGutters>
             <Col>
-              <TextLinkYellow href="#">
+              <TextLinkYellow href='#'>
                 <FontAwesomeIcon icon={['far', 'save']} className='mr-2' />
                 {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_SAVE)}
               </TextLinkYellow>
             </Col>
             <Col className='text-right'>
-              <TextBlue role='presentation' onClick={() => toggleKeyViewPopup(true)}>
+              <TextBlue
+                role='presentation'
+                onClick={() => toggleKeyViewPopup(true)}
+              >
                 {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_VIEW_PRIVATE_KEY)}
                 <FontAwesomeIcon icon='arrow-right' className='ml-2' />
               </TextBlue>
@@ -104,7 +100,10 @@ class RecoveryPhrase extends PureComponent {
               </ButtonStyler>
             </Col>
             <Col size={6}>
-              <ButtonStyler btnYellow onClick={() => toggleConfirmationPopup(true)}>
+              <ButtonStyler
+                btnYellow
+                onClick={() => toggleConfirmationPopup(true)}
+              >
                 {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_CONFIRMATION)}
               </ButtonStyler>
             </Col>

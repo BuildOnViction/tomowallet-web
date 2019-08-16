@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { isEmpty as _isEmpty } from 'lodash';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { Spinner } from 'reactstrap';
 // Custom Components
+import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';
 import Footer from '../../components/Footer';
 import PrivateRoute from './components/PrivateRoute';
@@ -55,6 +57,7 @@ class App extends PureComponent {
     return (
       <Router>
         <AppStyler>
+          <LoadingComponent />
           <NavigationBar isLoggedIn={isLoggedIn} />
           <div className='maincontent pt-3 pb-3'>
             <Route

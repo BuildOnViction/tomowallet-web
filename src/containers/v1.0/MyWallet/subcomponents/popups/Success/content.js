@@ -41,7 +41,7 @@ class SuccessContent extends PureComponent {
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
           </Label>
-          <div>{_get(txHash, 'transactionHash', '')}</div>
+          <div>{_get(txHash, 'transactionHash', txHash)}</div>
         </div>
       </Fragment>
     );
@@ -58,7 +58,7 @@ SuccessContent.propTypes = {
   /** Token symbol */
   symbol: PropTypes.string,
   /** Successful transaction's hash data */
-  txHash: PropTypes.object,
+  txHash: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 };
 
 SuccessContent.defaultProps = {

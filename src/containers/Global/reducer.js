@@ -13,6 +13,7 @@ import {
   RESET_WALLET_POPUP,
   SET_LANGUAGE,
   STORE_WALLET_INFO,
+  TOGGLE_LOADING_SCREEN,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
@@ -26,11 +27,12 @@ import { LIST } from '../../constants';
 const initialWalletPopupState = {
   isOpen: false,
   stage: WALLET_POPUP_STAGE.WARNING,
-  tabType: WALLET_POPUP_CONTENT_TAB.RECOVERY_PHRASE,
+  tabType: WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY,
 };
 const initialState = fromJS({
   wallet: null,
   language: _get(LIST, ['LANGUAGES', 0, 'value'], ''),
+  loading: false,
   walletPopup: initialWalletPopupState,
 });
 // =============================
@@ -50,8 +52,18 @@ export default (state = initialState, action) => {
       );
     case STORE_WALLET_INFO:
       return state.set('wallet', action.data);
-    case TOGGLE_WALLET_POPUP:
-      return state.setIn(['walletPopup', 'isOpen'], action.bool);
+    case TOGGLE_LOADING_SCREEN:
+      return state.set('loading', action.bool);
+    case TOGGLE_WALLET_POPUP: {
+      const newState = state.setIn(['walletPopup', 'isOpen'], action.bool);
+      if (!action.bool) {
+        return newState.setIn(
+          ['walletPopup', 'stage'],
+          WALLET_POPUP_STAGE.WARNING,
+        );
+      }
+      return newState;
+    }
     case UPDATE_WALLET_POPUP_CONTENT_TAB:
       return state.setIn(['walletPopup', 'tabType'], action.tabType);
     case UPDATE_WALLET_POPUP_STAGE:

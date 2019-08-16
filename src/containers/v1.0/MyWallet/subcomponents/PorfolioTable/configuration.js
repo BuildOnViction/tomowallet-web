@@ -8,7 +8,6 @@
 import React from 'react';
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { get as _get } from 'lodash';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
 // Constants
@@ -36,13 +35,10 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       {
         headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.BALANCE,
-        Cell: ({ value }) => {
-          console.warn('Balance', value);
-
-          return value.toLocaleString(undefined, {
+        Cell: ({ value }) =>
+          value.toLocaleString(undefined, {
             minimumFractionDigits: 3,
-          });
-        },
+          }),
       },
     ],
   },
@@ -91,6 +87,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
             onClick={() =>
               openSendTokenPopup({
                 [SEND_TOKEN_FIELDS.TOKEN]: original,
+                isTokenSpecific: true,
               })
             }
           >
