@@ -17,7 +17,7 @@ class WarningContent extends PureComponent {
     const { formatMessage } = this.props;
     return (
       <div className='text-center content-warning'>
-        <div>
+        <div className='conntent-warning__image'>
           {/* -- TO-DO: Add show wallet's warning image source */}
           <img
             src=''
