@@ -9,6 +9,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 // Constants
 import { MSG } from '../../../../constants';
+import VisualShowWallet from '../../../../assets/images/visual-showwallet.svg';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -20,7 +21,7 @@ class WarningContent extends PureComponent {
         <div className='conntent-warning__image'>
           {/* -- TO-DO: Add show wallet's warning image source */}
           <img
-            src=''
+            src={VisualShowWallet}
             alt={formatMessage(
               MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_WARNING_IMAGE_ALT,
             )}

@@ -50,7 +50,7 @@ const Content = ({ formatMessage, keyView, toggleKeyVisibile }) => (
         </div>
       )}
     </BoxImages>
-    <div className='text-center'>{_get(keyView, 'key')}</div>
+    <div className='text-break mt-3'>{_get(keyView, 'key')}</div>
   </div>
 );
 // =========================
