@@ -16,6 +16,7 @@ const commonPrefix = `${basePrefix}.common`;
 const componentPrefix = `${basePrefix}.component`;
 const containerPrefix = `${basePrefix}.container`;
 const buttonPrefix = `${commonPrefix}.button`;
+const listPrefix = `${commonPrefix}.list`;
 const navbarPrefix = `${componentPrefix}.navbar`;
 const welcomePagePrefix = `${containerPrefix}.welcome`;
 const createWalletPagePrefix = `${containerPrefix}.createwallet`;
@@ -59,6 +60,15 @@ export default defineMessages({
   COMMON_BUTTON_CONFIRM: {
     id: `${buttonPrefix}.confirm`,
     defaultMessage: 'Confirm',
+  },
+  // Common - Lists
+  COMMON_LIST_LANGUAGE_ENGLISH: {
+    id: `${listPrefix}.language.english`,
+    defaultMessage: 'English',
+  },
+  COMMON_LIST_LANGUAGE_FRENCH: {
+    id: `${listPrefix}.language.french`,
+    defaultMessage: 'French',
   },
   // Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {

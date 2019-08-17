@@ -5,10 +5,10 @@ export default {
     networkId: 89,
     hdPath: "m/44'/889'/0'/0/",
   },
-  GANACHE: {
+  TOMOCHAIN_MAINNET: {
     type: 'http',
-    host: 'http://127.0.0.1:7545',
-    networkId: '*',
-    hdPath: "m/44'/60'/0'/0/",
+    host: 'https://rpc.tomochain.com',
+    networkId: 88,
+    hdPath: "m/44'/889'/0'/0/",
   },
 };
