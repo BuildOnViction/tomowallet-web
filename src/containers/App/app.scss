@@ -57,23 +57,62 @@ a {
     }
   }
   .box_select {
-    color: #9eaacc;
+    .my-select__input {
+      display: inline-block;
+      height: 0;
+      width: 0;
+      overflow: hidden;
+    }
+    .my-select__indicator {
+      color: #3A8ECC;
+    }
     > div {
-      background-color: #39415c !important;
+      background-color: #2d344a !important;
       border-radius: 8px;
       border: 0;
+      min-height: 44px;
     }
+    .select_option {
+      padding: 1em;
+    }
+    .select_option,
+    .select_option_active {
+      img {
+        height: 16px;
+        margin-right: 10px;
+      }
+    }
+  }
+  .text-placeholder {
+    color: #444b64;
   }
   .input-group-append button {
     background-color: #2d344a !important;
     border-radius: 0 8px 8px 0 !important;
     border: 0;
-    border-left: 1px solid #272d40;
     color: #9eaacc;
     font-size: 14px;
-    &:focus {
-      box-shadow: 0 0 0 1px #5692cd;
+    text-transform: uppercase;
+    position: relative;
+    &::before {
+      background-color: #272d40;
+      content: '';
+      border-radius: 8px;
+      width: 1px;
+      height: 70%;
+      top: 50%;
+      left: 0;
+      position: absolute;
+      transform: translateY(-50%);
+    }
+    &:focus,
+    &:active,
+    &:active:focus {
+      box-shadow: 0 0 0 0px #5692cd!important;
       background-color: transparent;
+    }
+    &:hover {
+      background-color: #2D344A;
     }
   }
   input,
@@ -81,17 +120,20 @@ a {
     border-radius: 8px;
     background-color: #2d344a;
     border: 0;
-    color: #ffffff;
+    color: #9eaacc;
     font-size: 14px;
-    padding: 1.5em 1em;
+    height: 44px;
     &::placeholder {
-      color: #9eaacc;
+      color: #444b64;
       font-size: 13px;
       font-family: 'Nunito Sans', sans-serif;
     }
-    &:focus {
+    &:focus,
+    &:active
+    &:active:focus {
       box-shadow: 0 0 0 1px #5692cd;
       background-color: transparent;
+      color: #9eaacc;
     }
   }
   textarea {
@@ -104,7 +146,24 @@ a {
     margin-bottom: 2em;
   }
 }
-
+.box-confirmation {
+  >div {
+    padding: 1em 0;
+    >div {
+      list-style: 1.4;
+      &:first-child {
+        color: #5E677F;
+      }
+    }
+  }
+}
+.font-icon-checkmark-outline {
+  color: #e4ae63;
+  font-size: 60px;
+}
+.word-break{
+  word-break: break-word;
+}
 //MODAL
 .modal-content {
   border-radius: 8px;

@@ -18,16 +18,22 @@ const ContainerMin = styled.div`
 const BoxCardStyled = styled(Card)`
   padding: 0 3em;
 `;
-
 const BoxImages = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+const BoxFlexBetween = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
 `;
 
 export {
   BoxBtnStyler,
   ContainerMin,
   BoxCardStyled,
-  BoxImages
+  BoxImages,
+  BoxFlexBetween,
 };

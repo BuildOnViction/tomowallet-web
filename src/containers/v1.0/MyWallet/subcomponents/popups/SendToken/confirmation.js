@@ -26,76 +26,66 @@ class ConfirmationContent extends PureComponent {
       wallet,
     } = this.props;
     return (
-      <Container fluid>
+      <div className='box-confirmation'>
         <Row>
-          <Col xs={4} sm={4} md={4} lg={3}>
-            <Label>
-              {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}
-            </Label>
+          <Col xs={4}>
+            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}
           </Col>
-          <Col xs={8} sm={8} md={8} lg={9}>
-            <div>{`${_get(formValues, [
+          <Col xs={8} className=''>
+            {`${_get(formValues, [
               SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
             ])} ${_get(
               formValues,
               [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.SYMBOL],
               '',
-            )}`}</div>
+            )}`}
           </Col>
         </Row>
         <Row>
-          <Col xs={4} sm={4} md={4} lg={3}>
-            <Label>
-              {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_FROM_LABEL)}
-            </Label>
+          <Col xs={4}>
+            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_FROM_LABEL)}
           </Col>
-          <Col xs={8} sm={8} md={8} lg={9}>
+          <Col xs={8}>
             <div className='text-truncate' title={_get(wallet, 'address', '')}>
               {_get(wallet, 'address', '')}
             </div>
           </Col>
         </Row>
         <Row>
-          <Col xs={4} sm={4} md={4} lg={3}>
-            <Label>
-              {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TO_LABEL)}
-            </Label>
+          <Col xs={4}>
+            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TO_LABEL)}
           </Col>
-          <Col xs={8} sm={8} md={8} lg={9}>
+          <Col xs={8}>
             <div className='text-truncate' title={_get(wallet, 'address', '')}>
               {_get(formValues, [SEND_TOKEN_FIELDS.RECIPIENT], '')}
             </div>
           </Col>
         </Row>
         <Row>
-          <Col xs={4} sm={4} md={4} lg={3}>
-            <Label>
-              {formatMessage(
-                MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL,
-              )}
-            </Label>
+          <Col xs={4}>
+            {formatMessage(
+              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL,
+            )}
           </Col>
-          <Col xs={8} sm={8} md={8} lg={9}>
-            <div>{_get(formValues, [SEND_TOKEN_FIELDS.MESSAGE], '')}</div>
+          <Col xs={8}>
+            {_get(formValues, [SEND_TOKEN_FIELDS.MESSAGE], '')}
           </Col>
         </Row>
         <Row>
-          <Col xs={4} sm={4} md={4} lg={3}>
-            <Label>
-              {formatMessage(
-                MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,
-              )}
-            </Label>
+          <Col xs={4}>
+            {formatMessage(
+              MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,
+            )}
           </Col>
-          <Col xs={8} sm={8} md={8} lg={9}>
-            <div>{`${_get(
+          <Col xs={8}>
+            {`${_get(
               formValues,
               [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TRANSACTION_FEE],
               0,
-            )} TOMO`}</div>
+            )} TOMO`}
           </Col>
         </Row>
-      </Container>
+      </div>
     );
   }
 }

@@ -12,6 +12,11 @@ import { Label } from 'reactstrap';
 // Utilities & Constants
 import { withIntl } from '../../../../../../components/IntlProvider';
 import { MSG } from '../../../../../../constants';
+import {
+  BoxText,
+  TextYellow,
+  TextGray
+} from '../../../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -25,24 +30,21 @@ class SuccessContent extends PureComponent {
     } = this.props;
     return (
       <Fragment>
-        <div className='text-center'>
+        <BoxText className='text-center word-break'>
           <div>
-            {/* -- TO-DO: Add success image's source */}
-            <img
-              src=''
-              alt={formatMessage(MSG.SUCCESS_NOTIFICATION_IMAGE_ALT)}
-            />
+            <p><i className="font-icon-checkmark-outline"></i></p>
+            <TextYellow>{formatMessage(MSG.SUCCESS_NOTIFICATION_IMAGE_ALT)}</TextYellow>
           </div>
-          <div>
+          <div className='my-4'>
             {`${formatMessage(
               MSG.MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_SENT,
             )} ${amount} ${symbol}`}
           </div>
-          <Label>
+          <TextGray className='mb-3 '>
             {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
-          </Label>
-          <div>{_get(txHash, 'transactionHash', txHash)}</div>
-        </div>
+          </TextGray>
+          <div>{_get(txHash, 'transactionHash')}</div>
+        </BoxText>
       </Fragment>
     );
   }
