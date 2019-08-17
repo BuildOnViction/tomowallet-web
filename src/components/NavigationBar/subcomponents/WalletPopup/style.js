@@ -17,12 +17,12 @@ const WalletPopupStyler = styled(Popup)`
     min-height: 450px;
     .modal-body {
       .content-warning {
-        margin: 0px 65px;
+        margin: auto;
+        max-width: 382px;
         .conntent-warning__image {
           margin: auto;
           margin-bottom: 30px;
           width: 245px;
-          height: 145px;
           text-align: center;
           img {
             max-height: 126px;
