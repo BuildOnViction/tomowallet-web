@@ -148,8 +148,6 @@ class MyWallet extends PureComponent {
     if (contractData.contractAddress) {
       sendToken(web3, contractData)
         .then(hash => {
-          console.warn('sendToken successful!', hash);
-
           toggleLoading(false);
           return hash;
         })
