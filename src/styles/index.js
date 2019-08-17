@@ -29,6 +29,7 @@ import {
   TextBlue,
   TextYellow,
   TextLinkYellow,
+  TextYellowPointer,
   BoxText,
   TextGray,
 } from './StyleTypo';
@@ -60,6 +61,7 @@ export {
   TextBlue,
   TextYellow,
   TextLinkYellow,
+  TextYellowPointer,
   BoxText,
   TextGray,
 };

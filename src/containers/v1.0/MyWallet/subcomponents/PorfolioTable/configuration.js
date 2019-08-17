@@ -13,6 +13,11 @@ import TokenCell from './subcomponents/TokenCell';
 // Constants
 import { PORFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG } from '../../../../../constants';
+import {
+  TextBlue,
+  TextYellowPointer
+} from '../../../../../styles';
+
 // ===================
 
 // ===== CONFIGURATION =====
@@ -82,7 +87,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
         headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.SEND,
         Cell: ({ original }) => (
-          <div
+          <TextYellowPointer
             role='presentation'
             onClick={() =>
               openSendTokenPopup({
@@ -92,13 +97,16 @@ export default ({ formatMessage, openSendTokenPopup }) => [
             }
           >
             {formatMessage(MSG.COMMON_BUTTON_SEND)}
-          </div>
+          </TextYellowPointer>
         ),
       },
       {
         headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.RECEIVE,
-        Cell: () => <div>{formatMessage(MSG.COMMON_BUTTON_RECEIVE)}</div>,
+        Cell: () =>
+          <TextBlue>
+            {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
+          </TextBlue>,
       },
       {
         Cell: () => (
