@@ -44,6 +44,18 @@ const TextLinkYellow = styled.a`
   color: #e4ae63;
   cursor: pointer;
 `;
+const TextYellowPointer = styled.span`
+  color: #e4ae63;
+  cursor: pointer;
+  transition: all .3s;
+  &:hover {
+    color: #C59148;
+  }
+`;
+const TextGray = styled.div`
+  color: #5e677f;
+`;
+const BoxText = styled.div``;
 export {
   HeadingBig,
   HeadingLarge,
@@ -54,4 +66,7 @@ export {
   TextBlue,
   TextYellow,
   TextLinkYellow,
+  TextYellowPointer,
+  BoxText,
+  TextGray,
 };

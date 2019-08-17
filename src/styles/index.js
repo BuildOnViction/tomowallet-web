@@ -11,6 +11,7 @@ import {
   ContainerMin,
   BoxCardStyled,
   BoxImages,
+  BoxFlexBetween,
 } from './MainContainer';
 import {
   ImporWalletStyler,
@@ -28,6 +29,9 @@ import {
   TextBlue,
   TextYellow,
   TextLinkYellow,
+  TextYellowPointer,
+  BoxText,
+  TextGray,
 } from './StyleTypo';
 
 export {
@@ -42,6 +46,7 @@ export {
   ContainerMin,
   BoxCardStyled,
   BoxImages,
+  BoxFlexBetween,
   //ImportWallet
   ImporWalletStyler,
   //CreateNewWallet
@@ -56,4 +61,7 @@ export {
   TextBlue,
   TextYellow,
   TextLinkYellow,
+  TextYellowPointer,
+  BoxText,
+  TextGray,
 };
