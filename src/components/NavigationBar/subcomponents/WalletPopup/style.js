@@ -24,6 +24,9 @@ const WalletPopupStyler = styled(Popup)`
           width: 245px;
           height: 145px;
           text-align: center;
+          img {
+            max-height: 126px;
+          }
         }
       }
       .content-wallet-view {

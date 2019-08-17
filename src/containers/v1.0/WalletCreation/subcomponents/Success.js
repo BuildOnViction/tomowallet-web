@@ -11,16 +11,16 @@ import React, { PureComponent } from 'react';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+// Custom Componentsimport {
 import {
-  Card,
-  CardBody,
-  CardImg,
-  CardTitle,
-  CardText,
-  CardFooter,
+  Row,
+  Col,
 } from 'reactstrap';
-// Custom Components
-import { ButtonStyler } from '../../../../styles';
+import {
+  BoxText,
+  TextYellow,
+  ButtonStyler
+} from '../../../../styles';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../../constants';
@@ -46,26 +46,24 @@ class SuccessNotification extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <Card className='text-center'>
-        <CardBody>
-          {/* -- TO-DO: Add Success image's source */}
-          <CardImg
-            src=''
-            alt={formatMessage(MSG.SUCCESS_NOTIFICATION_IMAGE_ALT)}
-          />
-          <CardTitle>
-            {formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_TITLE)}
-          </CardTitle>
-          <CardText>
-            {formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_DESCRIPTION)}
-          </CardText>
-        </CardBody>
-        <CardFooter>
-          <ButtonStyler btnYellow onClick={this.handleConfirmSuccess}>
-            {formatMessage(MSG.SUCCESS_NOTIFICATION_BUTTON_ACCESS_WALLET)}
-          </ButtonStyler>
-        </CardFooter>
-      </Card>
+      <BoxText className='text-center word-break'>
+        <div>
+          <p><i className="font-icon-checkmark-outline"></i></p>
+          <TextYellow>{formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_TITLE)}</TextYellow>
+        </div>
+        <div className='my-4'>
+          {formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_DESCRIPTION)}
+        </div>
+        <Row>
+          <Col xs={3}></Col>
+          <Col xs={6}>
+            <ButtonStyler btnYellow onClick={this.handleConfirmSuccess}>
+              {formatMessage(MSG.SUCCESS_NOTIFICATION_BUTTON_ACCESS_WALLET)}
+            </ButtonStyler>
+          </Col>
+          <Col xs={3}></Col>
+        </Row>
+      </BoxText>
     );
   }
 }
