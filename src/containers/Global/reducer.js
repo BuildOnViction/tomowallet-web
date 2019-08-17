@@ -57,10 +57,12 @@ export default (state = initialState, action) => {
     case TOGGLE_WALLET_POPUP: {
       const newState = state.setIn(['walletPopup', 'isOpen'], action.bool);
       if (!action.bool) {
-        return newState.setIn(
-          ['walletPopup', 'stage'],
-          WALLET_POPUP_STAGE.WARNING,
-        );
+        return newState
+          .setIn(['walletPopup', 'stage'], WALLET_POPUP_STAGE.WARNING)
+          .setIn(
+            ['walletPopup', 'tabType'],
+            WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY,
+          );
       }
       return newState;
     }

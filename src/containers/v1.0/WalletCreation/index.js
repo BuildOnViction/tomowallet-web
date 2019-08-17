@@ -64,9 +64,10 @@ class WalletCreationPage extends PureComponent {
     super(props);
 
     this.state = {
-      test: '',
+      storeData: {},
     };
 
+    this.handleStoreWalletData = this.handleStoreWalletData.bind(this);
     this.handleVerifyMnemonic = this.handleVerifyMnemonic.bind(this);
   }
 
@@ -75,12 +76,21 @@ class WalletCreationPage extends PureComponent {
     onResetState();
   }
 
+  handleStoreWalletData() {
+    const { onStoreWallet, updateWeb3 } = this.props;
+    const { storeData } = this.state;
+
+    onStoreWallet(_get(storeData, 'walletInfo'));
+    updateWeb3(_get(storeData, 'web3'));
+    setWeb3Info(_get(storeData, 'web3Info'));
+  }
+
   handleVerifyMnemonic() {
     const {
-      history,
       intl: { formatMessage },
       mnemonic,
       onClearComparison,
+      onSetFormState,
       onStoreWallet,
       onUpdateErrors,
       rpcServer,
@@ -94,13 +104,20 @@ class WalletCreationPage extends PureComponent {
       const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
       getWalletInfo(newWeb3)
         .then(walletInfo => {
-          onStoreWallet(walletInfo);
-          updateWeb3(newWeb3);
-          setWeb3Info({ recoveryPhrase, rpcServer });
+          // onStoreWallet(walletInfo);
+          // updateWeb3(newWeb3);
+          // setWeb3Info({ recoveryPhrase, rpcServer });
+          this.setState({
+            storeData: {
+              walletInfo,
+              web3: newWeb3,
+              web3Info: { recoveryPhrase, rpcServer },
+            },
+          });
         })
         .then(() => {
           toggleLoading(false);
-          history.push(ROUTE.MY_WALLET);
+          onSetFormState(FORM_STATES.SUCCESS);
         });
     } else {
       toggleLoading(false);
@@ -157,7 +174,9 @@ class WalletCreationPage extends PureComponent {
               verifyMnemonic={this.handleVerifyMnemonic}
             />
           )) ||
-          (formState === FORM_STATES.SUCCESS && <SuccessNotification />)}
+          (formState === FORM_STATES.SUCCESS && (
+            <SuccessNotification confirmSuccess={this.handleStoreWalletData} />
+          ))}
         <ConfirmationPopup
           confirmation={confirmation}
           setFormState={onSetFormState}

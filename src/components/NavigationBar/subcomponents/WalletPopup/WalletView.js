@@ -52,8 +52,8 @@ class WalletViewContent extends PureComponent {
     const isLoggedInByPK = this.handleCheckPrivateKey();
 
     return (
-      <div className='content-wallet-view'>
-        <Nav tabs>
+      <div className='main_tab content-wallet-view'>
+        <Nav tabs className='mb-4'>
           <NavItem>
             {!isLoggedInByPK && (
               <NavLink
@@ -67,6 +67,8 @@ class WalletViewContent extends PureComponent {
                 )}
               </NavLink>
             )}
+          </NavItem>
+          <NavItem>
             <NavLink
               active={activeTab === WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}
               onClick={() => updateTab(WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY)}
@@ -83,8 +85,11 @@ class WalletViewContent extends PureComponent {
               <MnemonicBox mnemonic={this.handleGetRecoveryPhrase()} />
             </TabPane>
           )}
-          <TabPane tabId={WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}>
-            <div>{this.handleGetPrivateKey()}</div>
+          <TabPane
+            tabId={WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}
+            className='text-center'
+          >
+            <div className='text-break'>{this.handleGetPrivateKey()}</div>
             <div>
               {formatMessage(
                 MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE,

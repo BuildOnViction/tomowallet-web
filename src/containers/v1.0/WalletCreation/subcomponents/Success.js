@@ -32,12 +32,13 @@ class SuccessNotification extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleRedirect = this.handleRedirect.bind(this);
+    this.handleConfirmSuccess = this.handleConfirmSuccess.bind(this);
   }
 
-  handleRedirect(newRoute) {
-    const { history } = this.props;
-    history.push(newRoute);
+  handleConfirmSuccess() {
+    const { confirmSuccess, history } = this.props;
+    confirmSuccess();
+    history.push(ROUTE.MY_WALLET);
   }
 
   render() {
@@ -45,7 +46,7 @@ class SuccessNotification extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <Card>
+      <Card className='text-center'>
         <CardBody>
           {/* -- TO-DO: Add Success image's source */}
           <CardImg
@@ -60,7 +61,7 @@ class SuccessNotification extends PureComponent {
           </CardText>
         </CardBody>
         <CardFooter>
-          <ButtonStyler onClick={() => this.handleRedirect(ROUTE.MY_WALLET)}>
+          <ButtonStyler btnYellow onClick={this.handleConfirmSuccess}>
             {formatMessage(MSG.SUCCESS_NOTIFICATION_BUTTON_ACCESS_WALLET)}
           </ButtonStyler>
         </CardFooter>
@@ -72,10 +73,18 @@ class SuccessNotification extends PureComponent {
 
 // ===== PROP TYPES =====
 SuccessNotification.propTypes = {
+  /** Action to storing wallet data */
+  confirmSuccess: PropTypes.func,
   /** React Router's API object */
   history: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+};
+
+SuccessNotification.defaultProps = {
+  confirmSuccess: () => {},
+  history: {},
+  intl: {},
 };
 // ======================
 

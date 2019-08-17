@@ -26,6 +26,12 @@ const WalletPopupStyler = styled(Popup)`
           text-align: center;
         }
       }
+      .content-wallet-view {
+        .nav-tabs {
+          display: flex;
+          justify-content: center;
+        }
+      }
     }
   }
 `;
