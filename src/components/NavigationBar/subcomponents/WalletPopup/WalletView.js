@@ -9,12 +9,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get as _get } from 'lodash';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import QRCode from 'qrcode.react';
 // Custom Components
 import MnemonicBox from '../../../MnemonicBox';
-// Utilities & Constants
+// Utilities, Constants & Styles
 import { getWeb3Info, mnemonicToPrivateKey } from '../../../../utils';
 import { WALLET_POPUP_CONTENT_TAB } from '../../../../containers/Global/constants';
 import { MSG } from '../../../../constants';
+import { BoxImages } from '../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -89,6 +91,9 @@ class WalletViewContent extends PureComponent {
             tabId={WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}
             className='text-center'
           >
+            <BoxImages className='mb-3'>
+              <QRCode value={this.handleGetPrivateKey()} />
+            </BoxImages>
             <div className='text-break'>{this.handleGetPrivateKey()}</div>
             <div>
               {formatMessage(
