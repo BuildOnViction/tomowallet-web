@@ -35,8 +35,8 @@ const TokenOption = props => {
 
   return (
     <Container {...innerProps} role='presentation' fluid className='px-0'>
-      <Row noGutters>
-        <Col xs={6} sm={6} md={6} lg={6}>
+      <Row noGutters className='select_option align-items-center'>
+        <Col xs={8} className='d-flex align-items-center'>
           {/* -- TO-DO: Add token's image source */}
           <img
             src={_get(data, [PORFOLIO_COLUMNS.ICON], '')}
@@ -48,7 +48,7 @@ const TokenOption = props => {
             '',
           )})`}</span>
         </Col>
-        <Col xs={6} sm={6} md={6} lg={6} className='text-right'>
+        <Col xs={4} className='text-right'>
           {`${_get(
             data,
             [PORFOLIO_COLUMNS.BALANCE],
@@ -64,9 +64,9 @@ const TokenInputValue = props => {
   const { data } = props;
 
   return (
-    <Container className='px-0' style={{ width: '95%' }}>
-      <Row noGutters>
-        <Col xs={7} sm={7} md={7} lg={7}>
+    <div style={{ width: '96%' }}>
+      <Row noGutters className='select_option_active align-items-center'>
+        <Col xs={8} className='d-flex align-items-center'>
           {/* -- TO-DO: Add token's image source */}
           <img
             src={_get(data, [PORFOLIO_COLUMNS.ICON], '')}
@@ -78,7 +78,7 @@ const TokenInputValue = props => {
             '',
           )})`}</span>
         </Col>
-        <Col xs={5} sm={5} md={5} lg={5} className='text-right'>
+        <Col xs={4} className='text-right'>
           {`${_get(
             data,
             [PORFOLIO_COLUMNS.BALANCE],
@@ -86,7 +86,7 @@ const TokenInputValue = props => {
           ).toLocaleString()} ${_get(data, [PORFOLIO_COLUMNS.SYMBOL], '')}`}
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 // ==========================
@@ -144,12 +144,20 @@ class FormContent extends PureComponent {
             name={SEND_TOKEN_FIELDS.TOKEN}
             value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
             options={tokenOptions}
-            placeholder={formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER,
-            )}
+            // Placeholder={() => <div className='text-danger'>{formatMessage(
+            //   MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER,
+            // )}</div>}
             onChange={value => updateInput(SEND_TOKEN_FIELDS.TOKEN, value)}
-            components={{ Option: TokenOption, SingleValue: TokenInputValue }}
+            components={{
+              Option: TokenOption, SingleValue: TokenInputValue,
+              Placeholder: () => <div className='text-placeholder'> {formatMessage(
+                MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER,
+              )}</div>,
+              IndicatorSeparator: () => '',
+            }}
             isDisabled={_get(formValues, 'isTokenSpecific')}
+            menuIsOpens
+            classNamePrefix='my-select'
           />
           {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TOKEN)}
         </FormGroup>
