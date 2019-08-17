@@ -29,7 +29,6 @@ class AddressInfo extends PureComponent {
       intl: { formatMessage },
       openSendTokenPopup,
       wallet,
-      web3,
     } = this.props;
     return (
       <div>
@@ -39,8 +38,7 @@ class AddressInfo extends PureComponent {
         <div className='box-address'>
           <Row>
             <Col sm={12} md={8} className='pr-5'>
-              <div className=''>{_get(wallet, 'address', '')}</div>
-              <div className='my-3'>{`${_get(wallet, 'balance')} TOMO`}</div>
+              <div className='mb-5'>{_get(wallet, 'address', '')}</div>
               <Row className='my-3'>
                 <Col xs={6} sm={6} md={6} lg={6} className='pr-2'>
                   <BigButtonStyler onClick={() => openSendTokenPopup()}>
