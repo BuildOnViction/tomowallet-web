@@ -7,7 +7,7 @@
 // Modules
 import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
-import { isEqual as _isEqual } from 'lodash';
+import { isEqual as _isEqual, isEmpty as _isEmpty } from 'lodash';
 // Utilities & Constants
 import { ENUM } from '../constants';
 import trc20 from '../contractABIs/trc20.json';
@@ -136,6 +136,7 @@ const sendToken = (web3, contractData) => {
     .toBN(amount)
     .mul(web3.utils.toBN(10 ** decimals))
     .toString();
+  // In case token type is TRC21
   if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
     return contract.methods
       .estimateFee(weiAmount)
@@ -144,12 +145,21 @@ const sendToken = (web3, contractData) => {
         contract.methods
           .transfer(to, weiAmount)
           .send({ from, gasPrice: '250000000' })
-          .then(hash => hash)
+          .on('transactionHash', hash => {
+            repeatCall({
+              interval: 2000,
+              timeout: 10000,
+              action: () => {
+                return web3.eth.getTransactionReceipt(hash);
+              },
+            });
+          })
           .catch(ex => {
             console.log('[ERROR] -- ', ex);
           }),
       );
   } else {
+    // In case token type is TRC20
     return estimateTRC20Gas(web3, { from, to, value: weiAmount }).then(
       gasPrice =>
         contract.methods
@@ -160,7 +170,15 @@ const sendToken = (web3, contractData) => {
             gasPrice: '250000000',
             gas: 50000,
           })
-          .then(hash => hash)
+          .on('transactionHash', hash => {
+            repeatCall({
+              interval: 2000,
+              timeout: 10000,
+              action: () => {
+                return web3.eth.getTransactionReceipt(hash);
+              },
+            });
+          })
           .catch(ex => {
             console.log('[ERROR] -- ', ex);
           }),
@@ -189,6 +207,32 @@ const sendMoney = (web3, transactionData) => {
     gasPrice: '250000000',
     gas: 50000,
   });
+};
+
+/**
+ * repeatCall
+ *
+ * Execute a Promise action repeatly until there's a result
+ * @param {Object} param0 Set of parameters (interval, timeout, action)
+ */
+const repeatCall = ({ interval = 1000, timeout = 1000, action = () => {} }) => {
+  let intervalId = 0;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const repeat = (ms, func) =>
+    new Promise(r => {
+      intervalId = setInterval(func, ms);
+      wait(ms).then(r);
+    });
+  const stopAfter10Seconds = () =>
+    new Promise(r => r(setTimeout(() => clearInterval(intervalId)), 10000));
+  return repeat(
+    2000,
+    action().then(trans => {
+      if (!_isEmpty(trans)) {
+        clearInterval(intervalId);
+      }
+    }),
+  ).then(stopAfter10Seconds());
 };
 // ===================
 
