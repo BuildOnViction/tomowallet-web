@@ -70,6 +70,14 @@ export default defineMessages({
     id: `${listPrefix}.language.french`,
     defaultMessage: 'French',
   },
+  COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET: {
+    id: `${listPrefix}.network.tomochain.testnet`,
+    defaultMessage: 'TomoChain Test Network',
+  },
+  COMMON_LIST_NETWORK_TOMOCHAIN_MAINNET: {
+    id: `${listPrefix}.network.tomochain.mainnet`,
+    defaultMessage: 'Main TomoChain Network',
+  },
   // Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {
     id: `${navbarPrefix}.logo.alt`,

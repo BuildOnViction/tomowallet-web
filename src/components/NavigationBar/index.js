@@ -39,7 +39,7 @@ class NavigationBar extends PureComponent {
 
     this.state = {
       isExpandOptions: false,
-      networkTitle: Object.keys(RPC_SERVER)[0],
+      network: LIST.NETWORKS[0],
     };
 
     this.handleRenderPublicBar = this.handleRenderPublicBar.bind(this);
@@ -95,22 +95,22 @@ class NavigationBar extends PureComponent {
       intl: { formatMessage },
       onToggleWalletPopup,
     } = this.props;
-    const { networkTitle } = this.state;
+    const { network } = this.state;
 
     return (
       <Fragment>
         <Nav className='ml-auto' navbar>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggleHeader nav caret>
-              {networkTitle}
+              {network.label}
             </DropdownToggleHeader>
             <DropdownMenu right>
-              {Object.keys(RPC_SERVER).map((title, titleIdx) => (
+              {LIST.NETWORKS.map((opt, optIdx) => (
                 <DropdownItem
-                  key={`network_${titleIdx + 1}`}
-                  onClick={() => this.handleChangeNetwork(title)}
+                  key={`network_${optIdx + 1}`}
+                  onClick={() => this.handleChangeNetwork(opt)}
                 >
-                  {title}
+                  {opt.label}
                 </DropdownItem>
               ))}
             </DropdownMenu>
@@ -152,12 +152,12 @@ class NavigationBar extends PureComponent {
     }));
   }
 
-  handleChangeNetwork(title) {
+  handleChangeNetwork(newNetwork) {
     const { switchRPCServer } = this.props;
     this.setState({
-      networkTitle: title,
+      network: newNetwork,
     });
-    switchRPCServer(title);
+    switchRPCServer(newNetwork.value);
   }
 
   handleLogout() {
