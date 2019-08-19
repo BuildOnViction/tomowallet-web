@@ -11,6 +11,7 @@ import {
 import {
   decryptWalletInfo,
   estimateTRC20Gas,
+  fromWei,
   generateWeb3,
   getWalletInfo,
   mnemonicToPrivateKey,
@@ -37,4 +38,5 @@ export {
   setWeb3Info,
   removeWeb3Info,
   withLoading,
+  fromWei,
 };

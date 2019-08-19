@@ -344,7 +344,7 @@ MyWallet.defaultProps = {
   sendTokenForm: {},
   sendToKenPopup: {},
   successPopup: {},
-  tableType: LIST.TABLE_TYPES[0].value,
+  tableType: LIST.MY_WALLET_TABLE_TYPES[0].value,
   toggleLoading: () => {},
   tokenOptions: [],
   wallet: {},

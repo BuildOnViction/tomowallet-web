@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 // ===================
 
-const BoxTransction = styled.div`
+const BoxTransaction = styled.div`
   .rt-tr {
-      display: grid;
-      grid-template-columns: 10% 20% 15% 20% 5% 20% 10%;
-    }
+    display: grid;
+    grid-template-columns: 10% 20% 15% 20% 5% 20% 10%;
+  }
 `;
 
 // =================
 
-export { BoxTransction };
+export { BoxTransaction };

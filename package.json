@@ -16,6 +16,8 @@
     "invariant": "^2.2.4",
     "loadable-components": "^2.2.3",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "moment-locales-webpack-plugin": "^1.1.0",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
     "qrcode.react": "^0.9.3",

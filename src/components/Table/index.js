@@ -51,6 +51,7 @@ class CommonTable extends PureComponent {
   render() {
     const { data, getTableProps } = this.props;
     const { columns } = this.state;
+
     return (
       <CommonTableStyler
         columns={columns}

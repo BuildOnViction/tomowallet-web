@@ -25,7 +25,7 @@ class DataTables extends PureComponent {
     return (
       <div className='main_tab'>
         <Nav tabs className='mt-5 mb-4'>
-          {LIST.TABLE_TYPES.map((tab, tabIdx) => (
+          {LIST.MY_WALLET_TABLE_TYPES.map((tab, tabIdx) => (
             <NavItem key={`table_tab_${tabIdx + 1}`}>
               <NavLink
                 active={tab.value === tableType}
@@ -37,15 +37,15 @@ class DataTables extends PureComponent {
           ))}
         </Nav>
         <TabContent activeTab={tableType}>
-          <TabPane tabId={LIST.TABLE_TYPES[0].value}>
+          <TabPane tabId={LIST.MY_WALLET_TABLE_TYPES[0].value}>
             <PorfolioTable
               openSendTokenPopup={openSendTokenPopup}
-              isActive={tableType === LIST.TABLE_TYPES[0].value}
+              isActive={tableType === LIST.MY_WALLET_TABLE_TYPES[0].value}
             />
           </TabPane>
-          <TabPane tabId={LIST.TABLE_TYPES[1].value}>
+          <TabPane tabId={LIST.MY_WALLET_TABLE_TYPES[1].value}>
             <TransactionTable
-              isActive={tableType === LIST.TABLE_TYPES[1].value}
+              isActive={tableType === LIST.MY_WALLET_TABLE_TYPES[1].value}
             />
           </TabPane>
         </TabContent>

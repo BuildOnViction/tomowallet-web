@@ -348,8 +348,8 @@ export default defineMessages({
     defaultMessage: 'Address',
   },
   MY_WALLET_TABLE_PORFOLIO_TITLE: {
-    id: `${myWalletPagePrefix}.table.porfolio.title`,
-    defaultMessage: 'Porfolio',
+    id: `${myWalletPagePrefix}.table.tab.porfolio.title`,
+    defaultMessage: 'PORFOLIO',
   },
   MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME: {
     id: `${myWalletPagePrefix}.table.porfolio.header.tokenname`,
@@ -387,9 +387,9 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.porfolio.error.load.failed`,
     defaultMessage: 'Cannot load token list!',
   },
-  MY_WALLET_TABLE_TRANSACTIONS_TITLE: {
-    id: `${myWalletPagePrefix}.table.transactions.title`,
-    defaultMessage: 'Transactions',
+  MY_WALLET_TABLE_TRANSACTION_TITLE: {
+    id: `${myWalletPagePrefix}.table.tab.transaction.title`,
+    defaultMessage: 'TRANSACTIONS',
   },
   MY_WALLET_TABLE_TRANSACTIONS_HEADER_TOKEN_TYPE: {
     id: `${myWalletPagePrefix}.table.transactions.header.tokentype`,

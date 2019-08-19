@@ -7,35 +7,71 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { isEqual as _isEqual, get as _get } from 'lodash';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
-// Utilities
+import { BoxTransaction } from './style';
+// Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
 import transactionConfig from './configuration';
-import { BoxTransction } from './style';
-// Mock Data
-import { transactions } from '../../mockData.json';
+import { selectTransactionData, selectTableType } from '../../selectors';
+import { loadTransactionData } from '../../actions';
+import { LIST } from '../../../../../constants';
 // ===================
 
 // ===== MAIN COMPONENT =====
 class TransactionTable extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleLoadTransactionData = this.handleLoadTransactionData.bind(this);
+  }
+
+  componentDidUpdate(prepProps) {
+    if (
+      !_isEqual(_get(prepProps, 'tableType'), _get(this.props, 'tableType')) &&
+      _isEqual(
+        _get(this.props, 'tableType'),
+        _get(LIST, ['MY_WALLET_TABLE_TYPES', 1, 'value']),
+      )
+    ) {
+      this.handleLoadTransactionData();
+    }
+  }
+
+  handleLoadTransactionData(newPage) {
+    const { onLoadTransactionData } = this.props;
+    onLoadTransactionData(newPage || 1);
+  }
+
   render() {
     const {
       intl: { formatMessage },
+      transData,
     } = this.props;
+
     return (
-      <BoxTransction>
+      <BoxTransaction>
         <CommonTable
-          data={transactions}
+          data={_get(transData, 'data', [])}
           setConfig={transactionConfig}
           getConfigProps={{
             formatMessage,
           }}
           getTableProps={{
             defaultPageSize: 5,
+            minRows: 5,
+            getPaginationProps: () => ({
+              changePage: this.handleLoadTransactionData,
+              currentPage: _get(transData, 'page', 1),
+              totalPages: _get(transData, 'pages', 1),
+            }),
           }}
         />
-      </BoxTransction>
+      </BoxTransaction>
     );
   }
 }
@@ -45,7 +81,35 @@ class TransactionTable extends PureComponent {
 TransactionTable.propTypes = {
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Current table tab's type */
+  tableType: PropTypes.string,
+  /** Transaction table's data */
+  transData: PropTypes.object,
+};
+
+TransactionTable.defaultProps = {
+  intl: {},
+  tableType: PropTypes.string,
+  transData: {},
 };
 // ======================
 
-export default withIntl(TransactionTable);
+// ===== INJECTIONS =====
+const mapStateToProps = () =>
+  createStructuredSelector({
+    transData: selectTransactionData,
+    tableType: selectTableType,
+  });
+const mapDispatchToProps = dispatch => ({
+  onLoadTransactionData: page => dispatch(loadTransactionData(page)),
+});
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+// ======================
+
+export default compose(
+  withConnect,
+  withIntl,
+)(TransactionTable);

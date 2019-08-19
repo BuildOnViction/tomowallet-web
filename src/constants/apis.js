@@ -3,7 +3,11 @@
  * TomoWallet - Constants - APIs
  *
  */
-const BASE_URL = 'https://apiwallet.testnet.tomochain.com';
+// Base URLs
+const WALLET_TESTNET = 'https://apiwallet.testnet.tomochain.com';
+const SCAN_TESTNET = 'https://scan.testnet.tomochain.com';
+
 export default {
-  GET_TOKENS: `${BASE_URL}/api/tokens`,
+  GET_TOKENS: `${WALLET_TESTNET}/api/tokens`,
+  GET_TRANSACTIONS: `${SCAN_TESTNET}/api/txs/listByType/normalTsx`,
 };

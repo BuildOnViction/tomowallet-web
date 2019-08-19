@@ -39,6 +39,10 @@ const selectTokenOptions = createDeepEqualSelector(
   selectMyWalletDomain,
   obj => obj.toJS().tokenOptions,
 );
+const selectTransactionData = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().transactionTable,
+);
 // =====================
 
 export {
@@ -48,4 +52,5 @@ export {
   selectSuccessPopup,
   selectTableType,
   selectTokenOptions,
+  selectTransactionData,
 };

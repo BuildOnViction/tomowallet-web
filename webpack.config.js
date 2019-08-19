@@ -2,7 +2,7 @@ const { DefinePlugin } = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const dotenv = require('dotenv');
-const fs = require('fs');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = env => {
   // Get the root path (assuming your webpack config is in the root of your project!)
@@ -73,6 +73,9 @@ module.exports = env => {
       new HtmlWebpackPlugin({
         template: './public/index.html',
         filename: './index.html',
+      }),
+      new MomentLocalesPlugin({
+        localesToKeep: ['fr'],
       }),
       // new webpack.IgnorePlugin(/^\.\/(?!english)/, /bip39\/src\/wordlists$/),
     ],

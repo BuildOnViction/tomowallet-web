@@ -8,7 +8,8 @@
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TOKEN_OPTIONS_SUCCESS,
-  PREPEND_TOKEN_OPTION,
+  LOAD_TRANSACTION_DATA,
+  LOAD_TRANSACTION_DATA_SUCCESS,
   RESET_SEND_TOKEN_FORM,
   SET_TABLE_TYPE,
   SUBMIT_SEND_TOKEN,
@@ -32,9 +33,14 @@ export const loadTokenOptionsSuccess = tokens => ({
   tokens,
 });
 
-export const prependTokenOptions = token => ({
-  type: PREPEND_TOKEN_OPTION,
-  token,
+export const loadTransactionData = page => ({
+  type: LOAD_TRANSACTION_DATA,
+  page,
+});
+
+export const loadTransactionDataSuccess = tableData => ({
+  type: LOAD_TRANSACTION_DATA_SUCCESS,
+  tableData,
 });
 
 export const resetSendTokenForm = () => ({

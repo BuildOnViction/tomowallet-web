@@ -7,21 +7,24 @@
 // Modules
 import { fromJS } from 'immutable';
 import { omit as _omit, get as _get } from 'lodash';
+import moment from 'moment';
 // Constants
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TOKEN_OPTIONS_SUCCESS,
+  LOAD_TRANSACTION_DATA,
+  LOAD_TRANSACTION_DATA_SUCCESS,
   PORFOLIO_COLUMNS,
-  PREPEND_TOKEN_OPTION,
   RESET_SEND_TOKEN_FORM,
   SEND_TOKEN_FIELDS,
+  SEND_TOKEN_STAGES,
   SET_TABLE_TYPE,
   TOGGLE_SEND_TOKEN_POPUP,
   TOGGLE_SUCCESS_POPUP,
+  TRANSACTION_COLUMNS,
   UPDATE_SEND_TOKEN_ERRORS,
   UPDATE_SEND_TOKEN_INPUT,
   UPDATE_SEND_TOKEN_POPUP_STAGE,
-  SEND_TOKEN_STAGES,
 } from './constants';
 import { LIST } from '../../../constants';
 // ===================
@@ -48,8 +51,14 @@ const initialState = fromJS({
     isOpen: false,
     txHash: '',
   },
-  tableType: LIST.TABLE_TYPES[0].value,
+  tableType: LIST.MY_WALLET_TABLE_TYPES[0].value,
   tokenOptions: [],
+  transactionTable: {
+    data: [],
+    page: 1,
+    pages: 1,
+    total: 0,
+  },
 });
 // ====================================
 
@@ -81,10 +90,22 @@ export default (state = initialState, action) => {
           }),
         ),
       );
-    case PREPEND_TOKEN_OPTION:
-      return state.update('tokenOptions', tokens =>
-        tokens.unshift(action.token),
-      );
+    case LOAD_TRANSACTION_DATA:
+      return state.setIn(['transactionTable', 'data'], []);
+    case LOAD_TRANSACTION_DATA_SUCCESS:
+      return state.set('transactionTable', {
+        data: _get(action, 'tableData.items', []).map(trans => ({
+          [TRANSACTION_COLUMNS.TOKEN_TYPE]: 'TOMO',
+          [TRANSACTION_COLUMNS.TX_HASH]: _get(trans, 'hash', ''),
+          [TRANSACTION_COLUMNS.CREATE_TIME]: moment(_get(trans, 'createdAt')),
+          [TRANSACTION_COLUMNS.FROM]: _get(trans, 'from', ''),
+          [TRANSACTION_COLUMNS.TO]: _get(trans, 'to', ''),
+          [TRANSACTION_COLUMNS.QUANTITY]: _get(trans, 'value', ''),
+        })),
+        page: _get(action, 'tableData.currentPage', 1),
+        total: _get(action, 'tableData.total', 0),
+        pages: _get(action, 'tableData.pages', 1),
+      });
     case RESET_SEND_TOKEN_FORM:
       return state.set('sendForm', initialSendForm);
     case SET_TABLE_TYPE:

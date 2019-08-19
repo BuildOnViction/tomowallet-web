@@ -8,9 +8,13 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 // Utilities & Constants
 import request from '../../../utils/request';
-import { LOAD_TOKEN_OPTIONS } from './constants';
+import { LOAD_TOKEN_OPTIONS, LOAD_TRANSACTION_DATA } from './constants';
 import { API } from '../../../constants';
-import { loadTokenOptionsSuccess, updateSendTokenErrors } from './actions';
+import {
+  loadTokenOptionsSuccess,
+  loadTransactionDataSuccess,
+  updateSendTokenErrors,
+} from './actions';
 import { toggleLoading } from '../../Global/actions';
 // ===================
 
@@ -25,7 +29,7 @@ export function* loadTokens(actionData) {
       yield put(toggleLoading(false));
       yield put(loadTokenOptionsSuccess(response));
     }
-  } catch (error) {
+  } catch {
     yield put(toggleLoading(false));
     yield put(
       updateSendTokenErrors({
@@ -35,7 +39,40 @@ export function* loadTokens(actionData) {
   }
 }
 
-export default function* rootSaga() {
+export function* loadTransaction(actionData) {
+  try {
+    yield put(toggleLoading(true));
+    const { page } = actionData;
+    const response = yield call(
+      request,
+      `${API.GET_TRANSACTIONS}?page=${page}&limit=5`,
+      { headers: { withCredentials: true } },
+    );
+
+    if (response) {
+      const { items, currentPage, total, pages } = response;
+
+      yield put(toggleLoading(false));
+      yield put(
+        loadTransactionDataSuccess({ items, currentPage, total, pages }),
+      );
+    }
+  } catch (error) {
+    console.error('load transaction failed!', error);
+
+    yield put(toggleLoading(false));
+    yield put(
+      updateSendTokenErrors({
+        transactionTable: 'Cannot load transaction list!',
+      }),
+    );
+  }
+}
+
+function* rootSaga() {
   yield takeLatest(LOAD_TOKEN_OPTIONS, loadTokens);
+  yield takeLatest(LOAD_TRANSACTION_DATA, loadTransaction);
 }
 // ================
+
+export default rootSaga;

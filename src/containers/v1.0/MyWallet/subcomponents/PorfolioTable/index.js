@@ -16,9 +16,8 @@ import { isEqual as _isEqual, get as _get, isEmpty as _isEmpty } from 'lodash';
 // Custom Components
 import CommonTable from '../../../../../components/Table';
 // Utilities
-import { loadTokenOptions, prependTokenOptions } from '../../actions';
+import { loadTokenOptions } from '../../actions';
 import { selectTokenOptions, selectSuccessPopup } from '../../selectors';
-import { withWeb3 } from '../../../../../components/Web3';
 import { withIntl } from '../../../../../components/IntlProvider';
 import porfolioConfig from './configuration';
 import { BoxPorfolio } from './style';
@@ -153,5 +152,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   withIntl,
-  withWeb3,
 )(PorfolioTable);

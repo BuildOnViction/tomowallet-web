@@ -19,39 +19,52 @@ class CustomPagination extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      currentPage: 1,
-    };
-
     this.handleChangePage = this.handleChangePage.bind(this);
+    this.handleGetPageList = this.handleGetPageList.bind(this);
     this.isFirstPage = this.isFirstPage.bind(this);
     this.isLastPage = this.isLastPage.bind(this);
   }
 
   handleChangePage(newPage) {
-    const { onChangePage, totalPages } = this.props;
+    const { changePage, totalPages } = this.props;
     if (newPage >= 1 && newPage <= totalPages) {
-      Promise.all([
-        this.setState({ currentPage: newPage }),
-        onChangePage(newPage),
-      ]);
+      changePage(newPage);
+    }
+  }
+
+  handleGetPageList() {
+    const { currentPage, pageRange, totalPages } = this.props;
+    const subRange = Math.floor(pageRange / 2);
+
+    if (totalPages <= pageRange) {
+      return [...Array(totalPages).keys()].map(num => ++num);
+    } else if (currentPage <= subRange) {
+      return [...Array(pageRange).keys()].map(num => ++num);
+    } else if (currentPage > totalPages - subRange) {
+      return [...Array(pageRange).keys()].map(
+        num => totalPages - pageRange + 1 + num,
+      );
+    } else {
+      return [...Array(pageRange).keys()].map(
+        num => currentPage + subRange - pageRange + 1 + num,
+      );
     }
   }
 
   isFirstPage() {
-    const { currentPage } = this.state;
+    const { currentPage } = this.props;
     return currentPage === 1;
   }
 
   isLastPage() {
-    const { totalPages } = this.props;
-    const { currentPage } = this.state;
+    const { currentPage, totalPages } = this.props;
     return currentPage === totalPages;
   }
 
   render() {
-    const { totalPages } = this.props;
-    const { currentPage } = this.state;
+    const { currentPage, totalPages } = this.props;
+    const pageList = this.handleGetPageList();
+
     return (
       <PaginationStyler>
         <PaginationItem disabled={this.isFirstPage()}>
@@ -67,18 +80,13 @@ class CustomPagination extends PureComponent {
             <FontAwesomeIcon icon='chevron-left' />
           </PaginationLink>
         </PaginationItem>
-        {Array(totalPages)
-          .fill(null)
-          .map((_, index) => (
-            <PaginationItem
-              key={`page_${index + 1}`}
-              active={currentPage === index + 1}
-            >
-              <PaginationLink onClick={() => this.handleChangePage(index + 1)}>
-                {index + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
+        {pageList.map(num => (
+          <PaginationItem key={`page_${num}`} active={currentPage === num}>
+            <PaginationLink onClick={() => this.handleChangePage(num)}>
+              {num}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
         <PaginationItem disabled={this.isLastPage()}>
           <PaginationLink
             next
@@ -104,14 +112,20 @@ class CustomPagination extends PureComponent {
 // ===== PROP TYPES =====
 CustomPagination.propTypes = {
   /** Action to handle page jump */
-  onChangePage: PropTypes.func,
+  changePage: PropTypes.func,
+  /** Current table page */
+  currentPage: PropTypes.number,
+  /** Table pagination's range */
+  pageRange: PropTypes.number,
   /** Total number of pages in table */
   totalPages: PropTypes.number,
 };
 
 CustomPagination.defaultProps = {
-  onChangePage: () => {},
-  totalPages: 5,
+  changePage: () => {},
+  currentPage: 1,
+  pageRange: 7,
+  totalPages: 0,
 };
 // ======================
 

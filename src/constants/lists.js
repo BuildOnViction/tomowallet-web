@@ -37,13 +37,13 @@ const NETWORKS = [
 ];
 
 // My Wallet - Table Types
-const TABLE_TYPES = [
+const MY_WALLET_TABLE_TYPES = [
   {
-    label: 'PORFOLIO',
+    label: getMessage(MSG.MY_WALLET_TABLE_PORFOLIO_TITLE),
     value: '1',
   },
   {
-    label: 'TRANSACTIONS',
+    label: getMessage(MSG.MY_WALLET_TABLE_TRANSACTION_TITLE),
     value: '2',
   },
 ];
@@ -52,5 +52,5 @@ const TABLE_TYPES = [
 export default {
   LANGUAGES,
   NETWORKS,
-  TABLE_TYPES,
+  MY_WALLET_TABLE_TYPES,
 };

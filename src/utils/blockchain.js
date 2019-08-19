@@ -234,11 +234,23 @@ const repeatCall = ({ interval = 1000, timeout = 1000, action = () => {} }) => {
     }),
   ).then(stopAfter10Seconds());
 };
+
+/**
+ * fromWei
+ *
+ * Convert a Wei-format number into a decimal number
+ * @param {Number} amount An amount of TOMO in Wei format
+ */
+const fromWei = amount => {
+  const web3 = new Web3();
+  return web3.utils.fromWei(amount);
+};
 // ===================
 
 export {
   decryptWalletInfo,
   estimateTRC20Gas,
+  fromWei,
   generateWeb3,
   getWalletInfo,
   initiateWallet,
