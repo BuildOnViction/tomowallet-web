@@ -19,6 +19,7 @@ import { BigButtonStyler, HeadingSmall } from '../../../../styles';
 import { withWeb3 } from '../../../../components/Web3';
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
+import { TextBlue } from '../../../../styles';
 // -- TO-DO: Add style for Address Information section
 // ===================
 
@@ -36,23 +37,23 @@ class AddressInfo extends PureComponent {
           {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
         </HeadingSmall>
         <div className='box-address'>
-          <Row>
-            <Col sm={12} md={8} className='pr-5'>
-              <div className='mb-5'>{_get(wallet, 'address', '')}</div>
-              <Row className='my-3'>
-                <Col xs={6} sm={6} md={6} lg={6} className='pr-2'>
+          <Row className='align-items-center'>
+            <Col md={6} className='pr-5'>
+              <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
+              <Row className='mt-4'>
+                <Col md={6} className='pr-2'>
                   <BigButtonStyler onClick={() => openSendTokenPopup()}>
                     {formatMessage(MSG.COMMON_BUTTON_SEND)}
                   </BigButtonStyler>
                 </Col>
-                <Col xs={6} sm={6} md={6} lg={6} className='pl-2'>
+                <Col md={6} className='pl-2'>
                   <BigButtonStyler btnBlue>
                     {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
                   </BigButtonStyler>
                 </Col>
               </Row>
             </Col>
-            <Col sm={12} md={4}>
+            <Col md={6} className='d-flex'>
               <QRCode value={_get(wallet, 'address', '')} />
             </Col>
           </Row>

@@ -16,7 +16,7 @@ import MnemonicBox from '../../../MnemonicBox';
 import { getWeb3Info, mnemonicToPrivateKey } from '../../../../utils';
 import { WALLET_POPUP_CONTENT_TAB } from '../../../../containers/Global/constants';
 import { MSG } from '../../../../constants';
-import { BoxImages } from '../../../../styles';
+import { BoxImages, TextBlue } from '../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -89,17 +89,13 @@ class WalletViewContent extends PureComponent {
           )}
           <TabPane
             tabId={WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}
-            className='text-center'
+            className='text-center mt-5'
           >
-            <BoxImages className='mb-3'>
+            <BoxImages className='mb-4'>
               <QRCode value={this.handleGetPrivateKey()} />
             </BoxImages>
-            <div className='text-break'>{this.handleGetPrivateKey()}</div>
-            <div>
-              {formatMessage(
-                MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE,
-              )}
-            </div>
+            <div className='text-break'><TextBlue>{this.handleGetPrivateKey()}</TextBlue></div>
+            <div className='mt-5'>{formatMessage(MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE)}</div>
           </TabPane>
         </TabContent>
       </div>
