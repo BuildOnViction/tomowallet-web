@@ -82,6 +82,7 @@ class PorfolioTable extends Component {
     const {
       data,
       intl: { formatMessage },
+      openReceiveTokenPopup,
       openSendTokenPopup,
     } = this.props;
     return (
@@ -91,6 +92,7 @@ class PorfolioTable extends Component {
           setConfig={porfolioConfig}
           getConfigProps={{
             formatMessage,
+            openReceiveTokenPopup,
             openSendTokenPopup,
           }}
           getTableProps={{
@@ -118,7 +120,9 @@ PorfolioTable.propTypes = {
   successPopup: PropTypes.object,
   /** Action to request for token list by address */
   onLoadTokenOptions: PropTypes.func,
-  /** Action to show/hide send token popup */
+  /** Action to show receive token popup */
+  openReceiveTokenPopup: PropTypes.func,
+  /** Action to show send token popup */
   openSendTokenPopup: PropTypes.func,
 };
 
@@ -128,6 +132,7 @@ PorfolioTable.defaultProps = {
   isActive: false,
   successPopup: {},
   onLoadTokenOptions: () => {},
+  openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
 };
 // ======================

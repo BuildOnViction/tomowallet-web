@@ -499,5 +499,13 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.popup.success.info.transactionhash`,
     defaultMessage: 'Transaction hash',
   },
+  MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE: {
+    id: `${myWalletPagePrefix}.popup.receivetoken.title`,
+    defaultMessage: 'Receive',
+  },
+  MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE: {
+    id: `${myWalletPagePrefix}.popup.receivetoken.content.message`,
+    defaultMessage: 'Your address supports transferring to TOMO and its token',
+  },
 });
 // ====================

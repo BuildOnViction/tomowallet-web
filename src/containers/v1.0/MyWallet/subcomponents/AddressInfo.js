@@ -28,6 +28,7 @@ class AddressInfo extends PureComponent {
   render() {
     const {
       intl: { formatMessage },
+      openReceiveTokenPopup,
       openSendTokenPopup,
       wallet,
     } = this.props;
@@ -42,12 +43,12 @@ class AddressInfo extends PureComponent {
               <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
               <Row className='mt-4'>
                 <Col md={6} className='pr-2'>
-                  <BigButtonStyler onClick={() => openSendTokenPopup()}>
+                  <BigButtonStyler onClick={openSendTokenPopup}>
                     {formatMessage(MSG.COMMON_BUTTON_SEND)}
                   </BigButtonStyler>
                 </Col>
                 <Col md={6} className='pl-2'>
-                  <BigButtonStyler btnBlue>
+                  <BigButtonStyler btnBlue onClick={openReceiveTokenPopup}>
                     {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
                   </BigButtonStyler>
                 </Col>
@@ -68,6 +69,8 @@ class AddressInfo extends PureComponent {
 AddressInfo.propTypes = {
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to show receive token popup */
+  openReceiveTokenPopup: PropTypes.func,
   /** Action to show send token popup */
   openSendTokenPopup: PropTypes.func,
   /** Wallet's data */
@@ -76,6 +79,7 @@ AddressInfo.propTypes = {
 
 AddressInfo.defaultProps = {
   intl: {},
+  openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
   wallet: {},
 };

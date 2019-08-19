@@ -9,8 +9,10 @@ import {
   RELEASE_WALLET_INFO,
   RESET_WALLET_POPUP,
   SET_LANGUAGE,
+  SET_NETWORK,
   STORE_WALLET_INFO,
   TOGGLE_LOADING_SCREEN,
+  TOGGLE_NETWORK_DROPDOWN,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
@@ -31,6 +33,11 @@ export const setLanguage = language => ({
   language,
 });
 
+export const setNetwork = network => ({
+  type: SET_NETWORK,
+  network,
+});
+
 export const storeWallet = data => ({
   type: STORE_WALLET_INFO,
   data,
@@ -38,6 +45,11 @@ export const storeWallet = data => ({
 
 export const toggleLoading = bool => ({
   type: TOGGLE_LOADING_SCREEN,
+  bool,
+});
+
+export const toggleNetworkDropdown = bool => ({
+  type: TOGGLE_NETWORK_DROPDOWN,
   bool,
 });
 

@@ -13,6 +13,7 @@ import {
   RESET_SEND_TOKEN_FORM,
   SET_TABLE_TYPE,
   SUBMIT_SEND_TOKEN,
+  TOGGLE_RECEIVE_TOKEN_POPUP,
   TOGGLE_SEND_TOKEN_POPUP,
   TOGGLE_SUCCESS_POPUP,
   UPDATE_SEND_TOKEN_ERRORS,
@@ -56,6 +57,11 @@ export const submitSendToken = (amount, successMsg) => ({
   type: SUBMIT_SEND_TOKEN,
   amount,
   successMsg,
+});
+
+export const toggleReceiveTokenPopup = bool => ({
+  type: TOGGLE_RECEIVE_TOKEN_POPUP,
+  bool,
 });
 
 export const toggleSendTokenPopup = (bool, initialValues) => ({

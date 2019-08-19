@@ -19,6 +19,7 @@ import {
   SEND_TOKEN_FIELDS,
   SEND_TOKEN_STAGES,
   SET_TABLE_TYPE,
+  TOGGLE_RECEIVE_TOKEN_POPUP,
   TOGGLE_SEND_TOKEN_POPUP,
   TOGGLE_SUCCESS_POPUP,
   TRANSACTION_COLUMNS,
@@ -110,6 +111,8 @@ export default (state = initialState, action) => {
       return state.set('sendForm', initialSendForm);
     case SET_TABLE_TYPE:
       return state.set('tableType', action.tableType);
+    case TOGGLE_RECEIVE_TOKEN_POPUP:
+      return state.setIn(['receiveTokenPopup', 'isOpen'], action.bool);
     case TOGGLE_SEND_TOKEN_POPUP: {
       if (action.bool) {
         return state

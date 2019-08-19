@@ -57,9 +57,7 @@ export function* loadTransaction(actionData) {
         loadTransactionDataSuccess({ items, currentPage, total, pages }),
       );
     }
-  } catch (error) {
-    console.error('load transaction failed!', error);
-
+  } catch {
     yield put(toggleLoading(false));
     yield put(
       updateSendTokenErrors({

@@ -13,15 +13,16 @@ import TokenCell from './subcomponents/TokenCell';
 // Constants
 import { PORFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG } from '../../../../../constants';
-import {
-  TextBlue,
-  TextYellowPointer
-} from '../../../../../styles';
+import { TextBlue, TextYellowPointer } from '../../../../../styles';
 
 // ===================
 
 // ===== CONFIGURATION =====
-export default ({ formatMessage, openSendTokenPopup }) => [
+export default ({
+  formatMessage,
+  openReceiveTokenPopup,
+  openSendTokenPopup,
+}) => [
   {
     Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME),
     columns: [
@@ -103,10 +104,11 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       {
         headerClassName: 'd-none',
         accessor: PORFOLIO_COLUMNS.RECEIVE,
-        Cell: () =>
-          <TextBlue>
+        Cell: () => (
+          <TextBlue role='presentation' onClick={openReceiveTokenPopup}>
             {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
-          </TextBlue>,
+          </TextBlue>
+        ),
       },
       {
         Cell: () => (

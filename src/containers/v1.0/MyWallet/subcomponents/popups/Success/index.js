@@ -18,12 +18,12 @@ import { SuccessPopupStyler } from './style';
 // ===== MAIN COMPONENT =====
 class SuccessPopup extends PureComponent {
   render() {
-    const { amount, closePopup, successPopup, symbol } = this.props;
+    const { amount, togglePopup, successPopup, symbol } = this.props;
     return (
       <SuccessPopupStyler
         backdrop
         isOpen={_get(successPopup, 'isOpen', false)}
-        toggle={closePopup}
+        toggle={() => togglePopup(false)}
         Content={SuccessContent}
         getContentProps={{
           amount,
@@ -41,8 +41,8 @@ class SuccessPopup extends PureComponent {
 SuccessPopup.propTypes = {
   /** Amount of sent token */
   amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  /** Action to close popup */
-  closePopup: PropTypes.func,
+  /** Action to show/hide popup */
+  togglePopup: PropTypes.func,
   /** Success popup's data */
   successPopup: PropTypes.object,
   /** Token symbol */
@@ -51,7 +51,7 @@ SuccessPopup.propTypes = {
 
 SuccessPopup.defaultProps = {
   amount: 0,
-  closePopup: () => {},
+  togglePopup: () => {},
   successPopup: {},
   symbol: '',
 };

@@ -18,6 +18,7 @@ import { get as _get, isEmpty as _isEmpty } from 'lodash';
 import AddressInfo from './subcomponents/AddressInfo';
 import DataTables from './subcomponents/DataTables';
 import SendTokenPopup from './subcomponents/popups/SendToken';
+import ReceiveTokenPopup from './subcomponents/popups/ReceiveToken';
 import SuccessPopup from './subcomponents/popups/Success';
 // Utilities
 import {
@@ -28,6 +29,7 @@ import {
   updateSendTokenPopupStage,
   toggleSuccessPopup,
   resetSendTokenForm,
+  toggleReceiveTokenPopup,
 } from './actions';
 import {
   selectTableType,
@@ -69,7 +71,6 @@ class MyWallet extends PureComponent {
 
     this.handleAddFullAmount = this.handleAddFullAmount.bind(this);
     this.handleCloseSendTokenPopup = this.handleCloseSendTokenPopup.bind(this);
-    this.handleCloseSuccessPopup = this.handleCloseSuccessPopup.bind(this);
     this.handleConfirmBeforeSend = this.handleConfirmBeforeSend.bind(this);
     this.handleGetContractData = this.handleGetContractData.bind(this);
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
@@ -89,12 +90,6 @@ class MyWallet extends PureComponent {
   handleCloseSendTokenPopup() {
     const { onToggleSendTokenPopup } = this.props;
     onToggleSendTokenPopup(false);
-  }
-
-  handleCloseSuccessPopup() {
-    const { onToggleSuccessPopup } = this.props;
-    this.handleCloseSendTokenPopup();
-    onToggleSuccessPopup(false);
   }
 
   handleConfirmBeforeSend() {
@@ -249,9 +244,11 @@ class MyWallet extends PureComponent {
   render() {
     const {
       onSetTableType,
+      onToggleReceiveTokenPopup,
       onToggleSuccessPopup,
       onUpdateSendTokenInput,
       onUpdateSendTokenPopupStage,
+      receivePopup,
       sendTokenForm,
       sendToKenPopup,
       successPopup,
@@ -263,13 +260,15 @@ class MyWallet extends PureComponent {
     return (
       <Fragment>
         <AddressInfo
-          wallet={wallet}
+          openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
           openSendTokenPopup={this.handleOpenSendTokenPopup}
+          wallet={wallet}
         />
         <DataTables
+          openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
+          openSendTokenPopup={this.handleOpenSendTokenPopup}
           setTableType={onSetTableType}
           tableType={tableType}
-          openSendTokenPopup={this.handleOpenSendTokenPopup}
         />
         <SendTokenPopup
           addFullAmount={this.handleAddFullAmount}
@@ -284,13 +283,17 @@ class MyWallet extends PureComponent {
         />
         <SuccessPopup
           amount={_get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT])}
-          closePopup={() => onToggleSuccessPopup(false)}
+          togglePopup={onToggleSuccessPopup}
           successPopup={successPopup}
           symbol={_get(
             sendTokenForm,
             [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.SYMBOL],
             '',
           )}
+        />
+        <ReceiveTokenPopup
+          isOpen={_get(receivePopup, 'isOpen', false)}
+          togglePopup={onToggleReceiveTokenPopup}
         />
       </Fragment>
     );
@@ -306,6 +309,8 @@ MyWallet.propTypes = {
   onResetSendTokenForm: PropTypes.func,
   /** Action to set current table tab */
   onSetTableType: PropTypes.func,
+  /** Action to show/hide receive token popup */
+  onToggleReceiveTokenPopup: PropTypes.func,
   /** Action to show/hide send token popup */
   onToggleSendTokenPopup: PropTypes.func,
   /** Action to show/hide success popup */
@@ -316,6 +321,8 @@ MyWallet.propTypes = {
   onUpdateSendTokenInput: PropTypes.func,
   /** Action to update send token popup's stage of content */
   onUpdateSendTokenPopupStage: PropTypes.func,
+  /** Receive token popup's data */
+  receivePopup: PropTypes.object,
   /** Send token popup's form values */
   sendTokenForm: PropTypes.object,
   /** Send token popup's data */
@@ -336,11 +343,13 @@ MyWallet.defaultProps = {
   intl: {},
   onResetSendTokenForm: () => {},
   onSetTableType: () => {},
+  onToggleReceiveTokenPopup: () => {},
   onToggleSendTokenPopup: () => {},
   onToggleSuccessPopup: () => {},
   onUpdateSendTokenErrors: () => {},
   onUpdateSendTokenInput: () => {},
   onUpdateSendTokenPopupStage: () => {},
+  receivePopup: {},
   sendTokenForm: {},
   sendToKenPopup: {},
   successPopup: {},
@@ -366,6 +375,7 @@ const mapDispatchToProps = dispatch => ({
   onResetSendTokenForm: () => dispatch(resetSendTokenForm()),
   onSetTableType: type => dispatch(setTableType(type)),
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),
+  onToggleReceiveTokenPopup: bool => dispatch(toggleReceiveTokenPopup(bool)),
   onToggleSendTokenPopup: (bool, initialValues) =>
     dispatch(toggleSendTokenPopup(bool, initialValues)),
   onToggleSuccessPopup: (bool, hash) =>

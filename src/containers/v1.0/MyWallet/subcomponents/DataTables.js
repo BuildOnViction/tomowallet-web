@@ -21,7 +21,12 @@ import { LIST } from '../../../../constants';
 // ===== MAIN COMPONENT =====
 class DataTables extends PureComponent {
   render() {
-    const { setTableType, tableType, openSendTokenPopup } = this.props;
+    const {
+      setTableType,
+      tableType,
+      openReceiveTokenPopup,
+      openSendTokenPopup,
+    } = this.props;
     return (
       <div className='main_tab'>
         <Nav tabs className='mt-5 mb-4'>
@@ -39,8 +44,9 @@ class DataTables extends PureComponent {
         <TabContent activeTab={tableType}>
           <TabPane tabId={LIST.MY_WALLET_TABLE_TYPES[0].value}>
             <PorfolioTable
-              openSendTokenPopup={openSendTokenPopup}
               isActive={tableType === LIST.MY_WALLET_TABLE_TYPES[0].value}
+              openReceiveTokenPopup={openReceiveTokenPopup}
+              openSendTokenPopup={openSendTokenPopup}
             />
           </TabPane>
           <TabPane tabId={LIST.MY_WALLET_TABLE_TYPES[1].value}>
@@ -57,6 +63,10 @@ class DataTables extends PureComponent {
 
 // ===== PROP TYPES =====
 DataTables.propTypes = {
+  /** Action to open receive token's popup */
+  openReceiveTokenPopup: PropTypes.func,
+  /** Action to open send token's popup */
+  openSendTokenPopup: PropTypes.func,
   /** Action to set current table tab */
   setTableType: PropTypes.func,
   /** Value to determine highlighted table tab */
@@ -64,6 +74,8 @@ DataTables.propTypes = {
 };
 
 DataTables.defaultProps = {
+  openReceiveTokenPopup: () => {},
+  openSendTokenPopup: () => {},
   setTableType: () => {},
   tableType: 0,
 };

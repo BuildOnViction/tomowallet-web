@@ -1,10 +1,19 @@
+/**
+ *
+ * TomoWallet - Web3 Provider
+ *
+ */
+// ===== IMPORTS =====
+// Modules
 import React, { Component, createContext } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import Web3 from 'web3';
-import { get as _get } from 'lodash';
+import { get as _get, isEmpty as _isEmpty } from 'lodash';
+// Utilities & Constants
 import { FailureComponent, LoadingComponent } from './';
-import { RPC_SERVER, ENUM } from '../../constants';
 import { getWeb3Info, generateWeb3 } from '../../utils';
+import { RPC_SERVER, ENUM, LIST } from '../../constants';
+// ===================
 
 // ===== Web3 Context =====
 const Web3Context = createContext({
@@ -42,7 +51,14 @@ class Web3Provider extends Component {
 
       this.handleSetWeb3(newWeb3);
     } else {
-      this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
+      const storedNetwork = LIST.NETWORKS.find(
+        opt => opt.value === localStorage.getItem('network'),
+      );
+      if (!_isEmpty(storedNetwork)) {
+        this.handleUpdateRpcServer(storedNetwork.value);
+      } else {
+        this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
+      }
     }
   }
 
@@ -65,6 +81,7 @@ class Web3Provider extends Component {
         rpcServer: _get(RPC_SERVER, newKey, {}),
       },
       () => {
+        localStorage.setItem('network', newKey);
         const newWeb3 = new Web3(
           Web3.givenProvider || this.state.rpcServer.host,
           null,

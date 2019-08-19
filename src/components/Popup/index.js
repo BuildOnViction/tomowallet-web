@@ -47,9 +47,7 @@ class Popup extends PureComponent {
         title={title}
         toggle={toggle}
       >
-        {!noHeader &&
-          <ModalHeader toggle={toggle}>{title}</ModalHeader>
-        }
+        {!noHeader && <ModalHeader toggle={toggle}>{title}</ModalHeader>}
         <ModalBody>
           <Content {...getContentProps} />
         </ModalBody>
@@ -66,17 +64,18 @@ class Popup extends PureComponent {
                         outline
                         onClick={_get(button, 'secondary.action', () => {})}
                         disabled={_get(button, 'secondary.disabled')}
+                        {..._get(button, 'secondary')}
                       >
                         {_get(button, 'secondary.label', '')}
                       </ButtonStyler>
                     </Col>
                   )}
                   {_get(button, 'primary') && (
-                      <Col size={6}>
+                    <Col size={6}>
                       <ButtonStyler
-                        btnYellow
                         onClick={_get(button, 'primary.action', () => {})}
                         disabled={_get(button, 'primary.disabled')}
+                        {..._get(button, 'primary')}
                       >
                         {_get(button, 'primary.label', '')}
                       </ButtonStyler>
