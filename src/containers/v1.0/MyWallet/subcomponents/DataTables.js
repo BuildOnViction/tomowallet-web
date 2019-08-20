@@ -15,7 +15,6 @@ import PorfolioTable from './PorfolioTable';
 import TransactionTable from './TransactionTable';
 // Constants
 import { LIST } from '../../../../constants';
-// -- TO-DO: Add style for Data Table tabs component
 // ===================
 
 // ===== MAIN COMPONENT =====

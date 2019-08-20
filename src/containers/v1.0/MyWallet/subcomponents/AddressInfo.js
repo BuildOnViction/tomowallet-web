@@ -20,7 +20,6 @@ import { withWeb3 } from '../../../../components/Web3';
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
 import { TextBlue } from '../../../../styles';
-// -- TO-DO: Add style for Address Information section
 // ===================
 
 // ===== MAIN COMPONENT =====

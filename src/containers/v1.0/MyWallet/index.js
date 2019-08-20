@@ -61,7 +61,6 @@ import { selectWallet } from '../../Global/selectors';
 import { MSG, LIST } from '../../../constants';
 import { sendMoney, getWalletInfo } from '../../../utils/blockchain';
 import { storeWallet } from '../../Global/actions';
-// -- TO-DO: Add style for My Wallet page component
 // ==================
 
 // ===== MAIN COMPONENT =====

@@ -10,7 +10,6 @@ import { get as _get } from 'lodash';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
-// -- TO-DO: Update style for Recovery Phrase/Private Key form
 import { FormTextStyled } from '../../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';

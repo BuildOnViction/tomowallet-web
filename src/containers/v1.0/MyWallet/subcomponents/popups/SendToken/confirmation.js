@@ -9,12 +9,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { get as _get } from 'lodash';
-import { Container, Row, Col, Label } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 // Utilities & Constants
 import { withIntl } from '../../../../../../components/IntlProvider';
 import { MSG } from '../../../../../../constants';
 import { SEND_TOKEN_FIELDS, PORFOLIO_COLUMNS } from '../../../constants';
-// -- TO-DO: Add style for Confirmation Content of Send Token Popup
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -32,9 +31,7 @@ class ConfirmationContent extends PureComponent {
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}
           </Col>
           <Col xs={8} className=''>
-            {`${_get(formValues, [
-              SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-            ])} ${_get(
+            {`${_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT])} ${_get(
               formValues,
               [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.SYMBOL],
               '',
@@ -63,13 +60,9 @@ class ConfirmationContent extends PureComponent {
         </Row>
         <Row>
           <Col xs={4}>
-            {formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL,
-            )}
+            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL)}
           </Col>
-          <Col xs={8}>
-            {_get(formValues, [SEND_TOKEN_FIELDS.MESSAGE], '')}
-          </Col>
+          <Col xs={8}>{_get(formValues, [SEND_TOKEN_FIELDS.MESSAGE], '')}</Col>
         </Row>
         <Row>
           <Col xs={4}>

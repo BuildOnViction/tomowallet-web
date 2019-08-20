@@ -11,7 +11,6 @@ import { get as _get } from 'lodash';
 // Custom Component
 import SuccessContent from './content';
 // Styles
-// -- TO-DO: Add style for Success Popup
 import { SuccessPopupStyler } from './style';
 // ===================
 

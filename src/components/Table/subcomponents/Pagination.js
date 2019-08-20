@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { PaginationItem, PaginationLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
-// -- TO-DO: Update style for custom Pagination component
 import { PaginationStyler } from '../style';
 // ===================
 

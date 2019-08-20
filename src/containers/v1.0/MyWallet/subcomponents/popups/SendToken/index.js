@@ -14,7 +14,6 @@ import { get as _get } from 'lodash';
 // Custom Components
 import FormContent from './form';
 import ConfirmationContent from './confirmation';
-// -- TO-DO: Update style for Send Token popup
 import { SendTokenPopupStyler } from './style';
 // Utilities & Constants
 import { withIntl } from '../../../../../../components/IntlProvider';
