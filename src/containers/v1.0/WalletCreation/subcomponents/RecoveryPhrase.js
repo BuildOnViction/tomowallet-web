@@ -20,7 +20,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Component
 import MnemonicBox from '../../../../components/MnemonicBox';
-// -- TO-DO: Update style for buttons
 import {
   ButtonStyler,
   HeadingLarge,
@@ -28,11 +27,10 @@ import {
   TextLinkYellow,
   TextBlue,
 } from '../../../../styles';
-// Utilities
+// Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
 import { FORM_STATES } from '../constants';
-// -- TO-DO: Add style for Recovery Phrase generation page
 // ===================
 
 // ===== MAIN COMPONENT =====

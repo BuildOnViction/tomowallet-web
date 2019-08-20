@@ -14,7 +14,6 @@ import WelcomePage from '../v1.0/Welcome';
 import CreateWalletPage from '../v1.0/WalletCreation';
 import ImportWallet from '../v1.0/ImportWallet';
 import MyWallet from '../v1.0/MyWallet';
-// -- TO-DO: Update style for App component in the following styled component:
 import AppStyler from './style';
 // Utilities & Constants
 import { withWeb3 } from '../../components/Web3';

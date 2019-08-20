@@ -13,13 +13,10 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Row, Col, CardImg } from 'reactstrap';
 // Custom Component
-// -- TO-DO: Update style for button component
 import { BigButtonStyler, BoxBtnStyler, HeadingBig } from '../../../styles';
-// Utilities & Constants
+// Utilities, Constants & Styles
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../constants';
-// -- TO-DO: Add style for Welcome content component
-// IMAGES
 import imgvisual_login from '../../../assets/images/img-visual-login.png';
 // ===================
 
@@ -67,7 +64,6 @@ class WelcomePage extends PureComponent {
           </BoxBtnStyler>
         </Col>
         <Col xs={12} md={6} lg={5} className='d-none d-md-block'>
-          {/* -- TO-DO: Add welcome page's image source */}
           <CardImg
             src={imgvisual_login}
             alt={formatMessage(MSG.WELCOME_IMAGE_ALT)}
@@ -85,6 +81,11 @@ WelcomePage.propTypes = {
   history: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+};
+
+WelcomePage.defaultProps = {
+  history: {},
+  intl: {},
 };
 // ======================
 

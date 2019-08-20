@@ -12,19 +12,11 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // Custom Componentsimport {
-import {
-  Row,
-  Col,
-} from 'reactstrap';
-import {
-  BoxText,
-  TextYellow,
-  ButtonStyler
-} from '../../../../styles';
+import { Row, Col } from 'reactstrap';
+import { BoxText, TextYellow, ButtonStyler } from '../../../../styles';
 // Utilities
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../../constants';
-// -- TO-DO: Add style for Success Notification component
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -48,20 +40,24 @@ class SuccessNotification extends PureComponent {
     return (
       <BoxText className='text-center word-break'>
         <div>
-          <p><i className="font-icon-checkmark-outline"></i></p>
-          <TextYellow>{formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_TITLE)}</TextYellow>
+          <p>
+            <i className='font-icon-checkmark-outline' />
+          </p>
+          <TextYellow>
+            {formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_TITLE)}
+          </TextYellow>
         </div>
         <div className='my-4'>
           {formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_DESCRIPTION)}
         </div>
         <Row>
-          <Col xs={3}></Col>
+          <Col xs={3} />
           <Col xs={6}>
             <ButtonStyler btnYellow onClick={this.handleConfirmSuccess}>
               {formatMessage(MSG.SUCCESS_NOTIFICATION_BUTTON_ACCESS_WALLET)}
             </ButtonStyler>
           </Col>
-          <Col xs={3}></Col>
+          <Col xs={3} />
         </Row>
       </BoxText>
     );

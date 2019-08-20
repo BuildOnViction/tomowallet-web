@@ -18,6 +18,7 @@ const containerPrefix = `${basePrefix}.container`;
 const buttonPrefix = `${commonPrefix}.button`;
 const listPrefix = `${commonPrefix}.list`;
 const navbarPrefix = `${componentPrefix}.navbar`;
+const footerPrefix = `${componentPrefix}.footer`;
 const welcomePagePrefix = `${containerPrefix}.welcome`;
 const createWalletPagePrefix = `${containerPrefix}.createwallet`;
 const warningPagePrefix = `${createWalletPagePrefix}.warning`;
@@ -82,7 +83,7 @@ export default defineMessages({
     id: `${listPrefix}.network.tomochain.mainnet`,
     defaultMessage: 'Main TomoChain Network',
   },
-  // Header Navigation Bar
+  // Component - Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {
     id: `${navbarPrefix}.logo.alt`,
     defaultMessage: 'TOMOCHAIN LOGO',
@@ -135,6 +136,27 @@ export default defineMessages({
   HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE: {
     id: `${navbarPrefix}.popup.showwallet.tab.privatekey.note`,
     defaultMessage: 'Remove all spaces to use private key, please',
+  },
+  // Component - Page Footer
+  FOOTER_VERSION_TEXT: {
+    id: `${footerPrefix}.versiontext`,
+    defaultMessage: 'TomoWallet 2019 - v1.0',
+  },
+  FOOTER_OPTION_HELP: {
+    id: `${footerPrefix}.option.help`,
+    defaultMessage: 'Need help?',
+  },
+  FOOTER_OPTION_POLICY: {
+    id: `${footerPrefix}.option.policy`,
+    defaultMessage: 'Privacy Policy',
+  },
+  FOOTER_OPTION_TERMS_OF_SERVICE: {
+    id: `${footerPrefix}.option.termsofservice`,
+    defaultMessage: 'Terms of Service',
+  },
+  FOOTER_OPTION_API_DOCUMENTATION: {
+    id: `${footerPrefix}.option.apidocumentation`,
+    defaultMessage: 'API Documentation',
   },
   // Welcome Page
   WELCOME_TITLE: {

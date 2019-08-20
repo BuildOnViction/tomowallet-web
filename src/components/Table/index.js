@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import { get as _get, isEqual as _isEqual } from 'lodash';
 // Custom Components
 import CustomPagination from './subcomponents/Pagination';
-// -- TO-DO: Update style for common Table component
 import { CommonTableStyler } from './style';
 
 // ===================

@@ -14,7 +14,7 @@ import { get as _get } from 'lodash';
 // Custom Components
 import Warning from './Warning';
 import WalletView from './WalletView';
-// Utilities & Style
+// Utilities, Constants & Style
 import { selectWalletPopup } from '../../../../containers/Global/selectors';
 import { WALLET_POPUP_STAGE } from '../../../../containers/Global/constants';
 import {
@@ -25,7 +25,6 @@ import {
 import { withIntl } from '../../../IntlProvider';
 import { withWeb3 } from '../../../Web3';
 import { MSG } from '../../../../constants';
-// -- TO-DO: Update style for Show Wallet Popup
 import { WalletPopupStyler } from './style';
 // ===================
 

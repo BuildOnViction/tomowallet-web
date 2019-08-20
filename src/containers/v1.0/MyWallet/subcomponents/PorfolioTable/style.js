@@ -32,30 +32,18 @@ const TokenCellStyler = styled.div`
   }
 `;
 
-const ActionCellStyler = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  .block-send,
-  .block-receive,
-  .block-details {
-    flex: 0 1 auto;
-  }
-`;
-
 const BoxPorfolio = styled.div`
   .rt-tr {
-      display: grid;
-      grid-template-columns: 20% 15% 15% 15% 35%;
+    display: grid;
+    grid-template-columns: 20% 15% 15% 15% 35%;
+  }
+  .rt-tbody {
+    .rt-tr {
+      grid-template-columns: 20% 15% 15% 15% 15% 15% 5%;
     }
-    .rt-tbody {
-      .rt-tr {
-        grid-template-columns: 20% 15% 15% 15% 15% 15% 5%;
-      }
-    }
+  }
 `;
 
 // =================
 
-export { TokenCellStyler, ActionCellStyler, BoxPorfolio };
+export { TokenCellStyler, BoxPorfolio };

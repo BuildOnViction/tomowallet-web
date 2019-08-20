@@ -12,22 +12,17 @@ import PropTypes from 'prop-types';
 import { CardImg } from 'reactstrap';
 // Custom Component
 import Popup from '../../../../../components/Popup';
-// Utilities & Constants
+// Utilities, Constants & Styles
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
 import { FORM_STATES } from '../../constants';
-import {
-  BoxImages
-} from '../../../../../styles';
-// IMAGES
+import { BoxImages } from '../../../../../styles';
 import imgRecovery from '../../../../../assets/images/img-recovery.png';
-// -- TO-DO: Add style for Confirmation popup
 // ===================
 
 // ===== SUB-COMPONENT =====
 const Content = ({ formatMessage }) => (
   <div className='text-center'>
-    {/* -- TO-DO: Add confirmation image's source */}
     <BoxImages>
       <CardImg
         className='w-80'

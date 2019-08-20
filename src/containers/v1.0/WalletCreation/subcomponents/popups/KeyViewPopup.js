@@ -11,19 +11,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get as _get } from 'lodash';
 import QRCode from 'qrcode.react';
+import { CardText } from 'reactstrap';
 // Custom Component
 import Popup from '../../../../../components/Popup';
+import { HeadingMedium, BoxImages } from '../../../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
-// -- TO-DO: Add style for Private Key view popup
-import {
-  CardText,
-} from 'reactstrap';
-import {
-  HeadingMedium,
-  BoxImages
-} from '../../../../../styles';
 // ===================
 
 // ===== SUB-COMPONENT =====
@@ -35,8 +29,6 @@ const Content = ({ formatMessage, keyView, toggleKeyVisibile }) => (
     <CardText>
       {formatMessage(MSG.RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TEXT)}
     </CardText>
-    {/* -- TO-DO: Rewrite style for this QR code cover box */}
-    {/* -- NOTE: There hasn't been any UI design for it yet. Please use your imagination! :) */}
     <BoxImages>
       {_get(keyView, 'isPKVisible') ? (
         <QRCode value={_get(keyView, 'key')} />

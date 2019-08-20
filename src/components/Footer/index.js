@@ -9,65 +9,86 @@
 // ===== IMPORTS =====
 // Modules
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col, Nav, NavItem } from 'reactstrap';
+// Custom Component
 import { LinkFooter } from './style';
-// -- TO-DO: Add style for Welcome content component
+// Utilities & Constants
+import { withIntl } from '../IntlProvider';
+import { MSG } from '../../constants';
 // ===================
-
-const FooterButtons = [
-  {
-    className: 'font-icon-facebook',
-    link: 'https://www.facebook.com/tomochainofficial',
-  },
-  {
-    className: 'font-icon-twitter',
-    link: 'https://twitter.com/TomoChainANN',
-  },
-  {
-    className: 'font-icon-telegram',
-    link: 'https://t.me/tomochain',
-  },
-  {
-    className: 'font-icon-github',
-    link: 'https://github.com/tomochain/',
-  },
-  {
-    className: 'font-icon-linkedin',
-    link: 'https://www.linkedin.com/company/tomochain',
-  },
-  {
-    className: 'font-icon-reddit',
-    link: 'https://www.reddit.com/r/Tomochain/',
-  },
-];
 
 // ===== MAIN COMPONENT =====
 class Footer extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.FOOTER_BUTTONS = [
+      {
+        className: 'font-icon-facebook',
+        link: 'https://www.facebook.com/tomochainofficial',
+      },
+      {
+        className: 'font-icon-twitter',
+        link: 'https://twitter.com/TomoChainANN',
+      },
+      {
+        className: 'font-icon-telegram',
+        link: 'https://t.me/tomochain',
+      },
+      {
+        className: 'font-icon-github',
+        link: 'https://github.com/tomochain/',
+      },
+      {
+        className: 'font-icon-linkedin',
+        link: 'https://www.linkedin.com/company/tomochain',
+      },
+      {
+        className: 'font-icon-reddit',
+        link: 'https://www.reddit.com/r/Tomochain/',
+      },
+    ];
+  }
+
   render() {
+    const {
+      intl: { formatMessage },
+    } = this.props;
     return (
       <Row className='align-items-center pt-3 pb-3'>
         <Col xs={12} lg={7}>
-          <div className='mb-text-center'>TomoWallet 2019 - v1.0</div>
+          <div className='mb-text-center'>
+            {formatMessage(MSG.FOOTER_VERSION_TEXT)}
+          </div>
           <Row className='footer-menu'>
             <Nav>
               <NavItem>
-                <LinkFooter href='#'>Need help?</LinkFooter>
+                <LinkFooter href='#'>
+                  {formatMessage(MSG.FOOTER_OPTION_HELP)}
+                </LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter href='#'>Privacy Policy</LinkFooter>
+                <LinkFooter href='#'>
+                  {formatMessage(MSG.FOOTER_OPTION_POLICY)}
+                </LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter href='#'>Terms of Service</LinkFooter>
+                <LinkFooter href='#'>
+                  {formatMessage(MSG.FOOTER_OPTION_TERMS_OF_SERVICE)}
+                </LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter href='#'>API Documentation</LinkFooter>
+                <LinkFooter href='#'>
+                  {formatMessage(MSG.FOOTER_OPTION_API_DOCUMENTATION)}
+                </LinkFooter>
               </NavItem>
             </Nav>
           </Row>
         </Col>
         <Col xs={12} lg={5}>
           <Nav className='footer-buttons'>
-            {FooterButtons.map((item, itemIdx) => (
+            {this.FOOTER_BUTTONS.map((item, itemIdx) => (
               <NavItem key={`footer_button_${itemIdx + 1}`}>
                 <LinkFooter href='{item.link}' target='_blank'>
                   <i className={item.className} />
@@ -80,5 +101,17 @@ class Footer extends PureComponent {
     );
   }
 }
+// ==========================
 
-export default Footer;
+// ===== PROP TYPES =====
+Footer.propTypes = {
+  /** React Intl's instance object */
+  intl: PropTypes.object,
+};
+
+Footer.defaultProps = {
+  intl: {},
+};
+// ======================
+
+export default withIntl(Footer);

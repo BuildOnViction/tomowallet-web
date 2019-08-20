@@ -19,7 +19,6 @@ class WarningContent extends PureComponent {
     return (
       <div className='text-center content-warning'>
         <div className='conntent-warning__image'>
-          {/* -- TO-DO: Add show wallet's warning image source */}
           <img
             src={VisualShowWallet}
             alt={formatMessage(

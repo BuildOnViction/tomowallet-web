@@ -7,11 +7,9 @@
 // Modules
 import React, { PureComponent } from 'react';
 // Custom Components
-// -- TO-DO: Update style for Token Name column cell
 import { TokenCellStyler } from '../style';
-// Constants
+// Constants & Styles
 import { MSG } from '../../../../../../constants';
-// IMAGES
 import logoTomo from '../../../../../../assets/images/logo-tomo.png';
 import logoKyper from '../../../../../../assets/images/logo-kyper.png';
 import logoKucoin from '../../../../../../assets/images/logo-kucoin.png';
@@ -20,7 +18,7 @@ import logoKucoin from '../../../../../../assets/images/logo-kucoin.png';
 const LogoToken = {
   TOMO: logoTomo,
   KYPER: logoKyper,
-  KUCOIN: logoKucoin
+  KUCOIN: logoKucoin,
 };
 
 // ===== MAIN COMPONENT =====
@@ -30,7 +28,6 @@ class TokenCell extends PureComponent {
     return (
       <TokenCellStyler>
         <div className='block-symbol'>
-          {/* -- TO-DO: Add token's image source */}
           <img
             src={LogoToken[value]}
             alt={formatMessage(

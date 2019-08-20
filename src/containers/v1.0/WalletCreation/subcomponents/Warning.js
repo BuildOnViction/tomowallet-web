@@ -23,7 +23,6 @@ import {
   Card,
 } from 'reactstrap';
 // Custom Components
-// -- TO-DO: Update style for button & error text in the following styled components:
 import {
   ButtonStyler,
   WarningImages,
@@ -32,14 +31,12 @@ import {
   TextBlue,
   NoticeTextRed,
 } from '../../../../styles';
-// Utilities & Constants
+// Utilities, Constants & Styles
 import { withIntl } from '../../../../components/IntlProvider';
 import { withWeb3 } from '../../../../components/Web3';
 import { mnemonicToPrivateKey } from '../../../../utils';
 import { FORM_STATES } from '../constants';
 import { MSG, ROUTE } from '../../../../constants';
-// -- TO-DO: Add style for Warning page
-// IMAGES
 import imgWarning from '../../../../assets/images/img-warning.png';
 // ===================
 
@@ -93,7 +90,6 @@ class Warning extends PureComponent {
             </TextBlue>
           </CardText>
         </CardHeader>
-        {/* -- TO-DO: Add warning image's source */}
         <WarningImages>
           <CardImg
             src={imgWarning}
@@ -101,7 +97,9 @@ class Warning extends PureComponent {
           />
         </WarningImages>
         <CardBody>
-          <HeadingMedium>{formatMessage(MSG.WARNING_CONTENT_TITLE)}</HeadingMedium>
+          <HeadingMedium>
+            {formatMessage(MSG.WARNING_CONTENT_TITLE)}
+          </HeadingMedium>
           <CardText>{formatMessage(MSG.WARNING_CONTENT_DESCRIPTION)}</CardText>
           <CardText>
             <NoticeTextRed>

@@ -94,7 +94,6 @@ class NavigationBar extends PureComponent {
 
   handleRenderPublicBar() {
     const {
-      changeLocale,
       intl: { formatMessage },
       language,
     } = this.props;
@@ -196,7 +195,6 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <NavBarStyler light expand='lg'>
           <NavbarBrand onClick={this.handleRedirectToHomepage}>
-            {/* -- TO-DO: Add TomoChain logo's source */}
             <CardImg
               src={logo_tomochain}
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
