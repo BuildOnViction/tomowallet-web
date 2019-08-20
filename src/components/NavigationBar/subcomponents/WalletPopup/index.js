@@ -58,6 +58,7 @@ class WalletPopup extends PureComponent {
           action: this.handleClosePopup,
         },
         primary: {
+          btnYellow: true,
           label: formatMessage(MSG.COMMON_BUTTON_NEXT),
           action: () => onUpdatePopupStage(WALLET_POPUP_STAGE.CONTENT),
         },
@@ -69,6 +70,7 @@ class WalletPopup extends PureComponent {
           action: this.handleClosePopup,
         },
         primary: {
+          btnYellow: true,
           label: formatMessage(MSG.COMMON_BUTTON_SAVE),
         },
       };
