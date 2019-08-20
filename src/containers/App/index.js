@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { isEmpty as _isEmpty } from 'lodash';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import { Spinner } from 'reactstrap';
 // Custom Components
 import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';
@@ -23,7 +22,7 @@ import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
 import { ROUTE } from '../../constants';
 import './app.scss';
-import { getWeb3Info } from '../../utils';
+import { getWeb3Info, getLedger } from '../../utils';
 import { initiateWallet } from '../../utils/blockchain';
 
 // ===== MAIN COMPONENT =====
@@ -37,18 +36,22 @@ class App extends PureComponent {
   componentDidMount() {
     const { onStoreWallet, updateWeb3 } = this.props;
     const walletParams = getWeb3Info();
+    const ledger = getLedger();
+
     if (walletParams) {
       const { recoveryPhrase, rpcServer } = walletParams;
       initiateWallet(recoveryPhrase, rpcServer).then(({ web3, walletInfo }) => {
         updateWeb3(web3);
         onStoreWallet(walletInfo);
       });
+    } else if (ledger) {
+      onStoreWallet(ledger);
     }
   }
 
   handleCheckLoggedIn() {
     const { wallet } = this.props;
-    return !_isEmpty(wallet) || !!getWeb3Info();
+    return !_isEmpty(wallet) || !!getWeb3Info() || !!getLedger();
   }
 
   render() {

@@ -32,6 +32,7 @@ class Popup extends PureComponent {
       Footer,
       getContentProps,
       getFooterProps,
+      getPopupProps,
       isOpen,
       noHeader,
       title,
@@ -46,6 +47,7 @@ class Popup extends PureComponent {
         isOpen={isOpen}
         title={title}
         toggle={toggle}
+        {...getPopupProps}
       >
         {!noHeader && <ModalHeader toggle={toggle}>{title}</ModalHeader>}
         <ModalBody>
@@ -119,6 +121,8 @@ Popup.propTypes = {
   getContentProps: PropTypes.object,
   /** Customized footer component's props */
   getFooterProps: PropTypes.object,
+  /** Reactstrap popup's props */
+  getPopupProps: PropTypes.object,
   /** Condition flag to show/hide pop-up */
   isOpen: PropTypes.bool,
   /** Condition flag to show/hide pop-up header */
@@ -139,6 +143,8 @@ Popup.defaultProps = {
   className: '',
   Content: () => null,
   getContentProps: {},
+  getFooterProps: {},
+  getPopupProps: {},
   centered: true,
   isOpen: false,
   noHeader: false,

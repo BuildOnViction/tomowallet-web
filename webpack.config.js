@@ -31,6 +31,7 @@ module.exports = env => {
     devServer: {
       historyApiFallback: true,
       contentBase: 'dist',
+      https: true,
     },
     module: {
       rules: [

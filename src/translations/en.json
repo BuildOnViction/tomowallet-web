@@ -1,3 +1,13 @@
 {
+  "tomowallet.common.button.back": "Back",
+  "tomowallet.common.button.next": "Next",
+  "tomowallet.common.button.save": "Save",
+  "tomowallet.common.button.import": "Import",
+  "tomowallet.common.button.send": "Send",
+  "tomowallet.common.button.receive": "Receive",
+  "tomowallet.common.button.maximum": "Max",
+  "tomowallet.common.button.confirm": "Confirm",
+  "tomowallet.common.list.language.english": "English",
+  "tomowallet.common.list.language.french": "French",
   "tomowallet.header.navbar.option.about": "About"
 }

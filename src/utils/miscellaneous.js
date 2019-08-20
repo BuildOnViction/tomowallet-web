@@ -5,7 +5,7 @@
  */
 // ===== IMPORTS =====
 // Modules
-import { isObject as _isObject, isString as _isString } from 'lodash';
+import { get as _get, omit as _omit } from 'lodash';
 // ===================
 
 export const shuffleArray = array => {
@@ -29,14 +29,62 @@ export const shuffleArray = array => {
   return result;
 };
 
+// Global state storage
+const setStorage = (key, object) => {
+  localStorage.setItem(
+    'global',
+    JSON.stringify({
+      ...JSON.parse(localStorage.getItem('global')),
+      [key]: object,
+    }),
+  );
+};
+const getStorage = key => {
+  return _get(JSON.parse(localStorage.getItem('global')), [key]);
+};
+const removeStorage = key => {
+  localStorage.setItem(
+    'global',
+    JSON.stringify(_omit(getStorage('global'), key)),
+  );
+};
+
 export const setWeb3Info = web3Info => {
-  localStorage.setItem('web3Info', JSON.stringify(web3Info));
+  setStorage('web3Info', web3Info);
 };
-
 export const getWeb3Info = () => {
-  return JSON.parse(localStorage.getItem('web3Info'));
+  return getStorage('web3Info');
+};
+export const removeWeb3Info = () => {
+  removeStorage('web3Info');
 };
 
-export const removeWeb3Info = () => {
-  localStorage.removeItem('web3Info');
+export const setLocale = locale => {
+  setStorage('locale', locale);
+};
+export const getLocale = () => {
+  return getStorage('locale');
+};
+export const removeLocale = () => {
+  removeStorage('locale');
+};
+
+export const setNetwork = network => {
+  setStorage('network', network);
+};
+export const getNetwork = () => {
+  return getStorage('network');
+};
+export const removeNetwork = () => {
+  removeStorage('network');
+};
+
+export const setLedger = ledger => {
+  setStorage('ledger', ledger);
+};
+export const getLedger = () => {
+  return getStorage('ledger');
+};
+export const removeLedger = () => {
+  return removeStorage('ledger');
 };

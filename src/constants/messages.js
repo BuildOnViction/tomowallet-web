@@ -61,6 +61,10 @@ export default defineMessages({
     id: `${buttonPrefix}.confirm`,
     defaultMessage: 'Confirm',
   },
+  COMMON_BUTTON_UNLOCK: {
+    id: `${buttonPrefix}.unlock`,
+    defaultMessage: 'Unlock',
+  },
   // Common - Lists
   COMMON_LIST_LANGUAGE_ENGLISH: {
     id: `${listPrefix}.language.english`,
@@ -85,11 +89,11 @@ export default defineMessages({
   },
   HEADER_NAVBAR_OPTION_ABOUT: {
     id: `${navbarPrefix}.option.about`,
-    defaultMessage: 'Abouts',
+    defaultMessage: 'About',
   },
   HEADER_NAVBAR_OPTION_FAQS: {
     id: `${navbarPrefix}.option.faqs`,
-    defaultMessage: 'FAQs',
+    defaultMessage: 'FAQ',
   },
   HEADER_NAVBAR_OPTION_MY_WALLET: {
     id: `${navbarPrefix}.option.mywallet`,
@@ -316,7 +320,7 @@ export default defineMessages({
   IMPORT_WALLET_TAB_LEDGER_INPUT_DESCRIPTION: {
     id: `${importWalletPagePrefix}.tab.ledger.input.description`,
     defaultMessage:
-      "To unlock the wallet, try paths m/44'/60'/0 or m/44'/60'/0'/0 with Ethereum App, or try path m/44'/889'/0'/0 with TomoChain App (on Ledger)",
+      'To unlock the wallet, try paths {path1} or {path2} with Ethereum App, or try path {path3} with TomoChain App (on Ledger)',
   },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.text`,
@@ -342,49 +346,53 @@ export default defineMessages({
     id: `${importWalletPagePrefix}.error.invalid.hdpath`,
     defaultMessage: 'Invalid HD Path',
   },
+  IMPORT_WALLET_POPUP_ADDRESS_TITLE: {
+    id: `${importWalletPagePrefix}.popup.address.title`,
+    defaultMessage: 'Ledger Wallet',
+  },
   // My Wallet Page
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
     defaultMessage: 'Address',
   },
   MY_WALLET_TABLE_PORFOLIO_TITLE: {
-    id: `${myWalletPagePrefix}.table.tab.porfolio.title`,
+    id: `${myWalletPagePrefix}.table.tab.portfolio.title`,
     defaultMessage: 'PORFOLIO',
   },
   MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME: {
-    id: `${myWalletPagePrefix}.table.porfolio.header.tokenname`,
+    id: `${myWalletPagePrefix}.table.portfolio.header.tokenname`,
     defaultMessage: 'Token name',
   },
   MY_WALLET_TABLE_PORFOLIO_HEADER_BALANCE: {
-    id: `${myWalletPagePrefix}.table.porfolio.header.balance`,
+    id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
     defaultMessage: 'Balance',
   },
   MY_WALLET_TABLE_PORFOLIO_HEADER_VALUE: {
-    id: `${myWalletPagePrefix}.table.porfolio.header.value`,
+    id: `${myWalletPagePrefix}.table.portfolio.header.value`,
     defaultMessage: 'Value (USD)',
   },
   MY_WALLET_TABLE_PORFOLIO_HEADER_PRICE: {
-    id: `${myWalletPagePrefix}.table.porfolio.header.price`,
+    id: `${myWalletPagePrefix}.table.portfolio.header.price`,
     defaultMessage: 'Price (USD)',
   },
   MY_WALLET_TABLE_PORFOLIO_HEADER_SEND: {
-    id: `${myWalletPagePrefix}.table.porfolio.header.send`,
+    id: `${myWalletPagePrefix}.table.portfolio.header.send`,
     defaultMessage: 'Send',
   },
   MY_WALLET_TABLE_PORFOLIO_HEADER_RECEIVE: {
-    id: `${myWalletPagePrefix}.table.porfolio.header.receive`,
+    id: `${myWalletPagePrefix}.table.portfolio.header.receive`,
     defaultMessage: 'Receive',
   },
   MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_IMAGE_ALT: {
-    id: `${myWalletPagePrefix}.table.porfolio.cell.tokenname.image.alt`,
+    id: `${myWalletPagePrefix}.table.portfolio.cell.tokenname.image.alt`,
     defaultMessage: '{name} Symbol',
   },
   MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_PUBLISHER: {
-    id: `${myWalletPagePrefix}.table.porfolio.cell.tokenname.publisher`,
+    id: `${myWalletPagePrefix}.table.portfolio.cell.tokenname.publisher`,
     defaultMessage: 'TomoChain',
   },
   MY_WALLET_TABLE_PORFOLIO_ERROR_LOAD_FAILED: {
-    id: `${myWalletPagePrefix}.table.porfolio.error.load.failed`,
+    id: `${myWalletPagePrefix}.table.portfolio.error.load.failed`,
     defaultMessage: 'Cannot load token list!',
   },
   MY_WALLET_TABLE_TRANSACTION_TITLE: {

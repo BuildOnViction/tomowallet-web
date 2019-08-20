@@ -11,7 +11,7 @@ import Web3 from 'web3';
 import { get as _get, isEmpty as _isEmpty } from 'lodash';
 // Utilities & Constants
 import { FailureComponent, LoadingComponent } from './';
-import { getWeb3Info, generateWeb3 } from '../../utils';
+import { getWeb3Info, generateWeb3, getNetwork, setNetwork } from '../../utils';
 import { RPC_SERVER, ENUM, LIST } from '../../constants';
 // ===================
 
@@ -52,7 +52,7 @@ class Web3Provider extends Component {
       this.handleSetWeb3(newWeb3);
     } else {
       const storedNetwork = LIST.NETWORKS.find(
-        opt => opt.value === localStorage.getItem('network'),
+        opt => opt.value === getNetwork(),
       );
       if (!_isEmpty(storedNetwork)) {
         this.handleUpdateRpcServer(storedNetwork.value);
@@ -81,7 +81,7 @@ class Web3Provider extends Component {
         rpcServer: _get(RPC_SERVER, newKey, {}),
       },
       () => {
-        localStorage.setItem('network', newKey);
+        setNetwork(newKey);
         const newWeb3 = new Web3(
           Web3.givenProvider || this.state.rpcServer.host,
           null,

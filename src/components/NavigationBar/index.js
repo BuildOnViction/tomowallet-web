@@ -29,7 +29,14 @@ import {
   setNetwork,
 } from '../../containers/Global/actions';
 import { ROUTE, LIST, MSG } from '../../constants';
-import { removeWeb3Info } from '../../utils';
+import {
+  removeWeb3Info,
+  setLocale,
+  getLocale,
+  getNetwork,
+  removeLedger,
+  getLedger,
+} from '../../utils';
 import { selectNetworkData } from '../../containers/Global/selectors';
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
 
@@ -38,22 +45,51 @@ class NavigationBar extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleRenderPublicBar = this.handleRenderPublicBar.bind(this);
-    this.handleRenderPrivateBar = this.handleRenderPrivateBar.bind(this);
-    this.handleRedirectToHomepage = this.handleRedirectToHomepage.bind(this);
+    this.handleChangeLocale = this.handleChangeLocale.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleRedirectToHomepage = this.handleRedirectToHomepage.bind(this);
+    this.handleRenderPrivateBar = this.handleRenderPrivateBar.bind(this);
+    this.handleRenderPublicBar = this.handleRenderPublicBar.bind(this);
   }
 
   componentDidMount() {
-    const { onSetNetwork } = this.props;
-    const storedNetwork = LIST.NETWORKS.find(
-      opt => opt.value === localStorage.getItem('network'),
-    );
+    const { changeLocale, onSetNetwork } = this.props;
+    const storedNetwork = LIST.NETWORKS.find(opt => opt.value === getNetwork());
+    const storedLocale = getLocale();
 
     if (!_isEmpty(storedNetwork)) {
       onSetNetwork(storedNetwork);
     }
+    if (!_isEmpty(storedLocale)) {
+      changeLocale(storedLocale);
+    }
+  }
+
+  handleChangeLocale(locale) {
+    const { changeLocale } = this.props;
+    setLocale(locale);
+    changeLocale(locale);
+  }
+
+  handleChangeNetwork(newNetwork) {
+    const { onSetNetwork, switchRPCServer } = this.props;
+    onSetNetwork(newNetwork);
+    switchRPCServer(newNetwork.value);
+    this.handleLogout();
+  }
+
+  handleLogout() {
+    const { onReleaseWallet } = this.props;
+
+    Promise.all([onReleaseWallet(), removeWeb3Info(), removeLedger()]).then(
+      () => this.handleRedirectToHomepage(),
+    );
+  }
+
+  handleRedirectToHomepage() {
+    const { history } = this.props;
+    history.push(ROUTE.LOGIN);
   }
 
   handleRenderPublicBar() {
@@ -84,7 +120,7 @@ class NavigationBar extends PureComponent {
               {LIST.LANGUAGES.map((opt, optIdx) => (
                 <DropdownItem
                   key={`language_${optIdx + 1}`}
-                  onClick={() => changeLocale(opt.value)}
+                  onClick={() => this.handleChangeLocale(opt.value)}
                 >
                   {opt.label}
                 </DropdownItem>
@@ -126,11 +162,13 @@ class NavigationBar extends PureComponent {
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
             </DropdownToggleHeader>
             <DropdownMenu right>
-              <DropdownItem onClick={() => onToggleWalletPopup(true)}>
-                {formatMessage(
-                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,
-                )}
-              </DropdownItem>
+              {!getLedger() && (
+                <DropdownItem onClick={() => onToggleWalletPopup(true)}>
+                  {formatMessage(
+                    MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,
+                  )}
+                </DropdownItem>
+              )}
               <DropdownItem>
                 {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
               </DropdownItem>
@@ -144,26 +182,6 @@ class NavigationBar extends PureComponent {
           </UncontrolledDropdown>
         </Nav>
       </Fragment>
-    );
-  }
-
-  handleRedirectToHomepage() {
-    const { history } = this.props;
-    history.push(ROUTE.LOGIN);
-  }
-
-  handleChangeNetwork(newNetwork) {
-    const { onSetNetwork, switchRPCServer } = this.props;
-    onSetNetwork(newNetwork);
-    switchRPCServer(newNetwork.value);
-    this.handleLogout();
-  }
-
-  handleLogout() {
-    const { onReleaseWallet } = this.props;
-
-    Promise.all([onReleaseWallet(), removeWeb3Info()]).then(() =>
-      this.handleRedirectToHomepage(),
     );
   }
 

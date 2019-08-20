@@ -66,7 +66,7 @@ const generateWeb3 = (
 const getWalletInfo = web3 => {
   if (web3) {
     const address = web3.currentProvider.addresses[0];
-    return Promise.all([web3.eth.getBalance(address)]).then(([balance]) => ({
+    return web3.eth.getBalance(address).then(balance => ({
       address,
       balance: Number(web3.utils.fromWei(balance)),
     }));

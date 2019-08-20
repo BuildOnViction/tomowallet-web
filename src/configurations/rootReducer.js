@@ -20,46 +20,51 @@ import globalReducer from '../containers/Global/reducer';
 
 // ===== CONFIGURATION =====
 
-// Configure Redux persistor
-const GlobalTransform = createTransform(
-  // Inbound transformation
-  inboundState => {
-    const objState = inboundState.toJS();
-    const rawWallet = _get(objState, 'wallet.toJS', () => null)();
+// // Configure Redux persistor
+// const GlobalTransform = createTransform(
+//   // Inbound transformation
+//   inboundState => {
+//     const objState = inboundState.toJS();
+//     const rawWallet = _get(objState, 'wallet.toJS', () => null)();
 
-    return {
-      ...objState,
-      wallet: !_isEmpty(rawWallet)
-        ? JSON.stringify(objState.wallet.toJS())
-        : {},
-    };
-  },
-  // Outbound transformation
-  outboundState => {
-    return fromJS({
-      ...outboundState,
-      wallet: fromJS(JSON.parse(outboundState.wallet)),
-    });
-  },
-  {
-    whitelist: ['global'],
-  },
-);
-const rootPersistConfig = {
-  key: 'root',
-  storage,
-  whitelist: ['global'],
-  transforms: [GlobalTransform],
-  stateReconciler: hardSet,
-};
+//     return {
+//       ...objState,
+//       wallet: !_isEmpty(rawWallet)
+//         ? JSON.stringify(objState.wallet.toJS())
+//         : {},
+//     };
+//   },
+//   // Outbound transformation
+//   outboundState => {
+//     return fromJS({
+//       ...outboundState,
+//       wallet: fromJS(JSON.parse(outboundState.wallet)),
+//     });
+//   },
+//   {
+//     whitelist: ['global'],
+//   },
+// );
+// const rootPersistConfig = {
+//   key: 'root',
+//   storage,
+//   whitelist: ['global'],
+//   transforms: [GlobalTransform],
+//   stateReconciler: hardSet,
+// };
 
 export default (injectedReducers = {}) =>
-  persistReducer(
-    rootPersistConfig,
-    combineReducers({
-      global: globalReducer,
-      router: connectRouter(history),
-      ...injectedReducers,
-    }),
-  );
+  // persistReducer(
+  //   rootPersistConfig,
+  //   combineReducers({
+  //     global: globalReducer,
+  //     router: connectRouter(history),
+  //     ...injectedReducers,
+  //   }),
+  // );
+  combineReducers({
+    global: globalReducer,
+    router: connectRouter(history),
+    ...injectedReducers,
+  });
 // =========================
