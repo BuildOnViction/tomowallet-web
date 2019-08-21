@@ -14,13 +14,17 @@ import {
   Nav,
   NavItem,
   UncontrolledDropdown,
-  DropdownMenu,
-  DropdownItem,
   CardImg,
 } from 'reactstrap';
 // Custom Components
 import WalletPopup from './subcomponents/WalletPopup';
-import { NavBarStyler, LinkHeader, DropdownToggleHeader } from './style';
+import {
+  NavBarStyler,
+  LinkHeader,
+  DropdownToggleHeader,
+  DropdownMenuStyler,
+  DropdownItemStyler,
+} from './style';
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
 import { withIntl } from '../IntlProvider';
@@ -113,19 +117,20 @@ class NavigationBar extends PureComponent {
             </LinkHeader>
           </NavItem>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggleHeader nav caret>
+            <DropdownToggleHeader nav>
               {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
+              <i class="font-chevron-down"></i>
             </DropdownToggleHeader>
-            <DropdownMenu right>
+            <DropdownMenuStyler right>
               {LIST.LANGUAGES.map((opt, optIdx) => (
-                <DropdownItem
+                <DropdownItemStyler
                   key={`language_${optIdx + 1}`}
                   onClick={() => this.handleChangeLocale(opt.value)}
                 >
                   {opt.label}
-                </DropdownItem>
+                </DropdownItemStyler>
               ))}
-            </DropdownMenu>
+            </DropdownMenuStyler>
           </UncontrolledDropdown>
         </Nav>
       </Fragment>
@@ -143,42 +148,43 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <Nav className='ml-auto' navbar>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggleHeader nav caret>
+            <DropdownToggleHeader nav>
               {_get(network, 'data.label')}
+              <i class="font-chevron-down"></i>
             </DropdownToggleHeader>
-            <DropdownMenu right>
+            <DropdownMenuStyler right className='box_onl'>
               {LIST.NETWORKS.map((opt, optIdx) => (
-                <DropdownItem
+                <DropdownItemStyler
                   key={`network_${optIdx + 1}`}
                   onClick={() => this.handleChangeNetwork(opt)}
                 >
                   {opt.label}
-                </DropdownItem>
+                </DropdownItemStyler>
               ))}
-            </DropdownMenu>
+            </DropdownMenuStyler>
           </UncontrolledDropdown>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggleHeader nav caret>
+            <DropdownToggleHeader nav>
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
+              <i class="font-chevron-down"></i>
             </DropdownToggleHeader>
-            <DropdownMenu right>
+            <DropdownMenuStyler right>
               {!getLedger() && (
-                <DropdownItem onClick={() => onToggleWalletPopup(true)}>
+                <DropdownItemStyler onClick={() => onToggleWalletPopup(true)}>
                   {formatMessage(
                     MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,
                   )}
-                </DropdownItem>
+                </DropdownItemStyler>
               )}
-              <DropdownItem>
+              <DropdownItemStyler>
                 {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
-              </DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem onClick={this.handleLogout}>
+              </DropdownItemStyler>
+              <DropdownItemStyler onClick={this.handleLogout}>
                 {formatMessage(
                   MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_LOG_OUT,
                 )}
-              </DropdownItem>
-            </DropdownMenu>
+              </DropdownItemStyler>
+            </DropdownMenuStyler>
           </UncontrolledDropdown>
         </Nav>
       </Fragment>

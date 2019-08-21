@@ -5,10 +5,13 @@ import {
 // Style Component//
 
 const LinkFooter = styled(NavLink)`
-  color: #9eaacc !important;
+  color: #5e677f !important;
   font-weight: normal;
 `;
-
+const TextGray = styled.div`
+  color: #5e677f;
+`;
 export {
   LinkFooter,
+  TextGray
 };

@@ -17,6 +17,30 @@ a {
     text-decoration: none !important;
   }
 }
+.font-chevron-down {
+  font-size: 18px;
+  color: #3a8ecc;
+  margin-left: 5px;
+}
+
+.box_onl {
+  .dropdown-item {
+    position: relative;
+    padding: .5rem 0 .5rem 1em;
+    &:before {
+      background-color: #3a8ecc;
+      border-radius: 50%;
+      content: '';
+      width: 6px;
+      height: 6px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
+
 //maincontent
 .maincontent {
   min-height: calc(100vh - 179px);
@@ -234,6 +258,26 @@ a {
   }
 }
 .footer-menu {
+  ul {
+    li {
+      position: relative;
+      &:before {
+        background-color: #5e677f;
+        content: '';
+        height: 20px;
+        width: 1px;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      &:first-child {
+        &:before {
+          display: none;
+        }
+      }
+    }
+  }
   @media (max-width: 768px) {
     justify-content: center;
   }

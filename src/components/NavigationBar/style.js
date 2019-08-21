@@ -2,18 +2,25 @@ import styled from 'styled-components';
 import {
   Navbar,
   NavLink,
-  DropdownToggle
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap'
 // Style Component//
 
 const LinkHeader = styled(NavLink)`
   color: #9eaacc !important;
   font-weight: normal;
+  cursor: pointer;
 `;
 
 const DropdownToggleHeader = styled(DropdownToggle)`
   color: #9eaacc !important;
   font-weight: normal;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  white-space: nowrap;
 `;
 
 const NavBarStyler = styled(Navbar)`
@@ -39,8 +46,35 @@ const NavBarStyler = styled(Navbar)`
   }
 `;
 
+const DropdownMenuStyler = styled(DropdownMenu)`
+  background-color: #272D40;
+  border-radius: 8px;
+  border: 0;
+  top: 0;
+  margin: 0;
+  padding: 0.5em 1em;
+  min-width: 125px;
+  .dropdown-item {
+    color: #9eaacc;
+  }
+`;
+const DropdownItemStyler = styled(DropdownItem)`
+  font-size: 14px;
+  transition: all .5s ease;
+  position: relative;
+  padding: .5rem 0;
+  &:focus,
+  &:hover {
+    background: transparent;
+    color: #5692CD;
+    outline: 0 auto -webkit-focus-ring-color;
+  }
+`;
+
 export {
   NavBarStyler,
   LinkHeader,
   DropdownToggleHeader,
+  DropdownMenuStyler,
+  DropdownItemStyler
 };
