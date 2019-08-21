@@ -313,7 +313,7 @@ export default defineMessages({
   // Import Wallet Page
   IMPORT_WALLET_HEADER_TITLE: {
     id: `${importWalletPagePrefix}.header.title`,
-    defaultMessage: ' Import Your Wallet',
+    defaultMessage: 'Import Your Wallet',
   },
   IMPORT_WALLET_ALTERNATIVE_TEXT: {
     id: `${importWalletPagePrefix}.alternative.text`,

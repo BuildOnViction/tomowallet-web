@@ -6,7 +6,7 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { get as _get } from 'lodash';
+import _get from 'lodash.get';
 import {
   ModalHeader,
   ModalBody,

@@ -12,7 +12,8 @@ import storage from 'redux-persist/lib/storage';
 import hardSet from 'redux-persist/es/stateReconciler/hardSet';
 // import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import { fromJS } from 'immutable';
-import { get as _get, isEmpty as _isEmpty } from 'lodash';
+import _get from 'lodash.get';
+import _isEmpty from 'lodash.isempty';
 // Utilities
 import { history } from '../utils';
 import globalReducer from '../containers/Global/reducer';

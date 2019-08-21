@@ -5,7 +5,8 @@
  */
 // ===== IMPORTS =====
 // Modules
-import { get as _get, omit as _omit } from 'lodash';
+import _get from 'lodash.get';
+import _omit from 'lodash.omit';
 // ===================
 
 export const shuffleArray = array => {

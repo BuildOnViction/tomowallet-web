@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { get as _get } from 'lodash';
+import _get from 'lodash.get';
 // Custom Components
 import Warning from './Warning';
 import WalletView from './WalletView';

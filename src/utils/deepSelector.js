@@ -1,4 +1,4 @@
 import { createSelectorCreator, defaultMemoize } from 'reselect';
-import { isEqual } from 'lodash';
+import _isEqual from 'lodash.isequal';
 
-export default createSelectorCreator(defaultMemoize, isEqual);
+export default createSelectorCreator(defaultMemoize, _isEqual);

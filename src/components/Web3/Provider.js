@@ -8,7 +8,8 @@
 import React, { Component, createContext } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import Web3 from 'web3';
-import { get as _get, isEmpty as _isEmpty } from 'lodash';
+import _get from 'lodash.get';
+import _isEmpty from 'lodash.isempty';
 // Utilities & Constants
 import { FailureComponent, LoadingComponent } from './';
 import { getWeb3Info, generateWeb3, getNetwork, setNetwork } from '../../utils';

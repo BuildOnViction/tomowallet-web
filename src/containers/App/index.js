@@ -3,17 +3,19 @@ import React, { PureComponent } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { isEmpty as _isEmpty } from 'lodash';
+import _isEmpty from 'lodash.isempty';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 // Custom Components
 import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';
 import Footer from '../../components/Footer';
+import {
+  WelcomePage,
+  CreateWalletPage,
+  ImportWallet,
+  MyWallet,
+} from './components/LoadableComponents';
 import PrivateRoute from './components/PrivateRoute';
-import WelcomePage from '../v1.0/Welcome';
-import CreateWalletPage from '../v1.0/WalletCreation';
-import ImportWallet from '../v1.0/ImportWallet';
-import MyWallet from '../v1.0/MyWallet';
 import AppStyler from './style';
 // Utilities & Constants
 import { withWeb3 } from '../../components/Web3';

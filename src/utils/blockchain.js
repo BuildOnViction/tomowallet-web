@@ -7,7 +7,8 @@
 // Modules
 import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
-import { isEqual as _isEqual, isEmpty as _isEmpty } from 'lodash';
+import _isEmpty from 'lodash.isempty';
+import _isEqual from 'lodash.isequal';
 // Utilities & Constants
 import { ENUM } from '../constants';
 import trc20 from '../contractABIs/trc20.json';

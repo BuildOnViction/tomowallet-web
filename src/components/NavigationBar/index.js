@@ -5,7 +5,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
-import { get as _get, isEmpty as _isEmpty } from 'lodash';
+import _get from 'lodash.get';
+import _isEmpty from 'lodash.isempty';
 import {
   NavbarBrand,
   NavbarToggler,

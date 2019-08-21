@@ -6,7 +6,7 @@
 // ===== IMPORTS =====
 // Modules
 import { fromJS } from 'immutable';
-import { get as _get } from 'lodash';
+import _get from 'lodash.get';
 // Constants
 import {
   RELEASE_WALLET_INFO,

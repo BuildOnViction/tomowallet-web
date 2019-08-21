@@ -8,7 +8,7 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { isArray as _isArray, get as _get } from 'lodash';
+import _get from 'lodash.get';
 import { Col } from 'reactstrap';
 // Custom Component
 import { MnemonicBoxStyler } from './style';
@@ -26,7 +26,7 @@ class MnemonicBox extends PureComponent {
 
   handleConvertMnemonic() {
     const { mnemonic } = this.props;
-    return _isArray(mnemonic) ? mnemonic : mnemonic.split(' ');
+    return Array.isArray(mnemonic) ? mnemonic : mnemonic.split(' ');
   }
 
   render() {

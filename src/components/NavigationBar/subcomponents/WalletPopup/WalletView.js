@@ -7,7 +7,7 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { get as _get } from 'lodash';
+import _get from 'lodash.get';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import QRCode from 'qrcode.react';
 // Custom Components
@@ -94,8 +94,14 @@ class WalletViewContent extends PureComponent {
             <BoxImages className='mb-4'>
               <QRCode value={this.handleGetPrivateKey()} />
             </BoxImages>
-            <div className='text-break'><TextBlue>{this.handleGetPrivateKey()}</TextBlue></div>
-            <div className='mt-5'>{formatMessage(MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE)}</div>
+            <div className='text-break'>
+              <TextBlue>{this.handleGetPrivateKey()}</TextBlue>
+            </div>
+            <div className='mt-5'>
+              {formatMessage(
+                MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE,
+              )}
+            </div>
           </TabPane>
         </TabContent>
       </div>

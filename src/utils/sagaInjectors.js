@@ -1,5 +1,8 @@
 import invariant from 'invariant';
-import { isEmpty, isFunction, isString, conformsTo } from 'lodash';
+import _isEmpty from 'lodash.isempty';
+import _isFunction from 'lodash.isfunction';
+import _isString from 'lodash.isstring';
+import _conformsTo from 'lodash.conformsto';
 
 import checkStore from './checkStore';
 import { DAEMON, ONCE_TILL_UNMOUNT, RESTART_ON_REMOUNT } from './constants';
@@ -8,17 +11,17 @@ const allowedModes = [RESTART_ON_REMOUNT, DAEMON, ONCE_TILL_UNMOUNT];
 
 const checkKey = key =>
   invariant(
-    isString(key) && !isEmpty(key),
+    _isString(key) && !_isEmpty(key),
     '(app/utils...) injectSaga: Expected `key` to be a non empty string',
   );
 
 const checkDescriptor = descriptor => {
   const shape = {
-    saga: isFunction,
-    mode: mode => isString(mode) && allowedModes.includes(mode),
+    saga: _isFunction,
+    mode: mode => _isString(mode) && allowedModes.includes(mode),
   };
   invariant(
-    conformsTo(descriptor, shape),
+    _conformsTo(descriptor, shape),
     '(app/utils...) injectSaga: Expected a valid saga descriptor',
   );
 };

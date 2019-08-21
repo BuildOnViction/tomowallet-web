@@ -19,7 +19,15 @@
     "immutable": "^4.0.0-rc.12",
     "invariant": "^2.2.4",
     "loadable-components": "^2.2.3",
-    "lodash": "^4.17.15",
+    "lodash.conformsto": "^4.15.0",
+    "lodash.get": "^4.4.2",
+    "lodash.isempty": "^4.4.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.isfunction": "^3.0.9",
+    "lodash.isnumber": "^3.0.3",
+    "lodash.isobject": "^3.0.2",
+    "lodash.isstring": "^4.0.1",
+    "lodash.omit": "^4.5.0",
     "moment": "^2.24.0",
     "moment-locales-webpack-plugin": "^1.1.0",
     "node-sass": "^4.12.0",
@@ -47,8 +55,9 @@
     "web3": "^1.2.1"
   },
   "scripts": {
-    "start": "webpack-dev-server --open --mode development",
-    "build": "webpack --mode production",
+    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "build:dev": "webpack -d --config webpack.dev.js",
+    "build:prod": "webpack -p --config webpack.prod.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -73,6 +82,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "child_process": "^1.0.2",
     "css-loader": "^3.2.0",
     "dotenv": "^8.0.0",
@@ -85,6 +95,7 @@
     "style-loader": "^1.0.0",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.7.2",
+    "webpack-merge": "^4.2.1"
   }
 }

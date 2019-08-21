@@ -9,7 +9,8 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { get as _get, isEqual as _isEqual } from 'lodash';
+import _get from 'lodash.get';
+import _isEqual from 'lodash.isequal';
 // Custom Components
 import CustomPagination from './subcomponents/Pagination';
 import { CommonTableStyler } from './style';

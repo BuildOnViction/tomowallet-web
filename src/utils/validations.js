@@ -5,7 +5,8 @@
  */
 // ===== IMPORTS =====
 // Modules
-import { isEmpty as _isEmpty, isNumber as _isNumber } from 'lodash';
+import _isEmpty from 'lodash.isempty';
+import _isNumber from 'lodash.isnumber';
 // ===================
 
 // ===== VALIDATIONS =====
