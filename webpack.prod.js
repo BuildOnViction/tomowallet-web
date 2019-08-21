@@ -9,9 +9,13 @@ module.exports = common({
     filename: 'tomowallet_bundle.js',
     publicPath: '/',
   },
-  devtool: 'source-map',
+  devtool: false,
   optimization: { minimize: true, splitChunks: { chunks: 'all' } },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/(?!english)/, /bip39\/src\/wordlists$/),
   ],
+  performance: {
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
 });
