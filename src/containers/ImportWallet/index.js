@@ -213,9 +213,11 @@ class ImportWallet extends PureComponent {
     } else {
       toggleLoading(true);
       onUpdateErrors([]);
-      this.handleUnlockLedger().then(payload =>
-        this.handleLoadLedgerWallets(payload, 0),
-      );
+      this.handleUnlockLedger().then(payload => {
+        if (payload) {
+          this.handleLoadLedgerWallets(payload, 0);
+        }
+      });
     }
   }
 
