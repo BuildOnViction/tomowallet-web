@@ -11,7 +11,7 @@ import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import _get from 'lodash.get';
 import { FormattedMessage } from 'react-intl';
 // Custom Component
-import { FormTextStyled } from '../../../styles';
+import { ButtonLinkStyler, FormTextStyled } from '../../../styles';
 // Utilities
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
@@ -50,31 +50,28 @@ class LedgerForm extends PureComponent {
             {...MSG.IMPORT_WALLET_TAB_LEDGER_INPUT_DESCRIPTION}
             values={{
               path1: (
-                <span
-                  role='presentation'
+                <ButtonLinkStyler
+                  btnRed
                   onClick={() => updateInput('hdPath', "m/44'/60'/0")}
-                  className='text-danger'
                 >
                   {"m/44'/60'/0"}
-                </span>
+                </ButtonLinkStyler>
               ),
               path2: (
-                <span
-                  role='presentation'
+                <ButtonLinkStyler
+                  btnRed
                   onClick={() => updateInput('hdPath', "m/44'/60'/0'/0")}
-                  className='text-danger'
                 >
                   {"m/44'/60'/0'/0"}
-                </span>
+                </ButtonLinkStyler>
               ),
               path3: (
-                <span
-                  role='presentation'
+                <ButtonLinkStyler
+                  btnRed
                   onClick={() => updateInput('hdPath', "m/44'/889'/0'/0")}
-                  className='text-danger'
                 >
                   {"m/44'/889'/0'/0"}
-                </span>
+                </ButtonLinkStyler>
               ),
             }}
           />

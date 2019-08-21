@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 import { InputStylerRadio } from './style';
-import { TextBlue, BoxText } from '../../../../../styles';
+import { TextBlue, BoxText } from '../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====

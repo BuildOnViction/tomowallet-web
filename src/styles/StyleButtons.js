@@ -1,4 +1,6 @@
+import React from 'react';
 import styled from 'styled-components';
+
 const BigButtonStyler = styled.button`
   ${({ btnBlue }) =>
     btnBlue
@@ -83,4 +85,20 @@ const ButtonLineStyler = styled.button`
   }
 `;
 
-export { BigButtonStyler, ButtonStyler, ButtonLineStyler };
+const ButtonLinkStyler = styled(({ btnRed, children, ...remain }) => (
+  <span {...remain}>{children}</span>
+))`
+  font-family: 'Nunito Sans', sans-serif;
+  transition: all 0.3s;
+  ${({ btnRed }) => btnRed && 'color: #dc3545;'}
+  &:focus,
+  &:hover {
+    ${({ btnRed }) => btnRed && 'color: #8b0000;'}
+    cursor: pointer;
+  }
+  &:disabled {
+    opacity: 0.7;
+  }
+`;
+
+export { BigButtonStyler, ButtonStyler, ButtonLineStyler, ButtonLinkStyler };

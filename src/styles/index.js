@@ -1,11 +1,10 @@
 import {
   BigButtonStyler,
   ButtonStyler,
-  ButtonLineStyler
+  ButtonLineStyler,
+  ButtonLinkStyler,
 } from './StyleButtons';
-import {
-  FormTextStyled,
-} from './StyleForm';
+import { FormTextStyled } from './StyleForm';
 import {
   BoxBtnStyler,
   ContainerMin,
@@ -13,12 +12,8 @@ import {
   BoxImages,
   BoxFlexBetween,
 } from './MainContainer';
-import {
-  ImporWalletStyler,
-} from './ImportWallet';
-import {
-  WarningImages,
-} from './CreateNewWallet';
+import { ImporWalletStyler } from './ImportWallet';
+import { WarningImages } from './CreateNewWallet';
 import {
   HeadingBig,
   HeadingLarge,
@@ -39,6 +34,7 @@ export {
   BigButtonStyler,
   ButtonStyler,
   ButtonLineStyler,
+  ButtonLinkStyler,
   //StyleForm
   FormTextStyled,
   //MainContainer

@@ -65,8 +65,6 @@ import { withIntl } from '../../components/IntlProvider';
 import { storeWallet } from '../Global/actions';
 import LogoLedger from '../../assets/images/logo-ledger.png';
 import LogoKey from '../../assets/images/logo-key.png';
-// Mock Data (TO-BE-REMOVED)
-import { walletData } from './mockData.json';
 
 // ===== MAIN COMPONENT =====
 class ImportWallet extends PureComponent {
@@ -207,30 +205,36 @@ class ImportWallet extends PureComponent {
   }
 
   handleSelectHDPath() {
-    const { onLoadWalletAddresses, onUpdateErrors, toggleLoading } = this.props;
+    const { onUpdateErrors, toggleLoading } = this.props;
     const errorList = this.handleValidateHDPath();
 
     if (!_isEmpty(errorList)) {
       onUpdateErrors(Object.values(errorList));
     } else {
-      // toggleLoading(true);
-      // onUpdateErrors([]);
-      // this.handleUnlockLedger().then(payload =>
-      //   this.handleLoadLedgerWallets(payload, 0),
-      // );
-      onLoadWalletAddresses(walletData);
+      toggleLoading(true);
+      onUpdateErrors([]);
+      this.handleUnlockLedger().then(payload =>
+        this.handleLoadLedgerWallets(payload, 0),
+      );
     }
   }
 
   handleValidateHDPath() {
-    const { importWallet, web3 } = this.props;
+    const {
+      importWallet,
+      intl: { formatMessage },
+      web3,
+    } = this.props;
     const { isRequired } = getValidations(web3);
 
     return {
-      ...isRequired({
-        name: 'hdPath',
-        value: _get(importWallet, 'input.hdPath'),
-      }),
+      ...isRequired(
+        {
+          name: 'hdPath',
+          value: _get(importWallet, 'input.hdPath'),
+        },
+        formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH),
+      ),
     };
   }
 
