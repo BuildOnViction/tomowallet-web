@@ -31,7 +31,7 @@ export const UPDATE_SEND_TOKEN_POPUP_STAGE =
 export const DOMAIN_KEY = 'myWallet';
 
 // Tables' Column Names
-export const PORFOLIO_COLUMNS = {
+export const PORTFOLIO_COLUMNS = {
   ACTIONS: 'actions',
   BALANCE: 'balance',
   ICON: 'icon',

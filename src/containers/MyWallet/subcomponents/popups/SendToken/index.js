@@ -48,24 +48,27 @@ class SendTokenPopup extends PureComponent {
     return (
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
         primary: {
-          label: formatMessage(MSG.COMMON_BUTTON_SEND),
           action: confirmBeforeSend,
+          btnYellow: true,
+          label: formatMessage(MSG.COMMON_BUTTON_SEND),
         },
         secondary: {
-          label: formatMessage(MSG.COMMON_BUTTON_BACK),
           action: this.handleClosePopup,
+          label: formatMessage(MSG.COMMON_BUTTON_BACK),
         },
       }) ||
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
         primary: {
-          label: formatMessage(MSG.COMMON_BUTTON_CONFIRM),
           action: submitSendToken,
+          btnYellow: true,
+          label: formatMessage(MSG.COMMON_BUTTON_CONFIRM),
         },
         secondary: {
-          label: formatMessage(MSG.COMMON_BUTTON_BACK),
           action: () => updateSendTokenPopupStage(SEND_TOKEN_STAGES.FORM),
+          label: formatMessage(MSG.COMMON_BUTTON_BACK),
         },
-      })
+      }) ||
+      {}
     );
   }
 

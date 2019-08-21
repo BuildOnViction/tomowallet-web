@@ -8,7 +8,7 @@ module.exports = common({
     filename: 'tomowallet_bundle.js',
     publicPath: '/',
   },
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   devServer: {
     historyApiFallback: true,
     contentBase: 'dist',

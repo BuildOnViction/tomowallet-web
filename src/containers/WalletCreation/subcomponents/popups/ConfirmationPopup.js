@@ -73,12 +73,13 @@ class ConfirmationPopup extends PureComponent {
         }}
         button={{
           primary: {
-            label: formatMessage(MSG.COMMON_BUTTON_NEXT),
             action: this.handleNext,
+            btnYellow: true,
+            label: formatMessage(MSG.COMMON_BUTTON_NEXT),
           },
           secondary: {
-            label: formatMessage(MSG.COMMON_BUTTON_BACK),
             action: this.handleClosePopup,
+            label: formatMessage(MSG.COMMON_BUTTON_BACK),
           },
         }}
       />

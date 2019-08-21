@@ -62,7 +62,6 @@ class Popup extends PureComponent {
                   {_get(button, 'secondary') && (
                     <Col size={6}>
                       <ButtonStyler
-                        outline
                         onClick={_get(button, 'secondary.action', () => {})}
                         disabled={_get(button, 'secondary.disabled')}
                         {..._get(button, 'secondary')}

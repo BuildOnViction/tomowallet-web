@@ -126,7 +126,6 @@ class Verification extends PureComponent {
                 className='py-2'
               >
                 <ButtonLineStyler
-                  outline
                   onClick={() => addWord(word)}
                   disabled={_get(mnemonic, 'compare', []).includes(word)}
                 >

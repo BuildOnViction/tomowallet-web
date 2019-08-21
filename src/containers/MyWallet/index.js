@@ -45,7 +45,7 @@ import saga from './saga';
 import {
   DOMAIN_KEY,
   SEND_TOKEN_FIELDS,
-  PORFOLIO_COLUMNS,
+  PORTFOLIO_COLUMNS,
   SEND_TOKEN_STAGES,
 } from './constants';
 import {
@@ -109,19 +109,19 @@ class MyWallet extends PureComponent {
       amount: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
       contractAddress: _get(
         sendTokenForm,
-        [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TOKEN_ADDRESS],
+        [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
         '',
       ),
       decimals: _get(
         sendTokenForm,
-        [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.DECIMALS],
+        [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
         0,
       ),
       from: _get(web3, ['currentProvider', 'addresses', 0], ''),
       to: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT], ''),
       type: _get(sendTokenForm, [
         SEND_TOKEN_FIELDS.TOKEN,
-        PORFOLIO_COLUMNS.TYPE,
+        PORTFOLIO_COLUMNS.TYPE,
       ]),
     };
   }
@@ -215,7 +215,7 @@ class MyWallet extends PureComponent {
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
           max: _get(sendTokenForm, [
             SEND_TOKEN_FIELDS.TOKEN,
-            PORFOLIO_COLUMNS.BALANCE,
+            PORTFOLIO_COLUMNS.BALANCE,
           ]),
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID),
@@ -287,7 +287,7 @@ class MyWallet extends PureComponent {
           successPopup={successPopup}
           symbol={_get(
             sendTokenForm,
-            [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.SYMBOL],
+            [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
             '',
           )}
         />

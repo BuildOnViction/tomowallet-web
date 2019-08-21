@@ -1,6 +1,6 @@
 /**
  *
- * TomoWallet - My Wallet Page - Porfolio Table
+ * TomoWallet - My Wallet Page - Portfolio Table
  *
  * This component defines a table of tokens which current account owns,
  * including actions to send/receive with other accounts
@@ -17,19 +17,24 @@ import _isEqual from 'lodash.isequal';
 import _isEmpty from 'lodash.isempty';
 // Custom Components
 import CommonTable from '../../../../components/Table';
-// Utilities
+import { BoxPortfolio } from './style';
+// Utilities, Constants & Style
 import { loadTokenOptions } from '../../actions';
-import { selectTokenOptions, selectSuccessPopup } from '../../selectors';
+import {
+  selectTokenOptions,
+  selectSuccessPopup,
+  selectTableType,
+} from '../../selectors';
 import { withIntl } from '../../../../components/IntlProvider';
-import porfolioConfig from './configuration';
-import { BoxPorfolio } from './style';
-import { PORFOLIO_COLUMNS } from '../../constants';
-import tomoIcon from '../../../../assets/images/logo-tomo.png';
+import portfolioConfig from './configuration';
+import { PORTFOLIO_COLUMNS } from '../../constants';
 import { selectWallet } from '../../../Global/selectors';
+import { LIST } from '../../../../constants';
+import tomoIcon from '../../../../assets/images/logo-tomo.png';
 // ===================
 
 // ===== MAIN COMPONENT =====
-class PorfolioTable extends Component {
+class PortfolioTable extends Component {
   constructor(props) {
     super(props);
 
@@ -48,7 +53,12 @@ class PorfolioTable extends Component {
     if (
       !_isEqual(_get(prevProps, 'wallet'), _get(this.props, 'wallet')) ||
       (!_get(prevProps, 'successPopup.isOpen') &&
-        _get(this.props, 'successPopup.isOpen'))
+        _get(this.props, 'successPopup.isOpen')) ||
+      (!_isEqual(_get(prevProps, 'tableType'), _get(this.props, 'tableType')) &&
+        _isEqual(
+          _get(this.props, 'tableType'),
+          _get(LIST, ['MY_WALLET_TABLE_TYPES', 0, 'value']),
+        ))
     ) {
       this.handleLoadTokenOptions();
     }
@@ -58,16 +68,16 @@ class PorfolioTable extends Component {
     const { wallet } = this.props;
     return [
       {
-        [PORFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
-        [PORFOLIO_COLUMNS.SYMBOL]: 'TOMO',
-        [PORFOLIO_COLUMNS.ICON]: tomoIcon,
-        [PORFOLIO_COLUMNS.BALANCE]: _get(wallet, 'balance', 0),
-        [PORFOLIO_COLUMNS.DECIMALS]: 18,
-        [PORFOLIO_COLUMNS.PRICE]: 0.4,
-        [PORFOLIO_COLUMNS.VALUE]: _get(wallet, 'balance', 0) * 0.4,
-        [PORFOLIO_COLUMNS.TYPE]: 'TRC20',
-        [PORFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
-        [PORFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
+        [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
+        [PORTFOLIO_COLUMNS.SYMBOL]: 'TOMO',
+        [PORTFOLIO_COLUMNS.ICON]: tomoIcon,
+        [PORTFOLIO_COLUMNS.BALANCE]: _get(wallet, 'balance', 0),
+        [PORTFOLIO_COLUMNS.DECIMALS]: 18,
+        [PORTFOLIO_COLUMNS.PRICE]: 0.4,
+        [PORTFOLIO_COLUMNS.VALUE]: _get(wallet, 'balance', 0) * 0.4,
+        [PORTFOLIO_COLUMNS.TYPE]: 'TRC20',
+        [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
+        [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
       },
     ];
   }
@@ -88,10 +98,10 @@ class PorfolioTable extends Component {
       openSendTokenPopup,
     } = this.props;
     return (
-      <BoxPorfolio>
+      <BoxPortfolio>
         <CommonTable
           data={data}
-          setConfig={porfolioConfig}
+          setConfig={portfolioConfig}
           getConfigProps={{
             formatMessage,
             openReceiveTokenPopup,
@@ -104,14 +114,14 @@ class PorfolioTable extends Component {
               props.className !== '-header' && props.children,
           }}
         />
-      </BoxPorfolio>
+      </BoxPortfolio>
     );
   }
 }
 // ==========================
 
 // ===== PROP TYPES =====
-PorfolioTable.propTypes = {
+PortfolioTable.propTypes = {
   /** Table data */
   data: PropTypes.arrayOf(PropTypes.object),
   /** React Intl's instance object */
@@ -120,6 +130,8 @@ PorfolioTable.propTypes = {
   isActive: PropTypes.bool,
   /** Success popup's data */
   successPopup: PropTypes.object,
+  /** Current table tab's type */
+  tableType: PropTypes.string,
   /** Action to request for token list by address */
   onLoadTokenOptions: PropTypes.func,
   /** Action to show receive token popup */
@@ -128,11 +140,12 @@ PorfolioTable.propTypes = {
   openSendTokenPopup: PropTypes.func,
 };
 
-PorfolioTable.defaultProps = {
+PortfolioTable.defaultProps = {
   data: [],
   intl: {},
   isActive: false,
   successPopup: {},
+  tableType: '1',
   onLoadTokenOptions: () => {},
   openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
@@ -144,6 +157,7 @@ const mapStateToProps = () =>
   createStructuredSelector({
     data: selectTokenOptions,
     successPopup: selectSuccessPopup,
+    tableType: selectTableType,
     wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
@@ -159,4 +173,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   withIntl,
-)(PorfolioTable);
+)(PortfolioTable);

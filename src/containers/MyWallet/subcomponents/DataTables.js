@@ -11,7 +11,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 // Custom Components
-import PorfolioTable from './PorfolioTable';
+import PortfolioTable from './PortfolioTable';
 import TransactionTable from './TransactionTable';
 // Constants
 import { LIST } from '../../../constants';
@@ -42,7 +42,7 @@ class DataTables extends PureComponent {
         </Nav>
         <TabContent activeTab={tableType}>
           <TabPane tabId={LIST.MY_WALLET_TABLE_TYPES[0].value}>
-            <PorfolioTable
+            <PortfolioTable
               isActive={tableType === LIST.MY_WALLET_TABLE_TYPES[0].value}
               openReceiveTokenPopup={openReceiveTokenPopup}
               openSendTokenPopup={openSendTokenPopup}

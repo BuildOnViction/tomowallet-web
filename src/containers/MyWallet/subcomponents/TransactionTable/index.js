@@ -31,9 +31,9 @@ class TransactionTable extends PureComponent {
     this.handleLoadTransactionData = this.handleLoadTransactionData.bind(this);
   }
 
-  componentDidUpdate(prepProps) {
+  componentDidUpdate(prevProps) {
     if (
-      !_isEqual(_get(prepProps, 'tableType'), _get(this.props, 'tableType')) &&
+      !_isEqual(_get(prevProps, 'tableType'), _get(this.props, 'tableType')) &&
       _isEqual(
         _get(this.props, 'tableType'),
         _get(LIST, ['MY_WALLET_TABLE_TYPES', 1, 'value']),
@@ -90,7 +90,7 @@ TransactionTable.propTypes = {
 
 TransactionTable.defaultProps = {
   intl: {},
-  tableType: PropTypes.string,
+  tableType: '1',
   transData: {},
 };
 // ======================

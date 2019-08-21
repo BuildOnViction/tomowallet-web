@@ -80,11 +80,12 @@ class KeyViewPopup extends PureComponent {
         }}
         button={{
           primary: {
+            btnYellow: true,
             label: formatMessage(MSG.COMMON_BUTTON_SAVE),
           },
           secondary: {
-            label: formatMessage(MSG.COMMON_BUTTON_BACK),
             action: this.handleClosePopup,
+            label: formatMessage(MSG.COMMON_BUTTON_BACK),
           },
         }}
       />

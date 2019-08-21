@@ -1,6 +1,6 @@
 /**
  *
- * TomoWallet - My Wallet Page - Porfolio Table - Token Cell
+ * TomoWallet - My Wallet Page - Portfolio Table - Token Cell
  *
  */
 // ===== IMPORTS =====
@@ -31,7 +31,7 @@ class TokenCell extends PureComponent {
           <img
             src={LogoToken[value]}
             alt={formatMessage(
-              MSG.MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_IMAGE_ALT,
+              MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_IMAGE_ALT,
               { name: value },
             )}
           />
@@ -40,7 +40,7 @@ class TokenCell extends PureComponent {
           <div className='block-token__name'>{value}</div>
           <div className='block-token__publisher'>
             {formatMessage(
-              MSG.MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_PUBLISHER,
+              MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_PUBLISHER,
             )}
           </div>
         </div>

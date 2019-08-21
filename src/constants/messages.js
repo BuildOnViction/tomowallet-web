@@ -377,43 +377,43 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.section.address.title`,
     defaultMessage: 'Address',
   },
-  MY_WALLET_TABLE_PORFOLIO_TITLE: {
+  MY_WALLET_TABLE_PORTFOLIO_TITLE: {
     id: `${myWalletPagePrefix}.table.tab.portfolio.title`,
-    defaultMessage: 'PORFOLIO',
+    defaultMessage: 'PORTFOLIO',
   },
-  MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME: {
+  MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME: {
     id: `${myWalletPagePrefix}.table.portfolio.header.tokenname`,
     defaultMessage: 'Token name',
   },
-  MY_WALLET_TABLE_PORFOLIO_HEADER_BALANCE: {
+  MY_WALLET_TABLE_PORTFOLIO_HEADER_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
     defaultMessage: 'Balance',
   },
-  MY_WALLET_TABLE_PORFOLIO_HEADER_VALUE: {
+  MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.value`,
     defaultMessage: 'Value (USD)',
   },
-  MY_WALLET_TABLE_PORFOLIO_HEADER_PRICE: {
+  MY_WALLET_TABLE_PORTFOLIO_HEADER_PRICE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.price`,
     defaultMessage: 'Price (USD)',
   },
-  MY_WALLET_TABLE_PORFOLIO_HEADER_SEND: {
+  MY_WALLET_TABLE_PORTFOLIO_HEADER_SEND: {
     id: `${myWalletPagePrefix}.table.portfolio.header.send`,
     defaultMessage: 'Send',
   },
-  MY_WALLET_TABLE_PORFOLIO_HEADER_RECEIVE: {
+  MY_WALLET_TABLE_PORTFOLIO_HEADER_RECEIVE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.receive`,
     defaultMessage: 'Receive',
   },
-  MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_IMAGE_ALT: {
+  MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_IMAGE_ALT: {
     id: `${myWalletPagePrefix}.table.portfolio.cell.tokenname.image.alt`,
     defaultMessage: '{name} Symbol',
   },
-  MY_WALLET_TABLE_PORFOLIO_CELL_TOKEN_NAME_PUBLISHER: {
+  MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_PUBLISHER: {
     id: `${myWalletPagePrefix}.table.portfolio.cell.tokenname.publisher`,
     defaultMessage: 'TomoChain',
   },
-  MY_WALLET_TABLE_PORFOLIO_ERROR_LOAD_FAILED: {
+  MY_WALLET_TABLE_PORTFOLIO_ERROR_LOAD_FAILED: {
     id: `${myWalletPagePrefix}.table.portfolio.error.load.failed`,
     defaultMessage: 'Cannot load token list!',
   },

@@ -25,7 +25,7 @@ import {
 } from 'reactstrap';
 import Select from 'react-select';
 // Constants & Styles
-import { SEND_TOKEN_FIELDS, PORFOLIO_COLUMNS } from '../../../constants';
+import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
 // ===================
 
@@ -38,21 +38,21 @@ const TokenOption = props => {
       <Row noGutters className='select_option align-items-center'>
         <Col xs={8} className='d-flex align-items-center'>
           <img
-            src={_get(data, [PORFOLIO_COLUMNS.ICON], '')}
-            alt={_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')}
+            src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
+            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
           />
-          <span>{`${_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
             data,
-            [PORFOLIO_COLUMNS.PUBLISHER],
+            [PORTFOLIO_COLUMNS.PUBLISHER],
             '',
           )})`}</span>
         </Col>
         <Col xs={4} className='text-right'>
           {`${_get(
             data,
-            [PORFOLIO_COLUMNS.BALANCE],
+            [PORTFOLIO_COLUMNS.BALANCE],
             0,
-          ).toLocaleString()} ${_get(data, [PORFOLIO_COLUMNS.SYMBOL], '')}`}
+          ).toLocaleString()} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
         </Col>
       </Row>
     </Container>
@@ -67,21 +67,21 @@ const TokenInputValue = props => {
       <Row noGutters className='select_option_active align-items-center'>
         <Col xs={8} className='d-flex align-items-center'>
           <img
-            src={_get(data, [PORFOLIO_COLUMNS.ICON], '')}
-            alt={_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')}
+            src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
+            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
           />
-          <span>{`${_get(data, [PORFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
             data,
-            [PORFOLIO_COLUMNS.PUBLISHER],
+            [PORTFOLIO_COLUMNS.PUBLISHER],
             '',
           )})`}</span>
         </Col>
         <Col xs={4} className='text-right'>
           {`${_get(
             data,
-            [PORFOLIO_COLUMNS.BALANCE],
+            [PORTFOLIO_COLUMNS.BALANCE],
             0,
-          ).toLocaleString()} ${_get(data, [PORFOLIO_COLUMNS.SYMBOL], '')}`}
+          ).toLocaleString()} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
         </Col>
       </Row>
     </div>
@@ -236,7 +236,7 @@ class FormContent extends PureComponent {
             MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,
           )}: ${_get(
             formValues,
-            [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TRANSACTION_FEE],
+            [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TRANSACTION_FEE],
             0,
           )} TOMO`}
         </Label>

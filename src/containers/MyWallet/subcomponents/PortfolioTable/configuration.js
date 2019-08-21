@@ -1,6 +1,6 @@
 /**
  *
- * TomoWallet - Table Configuration - Porfolio Table
+ * TomoWallet - Table Configuration - Portfolio Table
  *
  */
 // ===== IMPORTS =====
@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
 // Constants
-import { PORFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
+import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG } from '../../../../constants';
 import { TextBlue, TextYellowPointer } from '../../../../styles';
 
@@ -24,11 +24,11 @@ export default ({
   openSendTokenPopup,
 }) => [
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_TOKEN_NAME),
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME),
     columns: [
       {
         headerClassName: 'd-none',
-        accessor: PORFOLIO_COLUMNS.TOKEN_NAME,
+        accessor: PORTFOLIO_COLUMNS.TOKEN_NAME,
         Cell: ({ value }) => (
           <TokenCell formatMessage={formatMessage} value={value} />
         ),
@@ -36,11 +36,11 @@ export default ({
     ],
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_BALANCE),
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_BALANCE),
     columns: [
       {
         headerClassName: 'd-none',
-        accessor: PORFOLIO_COLUMNS.BALANCE,
+        accessor: PORTFOLIO_COLUMNS.BALANCE,
         Cell: ({ value }) =>
           value.toLocaleString(undefined, {
             minimumFractionDigits: 3,
@@ -49,11 +49,11 @@ export default ({
     ],
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_VALUE),
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE),
     columns: [
       {
         headerClassName: 'd-none',
-        accessor: PORFOLIO_COLUMNS.VALUE,
+        accessor: PORTFOLIO_COLUMNS.VALUE,
         Cell: ({ value }) =>
           value.toLocaleString(undefined, {
             minimumFractionDigits: 3,
@@ -62,11 +62,11 @@ export default ({
     ],
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORFOLIO_HEADER_PRICE),
+    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_PRICE),
     columns: [
       {
         headerClassName: 'd-none',
-        accessor: PORFOLIO_COLUMNS.PRICE,
+        accessor: PORTFOLIO_COLUMNS.PRICE,
         Cell: ({ value }) => value,
       },
     ],
@@ -86,7 +86,7 @@ export default ({
     columns: [
       {
         headerClassName: 'd-none',
-        accessor: PORFOLIO_COLUMNS.SEND,
+        accessor: PORTFOLIO_COLUMNS.SEND,
         Cell: ({ original }) => (
           <TextYellowPointer
             role='presentation'
@@ -103,7 +103,7 @@ export default ({
       },
       {
         headerClassName: 'd-none',
-        accessor: PORFOLIO_COLUMNS.RECEIVE,
+        accessor: PORTFOLIO_COLUMNS.RECEIVE,
         Cell: () => (
           <TextBlue role='presentation' onClick={openReceiveTokenPopup}>
             {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}

@@ -5,11 +5,14 @@
  */
 // ===== IMPORTS =====
 // Modules
+import React from 'react';
 import styled from 'styled-components';
 // ===================
 
 // ===== STYLE =====
-const LoadingStyler = styled.div`
+const LoadingStyler = styled(({ loading, children, ...remain }) => (
+  <div {...remain}>{children}</div>
+))`
   display: ${({ loading }) => (loading ? 'block' : 'none')};
   position: fixed;
   top: 0;

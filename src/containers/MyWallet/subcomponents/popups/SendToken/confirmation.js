@@ -13,7 +13,7 @@ import { Row, Col } from 'reactstrap';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
-import { SEND_TOKEN_FIELDS, PORFOLIO_COLUMNS } from '../../../constants';
+import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -33,7 +33,7 @@ class ConfirmationContent extends PureComponent {
           <Col xs={8} className=''>
             {`${_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT])} ${_get(
               formValues,
-              [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.SYMBOL],
+              [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
               '',
             )}`}
           </Col>
@@ -73,7 +73,7 @@ class ConfirmationContent extends PureComponent {
           <Col xs={8}>
             {`${_get(
               formValues,
-              [SEND_TOKEN_FIELDS.TOKEN, PORFOLIO_COLUMNS.TRANSACTION_FEE],
+              [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TRANSACTION_FEE],
               0,
             )} TOMO`}
           </Col>

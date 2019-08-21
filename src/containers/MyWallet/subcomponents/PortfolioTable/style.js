@@ -1,6 +1,6 @@
 /**
  *
- * TomoWallet - My Wallet Page - Porfolio Table - Styles
+ * TomoWallet - My Wallet Page - Portfolio Table - Styles
  *
  */
 // ===== IMPORTS =====
@@ -32,7 +32,7 @@ const TokenCellStyler = styled.div`
   }
 `;
 
-const BoxPorfolio = styled.div`
+const BoxPortfolio = styled.div`
   .rt-tr {
     display: grid;
     grid-template-columns: 20% 15% 15% 15% 35%;
@@ -46,4 +46,4 @@ const BoxPorfolio = styled.div`
 
 // =================
 
-export { TokenCellStyler, BoxPorfolio };
+export { TokenCellStyler, BoxPortfolio };

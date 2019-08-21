@@ -39,7 +39,7 @@ const NETWORKS = [
 // My Wallet - Table Types
 const MY_WALLET_TABLE_TYPES = [
   {
-    label: getMessage(MSG.MY_WALLET_TABLE_PORFOLIO_TITLE),
+    label: getMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_TITLE),
     value: '1',
   },
   {

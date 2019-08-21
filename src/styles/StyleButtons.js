@@ -27,7 +27,11 @@ const BigButtonStyler = styled.button`
   }
 `;
 
-const ButtonStyler = styled.button`
+const ButtonStyler = styled(
+  ({ action, btnBlue, btnYellow, children, ...remain }) => (
+    <button {...remain}>{children}</button>
+  ),
+)`
   ${({ btnYellow, btnBlue }) => {
     if (btnYellow) {
       return 'background-color:#e4ae63;color:#444b64';
