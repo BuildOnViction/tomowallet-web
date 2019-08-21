@@ -8,7 +8,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { get as _get } from 'lodash';
-import { Input, Container, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
+import {
+  InputStylerRadio,
+} from './style';
+import {
+  TextBlue,
+  BoxText
+} from '../../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -16,19 +23,19 @@ class AddressContent extends PureComponent {
   render() {
     const { data, updateChosenAddress } = this.props;
     return (
-      <Container fluid>
+      <BoxText>
         {_get(data, 'wallets', []).map((wallet, walletIdx) => (
-          <Row>
-            <Col xs={1}>
-              <Input
-                type='radio'
-                name='wallet'
-                checked={_get(data, 'chosenIndex') === walletIdx}
-                onChange={() => updateChosenAddress(walletIdx)}
-              />
-            </Col>
-            <Col xs={6} lg={7} className='pl-2'>
-              {wallet.address}
+          <Row className='py-3'>
+            <Col xs={7} lg={8}>
+              <label className='pl-5 m-0 position-relative'>
+                <InputStylerRadio
+                  type='radio'
+                  name='wallet'
+                  checked={_get(data, 'chosenIndex') === walletIdx}
+                  onChange={() => updateChosenAddress(walletIdx)}
+                />
+                <TextBlue>{wallet.address}</TextBlue>
+              </label>
             </Col>
             <Col xs={5} lg={4} className='text-right'>
               {`${wallet.balance.toLocaleString(undefined, {
@@ -37,7 +44,7 @@ class AddressContent extends PureComponent {
             </Col>
           </Row>
         ))}
-      </Container>
+      </BoxText>
     );
   }
 }
