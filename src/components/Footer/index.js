@@ -12,7 +12,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Nav, NavItem } from 'reactstrap';
 // Custom Component
-import { LinkFooter } from './style';
+import {
+  LinkFooter,
+  TextGray
+ } from './style';
 // Utilities & Constants
 import { withIntl } from '../IntlProvider';
 import { MSG } from '../../constants';
@@ -58,9 +61,9 @@ class Footer extends PureComponent {
     return (
       <Row className='align-items-center pt-3 pb-3'>
         <Col xs={12} lg={7}>
-          <div className='mb-text-center'>
+          <TextGray className='mb-text-center'>
             {formatMessage(MSG.FOOTER_VERSION_TEXT)}
-          </div>
+          </TextGray>
           <Row className='footer-menu'>
             <Nav>
               <NavItem>

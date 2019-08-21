@@ -18,7 +18,7 @@ const InputStylerRadio = styled(Input)`
   position: absolute;
   margin-top: 0;
   margin-left: 0;
-  left: 5px;
+  left: 10px;
   top: 4px;
 `;
 
