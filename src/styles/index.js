@@ -1,5 +1,6 @@
 import {
   BigButtonStyler,
+  MediumButtonStyler,
   ButtonStyler,
   ButtonLineStyler,
   ButtonLinkStyler,
@@ -32,6 +33,7 @@ import {
 export {
   //StyleButtons
   BigButtonStyler,
+  MediumButtonStyler,
   ButtonStyler,
   ButtonLineStyler,
   ButtonLinkStyler,
