@@ -5,7 +5,7 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React from 'react';
+import React, { createElement } from 'react';
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components

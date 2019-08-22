@@ -24,6 +24,8 @@ import {
   NavItem,
 } from 'reactstrap';
 import Select from 'react-select';
+// Custom Components
+import Image from '../../../../../components/Image';
 // Constants & Styles
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
@@ -37,7 +39,7 @@ const TokenOption = props => {
     <Container {...innerProps} role='presentation' fluid className='px-0'>
       <Row noGutters className='select_option align-items-center'>
         <Col xs={8} className='d-flex align-items-center'>
-          <img
+          <Image
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
             alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
           />
@@ -66,7 +68,7 @@ const TokenInputValue = props => {
     <div style={{ width: '96%' }}>
       <Row noGutters className='select_option_active align-items-center'>
         <Col xs={8} className='d-flex align-items-center'>
-          <img
+          <Image
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
             alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
           />
@@ -142,9 +144,6 @@ class FormContent extends PureComponent {
             name={SEND_TOKEN_FIELDS.TOKEN}
             value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
             options={tokenOptions}
-            // Placeholder={() => <div className='text-danger'>{formatMessage(
-            //   MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER,
-            // )}</div>}
             onChange={value => updateInput(SEND_TOKEN_FIELDS.TOKEN, value)}
             components={{
               Option: TokenOption,
