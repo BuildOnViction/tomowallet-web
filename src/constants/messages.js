@@ -137,6 +137,15 @@ export default defineMessages({
     id: `${navbarPrefix}.popup.showwallet.tab.privatekey.note`,
     defaultMessage: 'Remove all spaces to use private key, please',
   },
+  HEADER_NAVBAR_POPUP_NETWORK_CONFIRMATION_TITLE: {
+    id: `${navbarPrefix}.popup.networkconfirmation.title`,
+    defaultMessage: 'Confirmation',
+  },
+  HEADER_NAVBAR_POPUP_NETWORK_CONFIRMATION_CONTENT_TEXT: {
+    id: `${navbarPrefix}.popup.networkconfirmation.content.text`,
+    defaultMessage:
+      'Changing network setting will log you out of the wallet as well. Are you sure you want to change the network?',
+  },
   // Component - Page Footer
   FOOTER_VERSION_TEXT: {
     id: `${footerPrefix}.versiontext`,
