@@ -19,6 +19,10 @@ const selectLoading = createDeepEqualSelector(
   selectGlobalDomain,
   obj => obj.toJS().loading,
 );
+const selectNetworkConfirmationPopup = createDeepEqualSelector(
+  selectGlobalDomain,
+  obj => obj.toJS().networkConfirmationPopup,
+);
 const selectNetworkData = createDeepEqualSelector(
   selectGlobalDomain,
   obj => obj.toJS().network,
@@ -36,6 +40,7 @@ const selectWalletPopup = createDeepEqualSelector(
 export {
   selectLanguage,
   selectLoading,
+  selectNetworkConfirmationPopup,
   selectNetworkData,
   selectWallet,
   selectWalletPopup,

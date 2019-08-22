@@ -19,6 +19,7 @@ import {
 } from 'reactstrap';
 // Custom Components
 import WalletPopup from './subcomponents/WalletPopup';
+import NetworkConfirmationPopup from './subcomponents/NetworkConfirmationPopup';
 import {
   NavBarStyler,
   LinkHeader,
@@ -33,6 +34,7 @@ import {
   releaseWallet,
   toggleWalletPopup,
   setNetwork,
+  toggleNetworkConfirmationPopup,
 } from '../../containers/Global/actions';
 import { ROUTE, LIST, MSG } from '../../constants';
 import {
@@ -43,7 +45,10 @@ import {
   removeLedger,
   getLedger,
 } from '../../utils';
-import { selectNetworkData } from '../../containers/Global/selectors';
+import {
+  selectNetworkData,
+  selectNetworkConfirmationPopup,
+} from '../../containers/Global/selectors';
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
 
 // ===== MAIN COMPONENT =====
@@ -143,6 +148,7 @@ class NavigationBar extends PureComponent {
     const {
       intl: { formatMessage },
       network,
+      onToggleNetworkConfirmationPopup,
       onToggleWalletPopup,
     } = this.props;
 
@@ -158,7 +164,7 @@ class NavigationBar extends PureComponent {
               {LIST.NETWORKS.map((opt, optIdx) => (
                 <DropdownItemStyler
                   key={`network_${optIdx + 1}`}
-                  onClick={() => this.handleChangeNetwork(opt)}
+                  onClick={() => onToggleNetworkConfirmationPopup(true, opt)}
                   active={this.isActiveNetwork(opt)}
                 >
                   {opt.label}
@@ -206,6 +212,8 @@ class NavigationBar extends PureComponent {
       intl: { formatMessage },
       isLoggedIn,
       network,
+      networkConfirmationPopup,
+      onToggleNetworkConfirmationPopup,
     } = this.props;
 
     return (
@@ -224,6 +232,11 @@ class NavigationBar extends PureComponent {
           </Collapse>
         </NavBarStyler>
         <WalletPopup />
+        <NetworkConfirmationPopup
+          popupData={networkConfirmationPopup}
+          togglePopup={onToggleNetworkConfirmationPopup}
+          changeNetwork={this.handleChangeNetwork}
+        />
       </Fragment>
     );
   }
@@ -244,10 +257,14 @@ NavigationBar.propTypes = {
   language: PropTypes.string,
   /** Network dropdown data */
   network: PropTypes.object,
+  /** Network update confirmation popup's data */
+  networkConfirmationPopup: PropTypes.object,
   /** Action to remove current wallet's data */
   onReleaseWallet: PropTypes.func,
   /** Action to update network options */
   onSetNetwork: PropTypes.func,
+  /** Action to show/hide network update confirmation popup */
+  onToggleNetworkConfirmationPopup: PropTypes.func,
   /** Action to show/hide show-wallet popup */
   onToggleWalletPopup: PropTypes.func,
   /** Action to change current RPC Server */
@@ -261,8 +278,10 @@ NavigationBar.defaultProps = {
   isLoggedIn: false,
   language: 'en',
   network: {},
+  networkConfirmationPopup: {},
   onReleaseWallet: () => {},
   onSetNetwork: () => {},
+  onToggleNetworkConfirmationPopup: () => {},
   onToggleWalletPopup: () => {},
   switchRPCServer: () => {},
 };
@@ -272,10 +291,13 @@ NavigationBar.defaultProps = {
 const mapStateToProps = () =>
   createStructuredSelector({
     network: selectNetworkData,
+    networkConfirmationPopup: selectNetworkConfirmationPopup,
   });
 const mapDispatchToProps = dispatch => ({
   onReleaseWallet: () => dispatch(releaseWallet()),
   onSetNetwork: network => dispatch(setNetwork(network)),
+  onToggleNetworkConfirmationPopup: (bool, networkOpt) =>
+    dispatch(toggleNetworkConfirmationPopup(bool, networkOpt)),
   onToggleWalletPopup: bool => dispatch(toggleWalletPopup(bool)),
 });
 const withConnect = connect(

@@ -6,18 +6,11 @@
 // ===== IMPORTS =====
 // Modules
 import React from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 // ===================
 
 // ===== UTILITIES =====
-const IntlTextComponent = ({
-  intl: { formatMessage },
-  intlProps,
-  valueProps,
-}) => formatMessage(intlProps, valueProps);
-const IntlText = injectIntl(IntlTextComponent);
-
 export const getMessage = (intlProps, valueProps) => (
-  <IntlText intlProps={intlProps} valueProps={valueProps} />
+  <FormattedMessage {...intlProps} values={valueProps} />
 );
 // =====================
