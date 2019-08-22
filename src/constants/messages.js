@@ -77,11 +77,11 @@ export default defineMessages({
   },
   COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET: {
     id: `${listPrefix}.network.tomochain.testnet`,
-    defaultMessage: 'TomoChain Test Network',
+    defaultMessage: 'TomoChain TestNet',
   },
   COMMON_LIST_NETWORK_TOMOCHAIN_MAINNET: {
     id: `${listPrefix}.network.tomochain.mainnet`,
-    defaultMessage: 'Main TomoChain Network',
+    defaultMessage: 'TomoChain MainNet',
   },
   // Component - Header Navigation Bar
   HEADER_NAVBAR_LOGO_ALT: {

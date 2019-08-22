@@ -38,7 +38,7 @@ class WalletViewContent extends PureComponent {
   handleGetPrivateKey() {
     const { recoveryPhrase, rpcServer } = getWeb3Info();
     if (this.handleCheckPrivateKey()) {
-      return `0x${recoveryPhrase.replace('0x', '')}`;
+      return recoveryPhrase.replace(/^0x/, '');
     }
     return mnemonicToPrivateKey(recoveryPhrase, rpcServer);
   }

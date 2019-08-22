@@ -42,10 +42,10 @@ export function* loadTokens(actionData) {
 export function* loadTransaction(actionData) {
   try {
     yield put(toggleLoading(true));
-    const { page } = actionData;
+    const { page, address } = actionData;
     const response = yield call(
       request,
-      `${API.GET_TRANSACTIONS}?page=${page}&limit=5`,
+      `${API.GET_TRANSACTIONS}/${address}?page=${page}&limit=5`,
       { headers: { withCredentials: true } },
     );
 

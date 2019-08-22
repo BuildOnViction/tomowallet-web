@@ -21,6 +21,7 @@ import transactionConfig from './configuration';
 import { selectTransactionData, selectTableType } from '../../selectors';
 import { loadTransactionData } from '../../actions';
 import { LIST } from '../../../../constants';
+import { selectWallet } from '../../../Global/selectors';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -44,8 +45,11 @@ class TransactionTable extends PureComponent {
   }
 
   handleLoadTransactionData(newPage) {
-    const { onLoadTransactionData } = this.props;
-    onLoadTransactionData(newPage || 1);
+    const { onLoadTransactionData, wallet } = this.props;
+    onLoadTransactionData({
+      page: newPage || 1,
+      address: _get(wallet, 'address', ''),
+    });
   }
 
   render() {
@@ -86,12 +90,15 @@ TransactionTable.propTypes = {
   tableType: PropTypes.string,
   /** Transaction table's data */
   transData: PropTypes.object,
+  /** Current wallet's data */
+  wallet: PropTypes.object,
 };
 
 TransactionTable.defaultProps = {
   intl: {},
   tableType: '1',
   transData: {},
+  wallet: {},
 };
 // ======================
 
@@ -100,9 +107,10 @@ const mapStateToProps = () =>
   createStructuredSelector({
     transData: selectTransactionData,
     tableType: selectTableType,
+    wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
-  onLoadTransactionData: page => dispatch(loadTransactionData(page)),
+  onLoadTransactionData: params => dispatch(loadTransactionData(params)),
 });
 const withConnect = connect(
   mapStateToProps,
