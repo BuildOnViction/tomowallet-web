@@ -218,9 +218,19 @@ a {
 
 //box-address
 .box-address {
-  border-radius: 8px;
-  background-color: #272d40;
-  padding: 1em 2em;
+  .bg_gray {
+    border-radius: 8px;
+    background-color: #272d40;
+    padding: 1.5em;
+    height: 100%;
+  }
+}
+.fullwidth {
+  width: 100%;
+}
+.coinmarketcap-currency-widget * {
+  border-width: 0px!important;
+  border-color: #5e677f!important;
 }
 //main_tab
 .main_tab {
