@@ -21,6 +21,17 @@ const DropdownToggleHeader = styled(DropdownToggle)`
   align-items: center;
   font-size: 14px;
   white-space: nowrap;
+  &.onl:before {
+      background-color: #36CE9A;
+      border-radius: 50%;
+      content: '';
+      width: 6px;
+      height: 6px;
+      position: absolute;
+      left: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
 `;
 
 const NavBarStyler = styled(Navbar)`
@@ -63,6 +74,7 @@ const DropdownItemStyler = styled(DropdownItem)`
   transition: all .5s ease;
   position: relative;
   padding: .5rem 0;
+  background: transparent!important;
   &:focus,
   &:hover {
     background: transparent;
