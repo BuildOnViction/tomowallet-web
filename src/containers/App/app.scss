@@ -38,6 +38,11 @@ a {
       top: 50%;
       transform: translateY(-50%);
     }
+    &.active {
+      &:before {
+        background-color: #36CE9A;
+      }
+    }
   }
 }
 

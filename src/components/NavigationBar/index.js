@@ -150,7 +150,7 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <Nav className='ml-auto' navbar>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggleHeader nav>
+            <DropdownToggleHeader nav className='onl'>
               {_get(network, 'data.label')}
               <i class='font-chevron-down' />
             </DropdownToggleHeader>
