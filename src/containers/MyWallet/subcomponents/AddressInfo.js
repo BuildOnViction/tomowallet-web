@@ -24,6 +24,11 @@ import { TextBlue } from '../../../styles';
 
 // ===== MAIN COMPONENT =====
 class AddressInfo extends PureComponent {
+  componentDidMount() {
+    const addScript = document.createElement('script')
+    addScript.setAttribute('src', 'https://files.coinmarketcap.com/static/widget/currency.js')
+    document.body.appendChild(addScript)
+  }
   render() {
     const {
       intl: { formatMessage },
