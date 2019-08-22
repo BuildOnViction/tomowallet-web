@@ -144,6 +144,8 @@ class ImportWallet extends PureComponent {
             });
         } catch (error) {
           toggleLoading(false);
+          console.error('[ERROR]: ', error);
+
           onUpdateErrors([error.message]);
         }
       } else {

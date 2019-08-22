@@ -34,9 +34,10 @@ export const loadTokenOptionsSuccess = tokens => ({
   tokens,
 });
 
-export const loadTransactionData = page => ({
+export const loadTransactionData = ({ page, address }) => ({
   type: LOAD_TRANSACTION_DATA,
   page,
+  address,
 });
 
 export const loadTransactionDataSuccess = tableData => ({

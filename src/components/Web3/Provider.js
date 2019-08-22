@@ -51,6 +51,9 @@ class Web3Provider extends Component {
       const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
 
       this.handleSetWeb3(newWeb3);
+      this.setState({
+        rpcServer,
+      });
     } else {
       const storedNetwork = LIST.NETWORKS.find(
         opt => opt.value === getNetwork(),

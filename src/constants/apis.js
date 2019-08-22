@@ -9,5 +9,5 @@ const SCAN_TESTNET = 'https://scan.testnet.tomochain.com';
 
 export default {
   GET_TOKENS: `${WALLET_TESTNET}/api/tokens`,
-  GET_TRANSACTIONS: `${SCAN_TESTNET}/api/txs/listByType/normalTsx`,
+  GET_TRANSACTIONS: `${SCAN_TESTNET}/api/txs/listByAccount`,
 };

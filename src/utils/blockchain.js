@@ -29,7 +29,7 @@ const mnemonicToPrivateKey = (mnemonic = '', serverConfig = {}) => {
     const pkInBytes =
       web3.currentProvider.wallets[web3.currentProvider.addresses[0]]._privKey;
 
-    return web3.utils.bytesToHex(pkInBytes);
+    return web3.utils.bytesToHex(pkInBytes).replace(/^0x/, '');
   }
   return '';
 };
