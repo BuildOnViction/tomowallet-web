@@ -38,6 +38,11 @@ a {
       top: 50%;
       transform: translateY(-50%);
     }
+    &.active {
+      &:before {
+        background-color: #36CE9A;
+      }
+    }
   }
 }
 
@@ -221,7 +226,7 @@ a {
   .bg_gray {
     border-radius: 8px;
     background-color: #272d40;
-    padding: 1.5em;
+    padding: 1em 1.5em;
     height: 100%;
   }
 }
@@ -231,6 +236,47 @@ a {
 .coinmarketcap-currency-widget * {
   border-width: 0px!important;
   border-color: #5e677f!important;
+}
+.coinmarketcap-currency-widget {
+  >div {
+    >div {
+      &:first-child {
+        div {
+          &:first-child {
+            >span {
+              &:first-child {
+                a {
+                  color: #e4ae63!important;
+                }
+              }
+              &:last-child {
+                color: #5e677f!important;
+              }
+            }
+          }
+        }
+      }
+      &:nth-child(2) {
+        overflow: hidden;
+        padding-top: 10px;
+        >div {
+          border-left: 1px solid #3a4152!important;
+          padding: 0!important;
+          &:first-child {
+            border: 0!important;
+          }
+        }
+      }
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+}
+.qrc_bd {
+  border: 7px solid #fff;
+  border-radius: 3px;
+  display: flex;
 }
 //main_tab
 .main_tab {

@@ -32,6 +32,7 @@ const TextLinkBlue = styled.a`
 const TextBlue = styled.span`
   color: #5692CD;
   cursor: pointer;
+  letter-spacing: 1px;
   transition: all .3s;
   &:hover {
     color: #0056b3;
