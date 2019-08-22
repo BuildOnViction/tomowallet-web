@@ -14,7 +14,7 @@ import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 import QRCode from 'qrcode.react';
 // Custom Components
-import { BigButtonStyler, HeadingSmall } from '../../../styles';
+import { MediumButtonStyler, HeadingSmall } from '../../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
@@ -33,9 +33,6 @@ class AddressInfo extends PureComponent {
     } = this.props;
     return (
       <div>
-        <HeadingSmall>
-          {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
-        </HeadingSmall>
         <div className='box-address'>
           <Row>
             <Col
@@ -61,21 +58,24 @@ class AddressInfo extends PureComponent {
             <Col xs={12} lg={{ size: 7, order: 1 }}>
               <div className='d-flex align-items-center bg_gray'>
                 <Row className='fullwidth align-items-center'>
-                  <Col md={8} className='text-center'>
+                  <Col md={8}>
+                    <HeadingSmall>
+                      {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
+                    </HeadingSmall>
                     <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
-                        <BigButtonStyler onClick={openSendTokenPopup}>
+                        <MediumButtonStyler onClick={openSendTokenPopup}>
                           {formatMessage(MSG.COMMON_BUTTON_SEND)}
-                        </BigButtonStyler>
+                        </MediumButtonStyler>
                       </Col>
                       <Col md={6} className='pl-2'>
-                        <BigButtonStyler
+                        <MediumButtonStyler
                           btnBlue
                           onClick={openReceiveTokenPopup}
                         >
                           {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
-                        </BigButtonStyler>
+                        </MediumButtonStyler>
                       </Col>
                     </Row>
                   </Col>

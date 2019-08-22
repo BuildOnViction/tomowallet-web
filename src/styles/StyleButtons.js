@@ -27,6 +27,32 @@ const BigButtonStyler = styled.button`
   }
 `;
 
+const MediumButtonStyler = styled.button`
+  ${({ btnBlue }) =>
+    btnBlue
+      ? 'background-color:#5692cd;color:#ffffff;'
+      : 'background-color:#e4ae63;color:#ffffff'}
+  border: 0px;
+  border-radius: 8px;
+  display: flex;
+  height: 34px;
+  padding: 0 2em;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Nunito Sans', sans-serif;
+  transition: all 0.3s;
+  width: 100%;
+  &:hover {
+    ${({ btnBlue }) =>
+      btnBlue
+        ? 'background-color:#4076AC;color:#ffffff;'
+        : 'background-color:#C59148;color:#ffffff'}
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
 const ButtonStyler = styled(
   ({ action, btnBlue, btnYellow, children, ...remain }) => (
     <button {...remain}>{children}</button>
@@ -105,4 +131,10 @@ const ButtonLinkStyler = styled(({ btnRed, children, ...remain }) => (
   }
 `;
 
-export { BigButtonStyler, ButtonStyler, ButtonLineStyler, ButtonLinkStyler };
+export {
+  BigButtonStyler,
+  MediumButtonStyler,
+  ButtonStyler,
+  ButtonLineStyler,
+  ButtonLinkStyler
+};
