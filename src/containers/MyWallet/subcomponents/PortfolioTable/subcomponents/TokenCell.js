@@ -8,7 +8,8 @@
 import React, { PureComponent } from 'react';
 // Custom Components
 import { TokenCellStyler } from '../style';
-// Constants & Styles
+import Image from '../../../../../components/Image';
+// Utilities, Constants & Styles
 import { MSG } from '../../../../../constants';
 import logoTomo from '../../../../../assets/images/logo-tomo.png';
 import logoKyper from '../../../../../assets/images/logo-kyper.png';
@@ -28,7 +29,7 @@ class TokenCell extends PureComponent {
     return (
       <TokenCellStyler>
         <div className='block-symbol'>
-          <img
+          <Image
             src={LogoToken[value]}
             alt={formatMessage(
               MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_IMAGE_ALT,

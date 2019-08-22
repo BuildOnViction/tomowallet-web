@@ -121,7 +121,7 @@ class NavigationBar extends PureComponent {
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggleHeader nav>
               {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
-              <i class="font-chevron-down"></i>
+              <i class='font-chevron-down' />
             </DropdownToggleHeader>
             <DropdownMenuStyler right>
               {LIST.LANGUAGES.map((opt, optIdx) => (
@@ -152,7 +152,7 @@ class NavigationBar extends PureComponent {
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggleHeader nav>
               {_get(network, 'data.label')}
-              <i class="font-chevron-down"></i>
+              <i class='font-chevron-down' />
             </DropdownToggleHeader>
             <DropdownMenuStyler right className='box_onl'>
               {LIST.NETWORKS.map((opt, optIdx) => (
@@ -169,7 +169,7 @@ class NavigationBar extends PureComponent {
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggleHeader nav>
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
-              <i class="font-chevron-down"></i>
+              <i class='font-chevron-down' />
             </DropdownToggleHeader>
             <DropdownMenuStyler right>
               {!getLedger() && (
@@ -197,7 +197,8 @@ class NavigationBar extends PureComponent {
   isActiveNetwork(networkOpt) {
     const { network } = this.props;
     const { value } = networkOpt;
-    return _isEqual(_get(network, 'value'), value);
+
+    return _isEqual(_get(network, 'data.value'), value);
   }
 
   render() {
