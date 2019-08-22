@@ -96,7 +96,11 @@ class SendTokenPopup extends PureComponent {
       }) ||
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
         Content: ConfirmationContent,
-        getContentProps: { formValues, wallet },
+        getContentProps: {
+          errors: _get(popupData, 'errors', {}),
+          formValues,
+          wallet,
+        },
       })
     );
   }

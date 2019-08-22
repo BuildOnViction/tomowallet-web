@@ -30,6 +30,14 @@ export const shuffleArray = array => {
   return result;
 };
 
+export const trimMnemonic = rawMnemonic => {
+  const words = rawMnemonic
+    .trim() // Remove beginning & end spaces
+    .replace(/[\r\n]+/g, '') // Remove break-line characters
+    .split(/[ ]+/);
+  return words.join(' ');
+};
+
 // Global state storage
 const setStorage = (key, object) => {
   localStorage.setItem(
@@ -46,7 +54,7 @@ const getStorage = key => {
 const removeStorage = key => {
   localStorage.setItem(
     'global',
-    JSON.stringify(_omit(getStorage('global'), key)),
+    JSON.stringify(_omit(JSON.parse(localStorage.getItem('global')), key)),
   );
 };
 

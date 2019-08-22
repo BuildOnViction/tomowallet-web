@@ -154,9 +154,6 @@ const sendToken = (web3, contractData) => {
                 return web3.eth.getTransactionReceipt(hash);
               },
             });
-          })
-          .catch(ex => {
-            console.log('[ERROR] -- ', ex);
           }),
       );
   } else {
@@ -179,9 +176,6 @@ const sendToken = (web3, contractData) => {
                 return web3.eth.getTransactionReceipt(hash);
               },
             });
-          })
-          .catch(ex => {
-            console.log('[ERROR] -- ', ex);
           }),
     );
   }

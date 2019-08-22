@@ -4,6 +4,7 @@ import history from './history';
 import createDeepEqualSelector from './deepSelector';
 import {
   shuffleArray,
+  trimMnemonic,
   getWeb3Info,
   setWeb3Info,
   removeWeb3Info,
@@ -57,4 +58,5 @@ export {
   getLedger,
   setLedger,
   removeLedger,
+  trimMnemonic,
 };

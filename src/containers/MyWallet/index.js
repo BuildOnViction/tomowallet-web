@@ -135,6 +135,7 @@ class MyWallet extends PureComponent {
     const {
       onStoreWallet,
       onToggleSuccessPopup,
+      onUpdateSendTokenErrors,
       toggleLoading,
       web3,
     } = this.props;
@@ -149,6 +150,10 @@ class MyWallet extends PureComponent {
         .then(hash => {
           this.handleCloseSendTokenPopup();
           onToggleSuccessPopup(true, hash);
+        })
+        .catch(error => {
+          toggleLoading(false);
+          onUpdateSendTokenErrors([error.message]);
         });
     } else {
       sendMoney(web3, contractData)

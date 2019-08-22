@@ -195,6 +195,7 @@ class FormContent extends PureComponent {
               type='number'
               name={SEND_TOKEN_FIELDS.TRANSFER_AMOUNT}
               value={_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], '')}
+              max={12}
               placeholder={formatMessage(
                 MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_PLACEHOLDER,
               )}
@@ -213,7 +214,7 @@ class FormContent extends PureComponent {
             {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT)}
           </InputGroup>
         </FormGroup>
-        <FormGroup>
+        {/* <FormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL)}
           </Label>
@@ -230,7 +231,7 @@ class FormContent extends PureComponent {
             invalid={this.handleMarkFieldInvalid(SEND_TOKEN_FIELDS.MESSAGE)}
           />
           {this.handleRenderErrorList(SEND_TOKEN_FIELDS.MESSAGE)}
-        </FormGroup>
+        </FormGroup> */}
         <Label>
           {`${formatMessage(
             MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,

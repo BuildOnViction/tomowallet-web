@@ -91,9 +91,6 @@ class WalletViewContent extends PureComponent {
             tabId={WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}
             className='text-center mt-5'
           >
-            <BoxImages className='mb-4'>
-              <QRCode value={this.handleGetPrivateKey()} />
-            </BoxImages>
             <div className='text-break'>
               <TextBlue>{this.handleGetPrivateKey()}</TextBlue>
             </div>

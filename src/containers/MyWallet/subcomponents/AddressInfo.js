@@ -41,12 +41,12 @@ class AddressInfo extends PureComponent {
             <Col md={6} className='pr-5'>
               <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
               <Row className='mt-4'>
-                <Col md={6} className='pr-2'>
+                <Col xs={6} className='pr-md-2'>
                   <BigButtonStyler onClick={openSendTokenPopup}>
                     {formatMessage(MSG.COMMON_BUTTON_SEND)}
                   </BigButtonStyler>
                 </Col>
-                <Col md={6} className='pl-2'>
+                <Col xs={6} className='pl-md-2'>
                   <BigButtonStyler btnBlue onClick={openReceiveTokenPopup}>
                     {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
                   </BigButtonStyler>

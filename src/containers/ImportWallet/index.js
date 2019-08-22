@@ -59,6 +59,7 @@ import {
   withLoading,
   getValidations,
   setLedger,
+  trimMnemonic,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -119,7 +120,9 @@ class ImportWallet extends PureComponent {
     if (_get(importWallet, 'type') === IMPORT_TYPES.LEDGER) {
       this.handleSelectHDPath();
     } else if (_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK) {
-      const recoveryPhrase = _get(importWallet, 'input.recoveryPhrase', '');
+      const recoveryPhrase = trimMnemonic(
+        _get(importWallet, 'input.recoveryPhrase', ''),
+      );
 
       if (
         recoveryPhrase &&
@@ -139,11 +142,9 @@ class ImportWallet extends PureComponent {
               toggleLoading(false);
               history.push(ROUTE.MY_WALLET);
             });
-        } catch {
+        } catch (error) {
           toggleLoading(false);
-          onUpdateErrors([
-            formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
-          ]);
+          onUpdateErrors([error.message]);
         }
       } else {
         toggleLoading(false);

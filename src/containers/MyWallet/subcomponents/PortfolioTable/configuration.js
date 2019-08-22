@@ -72,16 +72,16 @@ export default ({
     ],
   },
   {
-    Header: ({ searchToken }) => (
-      <InputGroup size='sm'>
-        <Input name='searchToken' value={searchToken} />
-        <InputGroupAddon addonType='append'>
-          <InputGroupText>
-            <FontAwesomeIcon icon='search' />
-          </InputGroupText>
-        </InputGroupAddon>
-      </InputGroup>
-    ),
+    // Header: ({ searchToken }) => (
+    //   <InputGroup size='sm'>
+    //     <Input name='searchToken' value={searchToken} />
+    //     <InputGroupAddon addonType='append'>
+    //       <InputGroupText>
+    //         <FontAwesomeIcon icon='search' />
+    //       </InputGroupText>
+    //     </InputGroupAddon>
+    //   </InputGroup>
+    // ),
     accessor: 'abc',
     columns: [
       {

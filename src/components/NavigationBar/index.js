@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
+import _isEqual from 'lodash.isequal';
 import {
   NavbarBrand,
   NavbarToggler,
@@ -56,6 +57,7 @@ class NavigationBar extends PureComponent {
     this.handleRedirectToHomepage = this.handleRedirectToHomepage.bind(this);
     this.handleRenderPrivateBar = this.handleRenderPrivateBar.bind(this);
     this.handleRenderPublicBar = this.handleRenderPublicBar.bind(this);
+    this.isActiveNetwork = this.isActiveNetwork.bind(this);
   }
 
   componentDidMount() {
@@ -157,6 +159,7 @@ class NavigationBar extends PureComponent {
                 <DropdownItemStyler
                   key={`network_${optIdx + 1}`}
                   onClick={() => this.handleChangeNetwork(opt)}
+                  active={this.isActiveNetwork(opt)}
                 >
                   {opt.label}
                 </DropdownItemStyler>
@@ -189,6 +192,12 @@ class NavigationBar extends PureComponent {
         </Nav>
       </Fragment>
     );
+  }
+
+  isActiveNetwork(networkOpt) {
+    const { network } = this.props;
+    const { value } = networkOpt;
+    return _isEqual(_get(network, 'value'), value);
   }
 
   render() {

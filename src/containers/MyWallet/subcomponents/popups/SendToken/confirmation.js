@@ -9,7 +9,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import _get from 'lodash.get';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, FormFeedback } from 'reactstrap';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
@@ -20,12 +20,25 @@ import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 class ConfirmationContent extends PureComponent {
   render() {
     const {
+      errors,
       formValues,
       intl: { formatMessage },
       wallet,
     } = this.props;
     return (
       <div className='box-confirmation'>
+        {errors.length > 0 && (
+          <Row>
+            <Col className='text-center'>
+              {errors.map((err, errIdx) => (
+                <div
+                  key={`error_${errIdx + 1}`}
+                  className='text-danger'
+                >{`* ${err}`}</div>
+              ))}
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col xs={4}>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}
@@ -58,12 +71,12 @@ class ConfirmationContent extends PureComponent {
             </div>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col xs={4}>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL)}
           </Col>
           <Col xs={8}>{_get(formValues, [SEND_TOKEN_FIELDS.MESSAGE], '')}</Col>
-        </Row>
+        </Row> */}
         <Row>
           <Col xs={4}>
             {formatMessage(
@@ -86,6 +99,8 @@ class ConfirmationContent extends PureComponent {
 
 // ===== PROP TYPES =====
 ConfirmationContent.propTypes = {
+  /** List of error messages */
+  errors: PropTypes.arrayOf(PropTypes.string),
   /** Send token form's input values */
   formValues: PropTypes.object,
   /** React Intl's instance object */
@@ -95,6 +110,7 @@ ConfirmationContent.propTypes = {
 };
 
 ConfirmationContent.defaultProps = {
+  errors: [],
   formValues: {},
   intl: {},
   wallet: {},
