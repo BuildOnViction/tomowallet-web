@@ -89,7 +89,7 @@ class WalletViewContent extends PureComponent {
           )}
           <TabPane
             tabId={WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}
-            className='text-center mt-5'
+            className='text-center mt-5 px-lg-5'
           >
             <div className='text-break'>
               <TextBlue>{this.handleGetPrivateKey()}</TextBlue>

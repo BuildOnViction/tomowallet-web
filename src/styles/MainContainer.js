@@ -22,6 +22,11 @@ const BoxImages = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  canvas {
+    border: 7px solid #fff;
+    border-radius: 3px;
+    display: flex;
+  }
 `;
 const BoxFlexBetween = styled.div`
   display: flex;
