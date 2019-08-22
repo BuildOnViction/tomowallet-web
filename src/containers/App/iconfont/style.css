@@ -81,3 +81,6 @@ i {
 .font-icon-edit-pencil:before {
   content: "\e913";
 }
+.font-chevron-down:before {
+  content: "\e90a";
+}
