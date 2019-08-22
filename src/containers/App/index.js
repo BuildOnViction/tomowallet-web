@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _isEmpty from 'lodash.isempty';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 // Custom Components
 import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';

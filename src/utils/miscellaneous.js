@@ -40,21 +40,21 @@ export const trimMnemonic = rawMnemonic => {
 
 // Global state storage
 const setStorage = (key, object) => {
-  localStorage.setItem(
+  sessionStorage.setItem(
     'global',
     JSON.stringify({
-      ...JSON.parse(localStorage.getItem('global')),
+      ...JSON.parse(sessionStorage.getItem('global')),
       [key]: object,
     }),
   );
 };
 const getStorage = key => {
-  return _get(JSON.parse(localStorage.getItem('global')), [key]);
+  return _get(JSON.parse(sessionStorage.getItem('global')), [key]);
 };
 const removeStorage = key => {
-  localStorage.setItem(
+  sessionStorage.setItem(
     'global',
-    JSON.stringify(_omit(JSON.parse(localStorage.getItem('global')), key)),
+    JSON.stringify(_omit(JSON.parse(sessionStorage.getItem('global')), key)),
   );
 };
 
