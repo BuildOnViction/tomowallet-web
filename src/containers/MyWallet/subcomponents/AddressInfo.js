@@ -37,24 +37,35 @@ class AddressInfo extends PureComponent {
           {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
         </HeadingSmall>
         <div className='box-address'>
-          <Row className='align-items-center'>
-            <Col md={6} className='pr-5'>
-              <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
-              <Row className='mt-4'>
-                <Col md={6} className='pr-2'>
-                  <BigButtonStyler onClick={openSendTokenPopup}>
-                    {formatMessage(MSG.COMMON_BUTTON_SEND)}
-                  </BigButtonStyler>
-                </Col>
-                <Col md={6} className='pl-2'>
-                  <BigButtonStyler btnBlue onClick={openReceiveTokenPopup}>
-                    {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
-                  </BigButtonStyler>
-                </Col>
-              </Row>
+          <Row>
+            <Col md={7}>
+              <div className='d-flex align-items-center bg_gray'>
+                <Row className='fullwidth align-items-center'>
+                  <Col md={8} className='text-center'>
+                    <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
+                    <Row className='mt-4'>
+                      <Col md={6} className='pr-2'>
+                        <BigButtonStyler onClick={openSendTokenPopup}>
+                          {formatMessage(MSG.COMMON_BUTTON_SEND)}
+                        </BigButtonStyler>
+                      </Col>
+                      <Col md={6} className='pl-2'>
+                        <BigButtonStyler btnBlue onClick={openReceiveTokenPopup}>
+                          {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
+                        </BigButtonStyler>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col md={4} className='d-flex justify-content-end'>
+                    <QRCode value={_get(wallet, 'address', '')} />
+                  </Col>
+                </Row>
+              </div>
             </Col>
-            <Col md={6} className='d-flex'>
-              <QRCode value={_get(wallet, 'address', '')} />
+            <Col md={5}>
+              <div  className='bg_gray'>
+                <div class="coinmarketcap-currency-widget" data-currencyid="2570" data-base="USD" data-secondary="BTC" data-ticker="true" data-rank="true" data-marketcap="true" data-volume="true" data-stats="USD" data-statsticker="true"></div>
+              </div>
             </Col>
           </Row>
         </div>
