@@ -33,7 +33,9 @@ class ReceiveContent extends PureComponent {
           {formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE)}
         </div>
         <BoxImages className='mt-5 mb-4'>
-          <QRCode value={_get(wallet, 'address', '')} />
+          <div className='qrc_bd'>
+            <QRCode value={_get(wallet, 'address', '')} />
+          </div>
         </BoxImages>
         <div className='text-center text-break'>
           <TextBlue>{_get(wallet, 'address', '')}</TextBlue>

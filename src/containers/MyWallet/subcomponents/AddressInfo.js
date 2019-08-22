@@ -42,7 +42,7 @@ class AddressInfo extends PureComponent {
             >
               <div className='bg_gray'>
                 <div
-                  class='coinmarketcap-currency-widget'
+                  className='coinmarketcap-currency-widget'
                   data-currencyid='2570'
                   data-base='USD'
                   data-secondary='BTC'
