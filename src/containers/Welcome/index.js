@@ -7,10 +7,11 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 import { Row, Col, CardImg } from 'reactstrap';
 // Custom Component
 import { BigButtonStyler, BoxBtnStyler, HeadingBig } from '../../styles';
@@ -38,38 +39,43 @@ class WelcomePage extends PureComponent {
       intl: { formatMessage },
     } = this.props;
     return (
-      <Row className='align-items-center'>
-        <Col xs={12} md={6} lg={7}>
-          <HeadingBig>{formatMessage(MSG.WELCOME_TITLE)}</HeadingBig>
-          <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
-          <BoxBtnStyler className='mt-3'>
-            <div>
-              <BigButtonStyler
-                btnBlue
-                onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
-              >
-                {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
-              </BigButtonStyler>
-            </div>
-            <div className='m-3'>
-              {formatMessage(MSG.WELCOME_TEXT_BETWEEN_BUTTONS)}
-            </div>
-            <div>
-              <BigButtonStyler
-                onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
-              >
-                {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
-              </BigButtonStyler>
-            </div>
-          </BoxBtnStyler>
-        </Col>
-        <Col xs={12} md={6} lg={5} className='d-none d-md-block'>
-          <CardImg
-            src={imgvisual_login}
-            alt={formatMessage(MSG.WELCOME_IMAGE_ALT)}
-          />
-        </Col>
-      </Row>
+      <Fragment>
+        <Helmet>
+          <title>{formatMessage(MSG.WELCOME_TITLE)}</title>
+        </Helmet>
+        <Row className='align-items-center'>
+          <Col xs={12} md={6} lg={7}>
+            <HeadingBig>{formatMessage(MSG.WELCOME_TITLE)}</HeadingBig>
+            <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
+            <BoxBtnStyler className='mt-3'>
+              <div>
+                <BigButtonStyler
+                  btnBlue
+                  onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
+                >
+                  {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
+                </BigButtonStyler>
+              </div>
+              <div className='m-3'>
+                {formatMessage(MSG.WELCOME_TEXT_BETWEEN_BUTTONS)}
+              </div>
+              <div>
+                <BigButtonStyler
+                  onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
+                >
+                  {formatMessage(MSG.WELCOME_BUTTON_CREATE_NEW_WALLET)}
+                </BigButtonStyler>
+              </div>
+            </BoxBtnStyler>
+          </Col>
+          <Col xs={12} md={6} lg={5} className='d-none d-md-block'>
+            <CardImg
+              src={imgvisual_login}
+              alt={formatMessage(MSG.WELCOME_IMAGE_ALT)}
+            />
+          </Col>
+        </Row>
+      </Fragment>
     );
   }
 }

@@ -166,6 +166,7 @@ class NavigationBar extends PureComponent {
                   key={`network_${optIdx + 1}`}
                   onClick={() => onToggleNetworkConfirmationPopup(true, opt)}
                   active={this.isActiveNetwork(opt)}
+                  disabled={this.isActiveNetwork(opt)}
                 >
                   {opt.label}
                 </DropdownItemStyler>

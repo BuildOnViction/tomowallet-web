@@ -7,6 +7,7 @@
 // Modules
 import _get from 'lodash.get';
 import _omit from 'lodash.omit';
+import _isNumber from 'lodash.isnumber';
 // ===================
 
 export const shuffleArray = array => {
@@ -36,6 +37,15 @@ export const trimMnemonic = rawMnemonic => {
     .replace(/[\r\n]+/g, '') // Remove break-line characters
     .split(/[ ]+/);
   return words.join(' ');
+};
+
+export const convertLocaleNumber = (rawNumber, decimals = 3) => {
+  if (_isNumber(rawNumber) && !isNaN(rawNumber)) {
+    const convertedNumber =
+      Math.floor(rawNumber * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return convertedNumber.toLocaleString();
+  }
+  return 0;
 };
 
 // Global state storage

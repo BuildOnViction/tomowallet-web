@@ -26,7 +26,8 @@ import {
 import Select from 'react-select';
 // Custom Components
 import Image from '../../../../../components/Image';
-// Constants & Styles
+// Utilities & Constants
+import { convertLocaleNumber } from '../../../../../utils';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
 // ===================
@@ -50,11 +51,10 @@ const TokenOption = props => {
           )})`}</span>
         </Col>
         <Col xs={4} className='text-right'>
-          {`${_get(
-            data,
-            [PORTFOLIO_COLUMNS.BALANCE],
-            0,
-          ).toLocaleString()} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
+          {`${convertLocaleNumber(
+            _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0),
+            3,
+          )} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
         </Col>
       </Row>
     </Container>
@@ -79,11 +79,9 @@ const TokenInputValue = props => {
           )})`}</span>
         </Col>
         <Col xs={4} className='text-right'>
-          {`${_get(
-            data,
-            [PORTFOLIO_COLUMNS.BALANCE],
-            0,
-          ).toLocaleString()} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
+          {`${convertLocaleNumber(
+            _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0),
+          )} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
         </Col>
       </Row>
     </div>

@@ -6,6 +6,9 @@
 // ===== IMPORTS =====
 // Constants
 import {
+  LOAD_COIN_DATA,
+  LOAD_COIN_DATA_FAILED,
+  LOAD_COIN_DATA_SUCCESS,
   LOAD_TOKEN_OPTIONS,
   LOAD_TOKEN_OPTIONS_SUCCESS,
   LOAD_TRANSACTION_DATA,
@@ -23,6 +26,20 @@ import {
 // ===================
 
 // ===== ACTIONS =====
+export const loadCoinData = () => ({
+  type: LOAD_COIN_DATA,
+});
+
+export const loadCoinDataFailed = message => ({
+  type: LOAD_COIN_DATA_FAILED,
+  message,
+});
+
+export const loadCoinDataSuccess = data => ({
+  type: LOAD_COIN_DATA_SUCCESS,
+  data,
+});
+
 export const loadTokenOptions = (address, initialTokens) => ({
   type: LOAD_TOKEN_OPTIONS,
   address,

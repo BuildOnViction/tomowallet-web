@@ -194,6 +194,10 @@ export default defineMessages({
     defaultMessage: 'Welcome to TomoWallet',
   },
   // Create Wallet - Warning Page
+  CREATE_WALLET_TITLE: {
+    id: `${createWalletPagePrefix}.title`,
+    defaultMessage: 'Create New Wallet',
+  },
   WARNING_HEADER_TITLE: {
     id: `${warningPagePrefix}.header.title`,
     defaultMessage: 'Create New Wallet',
@@ -320,6 +324,10 @@ export default defineMessages({
     defaultMessage: 'Access your wallet now',
   },
   // Import Wallet Page
+  IMPORT_WALLET_TITLE: {
+    id: `${importWalletPagePrefix}.title`,
+    defaultMessage: 'Import Wallet',
+  },
   IMPORT_WALLET_HEADER_TITLE: {
     id: `${importWalletPagePrefix}.header.title`,
     defaultMessage: 'Import Your Wallet',
@@ -382,6 +390,10 @@ export default defineMessages({
     defaultMessage: 'Ledger Wallet',
   },
   // My Wallet Page
+  MY_WALLET_TITLE: {
+    id: `${myWalletPagePrefix}.title`,
+    defaultMessage: 'My TomoWallet',
+  },
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
     defaultMessage: 'Address',

@@ -5,6 +5,7 @@ import createDeepEqualSelector from './deepSelector';
 import {
   shuffleArray,
   trimMnemonic,
+  convertLocaleNumber,
   getWeb3Info,
   setWeb3Info,
   removeWeb3Info,
@@ -59,4 +60,5 @@ export {
   setLedger,
   removeLedger,
   trimMnemonic,
+  convertLocaleNumber,
 };

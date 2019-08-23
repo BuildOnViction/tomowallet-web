@@ -24,6 +24,7 @@ import {
   selectTokenOptions,
   selectSuccessPopup,
   selectTableType,
+  selectCoinData,
 } from '../../selectors';
 import { withIntl } from '../../../../components/IntlProvider';
 import portfolioConfig from './configuration';
@@ -65,7 +66,7 @@ class PortfolioTable extends Component {
   }
 
   handleGetNativeCurrency() {
-    const { wallet } = this.props;
+    const { coinData, wallet } = this.props;
     return [
       {
         [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
@@ -73,8 +74,7 @@ class PortfolioTable extends Component {
         [PORTFOLIO_COLUMNS.ICON]: tomoIcon,
         [PORTFOLIO_COLUMNS.BALANCE]: _get(wallet, 'balance', 0),
         [PORTFOLIO_COLUMNS.DECIMALS]: 18,
-        [PORTFOLIO_COLUMNS.PRICE]: 0.4,
-        [PORTFOLIO_COLUMNS.VALUE]: _get(wallet, 'balance', 0) * 0.4,
+        [PORTFOLIO_COLUMNS.PRICE]: _get(coinData, 'data.quotes.USD.price', 0),
         [PORTFOLIO_COLUMNS.TYPE]: 'TRC20',
         [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
         [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
@@ -122,6 +122,8 @@ class PortfolioTable extends Component {
 
 // ===== PROP TYPES =====
 PortfolioTable.propTypes = {
+  /** TomoChain coin data */
+  coinData: PropTypes.object,
   /** Table data */
   data: PropTypes.arrayOf(PropTypes.object),
   /** React Intl's instance object */
@@ -141,6 +143,7 @@ PortfolioTable.propTypes = {
 };
 
 PortfolioTable.defaultProps = {
+  coinData: {},
   data: [],
   intl: {},
   isActive: false,
@@ -155,6 +158,7 @@ PortfolioTable.defaultProps = {
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
+    coinData: selectCoinData,
     data: selectTokenOptions,
     successPopup: selectSuccessPopup,
     tableType: selectTableType,

@@ -5,15 +5,16 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { createElement } from 'react';
-import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import React from 'react';
+import _get from 'lodash.get';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
-// Constants
+import { TextBlue, TextYellowPointer } from '../../../../styles';
+// Utilities & Constants
+import { convertLocaleNumber } from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG } from '../../../../constants';
-import { TextBlue, TextYellowPointer } from '../../../../styles';
 
 // ===================
 
@@ -41,10 +42,7 @@ export default ({
       {
         headerClassName: 'd-none',
         accessor: PORTFOLIO_COLUMNS.BALANCE,
-        Cell: ({ value }) =>
-          value.toLocaleString(undefined, {
-            minimumFractionDigits: 3,
-          }),
+        Cell: ({ value }) => convertLocaleNumber(value, 3),
       },
     ],
   },
@@ -54,10 +52,12 @@ export default ({
       {
         headerClassName: 'd-none',
         accessor: PORTFOLIO_COLUMNS.VALUE,
-        Cell: ({ value }) =>
-          value.toLocaleString(undefined, {
-            minimumFractionDigits: 3,
-          }),
+        Cell: ({ original }) =>
+          convertLocaleNumber(
+            _get(original, PORTFOLIO_COLUMNS.BALANCE) *
+              _get(original, [PORTFOLIO_COLUMNS.PRICE]),
+            3,
+          ),
       },
     ],
   },
@@ -67,21 +67,11 @@ export default ({
       {
         headerClassName: 'd-none',
         accessor: PORTFOLIO_COLUMNS.PRICE,
-        Cell: ({ value }) => value,
+        Cell: ({ value }) => convertLocaleNumber(value, 3),
       },
     ],
   },
   {
-    // Header: ({ searchToken }) => (
-    //   <InputGroup size='sm'>
-    //     <Input name='searchToken' value={searchToken} />
-    //     <InputGroupAddon addonType='append'>
-    //       <InputGroupText>
-    //         <FontAwesomeIcon icon='search' />
-    //       </InputGroupText>
-    //     </InputGroupAddon>
-    //   </InputGroup>
-    // ),
     accessor: 'abc',
     columns: [
       {

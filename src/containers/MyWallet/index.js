@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
+import { Helmet } from 'react-helmet';
 // Custom Components
 import AddressInfo from './subcomponents/AddressInfo';
 import DataTables from './subcomponents/DataTables';
@@ -31,6 +32,7 @@ import {
   toggleSuccessPopup,
   resetSendTokenForm,
   toggleReceiveTokenPopup,
+  loadCoinData,
 } from './actions';
 import {
   selectTableType,
@@ -39,6 +41,7 @@ import {
   selectSendTokenForm,
   selectSuccessPopup,
   selectTokenOptions,
+  selectCoinData,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -76,6 +79,11 @@ class MyWallet extends PureComponent {
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
     this.handleSubmitSendToken = this.handleSubmitSendToken.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
+  }
+
+  componentDidMount() {
+    const { onLoadCoinData } = this.props;
+    onLoadCoinData();
   }
 
   handleAddFullAmount() {
@@ -248,6 +256,8 @@ class MyWallet extends PureComponent {
 
   render() {
     const {
+      coinData,
+      intl: { formatMessage },
       onSetTableType,
       onToggleReceiveTokenPopup,
       onToggleSuccessPopup,
@@ -264,7 +274,11 @@ class MyWallet extends PureComponent {
 
     return (
       <Fragment>
+        <Helmet>
+          <title>{formatMessage(MSG.MY_WALLET_TITLE)}</title>
+        </Helmet>
         <AddressInfo
+          coinData={coinData}
           openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
           openSendTokenPopup={this.handleOpenSendTokenPopup}
           wallet={wallet}
@@ -308,6 +322,8 @@ class MyWallet extends PureComponent {
 
 // ===== PROP TYPES =====
 MyWallet.propTypes = {
+  /** TomoChain coin data */
+  coinData: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Action to reset send token popup's form */
@@ -345,6 +361,7 @@ MyWallet.propTypes = {
 };
 
 MyWallet.defaultProps = {
+  coinData: {},
   intl: {},
   onResetSendTokenForm: () => {},
   onSetTableType: () => {},
@@ -368,6 +385,7 @@ MyWallet.defaultProps = {
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
+    coinData: selectCoinData,
     receivePopup: selectReceiveToKenPopup,
     sendTokenForm: selectSendTokenForm,
     sendToKenPopup: selectSendTokenPopup,
@@ -377,6 +395,7 @@ const mapStateToProps = () =>
     wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
+  onLoadCoinData: () => dispatch(loadCoinData()),
   onResetSendTokenForm: () => dispatch(resetSendTokenForm()),
   onSetTableType: type => dispatch(setTableType(type)),
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),

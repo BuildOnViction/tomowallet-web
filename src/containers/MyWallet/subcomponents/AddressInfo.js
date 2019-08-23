@@ -25,9 +25,12 @@ import { TextBlue } from '../../../styles';
 // ===== MAIN COMPONENT =====
 class AddressInfo extends PureComponent {
   componentDidMount() {
-    const addScript = document.createElement('script')
-    addScript.setAttribute('src', 'https://files.coinmarketcap.com/static/widget/currency.js')
-    document.body.appendChild(addScript)
+    const addScript = document.createElement('script');
+    addScript.setAttribute(
+      'src',
+      'https://files.coinmarketcap.com/static/widget/currency.js',
+    );
+    document.body.appendChild(addScript);
   }
   render() {
     const {
@@ -85,7 +88,9 @@ class AddressInfo extends PureComponent {
                     </Row>
                   </Col>
                   <Col md={4} className='d-flex justify-content-end'>
-                    <div className='qrc_bd'><QRCode value={_get(wallet, 'address', '')} /></div>
+                    <div className='qrc_bd'>
+                      <QRCode value={_get(wallet, 'address', '')} />
+                    </div>
                   </Col>
                 </Row>
               </div>
@@ -100,6 +105,8 @@ class AddressInfo extends PureComponent {
 
 // ===== PROP TYPES =====
 AddressInfo.propTypes = {
+  /** TomoChain coin data */
+  coinData: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Action to show receive token popup */
@@ -111,6 +118,7 @@ AddressInfo.propTypes = {
 };
 
 AddressInfo.defaultProps = {
+  coinData: {},
   intl: {},
   openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},

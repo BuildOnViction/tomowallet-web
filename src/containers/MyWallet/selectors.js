@@ -15,6 +15,10 @@ import { DOMAIN_KEY } from './constants';
 // ===== SELECTORS =====
 const selectMyWalletDomain = state => _get(state, [DOMAIN_KEY], fromJS({}));
 
+const selectCoinData = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().coinData,
+);
 const selectReceiveToKenPopup = createDeepEqualSelector(
   selectMyWalletDomain,
   obj => obj.toJS().receiveTokenPopup,
@@ -46,6 +50,7 @@ const selectTransactionData = createDeepEqualSelector(
 // =====================
 
 export {
+  selectCoinData,
   selectReceiveToKenPopup,
   selectSendTokenForm,
   selectSendTokenPopup,

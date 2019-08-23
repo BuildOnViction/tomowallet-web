@@ -4,7 +4,7 @@
  *
  */
 // Modules
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -25,6 +25,7 @@ import {
   CardText,
   CardFooter,
 } from 'reactstrap';
+import { Helmet } from 'react-helmet';
 // Custom Components
 import {
   ContainerMin,
@@ -280,101 +281,114 @@ class ImportWallet extends PureComponent {
     } = this.props;
 
     return (
-      <ContainerMin>
-        <BoxCardStyled>
-          <CardHeader>
-            <HeadingLarge>
-              {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
-            </HeadingLarge>
-            <CardText>
-              {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
-              <TextBlue
-                role='presentation'
-                onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
-              >
-                {formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_LINK)}
-              </TextBlue>
-            </CardText>
-          </CardHeader>
-          <CardBody>
-            <Row noGutters>
-              <Col className='pr-5'>
-                <ImporWalletStyler
-                  isActive={_get(importWallet, 'type') === IMPORT_TYPES.LEDGER}
-                  onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
+      <Fragment>
+        <Helmet>
+          <title>{formatMessage(MSG.IMPORT_WALLET_TITLE)}</title>
+        </Helmet>
+        <ContainerMin>
+          <BoxCardStyled>
+            <CardHeader>
+              <HeadingLarge>
+                {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
+              </HeadingLarge>
+              <CardText>
+                {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
+                <TextBlue
+                  role='presentation'
+                  onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
                 >
-                  <CardImg
-                    src={LogoLedger}
-                    alt={formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT)}
-                  />
-                  <CardText className='mt-3'>
-                    {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
-                  </CardText>
-                </ImporWalletStyler>
-              </Col>
-              <Col className='pl-5'>
-                <ImporWalletStyler
-                  isActive={
-                    _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
-                  }
-                  onClick={() => this.handleChangeType(IMPORT_TYPES.RP_OR_PK)}
-                >
-                  <CardImg
-                    src={LogoKey}
-                    alt={formatMessage(
-                      MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
-                    )}
-                  />
-                  <CardText className='mt-3'>
-                    {formatMessage(MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT)}
-                  </CardText>
-                </ImporWalletStyler>
-              </Col>
-            </Row>
-            <Row noGutters className='mt-4'>
-              <Col>
-                {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
-                  <LedgerForm
-                    errors={_get(importWallet, 'errors', [])}
-                    formValues={_get(importWallet, 'input', {})}
-                    updateInput={onUpdateInput}
-                  />
-                )}
-                {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
-                  <RPOrPKForm
-                    errors={_get(importWallet, 'errors', [])}
-                    formValues={_get(importWallet, 'input', {})}
-                    updateInput={onUpdateInput}
-                  />
-                )}
-              </Col>
-            </Row>
-          </CardBody>
-          <CardFooter>
-            <Row>
-              <Col size={6}>
-                <ButtonStyler onClick={() => this.handleRedirect(ROUTE.LOGIN)}>
-                  {formatMessage(MSG.COMMON_BUTTON_BACK)}
-                </ButtonStyler>
-              </Col>
-              <Col size={6}>
-                <ButtonStyler
-                  btnYellow
-                  onClick={this.handleAccessByRecoveryPhrase}
-                >
-                  {formatMessage(MSG.COMMON_BUTTON_IMPORT)}
-                </ButtonStyler>
-              </Col>
-            </Row>
-          </CardFooter>
-        </BoxCardStyled>
-        <AddressPopup
-          accessByLedger={this.handleAccessByLedger}
-          data={addressPopup}
-          togglePopup={onToggleAddressPopup}
-          updateChosenAddress={onUpdateChosenWallet}
-        />
-      </ContainerMin>
+                  {formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_LINK)}
+                </TextBlue>
+              </CardText>
+            </CardHeader>
+            <CardBody>
+              <Row noGutters>
+                <Col className='pr-5'>
+                  <ImporWalletStyler
+                    isActive={
+                      _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
+                    }
+                    onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
+                  >
+                    <CardImg
+                      src={LogoLedger}
+                      alt={formatMessage(
+                        MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
+                      )}
+                    />
+                    <CardText className='mt-3'>
+                      {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
+                    </CardText>
+                  </ImporWalletStyler>
+                </Col>
+                <Col className='pl-5'>
+                  <ImporWalletStyler
+                    isActive={
+                      _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
+                    }
+                    onClick={() => this.handleChangeType(IMPORT_TYPES.RP_OR_PK)}
+                  >
+                    <CardImg
+                      src={LogoKey}
+                      alt={formatMessage(
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+                      )}
+                    />
+                    <CardText className='mt-3'>
+                      {formatMessage(
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+                      )}
+                    </CardText>
+                  </ImporWalletStyler>
+                </Col>
+              </Row>
+              <Row noGutters className='mt-4'>
+                <Col>
+                  {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
+                    <LedgerForm
+                      errors={_get(importWallet, 'errors', [])}
+                      formValues={_get(importWallet, 'input', {})}
+                      updateInput={onUpdateInput}
+                    />
+                  )}
+                  {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
+                    <RPOrPKForm
+                      errors={_get(importWallet, 'errors', [])}
+                      formValues={_get(importWallet, 'input', {})}
+                      updateInput={onUpdateInput}
+                    />
+                  )}
+                </Col>
+              </Row>
+            </CardBody>
+            <CardFooter>
+              <Row>
+                <Col size={6}>
+                  <ButtonStyler
+                    onClick={() => this.handleRedirect(ROUTE.LOGIN)}
+                  >
+                    {formatMessage(MSG.COMMON_BUTTON_BACK)}
+                  </ButtonStyler>
+                </Col>
+                <Col size={6}>
+                  <ButtonStyler
+                    btnYellow
+                    onClick={this.handleAccessByRecoveryPhrase}
+                  >
+                    {formatMessage(MSG.COMMON_BUTTON_IMPORT)}
+                  </ButtonStyler>
+                </Col>
+              </Row>
+            </CardFooter>
+          </BoxCardStyled>
+          <AddressPopup
+            accessByLedger={this.handleAccessByLedger}
+            data={addressPopup}
+            togglePopup={onToggleAddressPopup}
+            updateChosenAddress={onUpdateChosenWallet}
+          />
+        </ContainerMin>
+      </Fragment>
     );
   }
 }

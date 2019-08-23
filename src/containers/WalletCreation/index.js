@@ -7,7 +7,7 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -15,6 +15,7 @@ import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
+import { Helmet } from 'react-helmet';
 // Custom Component
 import Warning from './subcomponents/Warning';
 import RecoveryPhrase from './subcomponents/RecoveryPhrase';
@@ -132,6 +133,7 @@ class WalletCreationPage extends PureComponent {
       confirmation,
       errors,
       formState,
+      intl: { formatMessage },
       keyView,
       mnemonic,
       onAddWord,
@@ -147,48 +149,55 @@ class WalletCreationPage extends PureComponent {
     } = this.props;
 
     return (
-      <ContainerMin>
-        {(formState === FORM_STATES.WARNING && (
-          <Warning
+      <Fragment>
+        <Helmet>
+          <title>{formatMessage(MSG.CREATE_WALLET_TITLE)}</title>
+        </Helmet>
+        <ContainerMin>
+          {(formState === FORM_STATES.WARNING && (
+            <Warning
+              setFormState={onSetFormState}
+              setPrivateKey={onSetPrivateKey}
+              storeMnemonic={onStoreMnemonic}
+            />
+          )) ||
+            (formState === FORM_STATES.RECOVERY_PHRASE && (
+              <RecoveryPhrase
+                mnemonic={_get(mnemonic, 'origin')}
+                setFormState={onSetFormState}
+                toggleKeyViewPopup={onToggleKeyViewPopup}
+                toggleConfirmationPopup={onToggleConfirmationPopup}
+              />
+            )) ||
+            (formState === FORM_STATES.VERIFICATION && (
+              <Verification
+                addWord={onAddWord}
+                clearComparison={onClearComparison}
+                errors={errors}
+                mnemonic={mnemonic}
+                removeWord={onRemoveWord}
+                setFormState={onSetFormState}
+                updateErrors={onUpdateErrors}
+                verifyMnemonic={this.handleVerifyMnemonic}
+              />
+            )) ||
+            (formState === FORM_STATES.SUCCESS && (
+              <SuccessNotification
+                confirmSuccess={this.handleStoreWalletData}
+              />
+            ))}
+          <ConfirmationPopup
+            confirmation={confirmation}
             setFormState={onSetFormState}
-            setPrivateKey={onSetPrivateKey}
-            storeMnemonic={onStoreMnemonic}
+            togglePopup={onToggleConfirmationPopup}
           />
-        )) ||
-          (formState === FORM_STATES.RECOVERY_PHRASE && (
-            <RecoveryPhrase
-              mnemonic={_get(mnemonic, 'origin')}
-              setFormState={onSetFormState}
-              toggleKeyViewPopup={onToggleKeyViewPopup}
-              toggleConfirmationPopup={onToggleConfirmationPopup}
-            />
-          )) ||
-          (formState === FORM_STATES.VERIFICATION && (
-            <Verification
-              addWord={onAddWord}
-              clearComparison={onClearComparison}
-              errors={errors}
-              mnemonic={mnemonic}
-              removeWord={onRemoveWord}
-              setFormState={onSetFormState}
-              updateErrors={onUpdateErrors}
-              verifyMnemonic={this.handleVerifyMnemonic}
-            />
-          )) ||
-          (formState === FORM_STATES.SUCCESS && (
-            <SuccessNotification confirmSuccess={this.handleStoreWalletData} />
-          ))}
-        <ConfirmationPopup
-          confirmation={confirmation}
-          setFormState={onSetFormState}
-          togglePopup={onToggleConfirmationPopup}
-        />
-        <KeyViewPopup
-          keyView={keyView}
-          toggleKeyVisibile={onToggleKeyVisible}
-          togglePopup={onToggleKeyViewPopup}
-        />
-      </ContainerMin>
+          <KeyViewPopup
+            keyView={keyView}
+            toggleKeyVisibile={onToggleKeyVisible}
+            togglePopup={onToggleKeyViewPopup}
+          />
+        </ContainerMin>
+      </Fragment>
     );
   }
 }

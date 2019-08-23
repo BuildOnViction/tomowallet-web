@@ -11,6 +11,9 @@ import _omit from 'lodash.omit';
 import moment from 'moment';
 // Constants
 import {
+  LOAD_COIN_DATA,
+  LOAD_COIN_DATA_FAILED,
+  LOAD_COIN_DATA_SUCCESS,
   LOAD_TOKEN_OPTIONS,
   LOAD_TOKEN_OPTIONS_SUCCESS,
   LOAD_TRANSACTION_DATA,
@@ -40,6 +43,11 @@ const initialSendForm = {
 };
 
 const initialState = fromJS({
+  coinData: {
+    isLoaded: false,
+    data: {},
+    errorMessage: '',
+  },
   receiveTokenPopup: {
     isOpen: false,
   },
@@ -67,6 +75,34 @@ const initialState = fromJS({
 // ===== REDUCER =====
 export default (state = initialState, action) => {
   switch (action.type) {
+    case LOAD_COIN_DATA:
+      return state
+        .setIn(['coinData', 'isLoaded'], false)
+        .setIn(['coinData', 'data'], {})
+        .setIn(['coinData', 'errorMessage'], '');
+    case LOAD_COIN_DATA_FAILED:
+      return state
+        .setIn(['coinData', 'isLoaded'], true)
+        .setIn(['coinData', 'errorMessage'], action.message);
+    case LOAD_COIN_DATA_SUCCESS:
+      return state
+        .setIn(['coinData', 'isLoaded'], true)
+        .setIn(['coinData', 'data'], action.data)
+        .update('tokenOptions', tokens =>
+          tokens.map(tok => {
+            if (tok[PORTFOLIO_COLUMNS.TOKEN_NAME] === 'TOMO') {
+              return {
+                ...tok,
+                [PORTFOLIO_COLUMNS.PRICE]: _get(
+                  action,
+                  'data.quotes.USD.price',
+                  0,
+                ),
+              };
+            }
+            return tok;
+          }),
+        );
     case LOAD_TOKEN_OPTIONS:
       return state.set('tokenOptions', action.initialTokens);
     case LOAD_TOKEN_OPTIONS_SUCCESS:
@@ -83,7 +119,6 @@ export default (state = initialState, action) => {
               [PORTFOLIO_COLUMNS.BALANCE]: balance,
               [PORTFOLIO_COLUMNS.DECIMALS]: _get(token, 'decimals', 0),
               [PORTFOLIO_COLUMNS.PRICE]: _get(token, 'usdPrice', 0),
-              [PORTFOLIO_COLUMNS.VALUE]: balance * _get(token, 'usdPrice', 0),
               [PORTFOLIO_COLUMNS.TOKEN_ADDRESS]: _get(
                 token,
                 'tokenAddress',
