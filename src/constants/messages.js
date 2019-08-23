@@ -464,7 +464,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_TRANSACTIONS_HEADER_QUANTITY: {
     id: `${myWalletPagePrefix}.table.transactions.header.quantity`,
-    defaultMessage: 'Quantity',
+    defaultMessage: 'Amount',
   },
   MY_WALLET_POPUP_SEND_TOKEN_TITLE: {
     id: `${myWalletPagePrefix}.popup.sendtoken.title`,

@@ -64,7 +64,7 @@ import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
 import { MSG, LIST } from '../../constants';
-import { sendMoney, getWalletInfo } from '../../utils/blockchain';
+import { sendMoney, getWalletInfo, estimateGas } from '../../utils/blockchain';
 // ==================
 
 // ===== MAIN COMPONENT =====
@@ -101,12 +101,32 @@ class MyWallet extends PureComponent {
   }
 
   handleConfirmBeforeSend() {
-    const { onUpdateSendTokenErrors, onUpdateSendTokenPopupStage } = this.props;
+    const {
+      onUpdateSendTokenErrors,
+      onUpdateSendTokenInput,
+      onUpdateSendTokenPopupStage,
+      sendTokenForm,
+      web3,
+    } = this.props;
+    const contractData = this.handleGetContractData();
     const errorList = this.handleValidationSendForm();
+    const decimals = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0,
+    );
+
     if (!_isEmpty(errorList)) {
       onUpdateSendTokenErrors(errorList);
     } else {
-      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+      estimateGas(web3, contractData).then(weiFee => {
+        const feeObj = web3.utils
+          .toBN(weiFee)
+          .divmod(web3.utils.toBN(10 ** decimals));
+        const normalFee = `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`;
+        onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, normalFee);
+        onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+      });
     }
   }
 
@@ -197,7 +217,7 @@ class MyWallet extends PureComponent {
       isRequired(
         {
           name: SEND_TOKEN_FIELDS.TOKEN,
-          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN, 'value']),
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN]),
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_TOKEN_REQUIRED),
       ),

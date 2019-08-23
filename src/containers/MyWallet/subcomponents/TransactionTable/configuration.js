@@ -6,6 +6,7 @@
 // ===== IMPORTS =====
 // Modules
 import React from 'react';
+import _get from 'lodash.get';
 // Custom Components
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EllipsisCellStyler } from '../../../../components/Table/style';
@@ -54,7 +55,12 @@ export default ({ formatMessage }) => [
   {
     Header: '',
     accessor: 'connectArrow',
-    Cell: () => <FontAwesomeIcon icon='arrow-right' />,
+    Cell: ({ original }) =>
+      _get(original, [TRANSACTION_COLUMNS.TYPE]) === 'in' ? (
+        <FontAwesomeIcon icon='arrow-right' className='text-success' />
+      ) : (
+        <FontAwesomeIcon icon='arrow-right' className='text-danger' />
+      ),
     className: 'text-center',
   },
   {

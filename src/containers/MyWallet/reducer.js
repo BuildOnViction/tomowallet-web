@@ -8,6 +8,7 @@
 import { fromJS } from 'immutable';
 import _get from 'lodash.get';
 import _omit from 'lodash.omit';
+import _isEqual from 'lodash.isequal';
 import moment from 'moment';
 // Constants
 import {
@@ -142,6 +143,12 @@ export default (state = initialState, action) => {
           [TRANSACTION_COLUMNS.FROM]: _get(trans, 'from', ''),
           [TRANSACTION_COLUMNS.TO]: _get(trans, 'to', ''),
           [TRANSACTION_COLUMNS.QUANTITY]: _get(trans, 'value', ''),
+          [TRANSACTION_COLUMNS.TYPE]: _isEqual(
+            _get(trans, 'from'),
+            _get(action, 'tableData.address'),
+          )
+            ? 'out'
+            : 'in',
         })),
         page: _get(action, 'tableData.currentPage', 1),
         total: _get(action, 'tableData.total', 0),
@@ -156,13 +163,14 @@ export default (state = initialState, action) => {
     case TOGGLE_SEND_TOKEN_POPUP: {
       if (action.bool) {
         return state
-          .setIn(['sendTokenPopup', 'isOpen'], action.bool)
+          .setIn(['sendTokenPopup', 'isOpen'], true)
           .set('sendForm', {
             ...initialSendForm,
             ...(action.initialValues || {}),
-          });
+          })
+          .setIn(['sendTokenPopup', 'errors'], []);
       }
-      return state.setIn(['sendTokenPopup', 'isOpen'], action.bool);
+      return state.setIn(['sendTokenPopup', 'isOpen'], false);
     }
     case TOGGLE_SUCCESS_POPUP: {
       const newState = state

@@ -60,7 +60,13 @@ export function* loadTransaction(actionData) {
 
       yield put(toggleLoading(false));
       yield put(
-        loadTransactionDataSuccess({ items, currentPage, total, pages }),
+        loadTransactionDataSuccess({
+          items,
+          currentPage,
+          total,
+          pages,
+          address,
+        }),
       );
     }
   } catch {

@@ -18,6 +18,26 @@ import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 
 // ===== MAIN COMPONENT =====
 class ConfirmationContent extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleGetFeeUnit = this.handleGetFeeUnit.bind(this);
+  }
+
+  handleGetFeeUnit() {
+    const { formValues } = this.props;
+    if (
+      _get(formValues, [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE]) ===
+      'TRC20'
+    ) {
+      return 'TOMO';
+    }
+    return _get(formValues, [
+      SEND_TOKEN_FIELDS.TOKEN,
+      PORTFOLIO_COLUMNS.SYMBOL,
+    ]);
+  }
+
   render() {
     const {
       errors,
@@ -86,9 +106,9 @@ class ConfirmationContent extends PureComponent {
           <Col xs={8}>
             {`${_get(
               formValues,
-              [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TRANSACTION_FEE],
+              [SEND_TOKEN_FIELDS.TRANSACTION_FEE],
               0,
-            )} TOMO`}
+            )} ${this.handleGetFeeUnit()}`}
           </Col>
         </Row>
       </div>

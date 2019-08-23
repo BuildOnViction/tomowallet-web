@@ -109,14 +109,48 @@ const decryptWalletInfo = (web3, rawInfo) => {
 };
 
 /**
- * estimateTRC20Gas
+ * estimateGas
  *
- * Retrieve gas price for the specific transaction
+ * Retrieve gas price for the specific transaction. Supported for both TRC20 & TRC21 tokens
  * @param {Web3} web3 A Web3 object with supported APIs
  * @param {Object} txData A transaction object (including from, to, value, ...)
  */
-const estimateTRC20Gas = (web3, txData) => {
-  return web3.eth.estimateGas(txData);
+const estimateGas = (web3, txData) => {
+  const { amount, contractAddress, decimals, from, to, type } = txData;
+
+  const contract = new web3.eth.Contract(
+    _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
+    contractAddress,
+  );
+  const weiAmount = web3.utils
+    .toBN(amount)
+    .mul(web3.utils.toBN(10 ** decimals))
+    .toString();
+  // In case token type is TRC21
+  if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
+    return contract.methods
+      .estimateFee(weiAmount)
+      .call({ from, to })
+      .then(trc21Gas => {
+        if (Number(trc21Gas)) {
+          return web3.eth.getGasPrice().then(price => trc21Gas * price);
+        }
+        return web3.eth.getGasPrice().then(price =>
+          contract.methods
+            .transfer(to, weiAmount)
+            .estimateGas({ from })
+            .then(trc20Gas => trc20Gas * price),
+        );
+      });
+  } else {
+    // In case token type is TRC20
+    return web3.eth.getGasPrice().then(price =>
+      contract.methods
+        .transfer(to, weiAmount)
+        .estimateGas({ from })
+        .then(trc20Gas => trc20Gas * price),
+    );
+  }
 };
 
 /**
@@ -137,48 +171,88 @@ const sendToken = (web3, contractData) => {
     .toBN(amount)
     .mul(web3.utils.toBN(10 ** decimals))
     .toString();
-  // In case token type is TRC21
-  if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
-    return contract.methods
-      .estimateFee(weiAmount)
-      .call({ from, to })
-      .then(gasPrice =>
-        contract.methods
-          .transfer(to, weiAmount)
-          .send({ from, gasPrice: '250000000' })
-          .on('transactionHash', hash => {
-            repeatCall({
-              interval: 2000,
-              timeout: 10000,
-              action: () => {
-                return web3.eth.getTransactionReceipt(hash);
-              },
-            });
-          }),
-      );
-  } else {
-    // In case token type is TRC20
-    return estimateTRC20Gas(web3, { from, to, value: weiAmount }).then(
-      gasPrice =>
-        contract.methods
-          .transfer(to, weiAmount)
-          .send({
-            from,
-            to: contractAddress,
-            gasPrice: '250000000',
-            gas: 50000,
-          })
-          .on('transactionHash', hash => {
-            repeatCall({
-              interval: 2000,
-              timeout: 10000,
-              action: () => {
-                return web3.eth.getTransactionReceipt(hash);
-              },
-            });
-          }),
-    );
-  }
+
+  return estimateGas(web3, contractData).then(gasPrice =>
+    contract.methods
+      .transfer(to, weiAmount)
+      .send({ from, gasPrice: gasPrice, gas: 100000 })
+      .on('transactionHash', hash => {
+        repeatCall({
+          interval: 2000,
+          timeout: 10000,
+          action: () => {
+            return web3.eth.getTransactionReceipt(hash);
+          },
+        });
+      }),
+  );
+  // // In case token type is TRC21
+  // if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
+  //   return contract.methods
+  //     .estimateFee(weiAmount)
+  //     .call({ from, to })
+  //     .then(trc21Gas =>
+  //       Number(trc21Gas)
+  //         ? web3.eth.getGasPrice().then(price =>
+  //             contract.methods
+  //               .transfer(to, weiAmount)
+  //               .send({ from, gasPrice: trc21Gas * price, gas: 250000000 })
+  //               .on('transactionHash', hash => {
+  //                 repeatCall({
+  //                   interval: 2000,
+  //                   timeout: 10000,
+  //                   action: () => {
+  //                     return web3.eth.getTransactionReceipt(hash);
+  //                   },
+  //                 });
+  //               }),
+  //           )
+  //         : contract.methods
+  //             .transfer(to, weiAmount)
+  //             .estimateGas({ from })
+  //             .then(trc20Gas => {
+  //               return web3.eth.getGasPrice().then(price => {
+  //                 return contract.methods
+  //                   .transfer(to, weiAmount)
+  //                   .send({
+  //                     from,
+  //                     gasPrice: trc20Gas * price,
+  //                   })
+  //                   .on('transactionHash', hash => {
+  //                     repeatCall({
+  //                       interval: 2000,
+  //                       timeout: 10000,
+  //                       action: () => {
+  //                         return web3.eth.getTransactionReceipt(hash);
+  //                       },
+  //                     });
+  //                   });
+  //               });
+  //             }),
+  //     );
+  // } else {
+  //   // In case token type is TRC20
+  //   return estimateTRC20Gas(web3, { from, to, value: weiAmount }).then(
+  //     gasPrice =>
+  //       contract.methods
+  //         .transfer(to, weiAmount)
+  //         .send({
+  //           from,
+  //           to: contractAddress,
+  //           gasPrice: '250000000',
+  //           gas: 50000,
+  //         })
+  //         .on('transactionHash', hash => {
+  //           repeatCall({
+  //             interval: 2000,
+  //             timeout: 10000,
+  //             action: () => {
+  //               return web3.eth.getTransactionReceipt(hash);
+  //             },
+  //           });
+  //         }),
+  //   );
+  // }
 };
 
 /**
@@ -244,7 +318,7 @@ const fromWei = amount => {
 
 export {
   decryptWalletInfo,
-  estimateTRC20Gas,
+  estimateGas,
   fromWei,
   generateWeb3,
   getWalletInfo,

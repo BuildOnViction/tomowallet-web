@@ -106,7 +106,7 @@ class FormContent extends PureComponent {
   handleRenderErrorList(field) {
     const { errors } = this.props;
     return (
-      <FormFeedback>
+      <FormFeedback className='d-block'>
         <Nav>
           {_get(errors, [field], []).map((err, errIdx) => (
             <NavItem
@@ -229,7 +229,7 @@ class FormContent extends PureComponent {
           />
           {this.handleRenderErrorList(SEND_TOKEN_FIELDS.MESSAGE)}
         </FormGroup> */}
-        <Label>
+        {/* <Label>
           {`${formatMessage(
             MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,
           )}: ${_get(
@@ -237,7 +237,7 @@ class FormContent extends PureComponent {
             [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TRANSACTION_FEE],
             0,
           )} TOMO`}
-        </Label>
+        </Label> */}
       </Form>
     );
   }

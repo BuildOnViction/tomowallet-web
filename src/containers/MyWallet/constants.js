@@ -57,6 +57,7 @@ export const TRANSACTION_COLUMNS = {
   FROM: 'from',
   TO: 'to',
   QUANTITY: 'quantity',
+  TYPE: 'type',
 };
 
 // Popup Forms' Fields
@@ -65,6 +66,7 @@ export const SEND_TOKEN_FIELDS = {
   RECIPIENT: 'recipient',
   TRANSFER_AMOUNT: 'amount',
   MESSAGE: 'message',
+  TRANSACTION_FEE: 'txFee',
 };
 
 // Send Token Popup' Stages
