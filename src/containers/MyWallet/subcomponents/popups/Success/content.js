@@ -5,7 +5,7 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 // Utilities & Constants
@@ -24,27 +24,25 @@ class SuccessContent extends PureComponent {
       txHash,
     } = this.props;
     return (
-      <Fragment>
-        <BoxText className='text-center word-break'>
-          <div>
-            <p>
-              <i className='font-icon-checkmark-outline' />
-            </p>
-            <TextYellow>
-              {formatMessage(MSG.SUCCESS_NOTIFICATION_IMAGE_ALT)}
-            </TextYellow>
-          </div>
-          <div className='my-4'>
-            {`${formatMessage(
-              MSG.MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_SENT,
-            )} ${amount} ${symbol}`}
-          </div>
-          <TextGray className='mb-3 '>
-            {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
-          </TextGray>
-          <div>{_get(txHash, 'transactionHash')}</div>
-        </BoxText>
-      </Fragment>
+      <BoxText className='text-center word-break'>
+        <div>
+          <p>
+            <i className='font-icon-checkmark-outline' />
+          </p>
+          <TextYellow>
+            {formatMessage(MSG.SUCCESS_NOTIFICATION_IMAGE_ALT)}
+          </TextYellow>
+        </div>
+        <div className='my-4'>
+          {`${formatMessage(
+            MSG.MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_SENT,
+          )} ${amount} ${symbol}`}
+        </div>
+        <TextGray className='mb-3 '>
+          {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
+        </TextGray>
+        <div>{_get(txHash, 'transactionHash')}</div>
+      </BoxText>
     );
   }
 }

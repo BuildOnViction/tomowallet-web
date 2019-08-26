@@ -206,7 +206,7 @@ class MyWallet extends PureComponent {
         })
         .catch(error => {
           toggleLoading(false);
-          onUpdateSendTokenErrors([error.message]);
+          onUpdateSendTokenErrors({ error: error.message });
         });
     } else {
       sendMoney(web3, contractData)
@@ -223,7 +223,7 @@ class MyWallet extends PureComponent {
         })
         .catch(error => {
           toggleLoading(false);
-          onUpdateSendTokenErrors([error.message]);
+          onUpdateSendTokenErrors({ error: error.message });
         });
     }
   }

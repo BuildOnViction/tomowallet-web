@@ -168,7 +168,7 @@ export default (state = initialState, action) => {
             ...initialSendForm,
             ...(action.initialValues || {}),
           })
-          .setIn(['sendTokenPopup', 'errors'], []);
+          .setIn(['sendTokenPopup', 'errors'], {});
       }
       return state.setIn(['sendTokenPopup', 'isOpen'], false);
     }

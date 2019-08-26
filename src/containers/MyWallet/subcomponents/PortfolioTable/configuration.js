@@ -94,7 +94,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       },
       {
         Cell: ({ original }) => {
-          const { rpcServer } = getWeb3Info();
+          const rpcServer = _get(getWeb3Info(), 'rpcServer');
           let tomoScanLink = '';
           switch (rpcServer) {
             case Object.keys(RPC_SERVER)[0]:
