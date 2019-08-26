@@ -446,6 +446,10 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.portfolio.cell.tokenname.publisher`,
     defaultMessage: 'TomoChain',
   },
+  MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN: {
+    id: `${myWalletPagePrefix}.table.portfolio.cell.action.viewontomoscan`,
+    defaultMessage: 'View {token} on TomoScan',
+  },
   MY_WALLET_TABLE_PORTFOLIO_ERROR_LOAD_FAILED: {
     id: `${myWalletPagePrefix}.table.portfolio.error.load.failed`,
     defaultMessage: 'Cannot load token list!',

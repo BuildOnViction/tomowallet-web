@@ -94,7 +94,6 @@ class PortfolioTable extends Component {
     const {
       data,
       intl: { formatMessage },
-      openReceiveTokenPopup,
       openSendTokenPopup,
     } = this.props;
     return (
@@ -104,7 +103,6 @@ class PortfolioTable extends Component {
           setConfig={portfolioConfig}
           getConfigProps={{
             formatMessage,
-            openReceiveTokenPopup,
             openSendTokenPopup,
           }}
           getTableProps={{
@@ -136,8 +134,6 @@ PortfolioTable.propTypes = {
   tableType: PropTypes.string,
   /** Action to request for token list by address */
   onLoadTokenOptions: PropTypes.func,
-  /** Action to show receive token popup */
-  openReceiveTokenPopup: PropTypes.func,
   /** Action to show send token popup */
   openSendTokenPopup: PropTypes.func,
 };
@@ -150,7 +146,6 @@ PortfolioTable.defaultProps = {
   successPopup: {},
   tableType: '1',
   onLoadTokenOptions: () => {},
-  openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
 };
 // ======================

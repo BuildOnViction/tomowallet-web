@@ -26,7 +26,7 @@ a {
 .box_onl {
   .dropdown-item {
     position: relative;
-    padding: .5rem 0 .5rem 1em;
+    padding: 0.5rem 0 0.5rem 1em;
     &:before {
       background-color: #3a8ecc;
       border-radius: 50%;
@@ -40,7 +40,7 @@ a {
     }
     &.active {
       &:before {
-        background-color: #36CE9A;
+        background-color: #36ce9a;
       }
     }
   }
@@ -100,16 +100,16 @@ a {
       overflow: hidden;
     }
     .my-select__indicator {
-      color: #3A8ECC;
+      color: #3a8ecc;
     }
-    >div {
+    > div {
       background-color: #2d344a !important;
       border-radius: 8px;
       border: 0;
       min-height: 44px;
     }
     &.my-select--is-disabled {
-      >div {
+      > div {
         background-color: #212531 !important;
       }
       .my-select__indicator {
@@ -157,11 +157,11 @@ a {
     &:focus,
     &:active,
     &:active:focus {
-      box-shadow: 0 0 0 0px #5692cd!important;
+      box-shadow: 0 0 0 0px #5692cd !important;
       background-color: transparent;
     }
     &:hover {
-      background-color: #2D344A;
+      background-color: #2d344a;
     }
   }
   input,
@@ -178,8 +178,7 @@ a {
       font-family: 'Nunito Sans', sans-serif;
     }
     &:focus,
-    &:active
-    &:active:focus {
+    &:active &:active:focus {
       box-shadow: 0 0 0 1px #5692cd;
       background-color: transparent;
       color: #9eaacc;
@@ -196,12 +195,12 @@ a {
   }
 }
 .box-confirmation {
-  >div {
+  > div {
     padding: 1em 0;
-    >div {
+    > div {
       list-style: 1.4;
       &:first-child {
-        color: #5E677F;
+        color: #5e677f;
       }
     }
   }
@@ -210,7 +209,7 @@ a {
   color: #e4ae63;
   font-size: 60px;
 }
-.word-break{
+.word-break {
   word-break: break-word;
 }
 //MODAL
@@ -244,46 +243,6 @@ a {
 }
 .fullwidth {
   width: 100%;
-}
-.coinmarketcap-currency-widget * {
-  border-width: 0px!important;
-  border-color: #5e677f!important;
-}
-.coinmarketcap-currency-widget {
-  >div {
-    >div {
-      &:first-child {
-        div {
-          &:first-child {
-            >span {
-              &:first-child {
-                a {
-                  color: #e4ae63!important;
-                }
-              }
-              &:last-child {
-                color: #5e677f!important;
-              }
-            }
-          }
-        }
-      }
-      &:nth-child(2) {
-        overflow: hidden;
-        padding-top: 10px;
-        >div {
-          border-left: 1px solid #3a4152!important;
-          padding: 0!important;
-          &:first-child {
-            border: 0!important;
-          }
-        }
-      }
-      &:last-child {
-        display: none;
-      }
-    }
-  }
 }
 .qrc_bd {
   border: 7px solid #fff;
