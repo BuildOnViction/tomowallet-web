@@ -155,17 +155,9 @@ export default defineMessages({
     id: `${footerPrefix}.option.help`,
     defaultMessage: 'Need help?',
   },
-  FOOTER_OPTION_POLICY: {
-    id: `${footerPrefix}.option.policy`,
-    defaultMessage: 'Privacy Policy',
-  },
-  FOOTER_OPTION_TERMS_OF_SERVICE: {
-    id: `${footerPrefix}.option.termsofservice`,
-    defaultMessage: 'Terms of Service',
-  },
-  FOOTER_OPTION_API_DOCUMENTATION: {
-    id: `${footerPrefix}.option.apidocumentation`,
-    defaultMessage: 'API Documentation',
+  FOOTER_OPTION_TERMS_PRIVACY: {
+    id: `${footerPrefix}.option.terms&privacy`,
+    defaultMessage: 'Terms & Privacy',
   },
   // Welcome Page
   WELCOME_TITLE: {

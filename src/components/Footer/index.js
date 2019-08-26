@@ -12,10 +12,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Nav, NavItem } from 'reactstrap';
 // Custom Component
-import {
-  LinkFooter,
-  TextGray
- } from './style';
+import { LinkFooter, TextGray } from './style';
 // Utilities & Constants
 import { withIntl } from '../IntlProvider';
 import { MSG } from '../../constants';
@@ -67,23 +64,21 @@ class Footer extends PureComponent {
           <Row className='footer-menu'>
             <Nav>
               <NavItem>
-                <LinkFooter href='#'>
+                <LinkFooter
+                  href='https://docs.tomochain.com/products/tomowallet/features/'
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
                   {formatMessage(MSG.FOOTER_OPTION_HELP)}
                 </LinkFooter>
               </NavItem>
               <NavItem>
-                <LinkFooter href='#'>
-                  {formatMessage(MSG.FOOTER_OPTION_POLICY)}
-                </LinkFooter>
-              </NavItem>
-              <NavItem>
-                <LinkFooter href='#'>
-                  {formatMessage(MSG.FOOTER_OPTION_TERMS_OF_SERVICE)}
-                </LinkFooter>
-              </NavItem>
-              <NavItem>
-                <LinkFooter href='#'>
-                  {formatMessage(MSG.FOOTER_OPTION_API_DOCUMENTATION)}
+                <LinkFooter
+                  href='https://docs.tomochain.com/products/tomowallet/terms/'
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  {formatMessage(MSG.FOOTER_OPTION_TERMS_PRIVACY)}
                 </LinkFooter>
               </NavItem>
             </Nav>

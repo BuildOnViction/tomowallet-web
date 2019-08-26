@@ -123,8 +123,25 @@ class MyWallet extends PureComponent {
         const feeObj = web3.utils
           .toBN(weiFee)
           .divmod(web3.utils.toBN(10 ** decimals));
-        const normalFee = `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`;
+        const normalFee = parseFloat(
+          `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`,
+        );
         onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, normalFee);
+        if (
+          _get(
+            sendTokenForm,
+            [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
+            0,
+          ) -
+            _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0) <
+          normalFee
+        ) {
+          onUpdateSendTokenInput(
+            SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+            _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0) -
+              normalFee,
+          );
+        }
         onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
       });
     }
@@ -169,6 +186,7 @@ class MyWallet extends PureComponent {
     } = this.props;
     toggleLoading(true);
     const contractData = this.handleGetContractData();
+
     if (contractData.contractAddress) {
       sendToken(web3, contractData)
         .then(hash => {

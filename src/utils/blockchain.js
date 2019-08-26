@@ -15,6 +15,10 @@ import trc20 from '../contractABIs/trc20.json';
 import trc21 from '../contractABIs/trc21.json';
 // ===================
 
+// ===== SUPPORTED VARIABLES =====
+const DEFAULT_GAS_PRICE = '250000000';
+// ===============================
+
 // ===== METHODS =====
 /**
  * mnemonicToPrivateKey
@@ -120,12 +124,10 @@ const estimateGas = (web3, txData) => {
 
   const contract = new web3.eth.Contract(
     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
-    contractAddress,
+    contractAddress || from,
   );
-  const weiAmount = web3.utils
-    .toBN(amount)
-    .mul(web3.utils.toBN(10 ** decimals))
-    .toString();
+  const weiAmount = (amount * 10 ** decimals).toString();
+
   // In case token type is TRC21
   if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
     return contract.methods
@@ -138,7 +140,7 @@ const estimateGas = (web3, txData) => {
         return web3.eth.getGasPrice().then(price =>
           contract.methods
             .transfer(to, weiAmount)
-            .estimateGas({ from })
+            .estimateGas({ from, to, value: weiAmount })
             .then(trc20Gas => trc20Gas * price),
         );
       });
@@ -147,7 +149,7 @@ const estimateGas = (web3, txData) => {
     return web3.eth.getGasPrice().then(price =>
       contract.methods
         .transfer(to, weiAmount)
-        .estimateGas({ from })
+        .estimateGas({ from, to, value: weiAmount })
         .then(trc20Gas => trc20Gas * price),
     );
   }
@@ -167,10 +169,7 @@ const sendToken = (web3, contractData) => {
     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
     contractAddress,
   );
-  const weiAmount = web3.utils
-    .toBN(amount)
-    .mul(web3.utils.toBN(10 ** decimals))
-    .toString();
+  const weiAmount = (amount * 10 ** decimals).toString();
 
   return estimateGas(web3, contractData).then(gasPrice =>
     contract.methods
@@ -198,15 +197,12 @@ const sendToken = (web3, contractData) => {
 const sendMoney = (web3, transactionData) => {
   const { amount, decimals, from, to } = transactionData;
 
-  const weiAmount = web3.utils
-    .toBN(amount)
-    .mul(web3.utils.toBN(10 ** decimals))
-    .toString();
+  const weiAmount = (amount * 10 ** decimals).toString();
   return web3.eth.sendTransaction({
     from,
     to,
     value: weiAmount,
-    gasPrice: '250000000',
+    gasPrice: DEFAULT_GAS_PRICE,
     gas: 50000,
   });
 };
