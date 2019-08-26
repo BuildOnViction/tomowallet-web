@@ -39,7 +39,7 @@ const TokenOption = props => {
   return (
     <Container {...innerProps} role='presentation' fluid className='px-0'>
       <Row noGutters className='select_option align-items-center'>
-        <Col xs={8} className='d-flex align-items-center'>
+        <Col xs={6} className='d-flex align-items-center text-ellipsis'>
           <Image
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
             alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
@@ -50,7 +50,7 @@ const TokenOption = props => {
             '',
           )})`}</span>
         </Col>
-        <Col xs={4} className='text-right'>
+        <Col xs={6} className='text-right text-ellipsis'>
           {`${convertLocaleNumber(
             _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0),
             3,
@@ -67,7 +67,7 @@ const TokenInputValue = props => {
   return (
     <div style={{ width: '96%' }}>
       <Row noGutters className='select_option_active align-items-center'>
-        <Col xs={8} className='d-flex align-items-center'>
+        <Col xs={6} className='d-flex align-items-center text-ellipsis'>
           <Image
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
             alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
@@ -78,7 +78,7 @@ const TokenInputValue = props => {
             '',
           )})`}</span>
         </Col>
-        <Col xs={4} className='text-right'>
+        <Col xs={6} className='text-right text-ellipsis'>
           {`${convertLocaleNumber(
             _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0),
           )} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
