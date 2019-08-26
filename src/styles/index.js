@@ -12,6 +12,8 @@ import {
   BoxCardStyled,
   BoxImages,
   BoxFlexBetween,
+  DropdownMenuMainStyler,
+  DropdownToggleMainStyle,
 } from './MainContainer';
 import { ImporWalletStyler } from './ImportWallet';
 import { WarningImages } from './CreateNewWallet';
@@ -39,6 +41,8 @@ export {
   ButtonLinkStyler,
   //StyleForm
   FormTextStyled,
+  DropdownMenuMainStyler,
+  DropdownToggleMainStyle,
   //MainContainer
   BoxBtnStyler,
   ContainerMin,

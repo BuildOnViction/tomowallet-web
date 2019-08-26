@@ -49,7 +49,7 @@ a {
 //maincontent
 .maincontent {
   min-height: calc(100vh - 179px);
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     min-height: calc(100vh - 134px - 85px);
   }
   .card {
@@ -118,6 +118,10 @@ a {
     }
     .select_option {
       padding: 1em;
+      transition: all 0.3s;
+      &:hover {
+        background: #272d40;
+      }
     }
     .select_option,
     .select_option_active {
@@ -276,7 +280,7 @@ a {
 
 // Footer
 .mb-text-center {
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     text-align: center;
   }
 }
@@ -301,7 +305,7 @@ a {
       }
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     justify-content: center;
   }
 }

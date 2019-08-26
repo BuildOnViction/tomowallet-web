@@ -57,7 +57,7 @@ class Footer extends PureComponent {
     } = this.props;
     return (
       <Row className='align-items-center pt-3 pb-3'>
-        <Col xs={12} lg={7}>
+        <Col xs={12} md={7}>
           <TextGray className='mb-text-center'>
             {formatMessage(MSG.FOOTER_VERSION_TEXT)}
           </TextGray>
@@ -84,7 +84,7 @@ class Footer extends PureComponent {
             </Nav>
           </Row>
         </Col>
-        <Col xs={12} lg={5}>
+        <Col xs={12} md={5}>
           <Nav className='footer-buttons'>
             {this.FOOTER_BUTTONS.map((item, itemIdx) => (
               <NavItem key={`footer_button_${itemIdx + 1}`}>
