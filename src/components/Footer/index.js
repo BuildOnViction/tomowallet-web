@@ -88,7 +88,7 @@ class Footer extends PureComponent {
           <Nav className='footer-buttons'>
             {this.FOOTER_BUTTONS.map((item, itemIdx) => (
               <NavItem key={`footer_button_${itemIdx + 1}`}>
-                <LinkFooter href='{item.link}' target='_blank'>
+                <LinkFooter href={item.link} target='_blank'>
                   <i className={item.className} />
                 </LinkFooter>
               </NavItem>
