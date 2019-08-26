@@ -44,7 +44,6 @@ class DataTables extends PureComponent {
           <TabPane tabId={LIST.MY_WALLET_TABLE_TYPES[0].value}>
             <PortfolioTable
               isActive={tableType === LIST.MY_WALLET_TABLE_TYPES[0].value}
-              openReceiveTokenPopup={openReceiveTokenPopup}
               openSendTokenPopup={openSendTokenPopup}
             />
           </TabPane>

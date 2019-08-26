@@ -8,22 +8,23 @@
 import React from 'react';
 import _get from 'lodash.get';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
-import { TextBlue, TextYellowPointer } from '../../../../styles';
+import { TextYellowPointer } from '../../../../styles';
 // Utilities & Constants
-import { convertLocaleNumber } from '../../../../utils';
+import { convertLocaleNumber, getWeb3Info } from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
-import { MSG } from '../../../../constants';
-
+import { MSG, RPC_SERVER } from '../../../../constants';
 // ===================
 
 // ===== CONFIGURATION =====
-export default ({
-  formatMessage,
-  openReceiveTokenPopup,
-  openSendTokenPopup,
-}) => [
+export default ({ formatMessage, openSendTokenPopup }) => [
   {
     Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME),
     columns: [
@@ -91,21 +92,51 @@ export default ({
           </TextYellowPointer>
         ),
       },
-      // {
-      //   headerClassName: 'd-none',
-      //   accessor: PORTFOLIO_COLUMNS.RECEIVE,
-      //   Cell: () => (
-      //     <TextBlue role='presentation' onClick={openReceiveTokenPopup}>
-      //       {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
-      //     </TextBlue>
-      //   ),
-      // },
       {
-        Cell: () => (
-          <div className='text-right'>
-            <FontAwesomeIcon icon='ellipsis-v' />
-          </div>
-        ),
+        Cell: ({ original }) => {
+          const { rpcServer } = getWeb3Info();
+          let tomoScanLink = '';
+          switch (rpcServer) {
+            case Object.keys(RPC_SERVER)[0]:
+              tomoScanLink = 'https://scan.testnet.tomochain.com/tokens';
+              break;
+            case Object.keys(RPC_SERVER)[1]:
+              tomoScanLink = 'https://scan.tomochain.com/tokens';
+              break;
+            default:
+              tomoScanLink = 'https://scan.testnet.tomochain.com/tokens';
+          }
+
+          return (
+            <UncontrolledDropdown>
+              <DropdownToggle>
+                <div className='text-right'>
+                  <FontAwesomeIcon icon='ellipsis-v' />
+                </div>
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem>
+                  <a
+                    href={tomoScanLink}
+                    rel='noopener noreferrer'
+                    target='_blank'
+                  >
+                    {formatMessage(
+                      MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN,
+                      {
+                        token: _get(
+                          original,
+                          [PORTFOLIO_COLUMNS.TOKEN_NAME],
+                          '',
+                        ),
+                      },
+                    )}
+                  </a>
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          );
+        },
       },
     ],
   },
