@@ -91,15 +91,15 @@ export default ({
           </TextYellowPointer>
         ),
       },
-      {
-        headerClassName: 'd-none',
-        accessor: PORTFOLIO_COLUMNS.RECEIVE,
-        Cell: () => (
-          <TextBlue role='presentation' onClick={openReceiveTokenPopup}>
-            {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
-          </TextBlue>
-        ),
-      },
+      // {
+      //   headerClassName: 'd-none',
+      //   accessor: PORTFOLIO_COLUMNS.RECEIVE,
+      //   Cell: () => (
+      //     <TextBlue role='presentation' onClick={openReceiveTokenPopup}>
+      //       {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
+      //     </TextBlue>
+      //   ),
+      // },
       {
         Cell: () => (
           <div className='text-right'>

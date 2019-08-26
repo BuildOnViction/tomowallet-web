@@ -35,11 +35,11 @@ const TokenCellStyler = styled.div`
 const BoxPortfolio = styled.div`
   .rt-tr {
     display: grid;
-    grid-template-columns: 20% 15% 15% 15% 35%;
+    grid-template-columns: 20% 20% 20% 20% 20%;
   }
   .rt-tbody {
     .rt-tr {
-      grid-template-columns: 20% 15% 15% 15% 15% 15% 5%;
+      grid-template-columns: 20% 20% 20% 20% 15% 5%;
     }
   }
 `;
