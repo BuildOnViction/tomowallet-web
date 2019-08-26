@@ -227,14 +227,14 @@ class NavigationBar extends PureComponent {
 
     return (
       <Fragment>
-        <NavBarStyler light expand='lg'>
+        <NavBarStyler light expand='md'>
           <NavbarBrand onClick={this.handleRedirectToHomepage}>
             <CardImg
               src={logo_tomochain}
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
             />
           </NavbarBrand>
-          <NavbarToggler onClick={this.handleToggleOptions} />
+          {/* <NavbarToggler onClick={this.handleToggleOptions} /> */}
           <Collapse isOpen={_get(network, 'isExpanded', false)} navbar>
             {isLoggedIn && this.handleRenderPrivateBar()}
             {this.handleRenderPublicBar()}

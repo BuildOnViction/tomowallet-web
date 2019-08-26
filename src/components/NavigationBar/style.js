@@ -48,11 +48,13 @@ const NavBarStyler = styled(Navbar)`
   }
   .nav-item {
     font-weight: bold;
-    &:not(:first-child) {
-      margin-left: 20px;
-    }
-    &:not(:last-child) {
-      margin-right: 20px;
+    @media (min-width: 992px) {
+      &:not(:first-child) {
+        margin-left: 20px;
+      }
+      &:not(:last-child) {
+        margin-right: 20px;
+      }
     }
   }
 `;

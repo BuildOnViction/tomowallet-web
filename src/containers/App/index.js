@@ -17,6 +17,7 @@ import {
 } from './components/LoadableComponents';
 import PrivateRoute from './components/PrivateRoute';
 import AppStyler from './style';
+import { TextLinkBlue } from '../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
@@ -63,7 +64,21 @@ class App extends PureComponent {
         <AppStyler>
           <LoadingComponent />
           <NavigationBar isLoggedIn={isLoggedIn} />
-          <div className='maincontent pt-3 pb-3'>
+          <div className='maincontent d-flex d-md-none align-items-center'>
+            <div className='text-center'>
+              <p>
+                Sorry! We don’t support TomoWallet web version on mobile browsers.
+                Please download app version to access TomoWallet.
+              </p>
+              <p>
+                Download TomoWallet app<br/>
+                <TextLinkBlue href='http://l.ead.me/bb0oA6'>
+                  Link: http://l.ead.me/bb0oA6
+                </TextLinkBlue>
+              </p>
+            </div>
+          </div>
+          <div className='maincontent pt-3 pb-3 d-none d-md-block'>
             <Route
               path={ROUTE.LOGIN}
               render={() =>
