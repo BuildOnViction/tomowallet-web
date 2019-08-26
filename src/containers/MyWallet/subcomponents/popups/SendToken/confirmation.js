@@ -47,10 +47,10 @@ class ConfirmationContent extends PureComponent {
     } = this.props;
     return (
       <div className='box-confirmation'>
-        {errors.length > 0 && (
+        {Object.values(errors).length > 0 && (
           <Row>
             <Col className='text-center'>
-              {errors.map((err, errIdx) => (
+              {Object.values(errors).map((err, errIdx) => (
                 <div
                   key={`error_${errIdx + 1}`}
                   className='text-danger'
@@ -91,12 +91,6 @@ class ConfirmationContent extends PureComponent {
             </div>
           </Col>
         </Row>
-        {/* <Row>
-          <Col xs={4}>
-            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL)}
-          </Col>
-          <Col xs={8}>{_get(formValues, [SEND_TOKEN_FIELDS.MESSAGE], '')}</Col>
-        </Row> */}
         <Row>
           <Col xs={4}>
             {formatMessage(
@@ -120,7 +114,7 @@ class ConfirmationContent extends PureComponent {
 // ===== PROP TYPES =====
 ConfirmationContent.propTypes = {
   /** List of error messages */
-  errors: PropTypes.arrayOf(PropTypes.string),
+  errors: PropTypes.object,
   /** Send token form's input values */
   formValues: PropTypes.object,
   /** React Intl's instance object */
@@ -130,7 +124,7 @@ ConfirmationContent.propTypes = {
 };
 
 ConfirmationContent.defaultProps = {
-  errors: [],
+  errors: {},
   formValues: {},
   intl: {},
   wallet: {},
