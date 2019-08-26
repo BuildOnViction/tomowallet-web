@@ -9,7 +9,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import _get from 'lodash.get';
-import { Row, Col, FormFeedback } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
@@ -50,12 +50,14 @@ class ConfirmationContent extends PureComponent {
         {Object.values(errors).length > 0 && (
           <Row>
             <Col className='text-center'>
-              {Object.values(errors).map((err, errIdx) => (
-                <div
-                  key={`error_${errIdx + 1}`}
-                  className='text-danger'
-                >{`* ${err}`}</div>
-              ))}
+              {Object.values(errors).map((err, errIdx) =>
+                err.map(subErr => (
+                  <div
+                    key={`error_${errIdx + 1}`}
+                    className='text-danger'
+                  >{`* ${subErr}`}</div>
+                )),
+              )}
             </Col>
           </Row>
         )}
@@ -114,7 +116,7 @@ class ConfirmationContent extends PureComponent {
 // ===== PROP TYPES =====
 ConfirmationContent.propTypes = {
   /** List of error messages */
-  errors: PropTypes.object,
+  errors: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
   /** Send token form's input values */
   formValues: PropTypes.object,
   /** React Intl's instance object */

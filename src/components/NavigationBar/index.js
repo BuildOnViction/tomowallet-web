@@ -35,6 +35,7 @@ import {
   toggleWalletPopup,
   setNetwork,
   toggleNetworkConfirmationPopup,
+  toggleNavbarOptions,
 } from '../../containers/Global/actions';
 import { ROUTE, LIST, MSG } from '../../constants';
 import {
@@ -48,6 +49,7 @@ import {
 import {
   selectNetworkData,
   selectNetworkConfirmationPopup,
+  selectNavbarState,
 } from '../../containers/Global/selectors';
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
 
@@ -62,6 +64,7 @@ class NavigationBar extends PureComponent {
     this.handleRedirectToHomepage = this.handleRedirectToHomepage.bind(this);
     this.handleRenderPrivateBar = this.handleRenderPrivateBar.bind(this);
     this.handleRenderPublicBar = this.handleRenderPublicBar.bind(this);
+    this.handleToggleNavbarOptions = this.handleToggleNavbarOptions.bind(this);
     this.isActiveNetwork = this.isActiveNetwork.bind(this);
   }
 
@@ -209,6 +212,11 @@ class NavigationBar extends PureComponent {
     );
   }
 
+  handleToggleNavbarOptions() {
+    const { navbar, onToggleNavbarOptions } = this.props;
+    onToggleNavbarOptions(!_get(navbar, 'isExpanded'));
+  }
+
   isActiveNetwork(networkOpt) {
     const { network } = this.props;
     const { value } = networkOpt;
@@ -220,7 +228,7 @@ class NavigationBar extends PureComponent {
     const {
       intl: { formatMessage },
       isLoggedIn,
-      network,
+      navbar,
       networkConfirmationPopup,
       onToggleNetworkConfirmationPopup,
     } = this.props;
@@ -234,8 +242,8 @@ class NavigationBar extends PureComponent {
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
             />
           </NavbarBrand>
-          <NavbarToggler onClick={this.handleToggleOptions} />
-          <Collapse isOpen={_get(network, 'isExpanded', false)} navbar>
+          <NavbarToggler onClick={this.handleToggleNavbarOptions} />
+          <Collapse isOpen={_get(navbar, 'isExpanded', false)} navbar>
             {isLoggedIn && this.handleRenderPrivateBar()}
             {this.handleRenderPublicBar()}
           </Collapse>
@@ -264,6 +272,8 @@ NavigationBar.propTypes = {
   isLoggedIn: PropTypes.bool,
   /** Current chosen locale */
   language: PropTypes.string,
+  /** Navigation bar's data */
+  navbar: PropTypes.object,
   /** Network dropdown data */
   network: PropTypes.object,
   /** Network update confirmation popup's data */
@@ -272,6 +282,8 @@ NavigationBar.propTypes = {
   onReleaseWallet: PropTypes.func,
   /** Action to update network options */
   onSetNetwork: PropTypes.func,
+  /** Action to show/hide navigation bar options */
+  onToggleNavbarOptions: PropTypes.func,
   /** Action to show/hide network update confirmation popup */
   onToggleNetworkConfirmationPopup: PropTypes.func,
   /** Action to show/hide show-wallet popup */
@@ -286,10 +298,12 @@ NavigationBar.defaultProps = {
   intl: {},
   isLoggedIn: false,
   language: 'en',
+  navbar: {},
   network: {},
   networkConfirmationPopup: {},
   onReleaseWallet: () => {},
   onSetNetwork: () => {},
+  onToggleNavbarOptions: () => {},
   onToggleNetworkConfirmationPopup: () => {},
   onToggleWalletPopup: () => {},
   switchRPCServer: () => {},
@@ -299,12 +313,14 @@ NavigationBar.defaultProps = {
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
+    navbar: selectNavbarState,
     network: selectNetworkData,
     networkConfirmationPopup: selectNetworkConfirmationPopup,
   });
 const mapDispatchToProps = dispatch => ({
   onReleaseWallet: () => dispatch(releaseWallet()),
   onSetNetwork: network => dispatch(setNetwork(network)),
+  onToggleNavbarOptions: bool => dispatch(toggleNavbarOptions(bool)),
   onToggleNetworkConfirmationPopup: (bool, networkOpt) =>
     dispatch(toggleNetworkConfirmationPopup(bool, networkOpt)),
   onToggleWalletPopup: bool => dispatch(toggleWalletPopup(bool)),

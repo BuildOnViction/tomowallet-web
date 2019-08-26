@@ -192,7 +192,11 @@ class FormContent extends PureComponent {
               type='number'
               name={SEND_TOKEN_FIELDS.TRANSFER_AMOUNT}
               value={_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], '')}
-              max={12}
+              max={_get(
+                formValues,
+                [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
+                0,
+              )}
               placeholder={formatMessage(
                 MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_PLACEHOLDER,
               )}

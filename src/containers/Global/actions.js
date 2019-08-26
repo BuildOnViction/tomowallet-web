@@ -13,7 +13,7 @@ import {
   STORE_WALLET_INFO,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
-  TOGGLE_NETWORK_DROPDOWN,
+  TOGGLE_NAVBAR_OPTIONS,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
@@ -55,8 +55,8 @@ export const toggleNetworkConfirmationPopup = (bool, networkOpt) => ({
   networkOpt,
 });
 
-export const toggleNetworkDropdown = bool => ({
-  type: TOGGLE_NETWORK_DROPDOWN,
+export const toggleNavbarOptions = bool => ({
+  type: TOGGLE_NAVBAR_OPTIONS,
   bool,
 });
 

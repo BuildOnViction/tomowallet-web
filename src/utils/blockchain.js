@@ -17,6 +17,7 @@ import trc21 from '../contractABIs/trc21.json';
 
 // ===== SUPPORTED VARIABLES =====
 const DEFAULT_GAS_PRICE = '250000000';
+const DEFAULT_GAS = 21000;
 // ===============================
 
 // ===== METHODS =====
@@ -126,7 +127,7 @@ const estimateGas = (web3, txData) => {
     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
     contractAddress || from,
   );
-  const weiAmount = (amount * 10 ** decimals).toString();
+  const weiAmount = parseFloat(amount * 10 ** decimals).toString();
 
   // In case token type is TRC21
   if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
@@ -137,11 +138,18 @@ const estimateGas = (web3, txData) => {
         if (Number(trc21Gas)) {
           return trc21Gas;
         }
-        return contract.methods.transfer(to, weiAmount).estimateGas({ from });
+        console.warn('In case token type is TRC21', from, to, weiAmount);
+        return contract.methods
+          .transfer(to, weiAmount)
+          .estimateGas({ from })
+          .then(gas => gas);
       });
   } else {
     // In case token type is TRC20
-    return contract.methods.transfer(to, weiAmount).estimateGas({ from });
+    return contract.methods
+      .transfer(to, weiAmount)
+      .estimateGas({ from })
+      .then(gas => gas);
   }
 };
 
@@ -196,7 +204,7 @@ const sendMoney = (web3, transactionData) => {
         from,
         to,
         value: weiAmount,
-        gasPrice: `${price}`,
+        gasPrice: price,
         gas,
       });
     }),

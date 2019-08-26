@@ -16,7 +16,7 @@ import {
   STORE_WALLET_INFO,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
-  TOGGLE_NETWORK_DROPDOWN,
+  TOGGLE_NAVBAR_OPTIONS,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
@@ -35,16 +35,18 @@ const initialWalletPopupState = {
 const initialState = fromJS({
   language: _get(LIST, ['LANGUAGES', 0, 'value'], ''),
   loading: false,
-  network: {
-    data: LIST.NETWORKS[0],
+  navbar: {
     isExpanded: false,
   },
-  wallet: null,
-  walletPopup: initialWalletPopupState,
+  network: {
+    data: LIST.NETWORKS[0],
+  },
   networkConfirmationPopup: {
     isOpen: false,
     selected: {},
   },
+  wallet: null,
+  walletPopup: initialWalletPopupState,
 });
 // =============================
 
@@ -71,8 +73,8 @@ export default (state = initialState, action) => {
       return state
         .setIn(['networkConfirmationPopup', 'isOpen'], action.bool)
         .setIn(['networkConfirmationPopup', 'selected'], action.networkOpt);
-    case TOGGLE_NETWORK_DROPDOWN:
-      return state.setIn(['network', 'isExpanded'], action.bool);
+    case TOGGLE_NAVBAR_OPTIONS:
+      return state.setIn(['navbar', 'isExpanded'], action.bool);
     case TOGGLE_WALLET_POPUP: {
       const newState = state.setIn(['walletPopup', 'isOpen'], action.bool);
       if (!action.bool) {
