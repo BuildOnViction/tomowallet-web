@@ -398,6 +398,26 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.section.address.title`,
     defaultMessage: 'Address',
   },
+  MY_WALLET_SECTION_EXCHANGE_CHART_RANK: {
+    id: `${myWalletPagePrefix}.section.exchange.chart.rank`,
+    defaultMessage: 'Rank',
+  },
+  MY_WALLET_SECTION_EXCHANGE_CHART_MARKET_CAP: {
+    id: `${myWalletPagePrefix}.section.exchange.chart.marketcap`,
+    defaultMessage: 'Market Cap',
+  },
+  MY_WALLET_SECTION_EXCHANGE_CHART_VOLUME: {
+    id: `${myWalletPagePrefix}.section.exchange.chart.volume`,
+    defaultMessage: 'Volume',
+  },
+  MY_WALLET_SECTION_EXCHANGE_UNIT_USD: {
+    id: `${myWalletPagePrefix}.section.exchange.unit.usd`,
+    defaultMessage: 'USD',
+  },
+  MY_WALLET_SECTION_EXCHANGE_UNIT_BTC: {
+    id: `${myWalletPagePrefix}.section.exchange.unit.btc`,
+    defaultMessage: 'BTC',
+  },
   MY_WALLET_TABLE_PORTFOLIO_TITLE: {
     id: `${myWalletPagePrefix}.table.tab.portfolio.title`,
     defaultMessage: 'PORTFOLIO',

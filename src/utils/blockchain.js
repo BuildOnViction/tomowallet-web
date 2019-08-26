@@ -186,73 +186,6 @@ const sendToken = (web3, contractData) => {
         });
       }),
   );
-  // // In case token type is TRC21
-  // if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
-  //   return contract.methods
-  //     .estimateFee(weiAmount)
-  //     .call({ from, to })
-  //     .then(trc21Gas =>
-  //       Number(trc21Gas)
-  //         ? web3.eth.getGasPrice().then(price =>
-  //             contract.methods
-  //               .transfer(to, weiAmount)
-  //               .send({ from, gasPrice: trc21Gas * price, gas: 250000000 })
-  //               .on('transactionHash', hash => {
-  //                 repeatCall({
-  //                   interval: 2000,
-  //                   timeout: 10000,
-  //                   action: () => {
-  //                     return web3.eth.getTransactionReceipt(hash);
-  //                   },
-  //                 });
-  //               }),
-  //           )
-  //         : contract.methods
-  //             .transfer(to, weiAmount)
-  //             .estimateGas({ from })
-  //             .then(trc20Gas => {
-  //               return web3.eth.getGasPrice().then(price => {
-  //                 return contract.methods
-  //                   .transfer(to, weiAmount)
-  //                   .send({
-  //                     from,
-  //                     gasPrice: trc20Gas * price,
-  //                   })
-  //                   .on('transactionHash', hash => {
-  //                     repeatCall({
-  //                       interval: 2000,
-  //                       timeout: 10000,
-  //                       action: () => {
-  //                         return web3.eth.getTransactionReceipt(hash);
-  //                       },
-  //                     });
-  //                   });
-  //               });
-  //             }),
-  //     );
-  // } else {
-  //   // In case token type is TRC20
-  //   return estimateTRC20Gas(web3, { from, to, value: weiAmount }).then(
-  //     gasPrice =>
-  //       contract.methods
-  //         .transfer(to, weiAmount)
-  //         .send({
-  //           from,
-  //           to: contractAddress,
-  //           gasPrice: '250000000',
-  //           gas: 50000,
-  //         })
-  //         .on('transactionHash', hash => {
-  //           repeatCall({
-  //             interval: 2000,
-  //             timeout: 10000,
-  //             action: () => {
-  //               return web3.eth.getTransactionReceipt(hash);
-  //             },
-  //           });
-  //         }),
-  //   );
-  // }
 };
 
 /**
@@ -293,9 +226,9 @@ const repeatCall = ({ interval = 1000, timeout = 1000, action = () => {} }) => {
       wait(ms).then(r);
     });
   const stopAfter10Seconds = () =>
-    new Promise(r => r(setTimeout(() => clearInterval(intervalId)), 10000));
+    new Promise(r => r(setTimeout(() => clearInterval(intervalId)), timeout));
   return repeat(
-    2000,
+    interval,
     action().then(trans => {
       if (!_isEmpty(trans)) {
         clearInterval(intervalId);

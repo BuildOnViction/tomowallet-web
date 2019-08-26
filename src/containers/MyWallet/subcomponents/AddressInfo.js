@@ -14,6 +14,7 @@ import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 import QRCode from 'qrcode.react';
 // Custom Components
+import ExchangeInfo from './ExchangeInfo';
 import { MediumButtonStyler, HeadingSmall } from '../../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
@@ -24,16 +25,9 @@ import { TextBlue } from '../../../styles';
 
 // ===== MAIN COMPONENT =====
 class AddressInfo extends PureComponent {
-  componentDidMount() {
-    const addScript = document.createElement('script');
-    addScript.setAttribute(
-      'src',
-      'https://files.coinmarketcap.com/static/widget/currency.js',
-    );
-    document.body.appendChild(addScript);
-  }
   render() {
     const {
+      coinData,
       intl: { formatMessage },
       openReceiveTokenPopup,
       openSendTokenPopup,
@@ -49,18 +43,7 @@ class AddressInfo extends PureComponent {
               className='mb-sm-3 mb-lg-0'
             >
               <div className='bg_gray'>
-                <div
-                  className='coinmarketcap-currency-widget'
-                  data-currencyid='2570'
-                  data-base='USD'
-                  data-secondary='BTC'
-                  data-ticker='true'
-                  data-rank='true'
-                  data-marketcap='true'
-                  data-volume='true'
-                  data-stats='USD'
-                  data-statsticker='true'
-                />
+                <ExchangeInfo coinData={coinData} />
               </div>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
