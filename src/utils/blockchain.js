@@ -135,23 +135,13 @@ const estimateGas = (web3, txData) => {
       .call({ from, to })
       .then(trc21Gas => {
         if (Number(trc21Gas)) {
-          return web3.eth.getGasPrice().then(price => trc21Gas * price);
+          return trc21Gas;
         }
-        return web3.eth.getGasPrice().then(price =>
-          contract.methods
-            .transfer(to, weiAmount)
-            .estimateGas({ from, to, value: weiAmount })
-            .then(trc20Gas => trc20Gas * price),
-        );
+        return contract.methods.transfer(to, weiAmount).estimateGas({ from });
       });
   } else {
     // In case token type is TRC20
-    return web3.eth.getGasPrice().then(price =>
-      contract.methods
-        .transfer(to, weiAmount)
-        .estimateGas({ from, to, value: weiAmount })
-        .then(trc20Gas => trc20Gas * price),
-    );
+    return contract.methods.transfer(to, weiAmount).estimateGas({ from });
   }
 };
 
@@ -171,19 +161,21 @@ const sendToken = (web3, contractData) => {
   );
   const weiAmount = (amount * 10 ** decimals).toString();
 
-  return estimateGas(web3, contractData).then(gasPrice =>
-    contract.methods
-      .transfer(to, weiAmount)
-      .send({ from, gasPrice: gasPrice, gas: 100000 })
-      .on('transactionHash', hash => {
-        repeatCall({
-          interval: 2000,
-          timeout: 10000,
-          action: () => {
-            return web3.eth.getTransactionReceipt(hash);
-          },
-        });
-      }),
+  return estimateGas(web3, contractData).then(gas =>
+    web3.eth.getGasPrice(price =>
+      contract.methods
+        .transfer(to, weiAmount)
+        .send({ from, gasPrice: price, gas })
+        .on('transactionHash', hash => {
+          repeatCall({
+            interval: 2000,
+            timeout: 10000,
+            action: () => {
+              return web3.eth.getTransactionReceipt(hash);
+            },
+          });
+        }),
+    ),
   );
 };
 
@@ -198,13 +190,17 @@ const sendMoney = (web3, transactionData) => {
   const { amount, decimals, from, to } = transactionData;
 
   const weiAmount = (amount * 10 ** decimals).toString();
-  return web3.eth.sendTransaction({
-    from,
-    to,
-    value: weiAmount,
-    gasPrice: DEFAULT_GAS_PRICE,
-    gas: 50000,
-  });
+  return estimateGas(web3, transactionData).then(gas =>
+    web3.eth.getGasPrice().then(price => {
+      return web3.eth.sendTransaction({
+        from,
+        to,
+        value: weiAmount,
+        gasPrice: `${price}`,
+        gas,
+      });
+    }),
+  );
 };
 
 /**

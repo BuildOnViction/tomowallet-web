@@ -114,12 +114,20 @@ class NavigationBar extends PureComponent {
       <Fragment>
         <Nav className='ml-auto' navbar>
           <NavItem>
-            <LinkHeader>
+            <LinkHeader
+              href='https://docs.tomochain.com/products/tomowallet/features/'
+              rel='noopener noreferrer'
+              target='_blank'
+            >
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}
             </LinkHeader>
           </NavItem>
           <NavItem>
-            <LinkHeader>
+            <LinkHeader
+              href='https://docs.tomochain.com/general/faq/#tomowallet'
+              rel='noopener noreferrer'
+              target='_blank'
+            >
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}
             </LinkHeader>
           </NavItem>
