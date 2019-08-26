@@ -118,6 +118,10 @@ a {
     }
     .select_option {
       padding: 1em;
+      transition: all 0.3s;
+      &:hover {
+        background: #272d40;
+      }
     }
     .select_option,
     .select_option_active {
