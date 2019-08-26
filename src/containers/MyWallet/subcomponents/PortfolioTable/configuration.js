@@ -18,7 +18,7 @@ import {
 import TokenCell from './subcomponents/TokenCell';
 import { TextYellowPointer } from '../../../../styles';
 // Utilities & Constants
-import { convertLocaleNumber, getWeb3Info } from '../../../../utils';
+import { convertLocaleNumber, getNetwork } from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG, RPC_SERVER } from '../../../../constants';
 // ===================
@@ -94,7 +94,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       },
       {
         Cell: ({ original }) => {
-          const rpcServer = _get(getWeb3Info(), 'rpcServer');
+          const rpcServer = getNetwork();
           let tomoScanLink = '';
           switch (rpcServer) {
             case Object.keys(RPC_SERVER)[0]:
