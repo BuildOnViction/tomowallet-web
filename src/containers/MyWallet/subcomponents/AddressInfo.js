@@ -53,7 +53,7 @@ class AddressInfo extends PureComponent {
                     <HeadingSmall>
                       {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
                     </HeadingSmall>
-                    <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
+                    <TextBlue className='text-break'>{_get(wallet, 'address', '')}</TextBlue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
                         <MediumButtonStyler onClick={openSendTokenPopup}>

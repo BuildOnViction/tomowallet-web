@@ -74,6 +74,12 @@ a {
     }
   }
 }
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
 .form-group {
   margin-bottom: 0;
   label {
@@ -86,6 +92,7 @@ a {
     }
   }
   .box_select {
+    z-index: 9;
     .my-select__input {
       display: inline-block;
       height: 0;
