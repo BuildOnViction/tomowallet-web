@@ -74,7 +74,7 @@ const getWalletInfo = web3 => {
     const address = web3.currentProvider.addresses[0];
     return web3.eth.getBalance(address).then(balance => ({
       address,
-      balance: Number(web3.utils.fromWei(balance)),
+      balance,
     }));
   }
   return null;
@@ -128,6 +128,10 @@ const estimateGas = (web3, txData) => {
     contractAddress || from,
   );
   const weiAmount = parseFloat(amount * 10 ** decimals).toString();
+
+  web3.eth
+    .getBalance(from)
+    .then(balance => console.warn('getBalance', balance - weiAmount));
 
   // In case token type is TRC21
   if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
@@ -247,6 +251,16 @@ const fromWei = amount => {
   const web3 = new Web3();
   return web3.utils.fromWei(amount);
 };
+
+const convertNumberWithDecimals = (number, decimals) => {
+  const web3 = new Web3();
+  const normalNumber = web3.utils
+    .toBN(number)
+    .divmod(web3.utils.toBN(10 ** decimals));
+  return parseFloat(
+    `${normalNumber.div}.${normalNumber.mod.toString(10, decimals)}`,
+  );
+};
 // ===================
 
 export {
@@ -259,4 +273,5 @@ export {
   mnemonicToPrivateKey,
   sendMoney,
   sendToken,
+  convertNumberWithDecimals,
 };

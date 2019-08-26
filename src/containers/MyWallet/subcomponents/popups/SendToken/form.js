@@ -30,11 +30,15 @@ import Image from '../../../../../components/Image';
 import { convertLocaleNumber } from '../../../../../utils';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
+import { convertNumberWithDecimals } from '../../../../../utils/blockchain';
 // ===================
 
 // ===== SUB-COMPONENTS =====
 const TokenOption = props => {
   const { innerProps, data } = props;
+  const rawBalance = _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0);
+  const decimals = _get(data, [PORTFOLIO_COLUMNS.DECIMALS], 0);
+  const normalBalance = convertNumberWithDecimals(rawBalance, decimals);
 
   return (
     <Container {...innerProps} role='presentation' fluid className='px-0'>
@@ -51,10 +55,11 @@ const TokenOption = props => {
           )})`}</span>
         </Col>
         <Col xs={6} className='text-right text-ellipsis'>
-          {`${convertLocaleNumber(
-            _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0),
-            3,
-          )} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
+          {`${convertLocaleNumber(normalBalance)} ${_get(
+            data,
+            [PORTFOLIO_COLUMNS.SYMBOL],
+            '',
+          )}`}
         </Col>
       </Row>
     </Container>
@@ -63,6 +68,9 @@ const TokenOption = props => {
 
 const TokenInputValue = props => {
   const { data } = props;
+  const rawBalance = _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0);
+  const decimals = _get(data, [PORTFOLIO_COLUMNS.DECIMALS], 0);
+  const normalBalance = convertNumberWithDecimals(rawBalance, decimals);
 
   return (
     <div style={{ width: '96%' }}>
@@ -79,9 +87,11 @@ const TokenInputValue = props => {
           )})`}</span>
         </Col>
         <Col xs={6} className='text-right text-ellipsis'>
-          {`${convertLocaleNumber(
-            _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0),
-          )} ${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], '')}`}
+          {`${convertLocaleNumber(normalBalance)} ${_get(
+            data,
+            [PORTFOLIO_COLUMNS.SYMBOL],
+            '',
+          )}`}
         </Col>
       </Row>
     </div>

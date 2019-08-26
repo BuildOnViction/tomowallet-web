@@ -64,7 +64,12 @@ import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
 import { MSG, LIST } from '../../constants';
-import { sendMoney, getWalletInfo, estimateGas } from '../../utils/blockchain';
+import {
+  sendMoney,
+  getWalletInfo,
+  estimateGas,
+  convertNumberWithDecimals,
+} from '../../utils/blockchain';
 // ==================
 
 // ===== MAIN COMPONENT =====
@@ -88,11 +93,19 @@ class MyWallet extends PureComponent {
 
   handleAddFullAmount() {
     const { onUpdateSendTokenInput, sendTokenForm } = this.props;
-
-    onUpdateSendTokenInput(
-      SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-      _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN, 'balance'], ''),
+    const rawBalance = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
+      0,
     );
+    const decimals = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0,
+    );
+    const normalBalance = convertNumberWithDecimals(rawBalance, decimals);
+
+    onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, normalBalance);
   }
 
   handleCloseSendTokenPopup() {

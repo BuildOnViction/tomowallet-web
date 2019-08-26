@@ -7,22 +7,21 @@
 // Modules
 import React from 'react';
 import _get from 'lodash.get';
+import Web3 from 'web3';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  UncontrolledDropdown,
-  DropdownMenu,
-} from 'reactstrap';
+import { UncontrolledDropdown } from 'reactstrap';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
 import {
   TextYellowPointer,
   DropdownToggleMainStyle,
-  DropdownMenuMainStyler
+  DropdownMenuMainStyler,
 } from '../../../../styles';
 // Utilities & Constants
 import { convertLocaleNumber, getNetwork } from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG, RPC_SERVER } from '../../../../constants';
+import { convertNumberWithDecimals } from '../../../../utils/blockchain';
 // ===================
 
 // ===== CONFIGURATION =====
@@ -45,7 +44,13 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       {
         headerClassName: 'd-none',
         accessor: PORTFOLIO_COLUMNS.BALANCE,
-        Cell: ({ value }) => convertLocaleNumber(value, 3),
+        Cell: ({ original, value }) => {
+          const decimals = _get(original, PORTFOLIO_COLUMNS.DECIMALS);
+          return convertLocaleNumber(
+            convertNumberWithDecimals(value, decimals),
+            3,
+          );
+        },
       },
     ],
   },
@@ -55,12 +60,15 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       {
         headerClassName: 'd-none',
         accessor: PORTFOLIO_COLUMNS.VALUE,
-        Cell: ({ original }) =>
-          convertLocaleNumber(
-            _get(original, PORTFOLIO_COLUMNS.BALANCE) *
+        Cell: ({ original }) => {
+          const rawBalance = _get(original, PORTFOLIO_COLUMNS.BALANCE);
+          const decimals = _get(original, PORTFOLIO_COLUMNS.DECIMALS);
+          return convertLocaleNumber(
+            convertNumberWithDecimals(rawBalance, decimals) *
               _get(original, [PORTFOLIO_COLUMNS.PRICE]),
             3,
-          ),
+          );
+        },
       },
     ],
   },
@@ -125,11 +133,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
                   {formatMessage(
                     MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN,
                     {
-                      token: _get(
-                        original,
-                        [PORTFOLIO_COLUMNS.TOKEN_NAME],
-                        '',
-                      ),
+                      token: _get(original, [PORTFOLIO_COLUMNS.TOKEN_NAME], ''),
                     },
                   )}
                 </a>

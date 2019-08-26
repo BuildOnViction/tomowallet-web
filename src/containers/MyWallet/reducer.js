@@ -110,14 +110,11 @@ export default (state = initialState, action) => {
       return state.update('tokenOptions', tokens =>
         tokens.concat(
           action.tokens.map(token => {
-            const balance =
-              Number(_get(token, 'balance', 0)) /
-              Math.pow(10, _get(token, 'decimals', 0));
             return {
               [PORTFOLIO_COLUMNS.TOKEN_NAME]: _get(token, 'name', ''),
               [PORTFOLIO_COLUMNS.SYMBOL]: _get(token, 'symbol', ''),
               [PORTFOLIO_COLUMNS.ICON]: _get(token, 'icon', ''),
-              [PORTFOLIO_COLUMNS.BALANCE]: balance,
+              [PORTFOLIO_COLUMNS.BALANCE]: _get(token, 'balance', '0'),
               [PORTFOLIO_COLUMNS.DECIMALS]: _get(token, 'decimals', 0),
               [PORTFOLIO_COLUMNS.PRICE]: _get(token, 'usdPrice', 0),
               [PORTFOLIO_COLUMNS.TOKEN_ADDRESS]: _get(
