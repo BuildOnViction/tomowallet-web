@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import {
   Card,
+  DropdownMenu,
+  DropdownToggle
 } from 'reactstrap';
 // Style Component//
 
@@ -35,10 +37,50 @@ const BoxFlexBetween = styled.div`
   padding: 1em;
 `;
 
+
+const DropdownMenuMainStyler = styled(DropdownMenu)`
+  background-color: #202533;
+  border-radius: 8px;
+  border: 0;
+  top: 0;
+  margin: 0;
+  padding: 0.5em 1em;
+  min-width: 200px;
+  a {
+    color: #5692CD;
+    font-size: 14px;
+    white-space: nowrap;
+    &:hover {
+      color: #9eaacc;
+    }
+  }
+`;
+
+const DropdownToggleMainStyle = styled(DropdownToggle)`
+  background: transparent !important;
+  border: 0;
+  color: #9EAACC;
+  &:active {
+    &:focus {
+      border: 0;
+      box-shadow: 0 0 0 0 !important;
+    }
+  }
+  &:focus {
+    border: 0;
+    box-shadow: 0 0 0 0 !important;
+  }
+  &:hover {
+    color: #5692CD;
+  }
+`;
+
 export {
   BoxBtnStyler,
   ContainerMin,
   BoxCardStyled,
   BoxImages,
   BoxFlexBetween,
+  DropdownMenuMainStyler,
+  DropdownToggleMainStyle,
 };

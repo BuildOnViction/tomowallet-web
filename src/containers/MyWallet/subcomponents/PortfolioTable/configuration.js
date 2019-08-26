@@ -10,13 +10,15 @@ import _get from 'lodash.get';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   UncontrolledDropdown,
-  DropdownToggle,
   DropdownMenu,
-  DropdownItem,
 } from 'reactstrap';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
-import { TextYellowPointer } from '../../../../styles';
+import {
+  TextYellowPointer,
+  DropdownToggleMainStyle,
+  DropdownMenuMainStyler
+} from '../../../../styles';
 // Utilities & Constants
 import { convertLocaleNumber, getNetwork } from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
@@ -109,31 +111,29 @@ export default ({ formatMessage, openSendTokenPopup }) => [
 
           return (
             <UncontrolledDropdown>
-              <DropdownToggle>
+              <DropdownToggleMainStyle>
                 <div className='text-right'>
                   <FontAwesomeIcon icon='ellipsis-v' />
                 </div>
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                  <a
-                    href={tomoScanLink}
-                    rel='noopener noreferrer'
-                    target='_blank'
-                  >
-                    {formatMessage(
-                      MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN,
-                      {
-                        token: _get(
-                          original,
-                          [PORTFOLIO_COLUMNS.TOKEN_NAME],
-                          '',
-                        ),
-                      },
-                    )}
-                  </a>
-                </DropdownItem>
-              </DropdownMenu>
+              </DropdownToggleMainStyle>
+              <DropdownMenuMainStyler right>
+                <a
+                  href={tomoScanLink}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  {formatMessage(
+                    MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN,
+                    {
+                      token: _get(
+                        original,
+                        [PORTFOLIO_COLUMNS.TOKEN_NAME],
+                        '',
+                      ),
+                    },
+                  )}
+                </a>
+              </DropdownMenuMainStyler>
             </UncontrolledDropdown>
           );
         },
