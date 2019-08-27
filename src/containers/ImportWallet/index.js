@@ -339,6 +339,11 @@ class ImportWallet extends PureComponent {
                         MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
                       )}
                     </CardText>
+                    <CardText className='mt-3 small'>
+                      {formatMessage(
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT,
+                      )}
+                    </CardText>
                   </ImporWalletStyler>
                 </Col>
               </Row>

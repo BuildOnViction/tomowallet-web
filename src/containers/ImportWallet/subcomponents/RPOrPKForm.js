@@ -9,8 +9,6 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Custom Components
-import { FormTextStyled } from '../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
@@ -45,11 +43,6 @@ class RPOrPKForm extends PureComponent {
             <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
           ))}
         </FormFeedback>
-        <FormTextStyled className='import-by-qrcode'>
-          {formatMessage(
-            MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_OPTION_IMPORT_VIA_QRCODE,
-          )}
-        </FormTextStyled>
       </FormGroup>
     );
   }

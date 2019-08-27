@@ -10,10 +10,8 @@ import _isEmpty from 'lodash.isempty';
 import _isEqual from 'lodash.isequal';
 import {
   NavbarBrand,
-  NavbarToggler,
   Collapse,
   Nav,
-  NavItem,
   UncontrolledDropdown,
   CardImg,
 } from 'reactstrap';
@@ -22,7 +20,6 @@ import WalletPopup from './subcomponents/WalletPopup';
 import NetworkConfirmationPopup from './subcomponents/NetworkConfirmationPopup';
 import {
   NavBarStyler,
-  LinkHeader,
   DropdownToggleHeader,
   DropdownMenuStyler,
   DropdownItemStyler,
@@ -105,32 +102,11 @@ class NavigationBar extends PureComponent {
   }
 
   handleRenderPublicBar() {
-    const {
-      intl: { formatMessage },
-      language,
-    } = this.props;
+    const { language } = this.props;
 
     return (
       <Fragment>
         <Nav className='ml-auto' navbar>
-          <NavItem>
-            <LinkHeader
-              href='https://docs.tomochain.com/products/tomowallet/features/'
-              rel='noopener noreferrer'
-              target='_blank'
-            >
-              {formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}
-            </LinkHeader>
-          </NavItem>
-          <NavItem>
-            <LinkHeader
-              href='https://docs.tomochain.com/general/faq/#tomowallet'
-              rel='noopener noreferrer'
-              target='_blank'
-            >
-              {formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}
-            </LinkHeader>
-          </NavItem>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggleHeader nav>
               {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}

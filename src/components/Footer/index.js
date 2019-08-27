@@ -81,6 +81,24 @@ class Footer extends PureComponent {
                   {formatMessage(MSG.FOOTER_OPTION_TERMS_PRIVACY)}
                 </LinkFooter>
               </NavItem>
+              <NavItem>
+                <LinkFooter
+                  href='https://docs.tomochain.com/products/tomowallet/features/'
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  {formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}
+                </LinkFooter>
+              </NavItem>
+              <NavItem>
+                <LinkFooter
+                  href='https://docs.tomochain.com/general/faq/#tomowallet'
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  {formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}
+                </LinkFooter>
+              </NavItem>
             </Nav>
           </Row>
         </Col>

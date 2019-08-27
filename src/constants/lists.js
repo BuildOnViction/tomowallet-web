@@ -27,11 +27,11 @@ const LANGUAGES = [
 // Webpage Networks
 const NETWORKS = [
   {
-    label: getMessage(MSG.COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET),
+    label: getMessage(MSG.COMMON_LIST_NETWORK_TOMOCHAIN_MAINNET),
     value: Object.keys(RPC_SERVER)[0],
   },
   {
-    label: getMessage(MSG.COMMON_LIST_NETWORK_TOMOCHAIN_MAINNET),
+    label: getMessage(MSG.COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET),
     value: Object.keys(RPC_SERVER)[1],
   },
 ];

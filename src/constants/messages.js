@@ -357,6 +357,10 @@ export default defineMessages({
     id: `${importWalletPagePrefix}.tab.recoveryphrase.text`,
     defaultMessage: 'Recovery Phrase/ Private Key',
   },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT: {
+    id: `${myWalletPagePrefix}.tab.recoveryphrase.notrecommmended.text`,
+    defaultMessage: '(Not Recommmended)',
+  },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_LABEL: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.input.label`,
     defaultMessage: 'Enter your Recovery Phrase or Private Key',

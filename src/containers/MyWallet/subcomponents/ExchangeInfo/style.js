@@ -34,6 +34,9 @@ const ExchangeInfoStyler = styled.div`
         font-size: 16px;
         span {
           color: #009e73;
+          &.--negative {
+            color: red;
+          }
         }
       }
       .exchange-info__data-rate--btc {

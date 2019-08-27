@@ -25,6 +25,7 @@ class ExchangeInfo extends PureComponent {
     super(props);
 
     this.handleFormatMoney = this.handleFormatMoney.bind(this);
+    this.handleGetExchangeData = this.handleGetExchangeData.bind(this);
   }
 
   handleFormatMoney(number) {
@@ -39,11 +40,26 @@ class ExchangeInfo extends PureComponent {
     return convertLocaleNumber(absNumber, 2);
   }
 
+  handleGetExchangeData() {
+    const { coinData } = this.props;
+    return {
+      name: _get(coinData, 'data.name', ''),
+      symbol: _get(coinData, 'data.symbol', ''),
+      usdPrice: _get(coinData, 'data.quotes.USD.price', 0),
+      changeRate: _get(coinData, 'data.quotes.USD.percent_change_24h', 0),
+      btcPrice: _get(coinData, 'data.quotes.BTC.price', 0),
+      rank: _get(coinData, 'data.rank', 0),
+      marketCap: _get(coinData, 'data.quotes.USD.market_cap', 0),
+      volume: _get(coinData, 'data.quotes.USD.volume_24h', 0),
+    };
+  }
+
   render() {
     const {
-      coinData,
       intl: { formatMessage },
     } = this.props;
+    const data = this.handleGetExchangeData();
+    const isDecrease = Math.sign(data.changeRate) === -1;
 
     return (
       <ExchangeInfoStyler>
@@ -56,25 +72,19 @@ class ExchangeInfo extends PureComponent {
                   rel='noopener noreferrer'
                   target='_blank'
                 >
-                  {`${_get(coinData, 'data.name', '')} (${_get(
-                    coinData,
-                    'data.symbol',
-                    '',
-                  )})`}
+                  {`${data.name} (${data.symbol})`}
                 </a>
               </span>
               <br />
               <span className='exchange-info__data-rate--usd'>
-                {_get(coinData, 'data.quotes.USD.price', 0)}
-                <span>{` (${_get(
-                  coinData,
-                  'data.quotes.USD.percent_change_24h',
-                  0,
-                )}%)`}</span>
+                {data.usdPrice}
+                <span
+                  className={isDecrease && '--negative'}
+                >{` (${data.changeRate}%)`}</span>
               </span>
               <br />
               <span className='exchange-info__data-rate--btc'>
-                {`${_get(coinData, 'data.quotes.BTC.price', 0)} ${formatMessage(
+                {`${data.btcPrice} ${formatMessage(
                   MSG.MY_WALLET_SECTION_EXCHANGE_UNIT_BTC,
                 )}`}
               </span>
@@ -88,16 +98,14 @@ class ExchangeInfo extends PureComponent {
               {formatMessage(MSG.MY_WALLET_SECTION_EXCHANGE_CHART_RANK)}
               <br />
               <br />
-              <span>{_get(coinData, 'data.rank', 0)}</span>
+              <span>{data.rank}</span>
             </div>
             <div className='exchange-info__charts-box'>
               {formatMessage(MSG.MY_WALLET_SECTION_EXCHANGE_CHART_MARKET_CAP)}
               <br />
               <br />
               <span>
-                {`${this.handleFormatMoney(
-                  _get(coinData, 'data.quotes.USD.market_cap', 0),
-                )} `}
+                {`${this.handleFormatMoney(data.marketCap)} `}
                 <span>
                   {formatMessage(MSG.MY_WALLET_SECTION_EXCHANGE_UNIT_USD)}
                 </span>
@@ -108,9 +116,7 @@ class ExchangeInfo extends PureComponent {
               <br />
               <br />
               <span>
-                {`${this.handleFormatMoney(
-                  _get(coinData, 'data.quotes.USD.volume_24h', 0),
-                )} `}
+                {`${this.handleFormatMoney(data.volume)} `}
                 <span>
                   {formatMessage(MSG.MY_WALLET_SECTION_EXCHANGE_UNIT_USD)}
                 </span>
