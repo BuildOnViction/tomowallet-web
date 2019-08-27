@@ -21,7 +21,7 @@ import {
 import { convertLocaleNumber, getNetwork } from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG, RPC_SERVER } from '../../../../constants';
-import { convertNumberWithDecimals } from '../../../../utils/blockchain';
+import { convertAmountWithDecimals } from '../../../../utils/blockchain';
 // ===================
 
 // ===== CONFIGURATION =====
@@ -47,7 +47,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
         Cell: ({ original, value }) => {
           const decimals = _get(original, PORTFOLIO_COLUMNS.DECIMALS);
           return convertLocaleNumber(
-            convertNumberWithDecimals(value, decimals),
+            parseFloat(convertAmountWithDecimals(value, decimals)),
             3,
           );
         },
@@ -64,7 +64,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           const rawBalance = _get(original, PORTFOLIO_COLUMNS.BALANCE);
           const decimals = _get(original, PORTFOLIO_COLUMNS.DECIMALS);
           return convertLocaleNumber(
-            convertNumberWithDecimals(rawBalance, decimals) *
+            parseFloat(convertAmountWithDecimals(rawBalance, decimals)) *
               _get(original, [PORTFOLIO_COLUMNS.PRICE]),
             3,
           );

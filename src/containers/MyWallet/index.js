@@ -68,7 +68,7 @@ import {
   sendMoney,
   getWalletInfo,
   estimateGas,
-  convertNumberWithDecimals,
+  convertAmountWithDecimals,
 } from '../../utils/blockchain';
 // ==================
 
@@ -103,7 +103,7 @@ class MyWallet extends PureComponent {
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
       0,
     );
-    const normalBalance = convertNumberWithDecimals(rawBalance, decimals);
+    const normalBalance = convertAmountWithDecimals(rawBalance, decimals);
 
     onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, normalBalance);
   }
@@ -154,9 +154,11 @@ class MyWallet extends PureComponent {
                 _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0) <
               normalFee
             ) {
-              let reducedAmount =
-                _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0) -
-                2 * normalFee;
+              let reducedAmount = _get(
+                sendTokenForm,
+                [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT],
+                0,
+              );
               if (reducedAmount < 0) {
                 reducedAmount = 0;
               }
@@ -297,10 +299,18 @@ class MyWallet extends PureComponent {
         {
           name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-          max: _get(sendTokenForm, [
-            SEND_TOKEN_FIELDS.TOKEN,
-            PORTFOLIO_COLUMNS.BALANCE,
-          ]),
+          max: parseFloat(
+            convertAmountWithDecimals(
+              _get(sendTokenForm, [
+                SEND_TOKEN_FIELDS.TOKEN,
+                PORTFOLIO_COLUMNS.BALANCE,
+              ]),
+              _get(sendTokenForm, [
+                SEND_TOKEN_FIELDS.TOKEN,
+                PORTFOLIO_COLUMNS.DECIMALS,
+              ]),
+            ),
+          ),
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID),
       ),
@@ -308,7 +318,7 @@ class MyWallet extends PureComponent {
         {
           name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-          min: 1,
+          min: 0,
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID),
       ),

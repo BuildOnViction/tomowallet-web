@@ -30,7 +30,7 @@ import Image from '../../../../../components/Image';
 import { convertLocaleNumber } from '../../../../../utils';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
-import { convertNumberWithDecimals } from '../../../../../utils/blockchain';
+import { convertAmountWithDecimals } from '../../../../../utils/blockchain';
 // ===================
 
 // ===== SUB-COMPONENTS =====
@@ -38,7 +38,9 @@ const TokenOption = props => {
   const { innerProps, data } = props;
   const rawBalance = _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0);
   const decimals = _get(data, [PORTFOLIO_COLUMNS.DECIMALS], 0);
-  const normalBalance = convertNumberWithDecimals(rawBalance, decimals);
+  const normalBalance = parseFloat(
+    convertAmountWithDecimals(rawBalance, decimals),
+  );
 
   return (
     <Container {...innerProps} role='presentation' fluid className='px-0'>
@@ -70,7 +72,9 @@ const TokenInputValue = props => {
   const { data } = props;
   const rawBalance = _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0);
   const decimals = _get(data, [PORTFOLIO_COLUMNS.DECIMALS], 0);
-  const normalBalance = convertNumberWithDecimals(rawBalance, decimals);
+  const normalBalance = parseFloat(
+    convertAmountWithDecimals(rawBalance, decimals),
+  );
 
   return (
     <div style={{ width: '96%' }}>

@@ -127,11 +127,14 @@ const estimateGas = (web3, txData) => {
     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
     contractAddress || from,
   );
-  const weiAmount = parseFloat(amount * 10 ** decimals).toString();
-
-  web3.eth
-    .getBalance(from)
-    .then(balance => console.warn('getBalance', balance - weiAmount));
+  const remainDecimals =
+    amount.indexOf('.') !== -1
+      ? decimals - (amount.length - 1 - amount.indexOf('.'))
+      : decimals;
+  const weiAmount = web3.utils
+    .toBN(`${amount}`.replace('.', ''))
+    .mul(web3.utils.toBN(10 ** remainDecimals))
+    .toString(10);
 
   // In case token type is TRC21
   if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
@@ -142,7 +145,6 @@ const estimateGas = (web3, txData) => {
         if (Number(trc21Gas)) {
           return trc21Gas;
         }
-        console.warn('In case token type is TRC21', from, to, weiAmount);
         return contract.methods
           .transfer(to, weiAmount)
           .estimateGas({ from })
@@ -173,9 +175,9 @@ const sendToken = (web3, contractData) => {
   );
   const weiAmount = (amount * 10 ** decimals).toString();
 
-  return estimateGas(web3, contractData).then(gas =>
-    web3.eth.getGasPrice(price =>
-      contract.methods
+  return estimateGas(web3, contractData).then(gas => {
+    return web3.eth.getGasPrice().then(price => {
+      return contract.methods
         .transfer(to, weiAmount)
         .send({ from, gasPrice: price, gas })
         .on('transactionHash', hash => {
@@ -186,9 +188,9 @@ const sendToken = (web3, contractData) => {
               return web3.eth.getTransactionReceipt(hash);
             },
           });
-        }),
-    ),
-  );
+        });
+    });
+  });
 };
 
 /**
@@ -200,19 +202,32 @@ const sendToken = (web3, contractData) => {
  */
 const sendMoney = (web3, transactionData) => {
   const { amount, decimals, from, to } = transactionData;
-
   const weiAmount = (amount * 10 ** decimals).toString();
-  return estimateGas(web3, transactionData).then(gas =>
-    web3.eth.getGasPrice().then(price => {
-      return web3.eth.sendTransaction({
-        from,
-        to,
-        value: weiAmount,
-        gasPrice: price,
-        gas,
-      });
-    }),
-  );
+  return estimateGas(web3, transactionData)
+    .then(gas =>
+      web3.eth.getGasPrice().then(price => {
+        return web3.eth.getBalance(from).then(balance =>
+          web3.eth.sendTransaction({
+            from,
+            to,
+            value: web3.utils
+              .toBN(web3.utils.toWei(amount, 'ether'))
+              .sub(
+                web3.utils
+                  .toBN('21000')
+                  .mul(web3.utils.toBN(DEFAULT_GAS_PRICE)),
+              ),
+            gasPrice: DEFAULT_GAS_PRICE,
+            gas: 21000,
+          }),
+        );
+      }),
+    )
+    .then(v => v)
+    .catch(ex => {
+      console.log(ex);
+      throw ex;
+    });
 };
 
 /**
@@ -252,14 +267,12 @@ const fromWei = amount => {
   return web3.utils.fromWei(amount);
 };
 
-const convertNumberWithDecimals = (number, decimals) => {
+const convertAmountWithDecimals = (number, decimals) => {
   const web3 = new Web3();
   const normalNumber = web3.utils
     .toBN(number)
     .divmod(web3.utils.toBN(10 ** decimals));
-  return parseFloat(
-    `${normalNumber.div}.${normalNumber.mod.toString(10, decimals)}`,
-  );
+  return `${normalNumber.div}.${normalNumber.mod.toString(10, decimals)}`;
 };
 // ===================
 
@@ -273,5 +286,5 @@ export {
   mnemonicToPrivateKey,
   sendMoney,
   sendToken,
-  convertNumberWithDecimals,
+  convertAmountWithDecimals,
 };
