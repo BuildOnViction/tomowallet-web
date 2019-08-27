@@ -94,15 +94,22 @@ class ImportWallet extends PureComponent {
   }
 
   handleAccessByLedger() {
-    const { addressPopup, onStoreWallet } = this.props;
+    const { addressPopup, onStoreWallet, web3 } = this.props;
     const chosenWallet = _get(addressPopup, [
       'wallets',
       _get(addressPopup, 'chosenIndex'),
     ]);
 
     if (chosenWallet) {
-      setLedger(chosenWallet);
-      onStoreWallet(chosenWallet);
+      const walletToStore = {
+        ...chosenWallet,
+        balance: web3.utils
+          .toBN(chosenWallet.balance)
+          .mul(web3.utils.toBN(10 ** 18))
+          .toString(),
+      };
+      setLedger(walletToStore);
+      onStoreWallet(walletToStore);
     }
   }
 

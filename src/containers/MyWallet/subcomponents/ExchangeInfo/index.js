@@ -79,7 +79,7 @@ class ExchangeInfo extends PureComponent {
               <span className='exchange-info__data-rate--usd'>
                 {data.usdPrice}
                 <span
-                  className={isDecrease && '--negative'}
+                  className={isDecrease ? '--negative' : undefined}
                 >{` (${data.changeRate}%)`}</span>
               </span>
               <br />

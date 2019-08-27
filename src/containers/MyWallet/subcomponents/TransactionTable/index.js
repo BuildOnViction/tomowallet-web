@@ -22,6 +22,7 @@ import { selectTransactionData, selectTableType } from '../../selectors';
 import { loadTransactionData } from '../../actions';
 import { LIST } from '../../../../constants';
 import { selectWallet } from '../../../Global/selectors';
+import { getNetwork } from '../../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -49,6 +50,7 @@ class TransactionTable extends PureComponent {
     onLoadTransactionData({
       page: newPage || 1,
       address: _get(wallet, 'address', ''),
+      serverKey: getNetwork(),
     });
   }
 

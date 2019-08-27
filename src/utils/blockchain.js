@@ -70,14 +70,19 @@ const generateWeb3 = (
  * @param {Web3} web3 A Web3 object with supported APIs
  */
 const getWalletInfo = web3 => {
+  debugger;
   if (web3) {
-    const address = web3.currentProvider.addresses[0];
-    return web3.eth.getBalance(address).then(balance => ({
-      address,
-      balance,
-    }));
+    const address =
+      web3.currentProvider.selectedAddress ||
+      (web3.currentProvider.addresses && web3.currentProvider.addresses[0]);
+    if (address) {
+      return web3.eth.getBalance(address).then(balance => ({
+        address,
+        balance,
+      }));
+    }
   }
-  return null;
+  return new Promise(r => r());
 };
 
 /**
@@ -148,14 +153,14 @@ const estimateGas = (web3, txData) => {
         return contract.methods
           .transfer(to, weiAmount)
           .estimateGas({ from })
-          .then(gas => gas);
+          .then(gas => ({ type, gas }));
       });
   } else {
     // In case token type is TRC20
     return contract.methods
       .transfer(to, weiAmount)
       .estimateGas({ from })
-      .then(gas => gas);
+      .then(gas => ({ type, gas }));
   }
 };
 
@@ -168,7 +173,6 @@ const estimateGas = (web3, txData) => {
  */
 const sendToken = (web3, contractData) => {
   const { amount, contractAddress, decimals, from, to, type } = contractData;
-
   const contract = new web3.eth.Contract(
     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
     contractAddress,
@@ -179,7 +183,7 @@ const sendToken = (web3, contractData) => {
     return web3.eth.getGasPrice().then(price => {
       return contract.methods
         .transfer(to, weiAmount)
-        .send({ from, gasPrice: price, gas })
+        .send({ from, gasPrice: price, gas: 500000 })
         .on('transactionHash', hash => {
           repeatCall({
             interval: 2000,
@@ -203,31 +207,23 @@ const sendToken = (web3, contractData) => {
 const sendMoney = (web3, transactionData) => {
   const { amount, decimals, from, to } = transactionData;
   const weiAmount = (amount * 10 ** decimals).toString();
-  return estimateGas(web3, transactionData)
-    .then(gas =>
-      web3.eth.getGasPrice().then(price => {
-        return web3.eth.getBalance(from).then(balance =>
-          web3.eth.sendTransaction({
-            from,
-            to,
-            value: web3.utils
-              .toBN(web3.utils.toWei(amount, 'ether'))
-              .sub(
-                web3.utils
-                  .toBN('21000')
-                  .mul(web3.utils.toBN(DEFAULT_GAS_PRICE)),
-              ),
-            gasPrice: DEFAULT_GAS_PRICE,
-            gas: 21000,
-          }),
-        );
-      }),
-    )
-    .then(v => v)
-    .catch(ex => {
-      console.log(ex);
-      throw ex;
-    });
+  return estimateGas(web3, transactionData).then(gas =>
+    web3.eth.getGasPrice().then(price => {
+      return web3.eth.getBalance(from).then(balance =>
+        web3.eth.sendTransaction({
+          from,
+          to,
+          value: web3.utils
+            .toBN(web3.utils.toWei(amount, 'ether'))
+            .sub(
+              web3.utils.toBN('21000').mul(web3.utils.toBN(DEFAULT_GAS_PRICE)),
+            ),
+          gasPrice: DEFAULT_GAS_PRICE,
+          gas: 21000,
+        }),
+      );
+    }),
+  );
 };
 
 /**

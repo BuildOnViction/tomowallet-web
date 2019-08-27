@@ -58,12 +58,13 @@ import {
   injectSaga,
   sendToken,
   withLoading,
+  getLedger,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
-import { MSG, LIST } from '../../constants';
+import { MSG, LIST, ENUM } from '../../constants';
 import {
   sendMoney,
   getWalletInfo,
@@ -133,43 +134,45 @@ class MyWallet extends PureComponent {
       onUpdateSendTokenErrors(errorList);
     } else {
       estimateGas(web3, contractData)
-        .then(gas =>
-          web3.eth.getGasPrice().then(price => {
-            const feeObj = web3.utils
-              .toBN(gas * price)
-              .divmod(web3.utils.toBN(10 ** decimals));
-            const normalFee = parseFloat(
-              `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`,
+        .then(gas => {
+          let fee;
+          if (
+            contractData.type === ENUM.TOKEN_TYPE.TRC21 &&
+            parseInt(gas) > 0
+          ) {
+            fee = web3.utils.toBN(gas);
+          } else {
+            fee = web3.utils.toBN(200000).mul(web3.utils.toBN(250000000));
+          }
+          const feeObj = fee.divmod(web3.utils.toBN(10 ** decimals));
+          const normalFee = parseFloat(
+            `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`,
+          );
+          onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, normalFee);
+          if (
+            _get(
+              sendTokenForm,
+              [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
+              0,
+            ) -
+              _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0) <
+            normalFee
+          ) {
+            let reducedAmount = _get(
+              sendTokenForm,
+              [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT],
+              0,
             );
-            onUpdateSendTokenInput(
-              SEND_TOKEN_FIELDS.TRANSACTION_FEE,
-              normalFee,
-            );
-            if (
-              _get(
-                sendTokenForm,
-                [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
-                0,
-              ) -
-                _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0) <
-              normalFee
-            ) {
-              let reducedAmount = _get(
-                sendTokenForm,
-                [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT],
-                0,
-              );
-              if (reducedAmount < 0) {
-                reducedAmount = 0;
-              }
-              onUpdateSendTokenInput(
-                SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-                reducedAmount,
-              );
+            if (reducedAmount < 0) {
+              reducedAmount = 0;
             }
-            onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-          }),
-        )
+            onUpdateSendTokenInput(
+              SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+              reducedAmount,
+            );
+          }
+          onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+        })
         .catch(error => {
           onUpdateSendTokenErrors({
             [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [error.message],
@@ -179,7 +182,8 @@ class MyWallet extends PureComponent {
   }
 
   handleGetContractData() {
-    const { sendTokenForm, web3 } = this.props;
+    const { sendTokenForm, wallet } = this.props;
+    const address = wallet.address || getLedger().address;
 
     return {
       amount: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
@@ -193,7 +197,7 @@ class MyWallet extends PureComponent {
         [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
         0,
       ),
-      from: _get(web3, ['currentProvider', 'addresses', 0], ''),
+      from: address,
       to: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT], ''),
       type: _get(sendTokenForm, [
         SEND_TOKEN_FIELDS.TOKEN,

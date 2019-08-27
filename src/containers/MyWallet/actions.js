@@ -40,9 +40,9 @@ export const loadCoinDataSuccess = data => ({
   data,
 });
 
-export const loadTokenOptions = (address, initialTokens) => ({
+export const loadTokenOptions = (params, initialTokens) => ({
   type: LOAD_TOKEN_OPTIONS,
-  address,
+  params,
   initialTokens,
 });
 
@@ -51,10 +51,9 @@ export const loadTokenOptionsSuccess = tokens => ({
   tokens,
 });
 
-export const loadTransactionData = ({ page, address }) => ({
+export const loadTransactionData = params => ({
   type: LOAD_TRANSACTION_DATA,
-  page,
-  address,
+  params,
 });
 
 export const loadTransactionDataSuccess = tableData => ({

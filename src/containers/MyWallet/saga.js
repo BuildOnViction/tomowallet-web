@@ -6,6 +6,7 @@
 // ===== IMPORTS =====
 // Modules
 import { call, put, takeLatest } from 'redux-saga/effects';
+import _get from 'lodash.get';
 // Utilities & Constants
 import request from '../../utils/request';
 import {
@@ -28,8 +29,12 @@ import { toggleLoading } from '../Global/actions';
 export function* loadTokens(actionData) {
   try {
     yield put(toggleLoading(true));
-    const { address } = actionData;
-    const response = yield call(request, `${API.GET_TOKENS}?holder=${address}`);
+    const { params } = actionData;
+    const apiBase = _get(API, [params.serverKey], '');
+    const response = yield call(
+      request,
+      `${apiBase.GET_TOKENS}?holder=${params.address}`,
+    );
 
     if (response) {
       yield put(toggleLoading(false));
@@ -48,10 +53,11 @@ export function* loadTokens(actionData) {
 export function* loadTransaction(actionData) {
   try {
     yield put(toggleLoading(true));
-    const { page, address } = actionData;
+    const { params } = actionData;
+    const apiBase = _get(API, [params.serverKey], '');
     const response = yield call(
       request,
-      `${API.GET_TRANSACTIONS}/${address}?page=${page}&limit=5`,
+      `${apiBase.GET_TRANSACTIONS}/${params.address}?page=${params.page}&limit=5`,
       { headers: { withCredentials: true } },
     );
 
@@ -65,7 +71,7 @@ export function* loadTransaction(actionData) {
           currentPage,
           total,
           pages,
-          address,
+          address: params.address,
         }),
       );
     }

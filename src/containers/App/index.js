@@ -4,7 +4,9 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _isEmpty from 'lodash.isempty';
+import _get from 'lodash.get';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
+import Web3 from 'web3';
 // Custom Components
 import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';
@@ -22,9 +24,9 @@ import { TextLinkBlue } from '../../styles';
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
-import { ROUTE } from '../../constants';
+import { ROUTE, RPC_SERVER } from '../../constants';
 import './app.scss';
-import { getWeb3Info, getLedger } from '../../utils';
+import { getWeb3Info, getLedger, setLedger, getNetwork } from '../../utils';
 import { initiateWallet } from '../../utils/blockchain';
 
 // ===== MAIN COMPONENT =====
@@ -47,7 +49,15 @@ class App extends PureComponent {
         onStoreWallet(walletInfo);
       });
     } else if (ledger) {
-      onStoreWallet(ledger);
+      const newWeb3 = new Web3(
+        new Web3.providers.HttpProvider(
+          _get(RPC_SERVER, [getNetwork(), 'host']),
+        ),
+      );
+      newWeb3.eth.getBalance(ledger.address).then(balance => {
+        setLedger({ ...ledger, balance });
+        onStoreWallet({ ...ledger, balance });
+      });
     }
   }
 
@@ -67,11 +77,12 @@ class App extends PureComponent {
           <div className='maincontent d-flex d-md-none align-items-center'>
             <div className='text-center'>
               <p>
-                Sorry! We don’t support TomoWallet web version on mobile browsers.
-                Please download app version to access TomoWallet.
+                Sorry! We don’t support TomoWallet web version on mobile
+                browsers. Please download app version to access TomoWallet.
               </p>
               <p>
-                Download TomoWallet app<br/>
+                Download TomoWallet app
+                <br />
                 <TextLinkBlue href='http://l.ead.me/bb0oA6'>
                   Link: http://l.ead.me/bb0oA6
                 </TextLinkBlue>

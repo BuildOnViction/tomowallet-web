@@ -6,14 +6,25 @@
 // ===== IMPORTS =====
 // Modules
 import React, { Component, createContext } from 'react';
+import { connect } from 'react-redux';
 import hoistNonReactStatics from 'hoist-non-react-statics';
+import { createStructuredSelector } from 'reselect';
 import Web3 from 'web3';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
-// Utilities & Constants
+// Custom Components
 import { FailureComponent, LoadingComponent } from './';
-import { getWeb3Info, generateWeb3, getNetwork, setNetwork } from '../../utils';
+// Utilities & Constants
+import {
+  getWeb3Info,
+  generateWeb3,
+  getNetwork,
+  setNetwork,
+  getWalletInfo,
+} from '../../utils';
 import { RPC_SERVER, ENUM, LIST } from '../../constants';
+import { storeWallet, releaseWallet } from '../../containers/Global/actions';
+import { selectWallet } from '../../containers/Global/selectors';
 // ===================
 
 // ===== Web3 Context =====
@@ -36,48 +47,98 @@ class Web3Provider extends Component {
       rpcServer: {},
     };
 
-    // this.handleTryProvider = this.handleTryProvider.bind(this);
-    this.handleUpdateRpcServer = this.handleUpdateRpcServer.bind(this);
+    this.handleSetMetaMaskProvider = this.handleSetMetaMaskProvider.bind(this);
     this.handleSetWeb3 = this.handleSetWeb3.bind(this);
+    this.handleTryProvider = this.handleTryProvider.bind(this);
+    this.handleUpdateRpcServer = this.handleUpdateRpcServer.bind(this);
   }
 
   componentDidMount() {
-    // this.handleTryProvider(localStorage.getItem('web3'), () =>
-    //   this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]),
-    // );
-    const web3Info = getWeb3Info();
-    if (web3Info) {
-      const { recoveryPhrase, rpcServer } = web3Info;
-      const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
-
-      this.handleSetWeb3(newWeb3);
-      this.setState({
-        rpcServer,
-      });
+    const { onReleaseWallet } = this.props;
+    if (Web3.givenProvider) {
+      console.warn('Mounting MetaMask...', Web3.givenProvider);
+      this.handleSetMetaMaskProvider();
+      window.ethereum.enable();
+      window.ethereum.on('accountsChanged', this.handleSetMetaMaskProvider);
+      this.checkMetaMaskLogin = setInterval(() => {
+        Web3.givenProvider._metamask.isUnlocked().then(bool => {
+          const { wallet } = this.props;
+          if (!_isEmpty(wallet) && !bool) {
+            onReleaseWallet();
+          }
+        });
+      }, 1000);
     } else {
-      const storedNetwork = LIST.NETWORKS.find(
-        opt => opt.value === getNetwork(),
-      );
-      if (!_isEmpty(storedNetwork)) {
-        this.handleUpdateRpcServer(storedNetwork.value);
+      const web3Info = getWeb3Info();
+      if (web3Info) {
+        const { recoveryPhrase, rpcServer } = web3Info;
+        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+
+        this.handleSetWeb3(newWeb3);
+        this.setState({
+          rpcServer,
+        });
       } else {
-        this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
+        const storedNetwork = LIST.NETWORKS.find(
+          opt => opt.value === getNetwork(),
+        );
+        if (!_isEmpty(storedNetwork)) {
+          this.handleUpdateRpcServer(storedNetwork.value);
+        } else {
+          this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
+        }
       }
     }
   }
 
-  // handleTryProvider(web3, next = null) {
-  //   if (web3) {
-  //     this.handleSetWeb3(web3);
-  //   } else if (next) {
-  //     next();
-  //   } else {
-  //     this.setState({
-  //       status: ENUM.WEB3_STATUSES.FAILED,
-  //       error: 'Unexpected Web3 error!',
-  //     });
-  //   }
-  // }
+  componentWillUnmount() {
+    if (this.checkMetaMaskLogin) {
+      this.checkMetaMaskLogin.clearInterval();
+    }
+    window.ethereum.removeListener(
+      'accountsChanged',
+      this.handleSetMetaMaskProvider,
+    );
+  }
+
+  handleSetMetaMaskProvider() {
+    const { onStoreWallet } = this.props;
+    const newWeb3 = new Web3(Web3.givenProvider);
+    console.warn('Changing account...', Web3.givenProvider);
+
+    this.handleSetWeb3(newWeb3);
+    getWalletInfo(newWeb3).then(walletInfo => {
+      if (walletInfo) {
+        onStoreWallet(walletInfo);
+      }
+    });
+  }
+
+  handleSetWeb3(web3) {
+    this.setState({ web3: new Web3(web3) }, () =>
+      this.state.web3.eth.net
+        .isListening()
+        .then(() =>
+          this.setState({
+            status: ENUM.WEB3_STATUSES.INITIALIZED,
+          }),
+        )
+        .catch(() => this.setState({ status: ENUM.WEB3_STATUSES.FAILED })),
+    );
+  }
+
+  handleTryProvider(web3, next = null) {
+    if (web3) {
+      this.handleSetWeb3(web3);
+    } else if (next) {
+      next();
+    } else {
+      this.setState({
+        status: ENUM.WEB3_STATUSES.FAILED,
+        error: 'Unexpected Web3 error!',
+      });
+    }
+  }
 
   handleUpdateRpcServer(newKey) {
     this.setState(
@@ -93,19 +154,6 @@ class Web3Provider extends Component {
         );
         this.handleSetWeb3(newWeb3);
       },
-    );
-  }
-
-  handleSetWeb3(web3) {
-    this.setState({ web3: new Web3(web3) }, () =>
-      this.state.web3.eth.net
-        .isListening()
-        .then(() =>
-          this.setState({
-            status: ENUM.WEB3_STATUSES.INITIALIZED,
-          }),
-        )
-        .catch(() => this.setState({ status: ENUM.WEB3_STATUSES.FAILED })),
     );
   }
 
@@ -129,7 +177,22 @@ class Web3Provider extends Component {
   }
 }
 
-export default Web3Provider;
+// ===== INJECTIONS =====
+const mapStateToProps = () =>
+  createStructuredSelector({
+    wallet: selectWallet,
+  });
+const mapDispatchToProps = dispatch => ({
+  onReleaseWallet: () => dispatch(releaseWallet()),
+  onStoreWallet: wallet => dispatch(storeWallet(wallet)),
+});
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+// ======================
+
+export default withConnect(Web3Provider);
 // ===================================
 
 // ===== Web3 Injection =====

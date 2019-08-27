@@ -32,6 +32,7 @@ import { PORTFOLIO_COLUMNS } from '../../constants';
 import { selectWallet } from '../../../Global/selectors';
 import { LIST } from '../../../../constants';
 import tomoIcon from '../../../../assets/images/logo-tomo.png';
+import { getNetwork } from '../../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -85,7 +86,10 @@ class PortfolioTable extends Component {
   handleLoadTokenOptions() {
     const { onLoadTokenOptions, wallet } = this.props;
     onLoadTokenOptions(
-      _get(wallet, 'address', ''),
+      {
+        address: _get(wallet, 'address', ''),
+        serverKey: getNetwork(),
+      },
       this.handleGetNativeCurrency(),
     );
   }
@@ -160,8 +164,8 @@ const mapStateToProps = () =>
     wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
-  onLoadTokenOptions: (address, initialTokens) =>
-    dispatch(loadTokenOptions(address, initialTokens)),
+  onLoadTokenOptions: (params, initialTokens) =>
+    dispatch(loadTokenOptions(params, initialTokens)),
 });
 const withConnect = connect(
   mapStateToProps,
