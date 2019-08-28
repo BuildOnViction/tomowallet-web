@@ -16,6 +16,9 @@ import { createStructuredSelector } from 'reselect';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
 import { Helmet } from 'react-helmet';
+import Transaction from 'ethereumjs-tx';
+import Eth from '@ledgerhq/hw-app-eth';
+import TransportU2F from '@ledgerhq/hw-transport-u2f';
 // Custom Components
 import AddressInfo from './subcomponents/AddressInfo';
 import DataTables from './subcomponents/DataTables';
@@ -58,19 +61,24 @@ import {
   injectSaga,
   sendToken,
   withLoading,
-  getLedger,
+  getWeb3Info,
+  getNetwork,
+  sendMoney,
+  getWalletInfo,
+  convertAmountWithDecimals,
+  getBalance,
+  repeatGetTransaction,
+  estimateCurrencyFee,
+  estimateTRC20Fee,
+  estimateTRC21Fee,
+  bnToDecimals,
+  decimalsToBN,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
-import { MSG, LIST, ENUM } from '../../constants';
-import {
-  sendMoney,
-  getWalletInfo,
-  estimateGas,
-  convertAmountWithDecimals,
-} from '../../utils/blockchain';
+import { MSG, LIST, ENUM, RPC_SERVER } from '../../constants';
 // ==================
 
 // ===== MAIN COMPONENT =====
@@ -82,8 +90,11 @@ class MyWallet extends PureComponent {
     this.handleCloseSendTokenPopup = this.handleCloseSendTokenPopup.bind(this);
     this.handleConfirmBeforeSend = this.handleConfirmBeforeSend.bind(this);
     this.handleGetContractData = this.handleGetContractData.bind(this);
+    this.handleGetSendAction = this.handleGetSendAction.bind(this);
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
-    this.handleSubmitSendToken = this.handleSubmitSendToken.bind(this);
+    this.handleSendMoney = this.handleSendMoney.bind(this);
+    this.handleSendTokenByLedger = this.handleSendTokenByLedger.bind(this);
+    this.handleSendTokenByPK = this.handleSendTokenByPK.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
   }
 
@@ -129,61 +140,68 @@ class MyWallet extends PureComponent {
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
       0,
     );
+    const tokenType = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE],
+      '',
+    );
+    const balance = _get(sendTokenForm, [
+      SEND_TOKEN_FIELDS.TOKEN,
+      PORTFOLIO_COLUMNS.BALANCE,
+    ]);
 
     if (!_isEmpty(errorList)) {
       onUpdateSendTokenErrors(errorList);
     } else {
-      estimateGas(web3, contractData)
-        .then(gas => {
-          let fee;
-          if (
-            contractData.type === ENUM.TOKEN_TYPE.TRC21 &&
-            parseInt(gas) > 0
-          ) {
-            fee = web3.utils.toBN(gas);
-          } else {
-            fee = web3.utils.toBN(200000).mul(web3.utils.toBN(250000000));
-          }
-          const feeObj = fee.divmod(web3.utils.toBN(10 ** decimals));
-          const normalFee = parseFloat(
-            `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`,
-          );
-          onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, normalFee);
-          if (
-            _get(
-              sendTokenForm,
-              [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
-              0,
-            ) -
-              _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0) <
-            normalFee
-          ) {
-            let reducedAmount = _get(
-              sendTokenForm,
-              [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT],
-              0,
-            );
-            if (reducedAmount < 0) {
-              reducedAmount = 0;
-            }
-            onUpdateSendTokenInput(
-              SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-              reducedAmount,
-            );
-          }
-          onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-        })
-        .catch(error => {
-          onUpdateSendTokenErrors({
-            [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [error.message],
+      try {
+        if (tokenType === ENUM.TOKEN_TYPE.CURRENCY) {
+          estimateCurrencyFee(web3, contractData).then(feeObj => {
+            onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+            onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
           });
+        } else if (tokenType === ENUM.TOKEN_TYPE.TRC20) {
+          estimateTRC20Fee(web3, contractData).then(feeObj => {
+            onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+            onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+          });
+        } else {
+          estimateTRC21Fee(web3, contractData).then(feeObj => {
+            onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+            if (feeObj.type === ENUM.TOKEN_TYPE.TRC21) {
+              if (
+                balance ===
+                decimalsToBN(
+                  _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+                  decimals,
+                )
+              ) {
+                onUpdateSendTokenInput(
+                  SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+                  bnToDecimals(
+                    web3.utils
+                      .toBN(balance)
+                      .sub(
+                        web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)),
+                      ),
+                    decimals,
+                  ),
+                );
+              }
+            }
+            onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+          });
+        }
+      } catch (error) {
+        onUpdateSendTokenErrors({
+          [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [error.message],
         });
+      }
     }
   }
 
   handleGetContractData() {
     const { sendTokenForm, wallet } = this.props;
-    const address = wallet.address || getLedger().address;
+    const address = wallet.address;
 
     return {
       amount: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
@@ -206,14 +224,138 @@ class MyWallet extends PureComponent {
     };
   }
 
+  handleGetSendAction() {
+    const { sendTokenForm } = this.props;
+    const loginType = _get(getWeb3Info(), 'loginType');
+    let sendAction = () => {};
+
+    if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
+      sendAction = this.handleSendTokenByLedger;
+    } else if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+      if (
+        _get(sendTokenForm, [
+          SEND_TOKEN_FIELDS.TOKEN,
+          PORTFOLIO_COLUMNS.TYPE,
+        ]) === ENUM.TOKEN_TYPE.CURRENCY
+      ) {
+        sendAction = this.handleSendMoney;
+      } else {
+        sendAction = this.handleSendTokenByPK;
+      }
+    }
+
+    return sendAction();
+  }
+
   handleOpenSendTokenPopup(initialValues) {
     const { onToggleSendTokenPopup } = this.props;
     onToggleSendTokenPopup(true, initialValues);
   }
 
-  handleSubmitSendToken() {
+  handleSendMoney() {
     const {
       onStoreWallet,
+      web3,
+      toggleLoading,
+      onToggleSuccessPopup,
+      onUpdateSendTokenErrors,
+    } = this.props;
+    const contractData = this.handleGetContractData();
+
+    sendMoney(web3, contractData)
+      .then(hash => {
+        getWalletInfo(web3).then(walletInfo => {
+          onStoreWallet(walletInfo);
+        });
+        return hash;
+      })
+      .then(hash => {
+        toggleLoading(false);
+        this.handleCloseSendTokenPopup();
+        onToggleSuccessPopup(true, hash);
+      })
+      .catch(error => {
+        toggleLoading(false);
+        onUpdateSendTokenErrors({ error: [error.message] });
+      });
+  }
+
+  handleSendTokenByLedger() {
+    const {
+      onStoreWallet,
+      onToggleSuccessPopup,
+      onUpdateSendTokenErrors,
+      toggleLoading,
+      web3,
+    } = this.props;
+    const { address, hdPath } = getWeb3Info();
+    const contract = this.handleGetContractData();
+    const networkId = _get(RPC_SERVER, [getNetwork(), 'networkId']);
+
+    try {
+      toggleLoading(true);
+      web3.eth.getTransactionCount(contract.from).then(nonce => {
+        const txParams = {
+          from: contract.from,
+          to: contract.to,
+          value: `0x${web3.utils
+            .toBN(contract.amount)
+            .mul(web3.utils.toBN(10 ** contract.decimals))
+            .toString('hex')}`,
+          nonce: `0x${web3.utils.toBN(nonce).toString('hex')}`,
+          gas: `0x${web3.utils.toBN(200000).toString('hex')}`,
+          gasPrice: `0x${web3.utils.toBN('250000000').toString('hex')}`,
+          chainId: networkId,
+        };
+
+        const rawTx = new Transaction(txParams);
+        rawTx.v = Buffer.from([networkId]);
+        const serializedRawTx = rawTx.serialize().toString('hex');
+        TransportU2F.create().then(transport =>
+          new Eth(transport)
+            .signTransaction(hdPath, serializedRawTx)
+            .then(signature => {
+              const hexifySignature = {};
+              Object.keys(signature).forEach(key => {
+                hexifySignature[key] = signature[key].startsWith('0x')
+                  ? signature[key]
+                  : `0x${signature[key]}`;
+              });
+              const txObj = {
+                ...txParams,
+                ...hexifySignature,
+              };
+              const tx = new Transaction(txObj);
+              const serializedTx = `0x${tx.serialize().toString('hex')}`;
+
+              web3.eth
+                .sendSignedTransaction(serializedTx)
+                .on('transactionHash', txHash => {
+                  repeatGetTransaction(web3, txHash);
+                })
+                .then(txObj => {
+                  getBalance(address).then(balance => {
+                    onStoreWallet({
+                      address,
+                      balance,
+                    });
+                  });
+
+                  toggleLoading(false);
+                  this.handleCloseSendTokenPopup();
+                  onToggleSuccessPopup(true, txObj);
+                });
+            }),
+        );
+      });
+    } catch (error) {
+      toggleLoading(false);
+      onUpdateSendTokenErrors({ error: [error.message] });
+    }
+  }
+
+  handleSendTokenByPK() {
+    const {
       onToggleSuccessPopup,
       onUpdateSendTokenErrors,
       toggleLoading,
@@ -222,38 +364,19 @@ class MyWallet extends PureComponent {
     toggleLoading(true);
     const contractData = this.handleGetContractData();
 
-    if (contractData.contractAddress) {
-      sendToken(web3, contractData)
-        .then(hash => {
-          toggleLoading(false);
-          return hash;
-        })
-        .then(hash => {
-          this.handleCloseSendTokenPopup();
-          onToggleSuccessPopup(true, hash);
-        })
-        .catch(error => {
-          toggleLoading(false);
-          onUpdateSendTokenErrors({ error: [error.message] });
-        });
-    } else {
-      sendMoney(web3, contractData)
-        .then(hash => {
-          getWalletInfo(web3).then(walletInfo => {
-            onStoreWallet(walletInfo);
-          });
-          return hash;
-        })
-        .then(hash => {
-          toggleLoading(false);
-          this.handleCloseSendTokenPopup();
-          onToggleSuccessPopup(true, hash);
-        })
-        .catch(error => {
-          toggleLoading(false);
-          onUpdateSendTokenErrors({ error: [error.message] });
-        });
-    }
+    sendToken(web3, contractData)
+      .then(hash => {
+        toggleLoading(false);
+        return hash;
+      })
+      .then(hash => {
+        this.handleCloseSendTokenPopup();
+        onToggleSuccessPopup(true, hash);
+      })
+      .catch(error => {
+        toggleLoading(false);
+        onUpdateSendTokenErrors({ error: [error.message] });
+      });
   }
 
   handleValidationSendForm() {
@@ -380,7 +503,7 @@ class MyWallet extends PureComponent {
           confirmBeforeSend={this.handleConfirmBeforeSend}
           formValues={sendTokenForm}
           popupData={sendToKenPopup}
-          submitSendToken={this.handleSubmitSendToken}
+          submitSendToken={this.handleGetSendAction}
           tokenOptions={tokenOptions}
           updateInput={onUpdateSendTokenInput}
           updateSendTokenPopupStage={onUpdateSendTokenPopupStage}

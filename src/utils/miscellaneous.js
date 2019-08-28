@@ -70,20 +70,26 @@ const removeStorage = key => {
 };
 
 export const setWeb3Info = web3Info => {
-  const encryptedRP = CryptoJS.AES.encrypt(
-    web3Info.recoveryPhrase,
-    'ni@hC0m0T',
-  ).toString();
-  setStorage('web3Info', {
+  let infoToStore = {
     ...web3Info,
-    recoveryPhrase: encryptedRP,
-  });
+  };
+  if (_get(web3Info, 'recoveryPhrase')) {
+    const encryptedRP = CryptoJS.AES.encrypt(
+      web3Info.recoveryPhrase,
+      'ni@hC0m0T',
+    ).toString();
+    infoToStore.recoveryPhrase = encryptedRP;
+  }
+
+  setStorage('web3Info', infoToStore);
 };
 export const getWeb3Info = () => {
   const web3Info = getStorage('web3Info');
-  if (web3Info) {
+  const recoveryPhrase = _get(web3Info, 'recoveryPhrase');
+
+  if (recoveryPhrase) {
     const decryptedRP = CryptoJS.AES.decrypt(
-      web3Info.recoveryPhrase,
+      recoveryPhrase,
       'ni@hC0m0T',
     ).toString(CryptoJS.enc.Utf8);
     return {
@@ -91,6 +97,7 @@ export const getWeb3Info = () => {
       recoveryPhrase: decryptedRP,
     };
   }
+
   return web3Info;
 };
 export const removeWeb3Info = () => {

@@ -25,6 +25,12 @@ const MESSAGE_SET = {
 const TOKEN_TYPE = {
   TRC20: 'TRC20',
   TRC21: 'TRC21',
+  CURRENCY: 'CURRENCY',
+};
+
+const LOGIN_TYPE = {
+  PRIVATE_KEY: 'privateKey',
+  LEDGER: 'ledger',
 };
 // =================
 
@@ -32,4 +38,5 @@ export default {
   MESSAGE_SET,
   TOKEN_TYPE,
   WEB3_STATUSES,
+  LOGIN_TYPE,
 };

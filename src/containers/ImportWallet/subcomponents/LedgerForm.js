@@ -52,9 +52,9 @@ class LedgerForm extends PureComponent {
               path1: (
                 <ButtonLinkStyler
                   btnRed
-                  onClick={() => updateInput('hdPath', "m/44'/60'/0")}
+                  onClick={() => updateInput('hdPath', "m/44'/60'/0'")}
                 >
-                  {"m/44'/60'/0"}
+                  {"m/44'/60'/0'"}
                 </ButtonLinkStyler>
               ),
               path2: (

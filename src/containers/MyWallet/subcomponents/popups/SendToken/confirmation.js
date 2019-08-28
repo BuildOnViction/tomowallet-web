@@ -12,7 +12,7 @@ import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
-import { MSG } from '../../../../../constants';
+import { MSG, ENUM } from '../../../../../constants';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 // ===================
 
@@ -27,8 +27,10 @@ class ConfirmationContent extends PureComponent {
   handleGetFeeUnit() {
     const { formValues } = this.props;
     if (
-      _get(formValues, [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE]) ===
-      'TRC20'
+      _get(formValues, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'type']) ===
+        ENUM.TOKEN_TYPE.TRC20 ||
+      _get(formValues, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'type']) ===
+        ENUM.TOKEN_TYPE.CURRENCY
     ) {
       return 'TOMO';
     }
@@ -102,7 +104,7 @@ class ConfirmationContent extends PureComponent {
           <Col xs={8}>
             {`${_get(
               formValues,
-              [SEND_TOKEN_FIELDS.TRANSACTION_FEE],
+              [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'amount'],
               0,
             )} ${this.handleGetFeeUnit()}`}
           </Col>

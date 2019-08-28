@@ -51,16 +51,16 @@ import {
   updateChosenWallet,
 } from './actions';
 import reducer from './reducer';
-import { ROUTE, MSG } from '../../constants';
+import { ROUTE, MSG, ENUM } from '../../constants';
 import {
   injectReducer,
   generateWeb3,
-  getWalletInfo,
   setWeb3Info,
   withLoading,
   getValidations,
-  setLedger,
   trimMnemonic,
+  getBalance,
+  removeWeb3Info,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -94,22 +94,29 @@ class ImportWallet extends PureComponent {
   }
 
   handleAccessByLedger() {
-    const { addressPopup, onStoreWallet, web3 } = this.props;
+    const { addressPopup, importWallet, onStoreWallet } = this.props;
     const chosenWallet = _get(addressPopup, [
       'wallets',
       _get(addressPopup, 'chosenIndex'),
     ]);
 
     if (chosenWallet) {
-      const walletToStore = {
-        ...chosenWallet,
-        balance: web3.utils
-          .toBN(chosenWallet.balance)
-          .mul(web3.utils.toBN(10 ** 18))
-          .toString(),
-      };
-      setLedger(walletToStore);
-      onStoreWallet(walletToStore);
+      getBalance(chosenWallet.address).then(balance => {
+        const walletInfo = {
+          address: chosenWallet.address,
+          balance,
+        };
+        onStoreWallet(walletInfo);
+        removeWeb3Info();
+        setWeb3Info({
+          loginType: ENUM.LOGIN_TYPE.LEDGER,
+          address: chosenWallet.address,
+          hdPath: `${_get(importWallet, 'input.hdPath')}/${_get(
+            addressPopup,
+            'chosenIndex',
+          )}`,
+        });
+      });
     }
   }
 
@@ -119,47 +126,48 @@ class ImportWallet extends PureComponent {
       importWallet,
       intl: { formatMessage },
       onStoreWallet,
-      onUpdateErrors,
       rpcServer,
       toggleLoading,
       updateWeb3,
       web3,
     } = this.props;
-    if (_get(importWallet, 'type') === IMPORT_TYPES.LEDGER) {
-      this.handleSelectHDPath();
-    } else if (_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK) {
-      const recoveryPhrase = trimMnemonic(
-        _get(importWallet, 'input.recoveryPhrase', ''),
-      );
+    const recoveryPhrase = trimMnemonic(
+      _get(importWallet, 'input.recoveryPhrase', ''),
+    );
 
-      if (
-        recoveryPhrase &&
-        (web3.utils.isHex(recoveryPhrase) ||
-          recoveryPhrase.split(' ').length === 12)
-      ) {
-        try {
-          toggleLoading(true);
-          const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
-          getWalletInfo(newWeb3)
-            .then(walletInfo => {
-              onStoreWallet(walletInfo);
-              updateWeb3(newWeb3);
-              setWeb3Info({ recoveryPhrase, rpcServer });
-            })
-            .then(() => {
-              toggleLoading(false);
-              history.push(ROUTE.MY_WALLET);
+    if (
+      recoveryPhrase &&
+      (web3.utils.isHex(recoveryPhrase) ||
+        recoveryPhrase.split(' ').length === 12)
+    ) {
+      try {
+        toggleLoading(true);
+        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+        updateWeb3(newWeb3);
+        getBalance(newWeb3.currentProvider.addresses[0])
+          .then(balance => {
+            const walletInfo = {
+              address: newWeb3.currentProvider.addresses[0],
+              balance,
+            };
+            onStoreWallet(walletInfo);
+            setWeb3Info({
+              loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
+              recoveryPhrase,
+              address: walletInfo.address,
             });
-        } catch (error) {
-          toggleLoading(false);
-          onUpdateErrors([error.message]);
-        }
-      } else {
-        toggleLoading(false);
-        onUpdateErrors([
-          formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
-        ]);
+          })
+          .then(() => {
+            toggleLoading(false);
+            history.push(ROUTE.MY_WALLET);
+          });
+      } catch (error) {
+        this.handleUpdateError(error.message);
       }
+    } else {
+      this.handleUpdateError(
+        formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
+      );
     }
   }
 
@@ -271,9 +279,11 @@ class ImportWallet extends PureComponent {
       });
   }
 
-  handleUpdateError(errorMsg) {
+  handleUpdateError(errorMsg, clientMode) {
     const { onUpdateErrors, toggleLoading } = this.props;
-    toggleLoading(false);
+    if (!clientMode) {
+      toggleLoading(false);
+    }
     onUpdateErrors([errorMsg]);
   }
 
@@ -385,7 +395,11 @@ class ImportWallet extends PureComponent {
                 <Col size={6}>
                   <ButtonStyler
                     btnYellow
-                    onClick={this.handleAccessByRecoveryPhrase}
+                    onClick={
+                      _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
+                        ? this.handleAccessByRecoveryPhrase
+                        : this.handleSelectHDPath
+                    }
                   >
                     {formatMessage(MSG.COMMON_BUTTON_IMPORT)}
                   </ButtonStyler>

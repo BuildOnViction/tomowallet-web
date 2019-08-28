@@ -26,8 +26,8 @@ import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
 import { ROUTE, RPC_SERVER } from '../../constants';
 import './app.scss';
-import { getWeb3Info, getLedger, setLedger, getNetwork } from '../../utils';
-import { initiateWallet } from '../../utils/blockchain';
+import { getWeb3Info, setLedger, getNetwork } from '../../utils';
+import { initiateWallet, getBalance } from '../../utils/blockchain';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -40,30 +40,31 @@ class App extends PureComponent {
   componentDidMount() {
     const { onStoreWallet, updateWeb3 } = this.props;
     const walletParams = getWeb3Info();
-    const ledger = getLedger();
+    const networkKey = getNetwork();
 
-    if (walletParams) {
-      const { recoveryPhrase, rpcServer } = walletParams;
-      initiateWallet(recoveryPhrase, rpcServer).then(({ web3, walletInfo }) => {
-        updateWeb3(web3);
-        onStoreWallet(walletInfo);
-      });
-    } else if (ledger) {
-      const newWeb3 = new Web3(
-        new Web3.providers.HttpProvider(
-          _get(RPC_SERVER, [getNetwork(), 'host']),
-        ),
+    if (_get(walletParams, 'recoveryPhrase')) {
+      const { recoveryPhrase } = walletParams;
+      const serverConfig = _get(RPC_SERVER, [networkKey], {});
+      initiateWallet(recoveryPhrase, serverConfig).then(
+        ({ web3, walletInfo }) => {
+          updateWeb3(web3);
+          onStoreWallet(walletInfo);
+        },
       );
-      newWeb3.eth.getBalance(ledger.address).then(balance => {
-        setLedger({ ...ledger, balance });
-        onStoreWallet({ ...ledger, balance });
+    } else if (_get(walletParams, 'address')) {
+      getBalance(walletParams.address).then(balance => {
+        const walletInfo = {
+          address: walletParams.address,
+          balance,
+        };
+        onStoreWallet(walletInfo);
       });
     }
   }
 
   handleCheckLoggedIn() {
     const { wallet } = this.props;
-    return !_isEmpty(wallet) || !!getWeb3Info() || !!getLedger();
+    return !_isEmpty(wallet) || !!getWeb3Info();
   }
 
   render() {

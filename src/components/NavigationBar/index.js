@@ -40,7 +40,7 @@ import {
   getLocale,
   getNetwork,
   removeLedger,
-  getLedger,
+  getWeb3Info,
 } from '../../utils';
 import {
   selectNetworkData,
@@ -135,6 +135,7 @@ class NavigationBar extends PureComponent {
       onToggleNetworkConfirmationPopup,
       onToggleWalletPopup,
     } = this.props;
+    const hasPrivateKey = _get(getWeb3Info(), 'recoveryPhrase', false);
 
     return (
       <Fragment>
@@ -163,7 +164,7 @@ class NavigationBar extends PureComponent {
               <i className='font-chevron-down' />
             </DropdownToggleHeader>
             <DropdownMenuStyler right>
-              {!getLedger() && (
+              {hasPrivateKey && (
                 <DropdownItemStyler onClick={() => onToggleWalletPopup(true)}>
                   {formatMessage(
                     MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,

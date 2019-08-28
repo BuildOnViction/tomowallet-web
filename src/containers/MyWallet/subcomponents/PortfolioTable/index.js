@@ -30,7 +30,7 @@ import { withIntl } from '../../../../components/IntlProvider';
 import portfolioConfig from './configuration';
 import { PORTFOLIO_COLUMNS } from '../../constants';
 import { selectWallet } from '../../../Global/selectors';
-import { LIST } from '../../../../constants';
+import { LIST, ENUM } from '../../../../constants';
 import tomoIcon from '../../../../assets/images/logo-tomo.png';
 import { getNetwork } from '../../../../utils';
 // ===================
@@ -76,7 +76,7 @@ class PortfolioTable extends Component {
         [PORTFOLIO_COLUMNS.BALANCE]: _get(wallet, 'balance', 0),
         [PORTFOLIO_COLUMNS.DECIMALS]: 18,
         [PORTFOLIO_COLUMNS.PRICE]: _get(coinData, 'data.quotes.USD.price', 0),
-        [PORTFOLIO_COLUMNS.TYPE]: 'TRC20',
+        [PORTFOLIO_COLUMNS.TYPE]: ENUM.TOKEN_TYPE.CURRENCY,
         [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
         [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
       },

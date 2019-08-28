@@ -22,7 +22,7 @@ import {
   setNetwork,
   getWalletInfo,
 } from '../../utils';
-import { RPC_SERVER, ENUM, LIST } from '../../constants';
+import { RPC_SERVER, ENUM } from '../../constants';
 import { storeWallet, releaseWallet } from '../../containers/Global/actions';
 import { selectWallet } from '../../containers/Global/selectors';
 // ===================
@@ -70,7 +70,7 @@ class Web3Provider extends Component {
       }, 1000);
     } else {
       const web3Info = getWeb3Info();
-      if (web3Info) {
+      if (_get(web3Info, 'recoveryPhrase')) {
         const { recoveryPhrase, rpcServer } = web3Info;
         const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
 
@@ -79,11 +79,9 @@ class Web3Provider extends Component {
           rpcServer,
         });
       } else {
-        const storedNetwork = LIST.NETWORKS.find(
-          opt => opt.value === getNetwork(),
-        );
-        if (!_isEmpty(storedNetwork)) {
-          this.handleUpdateRpcServer(storedNetwork.value);
+        const networkKey = getNetwork();
+        if (networkKey) {
+          this.handleUpdateRpcServer(networkKey);
         } else {
           this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
         }
@@ -147,11 +145,7 @@ class Web3Provider extends Component {
       },
       () => {
         setNetwork(newKey);
-        const newWeb3 = new Web3(
-          Web3.givenProvider || this.state.rpcServer.host,
-          null,
-          {},
-        );
+        const newWeb3 = new Web3(this.state.rpcServer.host, null, {});
         this.handleSetWeb3(newWeb3);
       },
     );

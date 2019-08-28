@@ -21,12 +21,21 @@ import {
 } from './miscellaneous';
 import {
   decryptWalletInfo,
-  estimateTRC20Gas,
+  estimateGas,
   fromWei,
   generateWeb3,
   getWalletInfo,
   mnemonicToPrivateKey,
   sendToken,
+  getBalance,
+  sendMoney,
+  convertAmountWithDecimals,
+  repeatGetTransaction,
+  estimateCurrencyFee,
+  estimateTRC20Fee,
+  estimateTRC21Fee,
+  bnToDecimals,
+  decimalsToBN,
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
 import { withLoading } from './injectLoading';
@@ -43,7 +52,7 @@ export {
   getWalletInfo,
   getValidations,
   mergeErrors,
-  estimateTRC20Gas,
+  estimateGas,
   sendToken,
   getWeb3Info,
   setWeb3Info,
@@ -61,4 +70,13 @@ export {
   removeLedger,
   trimMnemonic,
   convertLocaleNumber,
+  getBalance,
+  sendMoney,
+  convertAmountWithDecimals,
+  repeatGetTransaction,
+  estimateCurrencyFee,
+  estimateTRC20Fee,
+  estimateTRC21Fee,
+  bnToDecimals,
+  decimalsToBN,
 };

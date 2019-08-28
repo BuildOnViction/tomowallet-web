@@ -7,17 +7,19 @@
 // Modules
 import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
+import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
 import _isEqual from 'lodash.isequal';
 // Utilities & Constants
-import { ENUM } from '../constants';
+import { getNetwork } from './miscellaneous';
+import { ENUM, RPC_SERVER } from '../constants';
 import trc20 from '../contractABIs/trc20.json';
 import trc21 from '../contractABIs/trc21.json';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
 const DEFAULT_GAS_PRICE = '250000000';
-const DEFAULT_GAS = 21000;
+const DEFAULT_GAS = '200000';
 // ===============================
 
 // ===== METHODS =====
@@ -70,7 +72,6 @@ const generateWeb3 = (
  * @param {Web3} web3 A Web3 object with supported APIs
  */
 const getWalletInfo = web3 => {
-  debugger;
   if (web3) {
     const address =
       web3.currentProvider.selectedAddress ||
@@ -81,6 +82,22 @@ const getWalletInfo = web3 => {
         balance,
       }));
     }
+  }
+  return new Promise(r => r());
+};
+
+/**
+ * getBalance
+ *
+ * Retrieve account balance by its address
+ * @param {String} address A valid hex-string address
+ */
+const getBalance = address => {
+  const networkURL = _get(RPC_SERVER, [getNetwork(), 'host']);
+  const web3 = new Web3(networkURL);
+
+  if (web3.utils.isAddress(address)) {
+    return web3.eth.getBalance(address);
   }
   return new Promise(r => r());
 };
@@ -153,15 +170,82 @@ const estimateGas = (web3, txData) => {
         return contract.methods
           .transfer(to, weiAmount)
           .estimateGas({ from })
-          .then(gas => ({ type, gas }));
+          .then(gas => gas);
       });
   } else {
     // In case token type is TRC20
     return contract.methods
       .transfer(to, weiAmount)
       .estimateGas({ from })
-      .then(gas => ({ type, gas }));
+      .then(gas => gas);
   }
+};
+
+const estimateTRC21Fee = (web3, txData) => {
+  const { amount, contractAddress, decimals, from, to, type } = txData;
+
+  const contract = new web3.eth.Contract(trc21, contractAddress);
+  const remainDecimals =
+    amount.indexOf('.') !== -1
+      ? decimals - (amount.length - 1 - amount.indexOf('.'))
+      : decimals;
+  const weiAmount = web3.utils
+    .toBN(`${amount}`.replace('.', ''))
+    .mul(web3.utils.toBN(10 ** remainDecimals))
+    .toString(10);
+
+  return contract.methods
+    .estimateFee(weiAmount)
+    .call({ from, to })
+    .then(fee => {
+      if (fee !== '0') {
+        return {
+          type,
+          amount: bnToDecimals(fee, decimals),
+        };
+      }
+      return estimateTRC20Fee(web3, txData);
+    });
+};
+
+const estimateTRC20Fee = (web3, txData) => {
+  const { amount, contractAddress, decimals, from, to, type } = txData;
+
+  const contract = new web3.eth.Contract(trc20, contractAddress || from);
+  const remainDecimals =
+    amount.indexOf('.') !== -1
+      ? decimals - (amount.length - 1 - amount.indexOf('.'))
+      : decimals;
+  const weiAmount = web3.utils
+    .toBN(`${amount}`.replace('.', ''))
+    .mul(web3.utils.toBN(10 ** remainDecimals))
+    .toString(10);
+
+  return contract.methods
+    .transfer(to, weiAmount)
+    .estimateGas({ from })
+    .then(gas =>
+      web3.eth.getGasPrice().then(price => {
+        const feeObj = web3.utils
+          .toBN(gas)
+          .mul(web3.utils.toBN(price))
+          .divmod(web3.utils.toBN(10 ** decimals));
+        return {
+          type,
+          amount: `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`,
+        };
+      }),
+    );
+};
+
+const estimateCurrencyFee = (web3, txData) => {
+  const { decimals, type } = txData;
+  const feeObj = web3.utils
+    .toBN(DEFAULT_GAS_PRICE)
+    .mul(web3.utils.toBN(DEFAULT_GAS))
+    .divmod(web3.utils.toBN(10 ** decimals));
+  const stringFee = `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`;
+  return new Promise(r => r({ type, amount: stringFee }));
 };
 
 /**
@@ -185,13 +269,14 @@ const sendToken = (web3, contractData) => {
         .transfer(to, weiAmount)
         .send({ from, gasPrice: price, gas: 500000 })
         .on('transactionHash', hash => {
-          repeatCall({
-            interval: 2000,
-            timeout: 10000,
-            action: () => {
-              return web3.eth.getTransactionReceipt(hash);
-            },
-          });
+          repeatGetTransaction(web3, hash);
+          // repeatCall({
+          //   interval: 2000,
+          //   timeout: 10000,
+          //   action: () => {
+          //     return web3.eth.getTransactionReceipt(hash);
+          //   },
+          // });
         });
     });
   });
@@ -206,31 +291,30 @@ const sendToken = (web3, contractData) => {
  */
 const sendMoney = (web3, transactionData) => {
   const { amount, decimals, from, to } = transactionData;
-  const weiAmount = (amount * 10 ** decimals).toString();
-  return estimateGas(web3, transactionData).then(gas =>
-    web3.eth.getGasPrice().then(price => {
-      return web3.eth.getBalance(from).then(balance =>
-        web3.eth.sendTransaction({
-          from,
-          to,
-          value: web3.utils
-            .toBN(web3.utils.toWei(amount, 'ether'))
-            .sub(
-              web3.utils.toBN('21000').mul(web3.utils.toBN(DEFAULT_GAS_PRICE)),
-            ),
-          gasPrice: DEFAULT_GAS_PRICE,
-          gas: 21000,
-        }),
-      );
-    }),
-  );
+  // const weiAmount = (amount * 10 ** decimals).toString();
+  const remainDecimals =
+    amount.indexOf('.') !== -1
+      ? decimals - (amount.length - 1 - amount.indexOf('.'))
+      : decimals;
+  const weiAmount = web3.utils
+    .toBN(`${amount}`.replace('.', ''))
+    .mul(web3.utils.toBN(10 ** remainDecimals))
+    .toString(10);
+
+  return web3.eth.sendTransaction({
+    from,
+    to,
+    value: weiAmount,
+    gasPrice: DEFAULT_GAS_PRICE,
+    gas: DEFAULT_GAS,
+  });
 };
 
 /**
  * repeatCall
  *
  * Execute a Promise action repeatly until there's a result
- * @param {Object} param0 Set of parameters (interval, timeout, action)
+ * @param {Object} params Set of parameters (interval, timeout, action)
  */
 const repeatCall = ({ interval = 1000, timeout = 1000, action = () => {} }) => {
   let intervalId = 0;
@@ -270,6 +354,50 @@ const convertAmountWithDecimals = (number, decimals) => {
     .divmod(web3.utils.toBN(10 ** decimals));
   return `${normalNumber.div}.${normalNumber.mod.toString(10, decimals)}`;
 };
+
+/**
+ * repeatGetTransaction
+ *
+ * Repeatly call to get transaction data with provided hash
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {String} txHash A hex string of transaction hash
+ */
+const repeatGetTransaction = (web3, txHash) => {
+  repeatCall({
+    interval: 2000,
+    timeout: 10000,
+    action: () => {
+      return web3.eth.getTransactionReceipt(txHash);
+    },
+  });
+};
+
+const bnToDecimals = (numberToConvert, decimals) => {
+  if (!numberToConvert) {
+    return '0';
+  }
+  const web3 = new Web3();
+  const numberObj = web3.utils
+    .toBN(numberToConvert)
+    .divmod(web3.utils.toBN(10 ** decimals));
+
+  return `${numberObj.div}.${numberObj.mod.toString(10, decimals)}`;
+};
+
+const decimalsToBN = (numberToConvert, decimals) => {
+  if (!numberToConvert) {
+    return '0';
+  }
+  const web3 = new Web3();
+  const remainDecimals =
+    numberToConvert.indexOf('.') !== -1
+      ? decimals - (numberToConvert.length - 1 - numberToConvert.indexOf('.'))
+      : decimals;
+  return web3.utils
+    .toBN(`${numberToConvert}`.replace('.', ''))
+    .mul(web3.utils.toBN(10 ** remainDecimals))
+    .toString(10);
+};
 // ===================
 
 export {
@@ -283,4 +411,11 @@ export {
   sendMoney,
   sendToken,
   convertAmountWithDecimals,
+  getBalance,
+  repeatGetTransaction,
+  estimateCurrencyFee,
+  estimateTRC20Fee,
+  estimateTRC21Fee,
+  bnToDecimals,
+  decimalsToBN,
 };

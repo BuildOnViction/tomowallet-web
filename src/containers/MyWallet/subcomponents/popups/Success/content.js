@@ -41,7 +41,7 @@ class SuccessContent extends PureComponent {
         <TextGray className='mb-3 '>
           {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
         </TextGray>
-        <div>{_get(txHash, 'transactionHash')}</div>
+        <div>{_get(txHash, 'transactionHash', txHash)}</div>
       </BoxText>
     );
   }

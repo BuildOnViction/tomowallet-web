@@ -55,7 +55,7 @@ import {
   withLoading,
 } from '../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
-import { MSG } from '../../constants';
+import { MSG, ENUM } from '../../constants';
 import { storeWallet } from '../Global/actions';
 import { ContainerMin } from '../../styles';
 // ===================
@@ -93,11 +93,9 @@ class WalletCreationPage extends PureComponent {
       mnemonic,
       onClearComparison,
       onSetFormState,
-      onStoreWallet,
       onUpdateErrors,
       rpcServer,
       toggleLoading,
-      updateWeb3,
     } = this.props;
     const recoveryPhrase = _get(mnemonic, 'origin');
 
@@ -106,14 +104,15 @@ class WalletCreationPage extends PureComponent {
       const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
       getWalletInfo(newWeb3)
         .then(walletInfo => {
-          // onStoreWallet(walletInfo);
-          // updateWeb3(newWeb3);
-          // setWeb3Info({ recoveryPhrase, rpcServer });
           this.setState({
             storeData: {
               walletInfo,
               web3: newWeb3,
-              web3Info: { recoveryPhrase, rpcServer },
+              web3Info: {
+                loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
+                recoveryPhrase,
+                address: walletInfo.address,
+              },
             },
           });
         })
