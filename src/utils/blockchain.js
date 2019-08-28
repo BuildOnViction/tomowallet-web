@@ -200,8 +200,10 @@ const estimateTRC21Fee = (web3, txData) => {
     .then(fee => {
       if (fee !== '0') {
         return {
-          type,
+          type: ENUM.TOKEN_TYPE.TRC21,
           amount: bnToDecimals(fee, decimals),
+          gas: 500000,
+          gasPrice: bnToDecimals(fee, decimals),
         };
       }
       return estimateTRC20Fee(web3, txData);
@@ -231,8 +233,10 @@ const estimateTRC20Fee = (web3, txData) => {
           .mul(web3.utils.toBN(price))
           .divmod(web3.utils.toBN(10 ** decimals));
         return {
-          type,
+          type: ENUM.TOKEN_TYPE.TRC20,
           amount: `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`,
+          gas,
+          gasPrice: price,
         };
       }),
     );
@@ -263,23 +267,42 @@ const sendToken = (web3, contractData) => {
   );
   const weiAmount = (amount * 10 ** decimals).toString();
 
-  return estimateGas(web3, contractData).then(gas => {
-    return web3.eth.getGasPrice().then(price => {
-      return contract.methods
-        .transfer(to, weiAmount)
-        .send({ from, gasPrice: price, gas: 500000 })
-        .on('transactionHash', hash => {
-          repeatGetTransaction(web3, hash);
-          // repeatCall({
-          //   interval: 2000,
-          //   timeout: 10000,
-          //   action: () => {
-          //     return web3.eth.getTransactionReceipt(hash);
-          //   },
-          // });
-        });
-    });
+  return new Promise(resolve => {
+    if (type === ENUM.TOKEN_TYPE.TRC20) {
+      resolve(estimateTRC20Fee(web3, contractData));
+    } else if (type === ENUM.TOKEN_TYPE.TRC21) {
+      resolve(estimateTRC21Fee(web3, contractData));
+    }
+  }).then(priceObj => {
+    return contract.methods
+      .transfer(to, weiAmount)
+      .send({
+        from,
+        gasPrice: priceObj.gasPrice,
+        gas: priceObj.gas,
+      })
+      .on('transactionHash', hash => {
+        repeatGetTransaction(web3, hash);
+      });
   });
+
+  // return estimateGas(web3, contractData).then(gas => {
+  //   return web3.eth.getGasPrice().then(price => {
+  //     return contract.methods
+  //       .transfer(to, weiAmount)
+  //       .send({ from, gasPrice: price, gas: 500000 })
+  //       .on('transactionHash', hash => {
+  //         repeatGetTransaction(web3, hash);
+  //         // repeatCall({
+  //         //   interval: 2000,
+  //         //   timeout: 10000,
+  //         //   action: () => {
+  //         //     return web3.eth.getTransactionReceipt(hash);
+  //         //   },
+  //         // });
+  //       });
+  //   });
+  // });
 };
 
 /**

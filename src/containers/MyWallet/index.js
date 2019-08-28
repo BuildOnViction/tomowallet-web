@@ -93,7 +93,7 @@ class MyWallet extends PureComponent {
     this.handleGetSendAction = this.handleGetSendAction.bind(this);
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
     this.handleSendMoney = this.handleSendMoney.bind(this);
-    this.handleSendTokenByLedger = this.handleSendTokenByLedger.bind(this);
+    this.handleSendMoneyByLedger = this.handleSendMoneyByLedger.bind(this);
     this.handleSendTokenByPK = this.handleSendTokenByPK.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
   }
@@ -230,7 +230,7 @@ class MyWallet extends PureComponent {
     let sendAction = () => {};
 
     if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
-      sendAction = this.handleSendTokenByLedger;
+      sendAction = this.handleSendMoneyByLedger;
     } else if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
       if (
         _get(sendTokenForm, [
@@ -280,17 +280,23 @@ class MyWallet extends PureComponent {
       });
   }
 
-  handleSendTokenByLedger() {
+  handleSendMoneyByLedger() {
     const {
       onStoreWallet,
       onToggleSuccessPopup,
       onUpdateSendTokenErrors,
+      sendTokenForm,
       toggleLoading,
       web3,
     } = this.props;
     const { address, hdPath } = getWeb3Info();
     const contract = this.handleGetContractData();
     const networkId = _get(RPC_SERVER, [getNetwork(), 'networkId']);
+    const gasPrice = _get(sendTokenForm, [
+      SEND_TOKEN_FIELDS.TRANSACTION_FEE,
+      'gasPrice',
+    ]);
+    const gas = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'gas']);
 
     try {
       toggleLoading(true);
@@ -299,12 +305,11 @@ class MyWallet extends PureComponent {
           from: contract.from,
           to: contract.to,
           value: `0x${web3.utils
-            .toBN(contract.amount)
-            .mul(web3.utils.toBN(10 ** contract.decimals))
+            .toBN(decimalsToBN(contract.amount, contract.decimals))
             .toString('hex')}`,
           nonce: `0x${web3.utils.toBN(nonce).toString('hex')}`,
-          gas: `0x${web3.utils.toBN(200000).toString('hex')}`,
-          gasPrice: `0x${web3.utils.toBN('250000000').toString('hex')}`,
+          gas: `0x${web3.utils.toBN(gas).toString('hex')}`,
+          gasPrice: `0x${web3.utils.toBN(gasPrice).toString('hex')}`,
           chainId: networkId,
         };
 
