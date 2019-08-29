@@ -115,7 +115,7 @@ Popup.propTypes = {
   Content: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.func,
-    PropTypes.node,
+    PropTypes.string,
   ]),
   /** Pop-up customized footer component */
   Footer: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),

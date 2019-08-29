@@ -61,6 +61,7 @@ import {
   trimMnemonic,
   getBalance,
   removeWeb3Info,
+  convertLocaleNumber,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -192,7 +193,9 @@ class ImportWallet extends PureComponent {
       // Return full wallet object
       return web3.eth.getBalance(walletAddress).then(balance => ({
         address: walletAddress,
-        balance: Number(web3.utils.fromWei(balance)),
+        balance: web3.utils
+          .fromWei(balance)
+          .slice(0, web3.utils.fromWei(balance).indexOf('.') + 4),
       }));
     } catch (error) {
       this.handleUpdateError(error.message);

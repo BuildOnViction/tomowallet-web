@@ -71,7 +71,8 @@ class Web3Provider extends Component {
     } else {
       const web3Info = getWeb3Info();
       if (_get(web3Info, 'recoveryPhrase')) {
-        const { recoveryPhrase, rpcServer } = web3Info;
+        const { recoveryPhrase } = web3Info;
+        const rpcServer = RPC_SERVER[getNetwork()];
         const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
 
         this.handleSetWeb3(newWeb3);

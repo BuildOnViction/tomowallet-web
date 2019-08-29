@@ -36,6 +36,7 @@ import {
   estimateTRC21Fee,
   bnToDecimals,
   decimalsToBN,
+  getLedgerTokenTransferData,
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
 import { withLoading } from './injectLoading';
@@ -79,4 +80,5 @@ export {
   estimateTRC21Fee,
   bnToDecimals,
   decimalsToBN,
+  getLedgerTokenTransferData,
 };

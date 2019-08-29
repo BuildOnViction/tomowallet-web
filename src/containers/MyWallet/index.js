@@ -73,6 +73,7 @@ import {
   estimateTRC21Fee,
   bnToDecimals,
   decimalsToBN,
+  getLedgerTokenTransferData,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
 import { withWeb3 } from '../../components/Web3';
@@ -92,8 +93,8 @@ class MyWallet extends PureComponent {
     this.handleGetContractData = this.handleGetContractData.bind(this);
     this.handleGetSendAction = this.handleGetSendAction.bind(this);
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
-    this.handleSendMoney = this.handleSendMoney.bind(this);
     this.handleSendMoneyByLedger = this.handleSendMoneyByLedger.bind(this);
+    this.handleSendMoneyByPK = this.handleSendMoneyByPK.bind(this);
     this.handleSendTokenByPK = this.handleSendTokenByPK.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
   }
@@ -238,7 +239,7 @@ class MyWallet extends PureComponent {
           PORTFOLIO_COLUMNS.TYPE,
         ]) === ENUM.TOKEN_TYPE.CURRENCY
       ) {
-        sendAction = this.handleSendMoney;
+        sendAction = this.handleSendMoneyByPK;
       } else {
         sendAction = this.handleSendTokenByPK;
       }
@@ -252,7 +253,15 @@ class MyWallet extends PureComponent {
     onToggleSendTokenPopup(true, initialValues);
   }
 
-  handleSendMoney() {
+  handleSendMoneyByLedger() {
+    const { sendTokenForm } = this.props;
+
+    this.handleSendSignedTransactionLedger(
+      _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE]),
+    );
+  }
+
+  handleSendMoneyByPK() {
     const {
       onStoreWallet,
       web3,
@@ -280,7 +289,7 @@ class MyWallet extends PureComponent {
       });
   }
 
-  handleSendMoneyByLedger() {
+  handleSendSignedTransactionLedger(tokenType) {
     const {
       onStoreWallet,
       onToggleSuccessPopup,
@@ -300,13 +309,21 @@ class MyWallet extends PureComponent {
 
     try {
       toggleLoading(true);
+      const transData = getLedgerTokenTransferData(web3, contract);
       web3.eth.getTransactionCount(contract.from).then(nonce => {
         const txParams = {
           from: contract.from,
-          to: contract.to,
-          value: `0x${web3.utils
-            .toBN(decimalsToBN(contract.amount, contract.decimals))
-            .toString('hex')}`,
+          ...(tokenType === ENUM.TOKEN_TYPE.CURRENCY
+            ? {
+                to: contract.to,
+                value: `0x${web3.utils
+                  .toBN(decimalsToBN(contract.amount, contract.decimals))
+                  .toString('hex')}`,
+              }
+            : {
+                to: contract.contractAddress,
+                data: transData,
+              }),
           nonce: `0x${web3.utils.toBN(nonce).toString('hex')}`,
           gas: `0x${web3.utils.toBN(gas).toString('hex')}`,
           gasPrice: `0x${web3.utils.toBN(gasPrice).toString('hex')}`,

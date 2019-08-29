@@ -182,7 +182,7 @@ const estimateGas = (web3, txData) => {
 };
 
 const estimateTRC21Fee = (web3, txData) => {
-  const { amount, contractAddress, decimals, from, to, type } = txData;
+  const { amount, contractAddress, decimals, from, to } = txData;
 
   const contract = new web3.eth.Contract(trc21, contractAddress);
   const remainDecimals =
@@ -203,7 +203,7 @@ const estimateTRC21Fee = (web3, txData) => {
           type: ENUM.TOKEN_TYPE.TRC21,
           amount: bnToDecimals(fee, decimals),
           gas: 500000,
-          gasPrice: bnToDecimals(fee, decimals),
+          gasPrice: fee,
         };
       }
       return estimateTRC20Fee(web3, txData);
@@ -211,7 +211,7 @@ const estimateTRC21Fee = (web3, txData) => {
 };
 
 const estimateTRC20Fee = (web3, txData) => {
-  const { amount, contractAddress, decimals, from, to, type } = txData;
+  const { amount, contractAddress, decimals, from, to } = txData;
 
   const contract = new web3.eth.Contract(trc20, contractAddress || from);
   const remainDecimals =
@@ -249,7 +249,32 @@ const estimateCurrencyFee = (web3, txData) => {
     .mul(web3.utils.toBN(DEFAULT_GAS))
     .divmod(web3.utils.toBN(10 ** decimals));
   const stringFee = `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`;
-  return new Promise(r => r({ type, amount: stringFee }));
+  return new Promise(r =>
+    r({
+      type,
+      amount: stringFee,
+      gas: DEFAULT_GAS,
+      gasPrice: DEFAULT_GAS_PRICE,
+    }),
+  );
+};
+
+/**
+ * getLedgerTokenTransferData
+ *
+ * Convert token transfer params for Ledger address into hex-string data
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {*} contractData An object which contains contract data
+ */
+const getLedgerTokenTransferData = (web3, contractData) => {
+  const { amount, contractAddress, decimals, to, type } = contractData;
+  const contract = new web3.eth.Contract(
+    _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
+    contractAddress,
+  );
+  const weiAmount = decimalsToBN(amount, decimals);
+
+  return contract.methods.transfer(to, weiAmount).encodeABI();
 };
 
 /**
@@ -265,7 +290,7 @@ const sendToken = (web3, contractData) => {
     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
     contractAddress,
   );
-  const weiAmount = (amount * 10 ** decimals).toString();
+  const weiAmount = decimalsToBN(amount, decimals);
 
   return new Promise(resolve => {
     if (type === ENUM.TOKEN_TYPE.TRC20) {
@@ -273,36 +298,24 @@ const sendToken = (web3, contractData) => {
     } else if (type === ENUM.TOKEN_TYPE.TRC21) {
       resolve(estimateTRC21Fee(web3, contractData));
     }
-  }).then(priceObj => {
-    return contract.methods
+  }).then(priceObj =>
+    contract.methods
       .transfer(to, weiAmount)
       .send({
         from,
-        gasPrice: priceObj.gasPrice,
+        gasPrice: (priceObj.type = ENUM.TOKEN_TYPE.TRC21
+          ? DEFAULT_GAS_PRICE
+          : priceObj.gasPrice),
         gas: priceObj.gas,
       })
       .on('transactionHash', hash => {
-        repeatGetTransaction(web3, hash);
-      });
-  });
-
-  // return estimateGas(web3, contractData).then(gas => {
-  //   return web3.eth.getGasPrice().then(price => {
-  //     return contract.methods
-  //       .transfer(to, weiAmount)
-  //       .send({ from, gasPrice: price, gas: 500000 })
-  //       .on('transactionHash', hash => {
-  //         repeatGetTransaction(web3, hash);
-  //         // repeatCall({
-  //         //   interval: 2000,
-  //         //   timeout: 10000,
-  //         //   action: () => {
-  //         //     return web3.eth.getTransactionReceipt(hash);
-  //         //   },
-  //         // });
-  //       });
-  //   });
-  // });
+        repeatCall({
+          interval: 2000,
+          timeout: 10000,
+          action: () => web3.eth.getTransactionReceipt(hash),
+        });
+      }),
+  );
 };
 
 /**
@@ -441,4 +454,5 @@ export {
   estimateTRC21Fee,
   bnToDecimals,
   decimalsToBN,
+  getLedgerTokenTransferData,
 };
