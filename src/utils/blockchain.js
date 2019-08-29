@@ -19,7 +19,8 @@ import trc21 from '../contractABIs/trc21.json';
 
 // ===== SUPPORTED VARIABLES =====
 const DEFAULT_GAS_PRICE = '250000000';
-const DEFAULT_GAS = '200000';
+const DEFAULT_GAS_TOKEN = '500000';
+const DEFAULT_GAS_CURRENCY = '21000';
 // ===============================
 
 // ===== METHODS =====
@@ -202,7 +203,7 @@ const estimateTRC21Fee = (web3, txData) => {
         return {
           type: ENUM.TOKEN_TYPE.TRC21,
           amount: bnToDecimals(fee, decimals),
-          gas: 500000,
+          gas: DEFAULT_GAS_TOKEN,
           gasPrice: fee,
         };
       }
@@ -246,14 +247,14 @@ const estimateCurrencyFee = (web3, txData) => {
   const { decimals, type } = txData;
   const feeObj = web3.utils
     .toBN(DEFAULT_GAS_PRICE)
-    .mul(web3.utils.toBN(DEFAULT_GAS))
+    .mul(web3.utils.toBN(DEFAULT_GAS_CURRENCY))
     .divmod(web3.utils.toBN(10 ** decimals));
   const stringFee = `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`;
   return new Promise(r =>
     r({
       type,
       amount: stringFee,
-      gas: DEFAULT_GAS,
+      gas: DEFAULT_GAS_CURRENCY,
       gasPrice: DEFAULT_GAS_PRICE,
     }),
   );
@@ -342,7 +343,7 @@ const sendMoney = (web3, transactionData) => {
     to,
     value: weiAmount,
     gasPrice: DEFAULT_GAS_PRICE,
-    gas: DEFAULT_GAS,
+    gas: DEFAULT_GAS_CURRENCY,
   });
 };
 

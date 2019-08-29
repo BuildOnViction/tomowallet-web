@@ -61,7 +61,6 @@ import {
   trimMnemonic,
   getBalance,
   removeWeb3Info,
-  convertLocaleNumber,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';

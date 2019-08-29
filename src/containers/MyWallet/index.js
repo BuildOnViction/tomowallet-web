@@ -157,6 +157,25 @@ class MyWallet extends PureComponent {
       try {
         if (tokenType === ENUM.TOKEN_TYPE.CURRENCY) {
           estimateCurrencyFee(web3, contractData).then(feeObj => {
+            if (
+              balance ===
+              decimalsToBN(
+                _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+                decimals,
+              )
+            ) {
+              onUpdateSendTokenInput(
+                SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+                bnToDecimals(
+                  web3.utils
+                    .toBN(balance)
+                    .sub(
+                      web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)),
+                    ),
+                  decimals,
+                ),
+              );
+            }
             onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
             onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
           });
@@ -329,6 +348,7 @@ class MyWallet extends PureComponent {
           gasPrice: `0x${web3.utils.toBN(gasPrice).toString('hex')}`,
           chainId: networkId,
         };
+        debugger;
 
         const rawTx = new Transaction(txParams);
         rawTx.v = Buffer.from([networkId]);
