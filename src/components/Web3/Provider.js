@@ -11,7 +11,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import { createStructuredSelector } from 'reselect';
 import Web3 from 'web3';
 import _get from 'lodash.get';
-import _isEmpty from 'lodash.isempty';
+// import _isEmpty from 'lodash.isempty';
 // Custom Components
 import { FailureComponent, LoadingComponent } from './';
 // Utilities & Constants
@@ -54,40 +54,40 @@ class Web3Provider extends Component {
   }
 
   componentDidMount() {
-    const { onReleaseWallet } = this.props;
-    if (Web3.givenProvider) {
-      console.warn('Mounting MetaMask...', Web3.givenProvider);
-      this.handleSetMetaMaskProvider();
-      window.ethereum.enable();
-      window.ethereum.on('accountsChanged', this.handleSetMetaMaskProvider);
-      this.checkMetaMaskLogin = setInterval(() => {
-        Web3.givenProvider._metamask.isUnlocked().then(bool => {
-          const { wallet } = this.props;
-          if (!_isEmpty(wallet) && !bool) {
-            onReleaseWallet();
-          }
-        });
-      }, 1000);
-    } else {
-      const web3Info = getWeb3Info();
-      if (_get(web3Info, 'recoveryPhrase')) {
-        const { recoveryPhrase } = web3Info;
-        const rpcServer = RPC_SERVER[getNetwork()];
-        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+    // const { onReleaseWallet } = this.props;
+    // if (Web3.givenProvider) {
+    //   console.warn('Mounting MetaMask...', Web3.givenProvider);
+    //   this.handleSetMetaMaskProvider();
+    //   window.ethereum.enable();
+    //   window.ethereum.on('accountsChanged', this.handleSetMetaMaskProvider);
+    //   this.checkMetaMaskLogin = setInterval(() => {
+    //     Web3.givenProvider._metamask.isUnlocked().then(bool => {
+    //       const { wallet } = this.props;
+    //       if (!_isEmpty(wallet) && !bool) {
+    //         onReleaseWallet();
+    //       }
+    //     });
+    //   }, 1000);
+    // } else {
+    const web3Info = getWeb3Info();
+    if (_get(web3Info, 'recoveryPhrase')) {
+      const { recoveryPhrase } = web3Info;
+      const rpcServer = RPC_SERVER[getNetwork()];
+      const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
 
-        this.handleSetWeb3(newWeb3);
-        this.setState({
-          rpcServer,
-        });
+      this.handleSetWeb3(newWeb3);
+      this.setState({
+        rpcServer,
+      });
+    } else {
+      const networkKey = getNetwork();
+      if (networkKey) {
+        this.handleUpdateRpcServer(networkKey);
       } else {
-        const networkKey = getNetwork();
-        if (networkKey) {
-          this.handleUpdateRpcServer(networkKey);
-        } else {
-          this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
-        }
+        this.handleUpdateRpcServer(Object.keys(RPC_SERVER)[0]);
       }
     }
+    // }
   }
 
   componentWillUnmount() {
