@@ -554,6 +554,14 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.popup.sendtoken.error.amount.required`,
     defaultMessage: 'Please enter an amount of token',
   },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_TOKEN: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.insufficientfee.fromtoken`,
+    defaultMessage: 'Remaining token is insufficient for transaction fee.',
+  },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.insufficientfee.fromcurrency`,
+    defaultMessage: 'Remaining currency is insufficient for transaction fee.',
+  },
   MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID: {
     id: `${myWalletPagePrefix}.popup.sendtoken.error.amount.invalid`,
     defaultMessage: 'Transfer amount is not correct',

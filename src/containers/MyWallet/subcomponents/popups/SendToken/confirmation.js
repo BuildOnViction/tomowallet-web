@@ -12,6 +12,7 @@ import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
+import { removeTrailingZero } from '../../../../../utils';
 import { MSG, ENUM } from '../../../../../constants';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 // ===================
@@ -22,7 +23,6 @@ class ConfirmationContent extends PureComponent {
     super(props);
 
     this.handleGetFeeUnit = this.handleGetFeeUnit.bind(this);
-    this.handleRemoveTrailingZero = this.handleRemoveTrailingZero.bind(this);
   }
 
   handleGetFeeUnit() {
@@ -39,19 +39,6 @@ class ConfirmationContent extends PureComponent {
       SEND_TOKEN_FIELDS.TOKEN,
       PORTFOLIO_COLUMNS.SYMBOL,
     ]);
-  }
-
-  handleRemoveTrailingZero(rawNumber = '0') {
-    let amount = rawNumber;
-
-    if (amount.includes('.')) {
-      amount = amount.replace(/0+$/, '');
-      if (amount.match(/\.$/)) {
-        amount = amount.replace('.', '');
-      }
-    }
-
-    return amount;
   }
 
   render() {
@@ -82,7 +69,7 @@ class ConfirmationContent extends PureComponent {
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}
           </Col>
           <Col xs={8} className=''>
-            {`${this.handleRemoveTrailingZero(
+            {`${removeTrailingZero(
               _get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
             )} ${_get(
               formValues,
@@ -118,7 +105,7 @@ class ConfirmationContent extends PureComponent {
             )}
           </Col>
           <Col xs={8}>
-            {`${this.handleRemoveTrailingZero(
+            {`${removeTrailingZero(
               _get(formValues, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'amount']),
             )} ${this.handleGetFeeUnit()}`}
           </Col>

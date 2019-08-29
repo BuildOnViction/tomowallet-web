@@ -190,7 +190,9 @@ export default (state = initialState, action) => {
           _omit(errors, action.name),
         );
     case UPDATE_SEND_TOKEN_POPUP_STAGE:
-      return state.setIn(['sendTokenPopup', 'stage'], action.stage);
+      return state
+        .setIn(['sendTokenPopup', 'stage'], action.stage)
+        .setIn(['sendTokenPopup', 'errors'], {});
     default:
       return state;
   }

@@ -18,6 +18,7 @@ import {
   getLedger,
   setLedger,
   removeLedger,
+  removeTrailingZero,
 } from './miscellaneous';
 import {
   decryptWalletInfo,
@@ -81,4 +82,5 @@ export {
   bnToDecimals,
   decimalsToBN,
   getLedgerTokenTransferData,
+  removeTrailingZero,
 };

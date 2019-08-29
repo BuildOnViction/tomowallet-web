@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
+import { removeTrailingZero } from '../../../../../utils';
 import { MSG } from '../../../../../constants';
 import { BoxText, TextYellow, TextGray } from '../../../../../styles';
 // ===================
@@ -36,7 +37,7 @@ class SuccessContent extends PureComponent {
         <div className='my-4'>
           {`${formatMessage(
             MSG.MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_SENT,
-          )} ${amount} ${symbol}`}
+          )} ${removeTrailingZero(amount)} ${symbol}`}
         </div>
         <TextGray className='mb-3 '>
           {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}

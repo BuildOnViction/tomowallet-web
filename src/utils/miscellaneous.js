@@ -49,6 +49,19 @@ export const convertLocaleNumber = (rawNumber, decimals = 3) => {
   return 0;
 };
 
+export const removeTrailingZero = rawNumber => {
+  let result = `${rawNumber}`;
+
+  if (result.includes('.')) {
+    result = result.replace(/0+$/, '');
+    if (result.match(/\.$/)) {
+      result = result.replace('.', '');
+    }
+  }
+
+  return result;
+};
+
 // Global state storage
 const setStorage = (key, object) => {
   sessionStorage.setItem(
