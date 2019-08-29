@@ -348,7 +348,6 @@ class MyWallet extends PureComponent {
           gasPrice: `0x${web3.utils.toBN(gasPrice).toString('hex')}`,
           chainId: networkId,
         };
-        debugger;
 
         const rawTx = new Transaction(txParams);
         rawTx.v = Buffer.from([networkId]);
