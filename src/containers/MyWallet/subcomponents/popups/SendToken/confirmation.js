@@ -22,6 +22,7 @@ class ConfirmationContent extends PureComponent {
     super(props);
 
     this.handleGetFeeUnit = this.handleGetFeeUnit.bind(this);
+    this.handleRemoveTrailingZero = this.handleRemoveTrailingZero.bind(this);
   }
 
   handleGetFeeUnit() {
@@ -38,6 +39,19 @@ class ConfirmationContent extends PureComponent {
       SEND_TOKEN_FIELDS.TOKEN,
       PORTFOLIO_COLUMNS.SYMBOL,
     ]);
+  }
+
+  handleRemoveTrailingZero(rawNumber = '0') {
+    let amount = rawNumber;
+
+    if (amount.includes('.')) {
+      amount = amount.replace(/0+$/, '');
+      if (amount.match(/\.$/)) {
+        amount = amount.replace('.', '');
+      }
+    }
+
+    return amount;
   }
 
   render() {
@@ -68,7 +82,9 @@ class ConfirmationContent extends PureComponent {
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}
           </Col>
           <Col xs={8} className=''>
-            {`${_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT])} ${_get(
+            {`${this.handleRemoveTrailingZero(
+              _get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+            )} ${_get(
               formValues,
               [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
               '',
@@ -102,10 +118,8 @@ class ConfirmationContent extends PureComponent {
             )}
           </Col>
           <Col xs={8}>
-            {`${_get(
-              formValues,
-              [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'amount'],
-              0,
+            {`${this.handleRemoveTrailingZero(
+              _get(formValues, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'amount']),
             )} ${this.handleGetFeeUnit()}`}
           </Col>
         </Row>

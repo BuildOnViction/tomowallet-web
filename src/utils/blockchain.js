@@ -204,7 +204,7 @@ const estimateTRC21Fee = (web3, txData) => {
           type: ENUM.TOKEN_TYPE.TRC21,
           amount: bnToDecimals(fee, decimals),
           gas: DEFAULT_GAS_TOKEN,
-          gasPrice: fee,
+          gasPrice: DEFAULT_GAS_PRICE,
         };
       }
       return estimateTRC20Fee(web3, txData);
