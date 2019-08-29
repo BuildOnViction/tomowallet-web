@@ -91,12 +91,16 @@ class MyWallet extends PureComponent {
     this.handleCloseSendTokenPopup = this.handleCloseSendTokenPopup.bind(this);
     this.handleConfirmBeforeSend = this.handleConfirmBeforeSend.bind(this);
     this.handleGetContractData = this.handleGetContractData.bind(this);
+    this.handleGetTrc20Fee = this.handleValidateCurrencyFee.bind(this);
     this.handleGetSendAction = this.handleGetSendAction.bind(this);
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
     this.handleSendMoneyByLedger = this.handleSendMoneyByLedger.bind(this);
     this.handleSendMoneyByPK = this.handleSendMoneyByPK.bind(this);
     this.handleSendTokenByPK = this.handleSendTokenByPK.bind(this);
     this.handleTransactionError = this.handleTransactionError.bind(this);
+    this.handleValidateCurrencyFee = this.handleValidateCurrencyFee.bind(this);
+    this.handleValidateTrc20Fee = this.handleValidateTrc20Fee.bind(this);
+    this.handleValidateTrc21Fee = this.handleValidateTrc21Fee.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
   }
 
@@ -129,31 +133,18 @@ class MyWallet extends PureComponent {
 
   handleConfirmBeforeSend() {
     const {
-      intl: { formatMessage },
       onUpdateSendTokenErrors,
-      onUpdateSendTokenInput,
-      onUpdateSendTokenPopupStage,
       sendTokenForm,
       toggleLoading,
-      wallet,
       web3,
     } = this.props;
     const contractData = this.handleGetContractData();
     const errorList = this.handleValidationSendForm();
-    const decimals = _get(
-      sendTokenForm,
-      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0,
-    );
     const tokenType = _get(
       sendTokenForm,
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE],
       '',
     );
-    const balance = _get(sendTokenForm, [
-      SEND_TOKEN_FIELDS.TOKEN,
-      PORTFOLIO_COLUMNS.BALANCE,
-    ]);
 
     if (!_isEmpty(errorList)) {
       onUpdateSendTokenErrors(errorList);
@@ -162,155 +153,18 @@ class MyWallet extends PureComponent {
       try {
         if (tokenType === ENUM.TOKEN_TYPE.CURRENCY) {
           estimateCurrencyFee(web3, contractData).then(feeObj => {
-            if (
-              balance ===
-              decimalsToBN(
-                _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-                decimals,
-              )
-            ) {
-              toggleLoading(false);
-              onUpdateSendTokenInput(
-                SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-                bnToDecimals(
-                  web3.utils
-                    .toBN(balance)
-                    .sub(
-                      web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)),
-                    ),
-                  decimals,
-                ),
-              );
-              onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
-              onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-            } else if (
-              !web3.utils
-                .toBN(
-                  decimalsToBN(
-                    _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-                    decimals,
-                  ),
-                )
-                .add(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)))
-                .sub(web3.utils.toBN(balance))
-                .toString()
-                .includes('-')
-            ) {
-              toggleLoading(false);
-              onUpdateSendTokenErrors({
-                [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
-                  formatMessage(
-                    MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
-                  ),
-                ],
-              });
-            } else {
-              toggleLoading(false);
-              onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
-              onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-            }
+            this.handleValidateCurrencyFee(feeObj);
           });
         } else if (tokenType === ENUM.TOKEN_TYPE.TRC20) {
           estimateTRC20Fee(web3, contractData).then(feeObj => {
-            if (
-              web3.utils
-                .toBN(_get(wallet, 'balance'))
-                .sub(web3.utils.toBN(decimalsToBN(feeObj.amount)).includes('-'))
-            ) {
-              toggleLoading(false);
-              onUpdateSendTokenErrors({
-                [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
-                  formatMessage(
-                    MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
-                  ),
-                ],
-              });
-            } else {
-              toggleLoading(false);
-              onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
-              onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-            }
+            this.handleValidateTrc20Fee(feeObj);
           });
         } else {
           estimateTRC21Fee(web3, contractData).then(feeObj => {
             if (feeObj.type === ENUM.TOKEN_TYPE.TRC21) {
-              if (
-                balance ===
-                decimalsToBN(
-                  _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-                  decimals,
-                )
-              ) {
-                toggleLoading(false);
-                onUpdateSendTokenInput(
-                  SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-                  bnToDecimals(
-                    web3.utils
-                      .toBN(balance)
-                      .sub(
-                        web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)),
-                      ),
-                    decimals,
-                  ),
-                );
-                onUpdateSendTokenInput(
-                  SEND_TOKEN_FIELDS.TRANSACTION_FEE,
-                  feeObj,
-                );
-                onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-              } else if (
-                !web3.utils
-                  .toBN(
-                    decimalsToBN(
-                      _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-                      decimals,
-                    ),
-                  )
-                  .add(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)))
-                  .sub(web3.utils.toBN(balance))
-                  .toString()
-                  .includes('-')
-              ) {
-                toggleLoading(false);
-                onUpdateSendTokenErrors({
-                  [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
-                    formatMessage(
-                      MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_TOKEN,
-                    ),
-                  ],
-                });
-              } else {
-                toggleLoading(false);
-                onUpdateSendTokenInput(
-                  SEND_TOKEN_FIELDS.TRANSACTION_FEE,
-                  feeObj,
-                );
-                onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-              }
+              this.handleValidateCurrencyFee(feeObj);
             } else {
-              if (
-                web3.utils
-                  .toBN(_get(wallet, 'balance'))
-                  .sub(
-                    web3.utils.toBN(decimalsToBN(feeObj.amount)).includes('-'),
-                  )
-              ) {
-                toggleLoading(false);
-                onUpdateSendTokenErrors({
-                  [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
-                    formatMessage(
-                      MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
-                    ),
-                  ],
-                });
-              } else {
-                toggleLoading(false);
-                onUpdateSendTokenInput(
-                  SEND_TOKEN_FIELDS.TRANSACTION_FEE,
-                  feeObj,
-                );
-                onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-              }
+              this.handleValidateTrc20Fee(feeObj);
             }
           });
         }
@@ -377,8 +231,9 @@ class MyWallet extends PureComponent {
   }
 
   handleSendMoneyByLedger() {
-    const { sendTokenForm } = this.props;
+    const { sendTokenForm, toggleLoading } = this.props;
 
+    toggleLoading(true);
     this.handleSendSignedTransactionLedger(
       _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE]),
     );
@@ -393,6 +248,7 @@ class MyWallet extends PureComponent {
     } = this.props;
     const contractData = this.handleGetContractData();
 
+    toggleLoading(true);
     sendMoney(web3, contractData)
       .then(hash => {
         getWalletInfo(web3).then(walletInfo => {
@@ -426,7 +282,6 @@ class MyWallet extends PureComponent {
     const gas = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'gas']);
 
     try {
-      toggleLoading(true);
       const transData = getLedgerTokenTransferData(web3, contract);
       web3.eth.getTransactionCount(contract.from).then(nonce => {
         const txParams = {
@@ -495,7 +350,6 @@ class MyWallet extends PureComponent {
 
   handleSendTokenByPK() {
     const { onToggleSuccessPopup, toggleLoading, web3 } = this.props;
-    toggleLoading(true);
     const contractData = this.handleGetContractData();
 
     sendToken(web3, contractData)
@@ -514,6 +368,179 @@ class MyWallet extends PureComponent {
     const { onUpdateSendTokenErrors, toggleLoading } = this.props;
     toggleLoading(false);
     onUpdateSendTokenErrors({ error: [error.message] });
+  }
+
+  handleValidateCurrencyFee(feeObj) {
+    const {
+      intl: { formatMessage },
+      onUpdateSendTokenErrors,
+      onUpdateSendTokenInput,
+      onUpdateSendTokenPopupStage,
+      sendTokenForm,
+      toggleLoading,
+      web3,
+    } = this.props;
+    const decimals = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0,
+    );
+    const balance = _get(sendTokenForm, [
+      SEND_TOKEN_FIELDS.TOKEN,
+      PORTFOLIO_COLUMNS.BALANCE,
+    ]);
+
+    if (
+      balance ===
+      decimalsToBN(
+        _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+        decimals,
+      )
+    ) {
+      toggleLoading(false);
+      onUpdateSendTokenInput(
+        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+        bnToDecimals(
+          web3.utils
+            .toBN(balance)
+            .sub(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals))),
+          decimals,
+        ),
+      );
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    } else if (
+      !web3.utils
+        .toBN(
+          decimalsToBN(
+            _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+            decimals,
+          ),
+        )
+        .add(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)))
+        .sub(web3.utils.toBN(balance))
+        .toString()
+        .includes('-')
+    ) {
+      toggleLoading(false);
+      onUpdateSendTokenErrors({
+        [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
+          formatMessage(
+            MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
+          ),
+        ],
+      });
+    } else {
+      toggleLoading(false);
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    }
+  }
+
+  handleValidateTrc20Fee(feeObj) {
+    const {
+      intl: { formatMessage },
+      onUpdateSendTokenErrors,
+      onUpdateSendTokenInput,
+      onUpdateSendTokenPopupStage,
+      sendTokenForm,
+      toggleLoading,
+      wallet,
+      web3,
+    } = this.props;
+    const decimals = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0,
+    );
+
+    if (
+      web3.utils
+        .toBN(_get(wallet, 'balance'))
+        .sub(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)))
+        .toString()
+        .includes('-')
+    ) {
+      toggleLoading(false);
+      onUpdateSendTokenErrors({
+        [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
+          formatMessage(
+            MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
+          ),
+        ],
+      });
+    } else {
+      toggleLoading(false);
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    }
+  }
+
+  handleValidateTrc21Fee(feeObj) {
+    const {
+      intl: { formatMessage },
+      onUpdateSendTokenErrors,
+      onUpdateSendTokenInput,
+      onUpdateSendTokenPopupStage,
+      sendTokenForm,
+      toggleLoading,
+      web3,
+    } = this.props;
+    const decimals = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0,
+    );
+    const balance = _get(sendTokenForm, [
+      SEND_TOKEN_FIELDS.TOKEN,
+      PORTFOLIO_COLUMNS.BALANCE,
+    ]);
+
+    if (
+      balance ===
+      decimalsToBN(
+        _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+        decimals,
+      )
+    ) {
+      toggleLoading(false);
+      onUpdateSendTokenInput(
+        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+        bnToDecimals(
+          web3.utils
+            .toBN(balance)
+            .sub(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals))),
+          decimals,
+        ),
+      );
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    } else if (
+      !web3.utils
+        .toBN(
+          decimalsToBN(
+            _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+            decimals,
+          ),
+        )
+        .add(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals)))
+        .sub(web3.utils.toBN(balance))
+        .toString()
+        .includes('-')
+    ) {
+      toggleLoading(false);
+      onUpdateSendTokenErrors({
+        [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
+          formatMessage(
+            MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_TOKEN,
+          ),
+        ],
+      });
+    } else {
+      toggleLoading(false);
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    }
   }
 
   handleValidationSendForm() {

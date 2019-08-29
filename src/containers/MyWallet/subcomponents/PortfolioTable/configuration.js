@@ -7,7 +7,6 @@
 // Modules
 import React from 'react';
 import _get from 'lodash.get';
-import Web3 from 'web3';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledDropdown } from 'reactstrap';
 // Custom Components

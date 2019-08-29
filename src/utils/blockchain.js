@@ -21,6 +21,7 @@ import trc21 from '../contractABIs/trc21.json';
 const DEFAULT_GAS_PRICE = '250000000';
 const DEFAULT_GAS_TOKEN = '500000';
 const DEFAULT_GAS_CURRENCY = '21000';
+const DEFAULT_CURRENCY_DECIMALS = 18;
 // ===============================
 
 // ===== METHODS =====
@@ -136,64 +137,56 @@ const decryptWalletInfo = (web3, rawInfo) => {
   return null;
 };
 
-/**
- * estimateGas
- *
- * Retrieve gas price for the specific transaction. Supported for both TRC20 & TRC21 tokens
- * @param {Web3} web3 A Web3 object with supported APIs
- * @param {Object} txData A transaction object (including from, to, value, ...)
- */
-const estimateGas = (web3, txData) => {
-  const { amount, contractAddress, decimals, from, to, type } = txData;
+// /**
+//  * estimateGas
+//  *
+//  * Retrieve gas price for the specific transaction. Supported for both TRC20 & TRC21 tokens
+//  * @param {Web3} web3 A Web3 object with supported APIs
+//  * @param {Object} txData A transaction object (including from, to, value, ...)
+//  */
+// const estimateGas = (web3, txData) => {
+//   const { amount, contractAddress, decimals, from, to, type } = txData;
 
-  const contract = new web3.eth.Contract(
-    _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
-    contractAddress || from,
-  );
-  const remainDecimals =
-    amount.indexOf('.') !== -1
-      ? decimals - (amount.length - 1 - amount.indexOf('.'))
-      : decimals;
-  const weiAmount = web3.utils
-    .toBN(`${amount}`.replace('.', ''))
-    .mul(web3.utils.toBN(10 ** remainDecimals))
-    .toString(10);
+//   const contract = new web3.eth.Contract(
+//     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
+//     contractAddress || from,
+//   );
+//   const remainDecimals =
+//     amount.indexOf('.') !== -1
+//       ? decimals - (amount.length - 1 - amount.indexOf('.'))
+//       : decimals;
+//   const weiAmount = web3.utils
+//     .toBN(`${amount}`.replace('.', ''))
+//     .mul(web3.utils.toBN(10 ** remainDecimals))
+//     .toString(10);
 
-  // In case token type is TRC21
-  if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
-    return contract.methods
-      .estimateFee(weiAmount)
-      .call({ from, to })
-      .then(trc21Gas => {
-        if (Number(trc21Gas)) {
-          return trc21Gas;
-        }
-        return contract.methods
-          .transfer(to, weiAmount)
-          .estimateGas({ from })
-          .then(gas => gas);
-      });
-  } else {
-    // In case token type is TRC20
-    return contract.methods
-      .transfer(to, weiAmount)
-      .estimateGas({ from })
-      .then(gas => gas);
-  }
-};
+//   // In case token type is TRC21
+//   if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
+//     return contract.methods
+//       .estimateFee(weiAmount)
+//       .call({ from, to })
+//       .then(trc21Gas => {
+//         if (Number(trc21Gas)) {
+//           return trc21Gas;
+//         }
+//         return contract.methods
+//           .transfer(to, weiAmount)
+//           .estimateGas({ from })
+//           .then(gas => gas);
+//       });
+//   } else {
+//     // In case token type is TRC20
+//     return contract.methods
+//       .transfer(to, weiAmount)
+//       .estimateGas({ from })
+//       .then(gas => gas);
+//   }
+// };
 
 const estimateTRC21Fee = (web3, txData) => {
   const { amount, contractAddress, decimals, from, to } = txData;
-
   const contract = new web3.eth.Contract(trc21, contractAddress);
-  const remainDecimals =
-    amount.indexOf('.') !== -1
-      ? decimals - (amount.length - 1 - amount.indexOf('.'))
-      : decimals;
-  const weiAmount = web3.utils
-    .toBN(`${amount}`.replace('.', ''))
-    .mul(web3.utils.toBN(10 ** remainDecimals))
-    .toString(10);
+  const weiAmount = decimalsToBN(amount, decimals);
 
   return contract.methods
     .estimateFee(weiAmount)
@@ -213,16 +206,8 @@ const estimateTRC21Fee = (web3, txData) => {
 
 const estimateTRC20Fee = (web3, txData) => {
   const { amount, contractAddress, decimals, from, to } = txData;
-
   const contract = new web3.eth.Contract(trc20, contractAddress || from);
-  const remainDecimals =
-    amount.indexOf('.') !== -1
-      ? decimals - (amount.length - 1 - amount.indexOf('.'))
-      : decimals;
-  const weiAmount = web3.utils
-    .toBN(`${amount}`.replace('.', ''))
-    .mul(web3.utils.toBN(10 ** remainDecimals))
-    .toString(10);
+  const weiAmount = decimalsToBN(amount, decimals);
 
   return contract.methods
     .transfer(to, weiAmount)
@@ -232,10 +217,13 @@ const estimateTRC20Fee = (web3, txData) => {
         const feeObj = web3.utils
           .toBN(gas)
           .mul(web3.utils.toBN(price))
-          .divmod(web3.utils.toBN(10 ** decimals));
+          .divmod(web3.utils.toBN(10 ** DEFAULT_CURRENCY_DECIMALS));
         return {
           type: ENUM.TOKEN_TYPE.TRC20,
-          amount: `${feeObj.div}.${feeObj.mod.toString(10, decimals)}`,
+          amount: `${feeObj.div}.${feeObj.mod.toString(
+            10,
+            DEFAULT_CURRENCY_DECIMALS,
+          )}`,
           gas,
           gasPrice: price,
         };
@@ -425,11 +413,29 @@ const decimalsToBN = (numberToConvert, decimals) => {
   if (!numberToConvert) {
     return '0';
   }
+  debugger;
   const web3 = new Web3();
-  const remainDecimals =
+  const rawDecimals =
     numberToConvert.indexOf('.') !== -1
-      ? decimals - (numberToConvert.length - 1 - numberToConvert.indexOf('.'))
-      : decimals;
+      ? numberToConvert.length - 1 - numberToConvert.indexOf('.')
+      : 0;
+  let remainDecimals;
+  if (rawDecimals) {
+    if (decimals >= rawDecimals) {
+      remainDecimals = decimals - rawDecimals;
+      return web3.utils
+        .toBN(`${numberToConvert}`.replace('.', ''))
+        .mul(web3.utils.toBN(remainDecimals === 0 ? 1 : 10 ** remainDecimals))
+        .toString(10);
+    } else {
+      remainDecimals = rawDecimals - decimals;
+      return web3.utils
+        .toBN(`${numberToConvert}`.replace('.', ''))
+        .div(web3.utils.toBN(10 ** remainDecimals))
+        .toString(10);
+    }
+  }
+  remainDecimals = decimals;
   return web3.utils
     .toBN(`${numberToConvert}`.replace('.', ''))
     .mul(web3.utils.toBN(10 ** remainDecimals))
@@ -439,7 +445,7 @@ const decimalsToBN = (numberToConvert, decimals) => {
 
 export {
   decryptWalletInfo,
-  estimateGas,
+  // estimateGas,
   fromWei,
   generateWeb3,
   getWalletInfo,

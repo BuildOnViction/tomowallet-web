@@ -12,9 +12,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EllipsisCellStyler } from '../../../../components/Table/style';
 import { TextBlue } from '../../../../styles';
 // Utilities & Constants
-import { fromWei } from '../../../../utils';
+import { fromWei, getNetwork } from '../../../../utils';
 import { TRANSACTION_COLUMNS } from '../../constants';
-import { MSG } from '../../../../constants';
+import { MSG, API } from '../../../../constants';
 // ===================
 
 // ===== CONFIGURATION =====
@@ -31,7 +31,15 @@ export default ({ formatMessage }) => [
     accessor: TRANSACTION_COLUMNS.TX_HASH,
     Cell: ({ value }) => (
       <EllipsisCellStyler title={value}>
-        <TextBlue>{value}</TextBlue>
+        <TextBlue>
+          <a
+            href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
+            rel='noopener noreferrer'
+            target='_blank'
+          >
+            {value}
+          </a>
+        </TextBlue>
       </EllipsisCellStyler>
     ),
   },
@@ -48,7 +56,15 @@ export default ({ formatMessage }) => [
     accessor: TRANSACTION_COLUMNS.FROM,
     Cell: ({ value }) => (
       <EllipsisCellStyler title={value}>
-        <TextBlue>{value}</TextBlue>
+        <TextBlue>
+          <a
+            href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
+            rel='noopener noreferrer'
+            target='_blank'
+          >
+            {value}
+          </a>
+        </TextBlue>
       </EllipsisCellStyler>
     ),
   },
@@ -68,7 +84,15 @@ export default ({ formatMessage }) => [
     accessor: TRANSACTION_COLUMNS.TO,
     Cell: ({ value }) => (
       <EllipsisCellStyler title={value}>
-        <TextBlue>{value}</TextBlue>
+        <TextBlue>
+          <a
+            href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
+            rel='noopener noreferrer'
+            target='_blank'
+          >
+            {value}
+          </a>
+        </TextBlue>
       </EllipsisCellStyler>
     ),
   },

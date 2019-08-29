@@ -11,6 +11,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _get from 'lodash.get';
+import _isEqual from 'lodash.isequal';
 // Custom Components
 import FormContent from './form';
 import ConfirmationContent from './confirmation';
@@ -27,9 +28,26 @@ class SendTokenPopup extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = {
+      isRequested: false,
+    };
+
     this.handleClosePopup = this.handleClosePopup.bind(this);
     this.handleGetButtonConfig = this.handleGetButtonConfig.bind(this);
     this.handleGetContentConfig = this.handleGetContentConfig.bind(this);
+    this.handleSendRequest = this.handleSendRequest.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      !_isEqual(
+        _get(prevProps, 'popupData.stage'),
+        _get(this.props, 'popupData.stage'),
+      ) &&
+      _isEqual(_get(this.props, 'popupData.stage'), SEND_TOKEN_STAGES.FORM)
+    ) {
+      this.handleSendRequest(false);
+    }
   }
 
   handleClosePopup() {
@@ -45,6 +63,8 @@ class SendTokenPopup extends PureComponent {
       submitSendToken,
       updateSendTokenPopupStage,
     } = this.props;
+    const { isRequested } = this.state;
+
     return (
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
         primary: {
@@ -59,9 +79,13 @@ class SendTokenPopup extends PureComponent {
       }) ||
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
         primary: {
-          action: submitSendToken,
+          action: () => {
+            this.handleSendRequest(true);
+            submitSendToken();
+          },
           btnYellow: true,
           label: formatMessage(MSG.COMMON_BUTTON_CONFIRM),
+          disabled: isRequested,
         },
         secondary: {
           action: () => updateSendTokenPopupStage(SEND_TOKEN_STAGES.FORM),
@@ -103,6 +127,12 @@ class SendTokenPopup extends PureComponent {
         },
       })
     );
+  }
+
+  handleSendRequest(bool) {
+    this.setState({
+      isRequested: bool,
+    });
   }
 
   render() {

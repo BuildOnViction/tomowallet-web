@@ -112,6 +112,7 @@ class PortfolioTable extends Component {
           getTableProps={{
             minRows: 3,
             showPagination: false,
+            defaultPageSize: undefined,
             TheadComponent: props =>
               props.className !== '-header' && props.children,
           }}
