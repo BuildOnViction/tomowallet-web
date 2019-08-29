@@ -96,6 +96,7 @@ class MyWallet extends PureComponent {
     this.handleSendMoneyByLedger = this.handleSendMoneyByLedger.bind(this);
     this.handleSendMoneyByPK = this.handleSendMoneyByPK.bind(this);
     this.handleSendTokenByPK = this.handleSendTokenByPK.bind(this);
+    this.handleTransactionError = this.handleTransactionError.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
   }
 
@@ -132,6 +133,7 @@ class MyWallet extends PureComponent {
       onUpdateSendTokenInput,
       onUpdateSendTokenPopupStage,
       sendTokenForm,
+      toggleLoading,
       web3,
     } = this.props;
     const contractData = this.handleGetContractData();
@@ -154,9 +156,11 @@ class MyWallet extends PureComponent {
     if (!_isEmpty(errorList)) {
       onUpdateSendTokenErrors(errorList);
     } else {
+      toggleLoading(true);
       try {
         if (tokenType === ENUM.TOKEN_TYPE.CURRENCY) {
           estimateCurrencyFee(web3, contractData).then(feeObj => {
+            toggleLoading(false);
             if (
               balance ===
               decimalsToBN(
@@ -181,11 +185,13 @@ class MyWallet extends PureComponent {
           });
         } else if (tokenType === ENUM.TOKEN_TYPE.TRC20) {
           estimateTRC20Fee(web3, contractData).then(feeObj => {
+            toggleLoading(false);
             onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
             onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
           });
         } else {
           estimateTRC21Fee(web3, contractData).then(feeObj => {
+            toggleLoading(false);
             onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
             if (feeObj.type === ENUM.TOKEN_TYPE.TRC21) {
               if (
@@ -212,6 +218,7 @@ class MyWallet extends PureComponent {
           });
         }
       } catch (error) {
+        toggleLoading(false);
         onUpdateSendTokenErrors({
           [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [error.message],
         });
@@ -286,7 +293,6 @@ class MyWallet extends PureComponent {
       web3,
       toggleLoading,
       onToggleSuccessPopup,
-      onUpdateSendTokenErrors,
     } = this.props;
     const contractData = this.handleGetContractData();
 
@@ -302,17 +308,13 @@ class MyWallet extends PureComponent {
         this.handleCloseSendTokenPopup();
         onToggleSuccessPopup(true, hash);
       })
-      .catch(error => {
-        toggleLoading(false);
-        onUpdateSendTokenErrors({ error: [error.message] });
-      });
+      .catch(this.handleTransactionError);
   }
 
   handleSendSignedTransactionLedger(tokenType) {
     const {
       onStoreWallet,
       onToggleSuccessPopup,
-      onUpdateSendTokenErrors,
       sendTokenForm,
       toggleLoading,
       web3,
@@ -390,18 +392,12 @@ class MyWallet extends PureComponent {
         );
       });
     } catch (error) {
-      toggleLoading(false);
-      onUpdateSendTokenErrors({ error: [error.message] });
+      this.handleTransactionError(error);
     }
   }
 
   handleSendTokenByPK() {
-    const {
-      onToggleSuccessPopup,
-      onUpdateSendTokenErrors,
-      toggleLoading,
-      web3,
-    } = this.props;
+    const { onToggleSuccessPopup, toggleLoading, web3 } = this.props;
     toggleLoading(true);
     const contractData = this.handleGetContractData();
 
@@ -414,10 +410,13 @@ class MyWallet extends PureComponent {
         this.handleCloseSendTokenPopup();
         onToggleSuccessPopup(true, hash);
       })
-      .catch(error => {
-        toggleLoading(false);
-        onUpdateSendTokenErrors({ error: [error.message] });
-      });
+      .catch(this.handleTransactionError);
+  }
+
+  handleTransactionError(error) {
+    const { onUpdateSendTokenErrors, toggleLoading } = this.props;
+    toggleLoading(false);
+    onUpdateSendTokenErrors({ error: [error.message] });
   }
 
   handleValidationSendForm() {

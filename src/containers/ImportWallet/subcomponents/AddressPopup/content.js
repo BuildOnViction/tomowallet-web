@@ -21,8 +21,11 @@ class AddressContent extends PureComponent {
       <BoxText>
         {_get(data, 'wallets', []).map((wallet, walletIdx) => (
           <Row className='py-3'>
-            <Col xs={7} lg={8}>
-              <label className='pl-5 m-0 position-relative'>
+            <Col xs={8} className='text-truncate'>
+              <label
+                className='pl-5 m-0 position-relative'
+                title={wallet.address}
+              >
                 <InputStylerRadio
                   type='radio'
                   name='wallet'
@@ -32,7 +35,7 @@ class AddressContent extends PureComponent {
                 <TextBlue>{wallet.address}</TextBlue>
               </label>
             </Col>
-            <Col xs={5} lg={4} className='text-right'>
+            <Col xs={4} className='text-right'>
               {`${wallet.balance.toLocaleString(undefined, {
                 minimumFractionDigits: 3,
               })} TOMO`}
