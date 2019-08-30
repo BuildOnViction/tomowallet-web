@@ -6,18 +6,6 @@ import {
   shuffleArray,
   trimMnemonic,
   convertLocaleNumber,
-  getWeb3Info,
-  setWeb3Info,
-  removeWeb3Info,
-  getLocale,
-  setLocale,
-  removeLocale,
-  getNetwork,
-  setNetwork,
-  removeNetwork,
-  getLedger,
-  setLedger,
-  removeLedger,
   removeTrailingZero,
 } from './miscellaneous';
 import {
@@ -41,6 +29,20 @@ import {
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
 import { withLoading } from './injectLoading';
+import {
+  getWeb3Info,
+  setWeb3Info,
+  removeWeb3Info,
+  getLocale,
+  setLocale,
+  removeLocale,
+  getNetwork,
+  setNetwork,
+  removeNetwork,
+  getLedger,
+  setLedger,
+  removeLedger,
+} from './storage';
 
 export {
   injectReducer,

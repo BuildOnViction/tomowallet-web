@@ -11,7 +11,7 @@ import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
 import _isEqual from 'lodash.isequal';
 // Utilities & Constants
-import { getNetwork } from './miscellaneous';
+import { getNetwork } from './storage';
 import { ENUM, RPC_SERVER } from '../constants';
 import trc20 from '../contractABIs/trc20.json';
 import trc21 from '../contractABIs/trc21.json';
@@ -95,7 +95,8 @@ const getWalletInfo = web3 => {
  * @param {String} address A valid hex-string address
  */
 const getBalance = address => {
-  const networkURL = _get(RPC_SERVER, [getNetwork(), 'host']);
+  const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+  const networkURL = _get(RPC_SERVER, [networkKey, 'host']);
   const web3 = new Web3(networkURL);
 
   if (web3.utils.isAddress(address)) {

@@ -9,14 +9,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import QRCode from 'qrcode.react';
 // Custom Components
 import MnemonicBox from '../../../MnemonicBox';
 // Utilities, Constants & Styles
 import { getWeb3Info, mnemonicToPrivateKey } from '../../../../utils';
 import { WALLET_POPUP_CONTENT_TAB } from '../../../../containers/Global/constants';
 import { MSG } from '../../../../constants';
-import { BoxImages, TextBlue } from '../../../../styles';
+import { TextBlue } from '../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====

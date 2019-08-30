@@ -24,7 +24,7 @@ import { TextLinkBlue } from '../../styles';
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
-import { ROUTE, RPC_SERVER } from '../../constants';
+import { ROUTE, RPC_SERVER, ENUM } from '../../constants';
 import './app.scss';
 import { getWeb3Info, setLedger, getNetwork } from '../../utils';
 import { initiateWallet, getBalance } from '../../utils/blockchain';
@@ -40,7 +40,7 @@ class App extends PureComponent {
   componentDidMount() {
     const { onStoreWallet, updateWeb3 } = this.props;
     const walletParams = getWeb3Info();
-    const networkKey = getNetwork();
+    const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
 
     if (_get(walletParams, 'recoveryPhrase')) {
       const { recoveryPhrase } = walletParams;

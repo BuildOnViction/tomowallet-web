@@ -32,6 +32,11 @@ const LOGIN_TYPE = {
   PRIVATE_KEY: 'privateKey',
   LEDGER: 'ledger',
 };
+
+const NETWORK_TYPE = {
+  TOMOCHAIN_TESTNET: 'TOMOCHAIN_TESTNET',
+  TOMOCHAIN_MAINNET: 'TOMOCHAIN_MAINNET',
+};
 // =================
 
 export default {
@@ -39,4 +44,5 @@ export default {
   TOKEN_TYPE,
   WEB3_STATUSES,
   LOGIN_TYPE,
+  NETWORK_TYPE,
 };

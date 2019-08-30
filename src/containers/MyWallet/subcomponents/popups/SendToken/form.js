@@ -23,7 +23,7 @@ import {
   Nav,
   NavItem,
 } from 'reactstrap';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 // Custom Components
 import Image from '../../../../../components/Image';
 // Utilities & Constants
@@ -169,6 +169,9 @@ class FormContent extends PureComponent {
                 </div>
               ),
               IndicatorSeparator: () => '',
+              DropdownIndicator:
+                !_get(formValues, 'isTokenSpecific') &&
+                components.DropdownIndicator,
             }}
             isDisabled={_get(formValues, 'isTokenSpecific')}
             menuIsOpens

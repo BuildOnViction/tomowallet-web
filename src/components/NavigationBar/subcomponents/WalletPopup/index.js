@@ -64,13 +64,9 @@ class WalletPopup extends PureComponent {
       };
     } else if (_get(walletPopup, 'stage') === WALLET_POPUP_STAGE.CONTENT) {
       return {
-        secondary: {
-          label: formatMessage(MSG.COMMON_BUTTON_BACK),
-          action: this.handleClosePopup,
-        },
         primary: {
-          btnYellow: true,
-          label: formatMessage(MSG.COMMON_BUTTON_SAVE),
+          label: formatMessage(MSG.COMMON_BUTTON_CLOSE),
+          action: this.handleClosePopup,
         },
       };
     }
@@ -114,8 +110,8 @@ class WalletPopup extends PureComponent {
     } = this.props;
     return (
       <WalletPopupStyler
-        {...this.handleGetContent()}
         button={this.handleGetButton()}
+        {...this.handleGetContent()}
         isOpen={_get(walletPopup, 'isOpen', false)}
         title={formatMessage(MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_TITLE)}
       />

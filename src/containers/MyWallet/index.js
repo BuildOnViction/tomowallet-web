@@ -36,6 +36,7 @@ import {
   resetSendTokenForm,
   toggleReceiveTokenPopup,
   loadCoinData,
+  resetState,
 } from './actions';
 import {
   selectTableType,
@@ -107,6 +108,11 @@ class MyWallet extends PureComponent {
   componentDidMount() {
     const { onLoadCoinData } = this.props;
     onLoadCoinData();
+  }
+
+  componentWillUnmount() {
+    const { onResetState } = this.props;
+    onResetState();
   }
 
   handleAddFullAmount() {
@@ -274,7 +280,8 @@ class MyWallet extends PureComponent {
     } = this.props;
     const { address, hdPath } = getWeb3Info();
     const contract = this.handleGetContractData();
-    const networkId = _get(RPC_SERVER, [getNetwork(), 'networkId']);
+    const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+    const networkId = _get(RPC_SERVER, [networkKey, 'networkId']);
     const gasPrice = _get(sendTokenForm, [
       SEND_TOKEN_FIELDS.TRANSACTION_FEE,
       'gasPrice',
@@ -700,6 +707,8 @@ MyWallet.propTypes = {
   intl: PropTypes.object,
   /** Action to reset send token popup's form */
   onResetSendTokenForm: PropTypes.func,
+  /** Action to refresh all My Wallet page's states */
+  onResetState: PropTypes.func,
   /** Action to set current table tab */
   onSetTableType: PropTypes.func,
   /** Action to show/hide receive token popup */
@@ -736,6 +745,7 @@ MyWallet.defaultProps = {
   coinData: {},
   intl: {},
   onResetSendTokenForm: () => {},
+  onResetState: () => {},
   onSetTableType: () => {},
   onToggleReceiveTokenPopup: () => {},
   onToggleSendTokenPopup: () => {},
@@ -769,6 +779,7 @@ const mapStateToProps = () =>
 const mapDispatchToProps = dispatch => ({
   onLoadCoinData: () => dispatch(loadCoinData()),
   onResetSendTokenForm: () => dispatch(resetSendTokenForm()),
+  onResetState: () => dispatch(resetState()),
   onSetTableType: type => dispatch(setTableType(type)),
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),
   onToggleReceiveTokenPopup: bool => dispatch(toggleReceiveTokenPopup(bool)),

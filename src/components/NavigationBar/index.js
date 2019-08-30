@@ -105,26 +105,22 @@ class NavigationBar extends PureComponent {
     const { language } = this.props;
 
     return (
-      <Fragment>
-        <Nav className='ml-auto' navbar>
-          <UncontrolledDropdown nav inNavbar>
-            <DropdownToggleHeader nav>
-              {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
-              <i className='font-chevron-down' />
-            </DropdownToggleHeader>
-            <DropdownMenuStyler right>
-              {LIST.LANGUAGES.map((opt, optIdx) => (
-                <DropdownItemStyler
-                  key={`language_${optIdx + 1}`}
-                  onClick={() => this.handleChangeLocale(opt.value)}
-                >
-                  {opt.label}
-                </DropdownItemStyler>
-              ))}
-            </DropdownMenuStyler>
-          </UncontrolledDropdown>
-        </Nav>
-      </Fragment>
+      <UncontrolledDropdown nav inNavbar>
+        <DropdownToggleHeader nav>
+          {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
+          <i className='font-chevron-down' />
+        </DropdownToggleHeader>
+        <DropdownMenuStyler right>
+          {LIST.LANGUAGES.map((opt, optIdx) => (
+            <DropdownItemStyler
+              key={`language_${optIdx + 1}`}
+              onClick={() => this.handleChangeLocale(opt.value)}
+            >
+              {opt.label}
+            </DropdownItemStyler>
+          ))}
+        </DropdownMenuStyler>
+      </UncontrolledDropdown>
     );
   }
 
@@ -139,49 +135,45 @@ class NavigationBar extends PureComponent {
 
     return (
       <Fragment>
-        <Nav className='ml-auto' navbar>
-          <UncontrolledDropdown nav inNavbar>
-            <DropdownToggleHeader nav className='onl'>
-              {_get(network, 'data.label')}
-              <i className='font-chevron-down' />
-            </DropdownToggleHeader>
-            <DropdownMenuStyler right className='box_onl'>
-              {LIST.NETWORKS.map((opt, optIdx) => (
-                <DropdownItemStyler
-                  key={`network_${optIdx + 1}`}
-                  onClick={() => onToggleNetworkConfirmationPopup(true, opt)}
-                  active={this.isActiveNetwork(opt)}
-                  disabled={this.isActiveNetwork(opt)}
-                >
-                  {opt.label}
-                </DropdownItemStyler>
-              ))}
-            </DropdownMenuStyler>
-          </UncontrolledDropdown>
-          <UncontrolledDropdown nav inNavbar>
-            <DropdownToggleHeader nav>
-              {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
-              <i className='font-chevron-down' />
-            </DropdownToggleHeader>
-            <DropdownMenuStyler right>
-              {hasPrivateKey && (
-                <DropdownItemStyler onClick={() => onToggleWalletPopup(true)}>
-                  {formatMessage(
-                    MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,
-                  )}
-                </DropdownItemStyler>
-              )}
-              <DropdownItemStyler>
-                {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
+        <UncontrolledDropdown nav inNavbar>
+          <DropdownToggleHeader nav className='onl'>
+            {_get(network, 'data.label')}
+            <i className='font-chevron-down' />
+          </DropdownToggleHeader>
+          <DropdownMenuStyler right className='box_onl'>
+            {LIST.NETWORKS.map((opt, optIdx) => (
+              <DropdownItemStyler
+                key={`network_${optIdx + 1}`}
+                onClick={() => onToggleNetworkConfirmationPopup(true, opt)}
+                active={this.isActiveNetwork(opt)}
+                disabled={this.isActiveNetwork(opt)}
+              >
+                {opt.label}
               </DropdownItemStyler>
-              <DropdownItemStyler onClick={this.handleLogout}>
+            ))}
+          </DropdownMenuStyler>
+        </UncontrolledDropdown>
+        <UncontrolledDropdown nav inNavbar>
+          <DropdownToggleHeader nav>
+            {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
+            <i className='font-chevron-down' />
+          </DropdownToggleHeader>
+          <DropdownMenuStyler right>
+            {hasPrivateKey && (
+              <DropdownItemStyler onClick={() => onToggleWalletPopup(true)}>
                 {formatMessage(
-                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_LOG_OUT,
+                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,
                 )}
               </DropdownItemStyler>
-            </DropdownMenuStyler>
-          </UncontrolledDropdown>
-        </Nav>
+            )}
+            <DropdownItemStyler>
+              {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
+            </DropdownItemStyler>
+            <DropdownItemStyler onClick={this.handleLogout}>
+              {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_LOG_OUT)}
+            </DropdownItemStyler>
+          </DropdownMenuStyler>
+        </UncontrolledDropdown>
       </Fragment>
     );
   }
@@ -211,8 +203,10 @@ class NavigationBar extends PureComponent {
             />
           </NavbarBrand>
           <Collapse navbar>
-            {isLoggedIn && this.handleRenderPrivateBar()}
-            {this.handleRenderPublicBar()}
+            <Nav className='ml-auto' navbar>
+              {isLoggedIn && this.handleRenderPrivateBar()}
+              {this.handleRenderPublicBar()}
+            </Nav>
           </Collapse>
         </NavBarStyler>
         <WalletPopup />

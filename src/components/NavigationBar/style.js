@@ -4,8 +4,8 @@ import {
   NavLink,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
-} from 'reactstrap'
+  DropdownItem,
+} from 'reactstrap';
 // Style Component//
 
 const LinkHeader = styled(NavLink)`
@@ -22,16 +22,16 @@ const DropdownToggleHeader = styled(DropdownToggle)`
   font-size: 14px;
   white-space: nowrap;
   &.onl:before {
-      background-color: #36CE9A;
-      border-radius: 50%;
-      content: '';
-      width: 6px;
-      height: 6px;
-      position: absolute;
-      left: -5px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+    background-color: #36ce9a;
+    border-radius: 50%;
+    content: '';
+    width: 6px;
+    height: 6px;
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 `;
 
 const NavBarStyler = styled(Navbar)`
@@ -60,10 +60,10 @@ const NavBarStyler = styled(Navbar)`
 `;
 
 const DropdownMenuStyler = styled(DropdownMenu)`
-  background-color: #272D40;
+  background-color: #272d40;
   border-radius: 8px;
   border: 0;
-  top: 0;
+  top: 39px;
   margin: 0;
   padding: 0.5em 1em;
   min-width: 125px;
@@ -73,14 +73,14 @@ const DropdownMenuStyler = styled(DropdownMenu)`
 `;
 const DropdownItemStyler = styled(DropdownItem)`
   font-size: 14px;
-  transition: all .5s ease;
+  transition: all 0.5s ease;
   position: relative;
-  padding: .5rem 0;
-  background: transparent!important;
+  padding: 0.5rem 0;
+  background: transparent !important;
   &:focus,
   &:hover {
     background: transparent;
-    color: #5692CD;
+    color: #5692cd;
     outline: 0 auto -webkit-focus-ring-color;
   }
 `;
@@ -90,5 +90,5 @@ export {
   LinkHeader,
   DropdownToggleHeader,
   DropdownMenuStyler,
-  DropdownItemStyler
+  DropdownItemStyler,
 };

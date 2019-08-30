@@ -14,6 +14,7 @@ import {
   LOAD_TRANSACTION_DATA,
   LOAD_TRANSACTION_DATA_SUCCESS,
   RESET_SEND_TOKEN_FORM,
+  RESET_STATE,
   SET_TABLE_TYPE,
   SUBMIT_SEND_TOKEN,
   TOGGLE_RECEIVE_TOKEN_POPUP,
@@ -63,6 +64,10 @@ export const loadTransactionDataSuccess = tableData => ({
 
 export const resetSendTokenForm = () => ({
   type: RESET_SEND_TOKEN_FORM,
+});
+
+export const resetState = () => ({
+  type: RESET_STATE,
 });
 
 export const setTableType = tableType => ({

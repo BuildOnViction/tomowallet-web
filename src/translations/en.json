@@ -7,7 +7,7 @@
   "tomowallet.common.button.receive": "Receive",
   "tomowallet.common.button.maximum": "Max",
   "tomowallet.common.button.confirm": "Confirm",
-  "tomowallet.common.list.language.english": "English",
-  "tomowallet.common.list.language.french": "French",
+  "tomowallet.common.list.language.english": "EN",
+  "tomowallet.common.list.language.french": "FR",
   "tomowallet.header.navbar.option.about": "About"
 }

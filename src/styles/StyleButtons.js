@@ -74,7 +74,7 @@ const ButtonStyler = styled(
   justify-content: center;
   align-items: center;
   font-family: 'Nunito Sans', sans-serif;
-  transition: all 0.3s;
+  transition: background-color 0.3s;
   width: 100%;
   &:hover {
     ${({ btnYellow, btnBlue }) => {
@@ -136,5 +136,5 @@ export {
   MediumButtonStyler,
   ButtonStyler,
   ButtonLineStyler,
-  ButtonLinkStyler
+  ButtonLinkStyler,
 };

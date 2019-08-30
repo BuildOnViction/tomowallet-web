@@ -19,7 +19,7 @@ import {
 // Utilities & Constants
 import { convertLocaleNumber, getNetwork } from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
-import { MSG, RPC_SERVER } from '../../../../constants';
+import { MSG, ENUM } from '../../../../constants';
 import { convertAmountWithDecimals } from '../../../../utils/blockchain';
 // ===================
 
@@ -106,14 +106,14 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           const rpcServer = getNetwork();
           let tomoScanLink = '';
           switch (rpcServer) {
-            case Object.keys(RPC_SERVER)[0]:
+            case ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET:
               tomoScanLink = 'https://scan.testnet.tomochain.com/tokens';
               break;
-            case Object.keys(RPC_SERVER)[1]:
+            case ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET:
               tomoScanLink = 'https://scan.tomochain.com/tokens';
               break;
             default:
-              tomoScanLink = 'https://scan.testnet.tomochain.com/tokens';
+              tomoScanLink = 'https://scan.tomochain.com/tokens';
           }
 
           return (

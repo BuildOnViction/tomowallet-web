@@ -21,6 +21,7 @@ import {
   LOAD_TRANSACTION_DATA_SUCCESS,
   PORTFOLIO_COLUMNS,
   RESET_SEND_TOKEN_FORM,
+  RESET_STATE,
   SEND_TOKEN_FIELDS,
   SEND_TOKEN_STAGES,
   SET_TABLE_TYPE,
@@ -153,6 +154,8 @@ export default (state = initialState, action) => {
       });
     case RESET_SEND_TOKEN_FORM:
       return state.set('sendForm', initialSendForm);
+    case RESET_STATE:
+      return initialState;
     case SET_TABLE_TYPE:
       return state.set('tableType', action.tableType);
     case TOGGLE_RECEIVE_TOKEN_POPUP:

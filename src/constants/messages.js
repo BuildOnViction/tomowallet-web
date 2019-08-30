@@ -66,14 +66,18 @@ export default defineMessages({
     id: `${buttonPrefix}.unlock`,
     defaultMessage: 'Unlock',
   },
+  COMMON_BUTTON_CLOSE: {
+    id: `${buttonPrefix}.close`,
+    defaultMessage: 'Close',
+  },
   // Common - Lists
   COMMON_LIST_LANGUAGE_ENGLISH: {
     id: `${listPrefix}.language.english`,
-    defaultMessage: 'English',
+    defaultMessage: 'EN',
   },
   COMMON_LIST_LANGUAGE_FRENCH: {
     id: `${listPrefix}.language.french`,
-    defaultMessage: 'French',
+    defaultMessage: 'FR',
   },
   COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET: {
     id: `${listPrefix}.network.tomochain.testnet`,
