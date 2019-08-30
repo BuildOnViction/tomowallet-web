@@ -83,7 +83,7 @@ class Footer extends PureComponent {
               </NavItem>
               <NavItem>
                 <LinkFooter
-                  href='https://docs.tomochain.com/products/tomowallet/features/'
+                  href='https://tomochain.com'
                   rel='noopener noreferrer'
                   target='_blank'
                 >

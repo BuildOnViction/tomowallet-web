@@ -58,53 +58,31 @@ export function* loadTransaction(actionData) {
     yield put(toggleLoading(true));
     const { params } = actionData;
     const apiBase = _get(API, [getNetwork()], '');
-    const response = yield call(
-      request,
-      `${apiBase.GET_TRANSACTIONS}/${params.address}?page=${params.page}&limit=5`,
-      { headers: { withCredentials: true } },
-    );
     const walletTransactions = yield call(
       request,
-      `${apiBase.WALLET_GET_TRANSACTIONS}?address=${params.address}`,
+      `${apiBase.WALLET_GET_TRANSACTIONS}?address=${params.address}&page=${params.page}&limit=5`,
     );
 
-    if (response) {
-      const { items, currentPage, total, pages } = response;
-      let updatedItems = items.map(trans => ({
-        tokenType: 'TOMO',
-        txHash: trans.hash,
-        createdTime: trans.createdAt,
-        txType: _isEqual(trans.from, params.address) ? 'OUT' : 'IN',
-        from: trans.from,
-        to: trans.to,
-        amount: bnToDecimals(trans.value, 18),
-      }));
-      if (!_isEmpty(walletTransactions)) {
-        updatedItems = items.map(trans1 => {
-          const foundTrans =
-            walletTransactions.find(trans2 =>
-              trans2.id.includes(trans1.hash),
-            ) || trans1;
-
-          return {
-            tokenType: foundTrans.symbol,
-            txHash: foundTrans.hash,
-            createdTime: foundTrans.timestamp,
-            type: foundTrans.type,
-            from: foundTrans.from,
-            to: foundTrans.to,
-            amount: foundTrans.amount,
-          };
-        });
-      }
+    if (!_isEmpty(walletTransactions)) {
+      var updatedItems = walletTransactions.map(e => {
+        return {
+          tokenType: e.symbol,
+          txHash: e.hash,
+          createdTime: e.timestamp,
+          type: e.type,
+          from: e.from,
+          to: e.to,
+          amount: e.amount,
+        };
+      });
 
       yield put(toggleLoading(false));
       yield put(
         loadTransactionDataSuccess({
           items: updatedItems,
-          currentPage,
-          total,
-          pages,
+          currentPage: params.page,
+          total: 500,
+          pages: 10,
           address: params.address,
         }),
       );

@@ -40,7 +40,7 @@ export default ({ formatMessage }) => [
     Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_CREATE_TIME),
     accessor: TRANSACTION_COLUMNS.CREATE_TIME,
     Cell: ({ value }) => {
-      const timeStr = value.format('DD MMM YYYY HH:MM:SS');
+      const timeStr = value.format('HH:MM, DD MMM YYYY');
       return <EllipsisCellStyler title={timeStr}>{timeStr}</EllipsisCellStyler>;
     },
   },
