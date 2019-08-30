@@ -51,7 +51,7 @@ export default ({ formatMessage }) => [
       <EllipsisCellStyler title={value}>
         <TextBlue>
           <a
-            href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
+            href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
             rel='noopener noreferrer'
             target='_blank'
           >
@@ -79,7 +79,7 @@ export default ({ formatMessage }) => [
       <EllipsisCellStyler title={value}>
         <TextBlue>
           <a
-            href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
+            href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
             rel='noopener noreferrer'
             target='_blank'
           >

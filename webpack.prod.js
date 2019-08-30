@@ -6,11 +6,22 @@ module.exports = common({
   mode: 'production',
   output: {
     path: path.resolve(__dirname, 'dist/prod'),
-    filename: 'tomowallet_bundle_v1.js',
+    filename: '[name].[contenthash].js',
     publicPath: '/',
   },
   devtool: false,
-  optimization: { minimize: true, splitChunks: { chunks: 'all' } },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+  },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/(?!english)/, /bip39\/src\/wordlists$/),
   ],
