@@ -5,7 +5,7 @@ module.exports = common({
   mode: 'development',
   output: {
     path: path.resolve(__dirname, 'dist/dev'),
-    filename: 'tomowallet_bundle.js',
+    filename: '[name].[contenthash].js',
     publicPath: '/',
   },
   devtool: 'source-map',
@@ -13,6 +13,19 @@ module.exports = common({
     historyApiFallback: true,
     contentBase: 'dist',
     https: true,
+  },
+  optimization: {
+    moduleIds: 'hashed',
+    minimize: true,
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
   },
   performance: {
     hints: false,

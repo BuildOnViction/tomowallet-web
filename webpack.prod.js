@@ -11,6 +11,7 @@ module.exports = common({
   },
   devtool: false,
   optimization: {
+    moduleIds: 'hashed',
     minimize: true,
     splitChunks: {
       cacheGroups: {

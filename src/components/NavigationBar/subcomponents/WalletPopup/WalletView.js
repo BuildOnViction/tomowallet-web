@@ -12,9 +12,13 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 // Custom Components
 import MnemonicBox from '../../../MnemonicBox';
 // Utilities, Constants & Styles
-import { getWeb3Info, mnemonicToPrivateKey } from '../../../../utils';
+import {
+  getWeb3Info,
+  mnemonicToPrivateKey,
+  getNetwork,
+} from '../../../../utils';
 import { WALLET_POPUP_CONTENT_TAB } from '../../../../containers/Global/constants';
-import { MSG } from '../../../../constants';
+import { MSG, RPC_SERVER } from '../../../../constants';
 import { TextBlue } from '../../../../styles';
 // ===================
 
@@ -35,7 +39,8 @@ class WalletViewContent extends PureComponent {
   }
 
   handleGetPrivateKey() {
-    const { recoveryPhrase, rpcServer } = getWeb3Info();
+    const { recoveryPhrase } = getWeb3Info();
+    const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
     if (this.handleCheckPrivateKey()) {
       return recoveryPhrase.replace(/^0x/, '');
     }

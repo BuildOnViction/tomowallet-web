@@ -6,7 +6,6 @@ import { createStructuredSelector } from 'reselect';
 import _isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
-import Web3 from 'web3';
 // Custom Components
 import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';
@@ -26,7 +25,7 @@ import { selectWallet } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
 import { ROUTE, RPC_SERVER, ENUM } from '../../constants';
 import './app.scss';
-import { getWeb3Info, setLedger, getNetwork } from '../../utils';
+import { getWeb3Info, getNetwork } from '../../utils';
 import { initiateWallet, getBalance } from '../../utils/blockchain';
 
 // ===== MAIN COMPONENT =====

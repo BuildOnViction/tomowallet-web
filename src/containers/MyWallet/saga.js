@@ -76,7 +76,6 @@ export function* loadTransaction(actionData) {
         };
       });
 
-      yield put(toggleLoading(false));
       yield put(
         loadTransactionDataSuccess({
           items: updatedItems,
@@ -87,6 +86,7 @@ export function* loadTransaction(actionData) {
         }),
       );
     }
+    yield put(toggleLoading(false));
   } catch {
     yield put(toggleLoading(false));
     yield put(
