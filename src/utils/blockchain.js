@@ -138,52 +138,6 @@ const decryptWalletInfo = (web3, rawInfo) => {
   return null;
 };
 
-// /**
-//  * estimateGas
-//  *
-//  * Retrieve gas price for the specific transaction. Supported for both TRC20 & TRC21 tokens
-//  * @param {Web3} web3 A Web3 object with supported APIs
-//  * @param {Object} txData A transaction object (including from, to, value, ...)
-//  */
-// const estimateGas = (web3, txData) => {
-//   const { amount, contractAddress, decimals, from, to, type } = txData;
-
-//   const contract = new web3.eth.Contract(
-//     _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20,
-//     contractAddress || from,
-//   );
-//   const remainDecimals =
-//     amount.indexOf('.') !== -1
-//       ? decimals - (amount.length - 1 - amount.indexOf('.'))
-//       : decimals;
-//   const weiAmount = web3.utils
-//     .toBN(`${amount}`.replace('.', ''))
-//     .mul(web3.utils.toBN(10 ** remainDecimals))
-//     .toString(10);
-
-//   // In case token type is TRC21
-//   if (_isEqual(type, ENUM.TOKEN_TYPE.TRC21)) {
-//     return contract.methods
-//       .estimateFee(weiAmount)
-//       .call({ from, to })
-//       .then(trc21Gas => {
-//         if (Number(trc21Gas)) {
-//           return trc21Gas;
-//         }
-//         return contract.methods
-//           .transfer(to, weiAmount)
-//           .estimateGas({ from })
-//           .then(gas => gas);
-//       });
-//   } else {
-//     // In case token type is TRC20
-//     return contract.methods
-//       .transfer(to, weiAmount)
-//       .estimateGas({ from })
-//       .then(gas => gas);
-//   }
-// };
-
 const estimateTRC21Fee = (web3, txData) => {
   const { amount, contractAddress, decimals, from, to } = txData;
   const contract = new web3.eth.Contract(trc21, contractAddress);
@@ -414,7 +368,7 @@ const decimalsToBN = (numberToConvert, decimals) => {
   if (!numberToConvert) {
     return '0';
   }
-  debugger;
+
   const web3 = new Web3();
   const rawDecimals =
     numberToConvert.indexOf('.') !== -1
