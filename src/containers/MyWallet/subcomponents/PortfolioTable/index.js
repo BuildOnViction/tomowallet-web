@@ -88,7 +88,6 @@ class PortfolioTable extends Component {
     onLoadTokenOptions(
       {
         address: _get(wallet, 'address', ''),
-        serverKey: getNetwork(),
       },
       this.handleGetNativeCurrency(),
     );

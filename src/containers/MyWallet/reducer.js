@@ -8,7 +8,7 @@
 import { fromJS } from 'immutable';
 import _get from 'lodash.get';
 import _omit from 'lodash.omit';
-import _isEqual from 'lodash.isequal';
+import _isNumber from 'lodash.isnumber';
 import moment from 'moment';
 // Constants
 import {
@@ -138,7 +138,9 @@ export default (state = initialState, action) => {
           [TRANSACTION_COLUMNS.TOKEN_TYPE]: trans.tokenType,
           [TRANSACTION_COLUMNS.TX_HASH]: trans.txHash,
           [TRANSACTION_COLUMNS.CREATE_TIME]: moment(
-            Number(`${trans.createdTime}000`),
+            _isNumber(trans.createdTime)
+              ? Number(`${trans.createdTime}000`)
+              : trans.createdTime,
           ),
           [TRANSACTION_COLUMNS.FROM]: trans.from,
           [TRANSACTION_COLUMNS.TO]: trans.to,

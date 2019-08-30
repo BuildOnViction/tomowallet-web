@@ -11,7 +11,7 @@ import _isEqual from 'lodash.isequal';
 import _isEmpty from 'lodash.isempty';
 // Utilities & Constants
 import request from '../../utils/request';
-import { bnToDecimals } from '../../utils';
+import { bnToDecimals, getNetwork } from '../../utils';
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,
@@ -33,7 +33,7 @@ export function* loadTokens(actionData) {
   try {
     yield put(toggleLoading(true));
     const { params } = actionData;
-    const apiBase = _get(API, [params.serverKey], '');
+    const apiBase = _get(API, [getNetwork()], '');
     const response = yield call(
       request,
       `${apiBase.GET_TOKENS}?holder=${params.address}`,
@@ -57,13 +57,13 @@ export function* loadTransaction(actionData) {
   try {
     yield put(toggleLoading(true));
     const { params } = actionData;
-    const apiBase = _get(API, [params.serverKey], '');
+    const apiBase = _get(API, [getNetwork()], '');
     const response = yield call(
       request,
       `${apiBase.GET_TRANSACTIONS}/${params.address}?page=${params.page}&limit=5`,
       { headers: { withCredentials: true } },
     );
-    const additionalRequest = yield call(
+    const walletTransactions = yield call(
       request,
       `${apiBase.WALLET_GET_TRANSACTIONS}?address=${params.address}`,
     );
@@ -79,11 +79,12 @@ export function* loadTransaction(actionData) {
         to: trans.to,
         amount: bnToDecimals(trans.value, 18),
       }));
-      if (!_isEmpty(additionalRequest)) {
+      if (!_isEmpty(walletTransactions)) {
         updatedItems = items.map(trans1 => {
           const foundTrans =
-            additionalRequest.find(trans2 => trans2.id.includes(trans1.hash)) ||
-            trans1;
+            walletTransactions.find(trans2 =>
+              trans2.id.includes(trans1.hash),
+            ) || trans1;
 
           return {
             tokenType: foundTrans.symbol,

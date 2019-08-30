@@ -37,6 +37,7 @@ import {
   toggleReceiveTokenPopup,
   loadCoinData,
   resetState,
+  loadWalletTransactionData,
 } from './actions';
 import {
   selectTableType,
@@ -705,6 +706,8 @@ MyWallet.propTypes = {
   coinData: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to load Tomo coin data from CoinMarketCap */
+  onLoadCoinData: PropTypes.func,
   /** Action to reset send token popup's form */
   onResetSendTokenForm: PropTypes.func,
   /** Action to refresh all My Wallet page's states */
@@ -744,6 +747,7 @@ MyWallet.propTypes = {
 MyWallet.defaultProps = {
   coinData: {},
   intl: {},
+  onLoadCoinData: () => {},
   onResetSendTokenForm: () => {},
   onResetState: () => {},
   onSetTableType: () => {},

@@ -50,7 +50,6 @@ class TransactionTable extends PureComponent {
     onLoadTransactionData({
       page: newPage || 1,
       address: _get(wallet, 'address', ''),
-      serverKey: getNetwork(),
     });
   }
 
