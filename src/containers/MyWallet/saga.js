@@ -84,7 +84,6 @@ export function* loadTransaction(actionData) {
           const foundTrans =
             additionalRequest.find(trans2 => trans2.id.includes(trans1.hash)) ||
             trans1;
-          console.warn('foundTrans', foundTrans);
 
           return {
             tokenType: foundTrans.symbol,
