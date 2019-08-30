@@ -6,7 +6,7 @@ module.exports = common({
   mode: 'production',
   output: {
     path: path.resolve(__dirname, 'dist/prod'),
-    filename: 'tomowallet_bundle.js',
+    filename: 'tomowallet_bundle_v1.js',
     publicPath: '/',
   },
   devtool: false,
