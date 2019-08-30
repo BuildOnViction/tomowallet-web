@@ -135,18 +135,15 @@ export default (state = initialState, action) => {
     case LOAD_TRANSACTION_DATA_SUCCESS:
       return state.set('transactionTable', {
         data: _get(action, 'tableData.items', []).map(trans => ({
-          [TRANSACTION_COLUMNS.TOKEN_TYPE]: 'TOMO',
-          [TRANSACTION_COLUMNS.TX_HASH]: _get(trans, 'hash', ''),
-          [TRANSACTION_COLUMNS.CREATE_TIME]: moment(_get(trans, 'createdAt')),
-          [TRANSACTION_COLUMNS.FROM]: _get(trans, 'from', ''),
-          [TRANSACTION_COLUMNS.TO]: _get(trans, 'to', ''),
-          [TRANSACTION_COLUMNS.QUANTITY]: _get(trans, 'value', ''),
-          [TRANSACTION_COLUMNS.TYPE]: _isEqual(
-            _get(trans, 'from'),
-            _get(action, 'tableData.address'),
-          )
-            ? 'out'
-            : 'in',
+          [TRANSACTION_COLUMNS.TOKEN_TYPE]: trans.tokenType,
+          [TRANSACTION_COLUMNS.TX_HASH]: trans.txHash,
+          [TRANSACTION_COLUMNS.CREATE_TIME]: moment(
+            Number(`${trans.createdTime}000`),
+          ),
+          [TRANSACTION_COLUMNS.FROM]: trans.from,
+          [TRANSACTION_COLUMNS.TO]: trans.to,
+          [TRANSACTION_COLUMNS.QUANTITY]: trans.amount,
+          [TRANSACTION_COLUMNS.TYPE]: trans.type,
         })),
         page: _get(action, 'tableData.currentPage', 1),
         total: _get(action, 'tableData.total', 0),

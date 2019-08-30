@@ -12,20 +12,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EllipsisCellStyler } from '../../../../components/Table/style';
 import { TextBlue } from '../../../../styles';
 // Utilities & Constants
-import { fromWei, getNetwork } from '../../../../utils';
+import { getNetwork } from '../../../../utils';
 import { TRANSACTION_COLUMNS } from '../../constants';
 import { MSG, API } from '../../../../constants';
 // ===================
 
 // ===== CONFIGURATION =====
 export default ({ formatMessage }) => [
-  {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_TOKEN_TYPE),
-    accessor: TRANSACTION_COLUMNS.TOKEN_TYPE,
-    Cell: ({ value }) => (
-      <EllipsisCellStyler title={value}>{value}</EllipsisCellStyler>
-    ),
-  },
   {
     Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_TX_HASH),
     accessor: TRANSACTION_COLUMNS.TX_HASH,
@@ -47,7 +40,7 @@ export default ({ formatMessage }) => [
     Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_CREATE_TIME),
     accessor: TRANSACTION_COLUMNS.CREATE_TIME,
     Cell: ({ value }) => {
-      const timeStr = value.format('DD MMM YYYY');
+      const timeStr = value.format('DD MMM YYYY HH:MM:SS');
       return <EllipsisCellStyler title={timeStr}>{timeStr}</EllipsisCellStyler>;
     },
   },
@@ -72,7 +65,7 @@ export default ({ formatMessage }) => [
     Header: '',
     accessor: 'connectArrow',
     Cell: ({ original }) =>
-      _get(original, [TRANSACTION_COLUMNS.TYPE]) === 'in' ? (
+      _get(original, [TRANSACTION_COLUMNS.TYPE]) === 'IN' ? (
         <FontAwesomeIcon icon='arrow-right' className='text-success' />
       ) : (
         <FontAwesomeIcon icon='arrow-right' className='text-danger' />
@@ -99,9 +92,16 @@ export default ({ formatMessage }) => [
   {
     Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_QUANTITY),
     accessor: TRANSACTION_COLUMNS.QUANTITY,
-    Cell: ({ value }) => (
-      <EllipsisCellStyler title={value}>{fromWei(value)}</EllipsisCellStyler>
-    ),
+    Cell: ({ value, original }) => {
+      const displayValue = `${value} ${_get(original, [
+        TRANSACTION_COLUMNS.TOKEN_TYPE,
+      ])}`;
+      return (
+        <EllipsisCellStyler title={displayValue}>
+          {displayValue}
+        </EllipsisCellStyler>
+      );
+    },
   },
 ];
 // =========================

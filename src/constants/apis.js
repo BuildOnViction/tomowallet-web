@@ -13,11 +13,13 @@ export default {
   TOMOCHAIN_TESTNET: {
     GET_TOKENS: `${WALLET_TESTNET}/api/tokens`,
     GET_TRANSACTIONS: `${SCAN_TESTNET}/api/txs/listByAccount`,
+    WALLET_GET_TRANSACTIONS: `${WALLET_TESTNET}/api/transactions/ui`,
     VIEW_TRANSACTION: `${SCAN_TESTNET}/txs`,
   },
   TOMOCHAIN_MAINNET: {
     GET_TOKENS: `${WALLET_MAINNET}/api/tokens`,
     GET_TRANSACTIONS: `${SCAN_MAINNET}/api/txs/listByAccount`,
+    WALLET_GET_TRANSACTIONS: `${WALLET_MAINNET}/api/transactions/ui`,
     VIEW_TRANSACTION: `${SCAN_MAINNET}/txs`,
   },
 };

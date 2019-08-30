@@ -7,8 +7,11 @@
 // Modules
 import { call, put, takeLatest } from 'redux-saga/effects';
 import _get from 'lodash.get';
+import _isEqual from 'lodash.isequal';
+import _isEmpty from 'lodash.isempty';
 // Utilities & Constants
 import request from '../../utils/request';
+import { bnToDecimals } from '../../utils';
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,
@@ -60,14 +63,45 @@ export function* loadTransaction(actionData) {
       `${apiBase.GET_TRANSACTIONS}/${params.address}?page=${params.page}&limit=5`,
       { headers: { withCredentials: true } },
     );
+    const additionalRequest = yield call(
+      request,
+      `${apiBase.WALLET_GET_TRANSACTIONS}?address=${params.address}`,
+    );
 
     if (response) {
       const { items, currentPage, total, pages } = response;
+      let updatedItems = items.map(trans => ({
+        tokenType: 'TOMO',
+        txHash: trans.hash,
+        createdTime: trans.createdAt,
+        txType: _isEqual(trans.from, params.address) ? 'OUT' : 'IN',
+        from: trans.from,
+        to: trans.to,
+        amount: bnToDecimals(trans.value, 18),
+      }));
+      if (!_isEmpty(additionalRequest)) {
+        updatedItems = items.map(trans1 => {
+          const foundTrans =
+            additionalRequest.find(trans2 => trans2.id.includes(trans1.hash)) ||
+            trans1;
+          console.warn('foundTrans', foundTrans);
+
+          return {
+            tokenType: foundTrans.symbol,
+            txHash: foundTrans.title,
+            createdTime: foundTrans.timestamp,
+            type: foundTrans.type,
+            from: foundTrans.from,
+            to: foundTrans.to,
+            amount: foundTrans.amount,
+          };
+        });
+      }
 
       yield put(toggleLoading(false));
       yield put(
         loadTransactionDataSuccess({
-          items,
+          items: updatedItems,
           currentPage,
           total,
           pages,

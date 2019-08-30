@@ -30,6 +30,7 @@
     "lodash.isobject": "3.0.2",
     "lodash.isstring": "4.0.1",
     "lodash.omit": "4.5.0",
+    "lodash.uniqby": "^4.7.0",
     "moment": "2.24.0",
     "moment-locales-webpack-plugin": "1.1.0",
     "node-sass": "4.12.0",
