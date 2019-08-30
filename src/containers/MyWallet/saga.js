@@ -88,7 +88,7 @@ export function* loadTransaction(actionData) {
 
           return {
             tokenType: foundTrans.symbol,
-            txHash: foundTrans.title,
+            txHash: foundTrans.hash,
             createdTime: foundTrans.timestamp,
             type: foundTrans.type,
             from: foundTrans.from,
