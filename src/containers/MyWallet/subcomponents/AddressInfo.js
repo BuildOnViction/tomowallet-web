@@ -8,8 +8,9 @@
 // ===== IMPORTS =====
 // Modules
 import React, { PureComponent } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 import QRCode from 'qrcode.react';
@@ -21,10 +22,24 @@ import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
 import { TextBlue } from '../../../styles';
+import { toggleClipboardCopyState } from '../../Global/actions';
+import { copyToClipboard } from '../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
 class AddressInfo extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleCopyToClipboard = this.handleCopyToClipboard.bind(this);
+  }
+
+  handleCopyToClipboard() {
+    const { onToggleClipboardPopup, wallet } = this.props;
+    copyToClipboard(_get(wallet, 'address', ''));
+    onToggleClipboardPopup(true);
+  }
+
   render() {
     const {
       coinData,
@@ -53,7 +68,13 @@ class AddressInfo extends PureComponent {
                     <HeadingSmall>
                       {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
                     </HeadingSmall>
-                    <TextBlue className='text-break'>{_get(wallet, 'address', '')}</TextBlue>
+                    <TextBlue
+                      role='presentation'
+                      onClick={this.handleCopyToClipboard}
+                      className='text-break'
+                    >
+                      {_get(wallet, 'address', '')}
+                    </TextBlue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
                         <MediumButtonStyler onClick={openSendTokenPopup}>
@@ -92,6 +113,8 @@ AddressInfo.propTypes = {
   coinData: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to show/hide clipboard popup */
+  onToggleClipboardPopup: PropTypes.func,
   /** Action to show receive token popup */
   openReceiveTokenPopup: PropTypes.func,
   /** Action to show send token popup */
@@ -103,13 +126,25 @@ AddressInfo.propTypes = {
 AddressInfo.defaultProps = {
   coinData: {},
   intl: {},
+  onToggleClipboardPopup: () => {},
   openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
   wallet: {},
 };
 // ======================
 
+// ===== INJECTIONS =====
+const mapDispatchToProps = dispatch => ({
+  onToggleClipboardPopup: bool => dispatch(toggleClipboardCopyState(bool)),
+});
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+// ======================
+
 export default compose(
   withIntl,
   withWeb3,
+  withConnect,
 )(AddressInfo);

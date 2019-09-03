@@ -20,12 +20,7 @@ import { LIST } from '../../../constants';
 // ===== MAIN COMPONENT =====
 class DataTables extends PureComponent {
   render() {
-    const {
-      setTableType,
-      tableType,
-      openReceiveTokenPopup,
-      openSendTokenPopup,
-    } = this.props;
+    const { setTableType, tableType, openSendTokenPopup } = this.props;
     return (
       <div className='main_tab'>
         <Nav tabs className='mt-5 mb-4'>

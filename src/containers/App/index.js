@@ -10,6 +10,7 @@ import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';
 import Footer from '../../components/Footer';
+import ClipboardPopup from '../../components/ClipboardPopup';
 import {
   WelcomePage,
   CreateWalletPage,
@@ -21,7 +22,7 @@ import AppStyler from './style';
 import { TextLinkBlue } from '../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../components/Web3';
-import { selectWallet } from '../Global/selectors';
+import { selectWallet, selectClipboardPopup } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
 import { ROUTE, RPC_SERVER, ENUM } from '../../constants';
 import './app.scss';
@@ -67,6 +68,7 @@ class App extends PureComponent {
   }
 
   render() {
+    const { clipboardData } = this.props;
     const isLoggedIn = this.handleCheckLoggedIn();
 
     return (
@@ -132,6 +134,7 @@ class App extends PureComponent {
             />
           </div>
           <Footer className='mt-5' isLoggedIn={isLoggedIn} />
+          <ClipboardPopup data={clipboardData} />
         </AppStyler>
       </Router>
     );
@@ -143,6 +146,7 @@ class App extends PureComponent {
 const mapStateToProps = () =>
   createStructuredSelector({
     wallet: selectWallet,
+    clipboardData: selectClipboardPopup,
   });
 const mapDispatchToProps = dispatch => ({
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),

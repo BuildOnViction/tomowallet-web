@@ -11,6 +11,7 @@ import {
   SET_LANGUAGE,
   SET_NETWORK,
   STORE_WALLET_INFO,
+  TOGGLE_CLIPBOARD_COPY_STATE,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
   TOGGLE_WALLET_POPUP,
@@ -41,6 +42,11 @@ export const setNetwork = network => ({
 export const storeWallet = data => ({
   type: STORE_WALLET_INFO,
   data,
+});
+
+export const toggleClipboardCopyState = bool => ({
+  type: TOGGLE_CLIPBOARD_COPY_STATE,
+  bool,
 });
 
 export const toggleLoading = bool => ({

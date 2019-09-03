@@ -19,6 +19,7 @@ const buttonPrefix = `${commonPrefix}.button`;
 const listPrefix = `${commonPrefix}.list`;
 const navbarPrefix = `${componentPrefix}.navbar`;
 const footerPrefix = `${componentPrefix}.footer`;
+const clipboardPopupPrefix = `${componentPrefix}.popup.clipboard`;
 const welcomePagePrefix = `${containerPrefix}.welcome`;
 const createWalletPagePrefix = `${containerPrefix}.createwallet`;
 const warningPagePrefix = `${createWalletPagePrefix}.warning`;
@@ -162,6 +163,11 @@ export default defineMessages({
   FOOTER_OPTION_TERMS_PRIVACY: {
     id: `${footerPrefix}.option.terms&privacy`,
     defaultMessage: 'Terms & Privacy',
+  },
+  // Component - Clipboard Popup
+  POPUP_CLIPBOARD_CONTENT_MESSAGE: {
+    id: `${clipboardPopupPrefix}.content.message`,
+    defaultMessage: 'Copied to Clipboard',
   },
   // Welcome Page
   WELCOME_TITLE: {
