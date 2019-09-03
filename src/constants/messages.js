@@ -187,7 +187,7 @@ export default defineMessages({
   WELCOME_DESCRIPTION: {
     id: `${welcomePagePrefix}.description`,
     defaultMessage:
-      'TomoWallet (our friends call us TMW) is a free, client-side interface helping you interact with the TomoChain. Our easy-to-use, open-source platform allows you to generate wallets, interact with smart contracts, and so much more.',
+      'TomoWallet (our friends call us TMW) is a free, client-side interface helping you interact with TomoChain. Our easy-to-use, open-source platform allows you to generate wallets, interact with smart contracts, and so much more.',
   },
   WELCOME_BUTTON_CREATE_NEW_WALLET: {
     id: `${welcomePagePrefix}.button.createnewwallet`,
