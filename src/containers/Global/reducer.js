@@ -14,6 +14,7 @@ import {
   SET_LANGUAGE,
   SET_NETWORK,
   STORE_WALLET_INFO,
+  TOGGLE_CLIPBOARD_COPY_STATE,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
   TOGGLE_WALLET_POPUP,
@@ -32,6 +33,9 @@ const initialWalletPopupState = {
   tabType: WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY,
 };
 const initialState = fromJS({
+  clipboardPopup: {
+    isOpen: false,
+  },
   language: _get(LIST, ['LANGUAGES', 0, 'value'], ''),
   loading: false,
   network: {
@@ -63,6 +67,8 @@ export default (state = initialState, action) => {
       return state.setIn(['network', 'data'], action.network);
     case STORE_WALLET_INFO:
       return state.set('wallet', action.data);
+    case TOGGLE_CLIPBOARD_COPY_STATE:
+      return state.setIn(['clipboardPopup', 'isOpen'], action.bool);
     case TOGGLE_LOADING_SCREEN:
       return state.set('loading', action.bool);
     case TOGGLE_NETWORK_CONFIRMATION_POPUP:

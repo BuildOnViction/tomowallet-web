@@ -7,10 +7,11 @@ import {
   trimMnemonic,
   convertLocaleNumber,
   removeTrailingZero,
+  copyToClipboard,
+  downloadTextFile,
 } from './miscellaneous';
 import {
   decryptWalletInfo,
-  estimateGas,
   fromWei,
   generateWeb3,
   getWalletInfo,
@@ -56,7 +57,6 @@ export {
   getWalletInfo,
   getValidations,
   mergeErrors,
-  estimateGas,
   sendToken,
   getWeb3Info,
   setWeb3Info,
@@ -85,4 +85,6 @@ export {
   decimalsToBN,
   getLedgerTokenTransferData,
   removeTrailingZero,
+  copyToClipboard,
+  downloadTextFile,
 };

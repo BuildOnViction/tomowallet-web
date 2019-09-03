@@ -31,6 +31,7 @@ import {
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
 import { FORM_STATES } from '../constants';
+import { downloadTextFile } from '../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -39,11 +40,17 @@ class RecoveryPhrase extends PureComponent {
     super(props);
 
     this.handleConvertMnemonic = this.handleConvertMnemonic.bind(this);
+    this.handleDownloadRPFile = this.handleDownloadRPFile.bind(this);
   }
 
   handleConvertMnemonic() {
     const { mnemonic } = this.props;
     return mnemonic.split(' ');
+  }
+
+  handleDownloadRPFile() {
+    const { mnemonic } = this.props;
+    downloadTextFile(mnemonic, 'recovery_phrase');
   }
 
   render() {
@@ -54,6 +61,7 @@ class RecoveryPhrase extends PureComponent {
       toggleKeyViewPopup,
     } = this.props;
     const convertedMnemonic = this.handleConvertMnemonic();
+
     return (
       <Card>
         <CardHeader>
@@ -74,7 +82,7 @@ class RecoveryPhrase extends PureComponent {
           />
           <Row noGutters>
             <Col>
-              <TextLinkYellow href='#'>
+              <TextLinkYellow onClick={this.handleDownloadRPFile}>
                 <FontAwesomeIcon icon={['far', 'save']} className='mr-2' />
                 {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_SAVE)}
               </TextLinkYellow>

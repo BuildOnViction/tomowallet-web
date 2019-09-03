@@ -59,4 +59,23 @@ export const removeTrailingZero = rawNumber => {
 
   return result;
 };
+
+export const copyToClipboard = content => {
+  const textHolder = document.createElement('input');
+  textHolder.defaultValue = content;
+  document.body.appendChild(textHolder);
+  textHolder.select();
+  document.execCommand('copy');
+  document.body.removeChild(textHolder);
+};
+
+export const downloadTextFile = (content, fileName) => {
+  const link = document.createElement('a');
+  const blob = new Blob([content], { type: 'plain/text' });
+  link.href = URL.createObjectURL(blob);
+  link.download = `${fileName.replace(/\.txt$/, '')}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 // ===================

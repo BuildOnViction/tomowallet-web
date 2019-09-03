@@ -9,19 +9,28 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import _get from 'lodash.get';
 import QRCode from 'qrcode.react';
 import { CardText } from 'reactstrap';
 // Custom Component
 import Popup from '../../../../components/Popup';
-import { HeadingMedium, BoxImages } from '../../../../styles';
+import { HeadingMedium, BoxImages, TextBlue } from '../../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
+import { toggleClipboardCopyState } from '../../../Global/actions';
+import { copyToClipboard } from '../../../../utils';
 import { MSG } from '../../../../constants';
 // ===================
 
 // ===== SUB-COMPONENT =====
-const Content = ({ formatMessage, keyView, toggleKeyVisibile }) => (
+const Content = ({
+  formatMessage,
+  keyView,
+  saveToClipboard,
+  toggleKeyVisibile,
+}) => (
   <div className='padding'>
     <HeadingMedium>
       {formatMessage(MSG.RECOVERY_PHRASE_POPUP_KEY_VIEW_CONTENT_TITLE)}
@@ -42,7 +51,13 @@ const Content = ({ formatMessage, keyView, toggleKeyVisibile }) => (
         </div>
       )}
     </BoxImages>
-    <div className='text-break mt-3'>{_get(keyView, 'key')}</div>
+    <TextBlue
+      role='presentation'
+      onClick={saveToClipboard}
+      className='d-block text-break text-center mt-3'
+    >
+      {_get(keyView, 'key')}
+    </TextBlue>
   </div>
 );
 // =========================
@@ -53,6 +68,7 @@ class KeyViewPopup extends PureComponent {
     super(props);
 
     this.handleClosePopup = this.handleClosePopup.bind(this);
+    this.handleCopyToClipboard = this.handleCopyToClipboard.bind(this);
   }
 
   handleClosePopup() {
@@ -61,12 +77,19 @@ class KeyViewPopup extends PureComponent {
     toggleKeyVisibile(false);
   }
 
+  handleCopyToClipboard() {
+    const { keyView, onToggleClipboardPopup } = this.props;
+    copyToClipboard(_get(keyView, 'key'));
+    onToggleClipboardPopup(true);
+  }
+
   render() {
     const {
       intl: { formatMessage },
       keyView,
       toggleKeyVisibile,
     } = this.props;
+
     return (
       <Popup
         isOpen={_get(keyView, 'isOpen', false)}
@@ -76,6 +99,7 @@ class KeyViewPopup extends PureComponent {
         getContentProps={{
           formatMessage,
           keyView,
+          saveToClipboard: this.handleCopyToClipboard,
           toggleKeyVisibile,
         }}
         button={{
@@ -108,4 +132,17 @@ KeyViewPopup.defaultProps = {
 };
 // ======================
 
-export default withIntl(KeyViewPopup);
+// ===== INJECTIONS =====
+const mapDispatchToProps = dispatch => ({
+  onToggleClipboardPopup: bool => dispatch(toggleClipboardCopyState(bool)),
+});
+const withConnect = connect(
+  null,
+  mapDispatchToProps,
+);
+// ======================
+
+export default compose(
+  withConnect,
+  withIntl,
+)(KeyViewPopup);

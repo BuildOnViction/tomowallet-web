@@ -99,6 +99,7 @@ class PortfolioTable extends Component {
       intl: { formatMessage },
       openSendTokenPopup,
     } = this.props;
+
     return (
       <BoxPortfolio>
         <CommonTable

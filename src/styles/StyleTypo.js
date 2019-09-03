@@ -27,12 +27,12 @@ const NoticeTextRed = styled.span`
   color: #be445e;
 `;
 const TextLinkBlue = styled.a`
-  color: #5692CD;
+  color: #5692cd;
 `;
 const TextBlue = styled.span`
-  color: #5692CD;
+  color: #5692cd;
   cursor: pointer;
-  transition: all .3s;
+  transition: all 0.3s;
   &:hover {
     color: #0056b3;
   }
@@ -41,15 +41,15 @@ const TextYellow = styled.span`
   color: #e4ae63;
 `;
 const TextLinkYellow = styled.a`
-  color: #e4ae63;
+  color: #e4ae63 !important;
   cursor: pointer;
 `;
 const TextYellowPointer = styled.span`
   color: #e4ae63;
   cursor: pointer;
-  transition: all .3s;
+  transition: all 0.3s;
   &:hover {
-    color: #C59148;
+    color: #c59148;
   }
 `;
 const TextGray = styled.div`
