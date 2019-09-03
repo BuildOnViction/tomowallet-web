@@ -26,7 +26,7 @@ class ClipboardPopup extends PureComponent {
     if (data.isOpen) {
       setTimeout(() => {
         onTogglePopup(false);
-      }, 1000);
+      }, 1500);
     }
   }
 

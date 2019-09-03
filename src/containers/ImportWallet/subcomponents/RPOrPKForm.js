@@ -9,12 +9,26 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// Custom Components
+import FileUploadInput from '../../../components/FileUpload';
 // Utilities & Constants
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
 
 // ===== MAIN COMPONENT =====
 class RPOrPKForm extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleLoadRecoveryPhrase = this.handleLoadRecoveryPhrase.bind(this);
+  }
+
+  handleLoadRecoveryPhrase(readText) {
+    const { updateInput } = this.props;
+
+    updateInput('recoveryPhrase', readText);
+  }
+
   render() {
     const {
       errors,
@@ -38,6 +52,7 @@ class RPOrPKForm extends PureComponent {
           onChange={e => updateInput('recoveryPhrase', e.target.value)}
           invalid={errors.length > 0}
         />
+        <FileUploadInput onLoaded={this.handleLoadRecoveryPhrase} />
         <FormFeedback>
           {errors.map((err, errIdx) => (
             <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>

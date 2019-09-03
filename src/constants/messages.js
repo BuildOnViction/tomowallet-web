@@ -20,6 +20,7 @@ const listPrefix = `${commonPrefix}.list`;
 const navbarPrefix = `${componentPrefix}.navbar`;
 const footerPrefix = `${componentPrefix}.footer`;
 const clipboardPopupPrefix = `${componentPrefix}.popup.clipboard`;
+const fileUploadInputPrefix = `${componentPrefix}.input.fileupload`;
 const welcomePagePrefix = `${containerPrefix}.welcome`;
 const createWalletPagePrefix = `${containerPrefix}.createwallet`;
 const warningPagePrefix = `${createWalletPagePrefix}.warning`;
@@ -168,6 +169,15 @@ export default defineMessages({
   POPUP_CLIPBOARD_CONTENT_MESSAGE: {
     id: `${clipboardPopupPrefix}.content.message`,
     defaultMessage: 'Copied to Clipboard',
+  },
+  // Component - File Upload Input
+  INPUT_FILE_UPLOAD_BUTTON_LABEL: {
+    id: `${fileUploadInputPrefix}.button.label`,
+    defaultMessage: 'Upload File',
+  },
+  INPUT_FILE_UPLOAD_PLACEHOLDER: {
+    id: `${fileUploadInputPrefix}.placeholder`,
+    defaultMessage: 'Drag/drop or click to open...',
   },
   // Welcome Page
   WELCOME_TITLE: {
