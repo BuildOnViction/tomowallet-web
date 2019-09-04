@@ -36,6 +36,7 @@ import {
   BoxCardStyled,
 } from '../../styles';
 import LedgerForm from './subcomponents/LedgerForm';
+import MetaMaskForm from './subcomponents/MetaMaskForm';
 import RPOrPKForm from './subcomponents/RPOrPKForm';
 import AddressPopup from './subcomponents/AddressPopup';
 // Utilities, Constants & Styles
@@ -378,7 +379,7 @@ class ImportWallet extends PureComponent {
                         MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
                       )}
                     </CardText>
-                    <CardText className='mt-3 small'>
+                    <CardText className='mt-3 small text-danger'>
                       {formatMessage(
                         MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT,
                       )}
@@ -395,6 +396,9 @@ class ImportWallet extends PureComponent {
                       updateInput={onUpdateInput}
                     />
                   )}
+                  {_get(importWallet, 'type') === IMPORT_TYPES.META_MASK && (
+                    <MetaMaskForm />
+                  )}
                   {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
                     <RPOrPKForm
                       errors={_get(importWallet, 'errors', [])}
@@ -405,29 +409,31 @@ class ImportWallet extends PureComponent {
                 </Col>
               </Row>
             </CardBody>
-            <CardFooter>
-              <Row>
-                <Col size={6}>
-                  <ButtonStyler
-                    onClick={() => this.handleRedirect(ROUTE.LOGIN)}
-                  >
-                    {formatMessage(MSG.COMMON_BUTTON_BACK)}
-                  </ButtonStyler>
-                </Col>
-                <Col size={6}>
-                  <ButtonStyler
-                    btnYellow
-                    onClick={
-                      _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
-                        ? this.handleAccessByRecoveryPhrase
-                        : this.handleSelectHDPath
-                    }
-                  >
-                    {formatMessage(MSG.COMMON_BUTTON_IMPORT)}
-                  </ButtonStyler>
-                </Col>
-              </Row>
-            </CardFooter>
+            {_get(importWallet, 'type') !== IMPORT_TYPES.META_MASK && (
+              <CardFooter>
+                <Row>
+                  <Col size={6}>
+                    <ButtonStyler
+                      onClick={() => this.handleRedirect(ROUTE.LOGIN)}
+                    >
+                      {formatMessage(MSG.COMMON_BUTTON_BACK)}
+                    </ButtonStyler>
+                  </Col>
+                  <Col size={6}>
+                    <ButtonStyler
+                      btnYellow
+                      onClick={
+                        _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
+                          ? this.handleAccessByRecoveryPhrase
+                          : this.handleSelectHDPath
+                      }
+                    >
+                      {formatMessage(MSG.COMMON_BUTTON_IMPORT)}
+                    </ButtonStyler>
+                  </Col>
+                </Row>
+              </CardFooter>
+            )}
           </BoxCardStyled>
           <AddressPopup
             accessByLedger={this.handleAccessByLedger}

@@ -89,11 +89,14 @@ class NavigationBar extends PureComponent {
   }
 
   handleLogout() {
-    const { onReleaseWallet } = this.props;
+    const { onReleaseWallet, removeMetaMaskProvider } = this.props;
 
-    Promise.all([onReleaseWallet(), removeWeb3Info(), removeLedger()]).then(
-      () => this.handleRedirectToHomepage(),
-    );
+    Promise.all([
+      onReleaseWallet(),
+      removeWeb3Info(),
+      removeLedger(),
+      removeMetaMaskProvider(),
+    ]).then(() => this.handleRedirectToHomepage());
   }
 
   handleRedirectToHomepage() {
@@ -249,6 +252,8 @@ NavigationBar.propTypes = {
   onToggleNetworkConfirmationPopup: PropTypes.func,
   /** Action to show/hide show-wallet popup */
   onToggleWalletPopup: PropTypes.func,
+  /** Action to remove MetaMask provider */
+  removeMetaMaskProvider: PropTypes.func,
   /** Action to change current RPC Server */
   switchRPCServer: PropTypes.func,
 };
@@ -266,6 +271,7 @@ NavigationBar.defaultProps = {
   onToggleNavbarOptions: () => {},
   onToggleNetworkConfirmationPopup: () => {},
   onToggleWalletPopup: () => {},
+  removeMetaMaskProvider: () => {},
   switchRPCServer: () => {},
 };
 // ======================

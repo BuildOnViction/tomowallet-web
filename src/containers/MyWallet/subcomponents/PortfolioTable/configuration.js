@@ -25,7 +25,6 @@ import {
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG, ENUM, API } from '../../../../constants';
 import { convertAmountWithDecimals } from '../../../../utils/blockchain';
-import apis from '../../../../constants/apis';
 // ===================
 
 // ===== CONFIGURATION =====

@@ -11,7 +11,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import { createStructuredSelector } from 'reselect';
 import Web3 from 'web3';
 import _get from 'lodash.get';
-// import _isEmpty from 'lodash.isempty';
+import _isEmpty from 'lodash.isempty';
 // Custom Components
 import { FailureComponent, LoadingComponent } from './';
 // Utilities & Constants
@@ -21,6 +21,8 @@ import {
   getNetwork,
   setNetwork,
   getWalletInfo,
+  removeWeb3Info,
+  setWeb3Info,
 } from '../../utils';
 import { RPC_SERVER, ENUM } from '../../constants';
 import { storeWallet, releaseWallet } from '../../containers/Global/actions';
@@ -47,6 +49,9 @@ class Web3Provider extends Component {
       rpcServer: {},
     };
 
+    this.handleRemoveMetaMaskProvider = this.handleRemoveMetaMaskProvider.bind(
+      this,
+    );
     this.handleSetMetaMaskProvider = this.handleSetMetaMaskProvider.bind(this);
     this.handleSetWeb3 = this.handleSetWeb3.bind(this);
     this.handleTryProvider = this.handleTryProvider.bind(this);
@@ -54,64 +59,62 @@ class Web3Provider extends Component {
   }
 
   componentDidMount() {
-    // const { onReleaseWallet } = this.props;
-    // if (Web3.givenProvider) {
-    //   console.warn('Mounting MetaMask...', Web3.givenProvider);
-    //   this.handleSetMetaMaskProvider();
-    //   window.ethereum.enable();
-    //   window.ethereum.on('accountsChanged', this.handleSetMetaMaskProvider);
-    //   this.checkMetaMaskLogin = setInterval(() => {
-    //     Web3.givenProvider._metamask.isUnlocked().then(bool => {
-    //       const { wallet } = this.props;
-    //       if (!_isEmpty(wallet) && !bool) {
-    //         onReleaseWallet();
-    //       }
-    //     });
-    //   }, 1000);
-    // } else {
-    const web3Info = getWeb3Info();
-    if (_get(web3Info, 'recoveryPhrase')) {
-      const { recoveryPhrase } = web3Info;
-      const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
-      const rpcServer = _get(RPC_SERVER, [networkKey]);
-      const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
-
-      this.handleSetWeb3(newWeb3);
-      this.setState({
-        rpcServer,
-      });
+    if (!_isEmpty(getWeb3Info()) && Web3.givenProvider) {
+      this.handleSetMetaMaskProvider();
     } else {
-      const networkKey = getNetwork();
-      if (networkKey) {
-        this.handleUpdateRpcServer(networkKey);
+      const web3Info = getWeb3Info();
+      if (_get(web3Info, 'recoveryPhrase')) {
+        const { recoveryPhrase } = web3Info;
+        const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+        const rpcServer = _get(RPC_SERVER, [networkKey]);
+        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+
+        this.handleSetWeb3(newWeb3);
+        this.setState({
+          rpcServer,
+        });
       } else {
-        this.handleUpdateRpcServer(ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET);
+        const networkKey = getNetwork();
+        if (networkKey) {
+          this.handleUpdateRpcServer(networkKey);
+        } else {
+          this.handleUpdateRpcServer(ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET);
+        }
       }
     }
-    // }
   }
 
   componentWillUnmount() {
+    this.handleRemoveMetaMaskProvider();
+  }
+
+  handleRemoveMetaMaskProvider() {
     if (this.checkMetaMaskLogin) {
-      this.checkMetaMaskLogin.clearInterval();
+      clearInterval(this.checkMetaMaskLogin);
     }
     window.ethereum.removeListener(
       'accountsChanged',
-      this.handleSetMetaMaskProvider,
+      this.handleUpdateMetaMaskAccount,
     );
   }
 
   handleSetMetaMaskProvider() {
-    const { onStoreWallet } = this.props;
-    const newWeb3 = new Web3(Web3.givenProvider);
-    console.warn('Changing account...', Web3.givenProvider);
-
-    this.handleSetWeb3(newWeb3);
-    getWalletInfo(newWeb3).then(walletInfo => {
-      if (walletInfo) {
-        onStoreWallet(walletInfo);
-      }
-    });
+    const { onReleaseWallet } = this.props;
+    if (Web3.givenProvider) {
+      this.handleUpdateMetaMaskAccount();
+      window.ethereum.enable();
+      window.ethereum.on('accountsChanged', this.handleSetMetaMaskProvider);
+      this.checkMetaMaskLogin = setInterval(() => {
+        Web3.givenProvider._metamask.isUnlocked().then(bool => {
+          const { wallet } = this.props;
+          if (!_isEmpty(wallet) && !bool) {
+            removeWeb3Info();
+            onReleaseWallet();
+            this.handleRemoveMetaMaskProvider();
+          }
+        });
+      }, 1000);
+    }
   }
 
   handleSetWeb3(web3) {
@@ -140,6 +143,22 @@ class Web3Provider extends Component {
     }
   }
 
+  handleUpdateMetaMaskAccount() {
+    const { onStoreWallet } = this.props;
+    const newWeb3 = new Web3(Web3.givenProvider);
+
+    this.handleSetWeb3(newWeb3);
+    getWalletInfo(newWeb3).then(walletInfo => {
+      if (walletInfo) {
+        setWeb3Info({
+          address: walletInfo.address,
+          loginType: ENUM.LOGIN_TYPE.META_MASK,
+        });
+        onStoreWallet(walletInfo);
+      }
+    });
+  }
+
   handleUpdateRpcServer(newKey) {
     this.setState(
       {
@@ -163,6 +182,8 @@ class Web3Provider extends Component {
           web3,
           web3Status: status,
           rpcServer,
+          removeMetaMaskProvider: this.handleRemoveMetaMaskProvider,
+          setMetaMaskProvider: this.handleSetMetaMaskProvider,
           switchRPCServer: this.handleUpdateRpcServer,
           updateWeb3: this.handleSetWeb3,
         }}
@@ -197,11 +218,20 @@ export const withWeb3 = WrappedComponent => {
     render() {
       return (
         <Web3Context.Consumer>
-          {({ web3, rpcServer, switchRPCServer, updateWeb3 }) => (
+          {({
+            web3,
+            rpcServer,
+            removeMetaMaskProvider,
+            setMetaMaskProvider,
+            switchRPCServer,
+            updateWeb3,
+          }) => (
             <WrappedComponent
               {...this.props}
               web3={web3}
               rpcServer={rpcServer}
+              removeMetaMaskProvider={removeMetaMaskProvider}
+              setMetaMaskProvider={setMetaMaskProvider}
               switchRPCServer={switchRPCServer}
               updateWeb3={updateWeb3}
             />
@@ -223,7 +253,15 @@ export const withWeb3AndState = WrappedComponent => {
     render() {
       return (
         <Web3Context.Consumer>
-          {({ web3, web3Status, rpcServer, switchRPCServer, updateWeb3 }) =>
+          {({
+            web3,
+            web3Status,
+            rpcServer,
+            removeMetaMaskProvider,
+            setMetaMaskProvider,
+            switchRPCServer,
+            updateWeb3,
+          }) =>
             (web3Status === ENUM.WEB3_STATUSES.LOADING && (
               <LoadingComponent />
             )) ||
@@ -236,6 +274,8 @@ export const withWeb3AndState = WrappedComponent => {
                 web3={web3}
                 web3Status={web3Status}
                 rpcServer={rpcServer}
+                removeMetaMaskProvider={removeMetaMaskProvider}
+                setMetaMaskProvider={setMetaMaskProvider}
                 switchRPCServer={switchRPCServer}
                 updateWeb3={updateWeb3}
               />

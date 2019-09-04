@@ -15,7 +15,6 @@ import { ButtonLinkStyler, FormTextStyled } from '../../../styles';
 // Utilities
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
-// -- TO-DO: Add style for Ledger form
 // ===================
 
 // ===== MAIN COMPONENT =====

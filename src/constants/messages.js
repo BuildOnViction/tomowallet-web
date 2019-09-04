@@ -381,13 +381,18 @@ export default defineMessages({
     id: `${importWalletPagePrefix}.tab.metamask.text`,
     defaultMessage: 'MetaMask',
   },
+  IMPORT_WALLET_TAB_METAMASK_CONTENT_MESSAGE: {
+    id: `${importWalletPagePrefix}.tab.metamask.content.message`,
+    defaultMessage:
+      'Make sure you installed MetaMask extension in order for this option to work.',
+  },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.text`,
     defaultMessage: 'Recovery Phrase/ Private Key',
   },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT: {
     id: `${myWalletPagePrefix}.tab.recoveryphrase.notrecommmended.text`,
-    defaultMessage: '(Not Recommmended)',
+    defaultMessage: '(Not Recommended)',
   },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_LABEL: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.input.label`,

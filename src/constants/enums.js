@@ -29,8 +29,9 @@ const TOKEN_TYPE = {
 };
 
 const LOGIN_TYPE = {
-  PRIVATE_KEY: 'privateKey',
   LEDGER: 'ledger',
+  META_MASK: 'metaMask',
+  PRIVATE_KEY: 'privateKey',
 };
 
 const NETWORK_TYPE = {
