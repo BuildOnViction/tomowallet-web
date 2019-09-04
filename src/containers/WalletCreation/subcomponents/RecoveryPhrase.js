@@ -8,6 +8,8 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -29,9 +31,15 @@ import {
 } from '../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../components/IntlProvider';
+import { withWeb3 } from '../../../components/Web3';
 import { MSG } from '../../../constants';
 import { FORM_STATES } from '../constants';
-import { downloadTextFile } from '../../../utils';
+import {
+  downloadFile,
+  encryptKeystore,
+  mnemonicToPrivateKey,
+  decryptKeystore,
+} from '../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -49,8 +57,16 @@ class RecoveryPhrase extends PureComponent {
   }
 
   handleDownloadRPFile() {
-    const { mnemonic } = this.props;
-    downloadTextFile(mnemonic, 'recovery_phrase');
+    const { mnemonic, rpcServer, web3 } = this.props;
+    const privKey = mnemonicToPrivateKey(mnemonic, rpcServer);
+    const keystore = encryptKeystore(web3, `0x${privKey}`);
+    const timePrefix = moment().format('ZZ--YYYY-MM-DD-HH-mm');
+    const address = decryptKeystore(web3, keystore).address;
+
+    downloadFile({
+      content: JSON.stringify(keystore),
+      name: `${timePrefix}.${address}`,
+    });
   }
 
   render() {
@@ -133,6 +149,8 @@ RecoveryPhrase.propTypes = {
   toggleConfirmationPopup: PropTypes.func,
   /** Action to toggle private key view popup */
   toggleKeyViewPopup: PropTypes.func,
+  /** Current Web3 provider */
+  web3: PropTypes.object,
 };
 
 RecoveryPhrase.defaultProps = {
@@ -141,7 +159,11 @@ RecoveryPhrase.defaultProps = {
   setFormState: () => {},
   toggleConfirmationPopup: () => {},
   toggleKeyViewPopup: () => {},
+  web3: {},
 };
 // ======================
 
-export default withIntl(RecoveryPhrase);
+export default compose(
+  withIntl,
+  withWeb3,
+)(RecoveryPhrase);

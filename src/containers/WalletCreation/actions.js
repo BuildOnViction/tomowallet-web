@@ -18,6 +18,7 @@ import {
   TOGGLE_KEY_VIEW_POPUP,
   TOGGLE_KEY_VISIBLE,
   UPDATE_ERRORS,
+  UPDATE_INPUT,
 } from './constants';
 // ===================
 
@@ -77,5 +78,11 @@ export const toggleKeyVisibile = bool => ({
 export const updateErrors = errors => ({
   type: UPDATE_ERRORS,
   errors,
+});
+
+export const updateInput = (name, value) => ({
+  type: UPDATE_INPUT,
+  name,
+  value,
 });
 // ===================

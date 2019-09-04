@@ -12,8 +12,10 @@ import _get from 'lodash.get';
 // Custom Components
 import { FileUploadInputStyler } from './style';
 // Utilities & Constants
+import { withWeb3 } from '../Web3';
 import { getMessage } from '../IntlProvider';
 import { MSG } from '../../constants';
+import { decryptKeystore } from '../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -34,19 +36,23 @@ class FileUploadInput extends PureComponent {
   }
 
   handleChangeFile(e) {
-    const { onLoaded } = this.props;
+    const { onError, onLoaded, web3 } = this.props;
     const file = _get(e, 'dataTransfer.files.0') || _get(e, 'target.files.0');
-    console.warn('change file', file);
 
     const fileReader = new FileReader();
 
     fileReader.readAsText(file);
     fileReader.onloadend = () => {
-      onLoaded(fileReader.result);
-      this.setState({
-        active: false,
-        fileName: file.name,
-      });
+      try {
+        const walletInfo = decryptKeystore(web3, fileReader.result);
+        onLoaded(walletInfo.privateKey);
+        this.setState({
+          active: false,
+          fileName: file.name,
+        });
+      } catch (error) {
+        onError(error.message);
+      }
     };
   }
 
@@ -82,7 +88,7 @@ class FileUploadInput extends PureComponent {
         <div className='upload-button'>
           <span>{getMessage(MSG.INPUT_FILE_UPLOAD_BUTTON_LABEL)}</span>
         </div>
-        <div className='upload-input'>
+        <div className='upload-input text-truncate'>
           <span className={fileName && 'loaded'}>
             {fileName || getMessage(MSG.INPUT_FILE_UPLOAD_PLACEHOLDER)}
           </span>
@@ -96,13 +102,19 @@ class FileUploadInput extends PureComponent {
 
 // ===== PROP TYPES =====
 FileUploadInput.propTypes = {
+  /** Action to handle exception */
+  onError: PropTypes.func,
   /** Action to handle file content after uploaded */
   onLoaded: PropTypes.func,
+  /** Web3 object */
+  web3: PropTypes.object,
 };
 
 FileUploadInput.defaultProps = {
+  onError: () => {},
   onLoaded: () => {},
+  web3: {},
 };
 // ======================
 
-export default FileUploadInput;
+export default withWeb3(FileUploadInput);

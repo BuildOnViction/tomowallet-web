@@ -69,11 +69,25 @@ export const copyToClipboard = content => {
   document.body.removeChild(textHolder);
 };
 
-export const downloadTextFile = (content, fileName) => {
+export const downloadFile = ({ content, name, type }) => {
   const link = document.createElement('a');
-  const blob = new Blob([content], { type: 'plain/text' });
+  const blob = new Blob([content], { type });
   link.href = URL.createObjectURL(blob);
-  link.download = `${fileName.replace(/\.txt$/, '')}.txt`;
+  let extension = '';
+  let regExp = '';
+  switch (type) {
+    case 'plain/text':
+      extension = '.txt';
+      regExp = /\.txt$/;
+      break;
+    case 'application/json':
+      extension = '.json';
+      regExp = /\.json$/;
+      break;
+    default:
+      break;
+  }
+  link.download = `${name.replace(regExp, '')}${extension}`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

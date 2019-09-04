@@ -122,20 +122,37 @@ const initiateWallet = (mnemonic, serverConfig, callback = () => {}) => {
 };
 
 /**
- * decryptWalletInfo
+ * encryptKeystore
  *
- * Decrypt current encrypted wallet info by password
+ * Encrypt plain wallet information into keystore by password
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Wallet} rawInfo Plain wallet information
+ */
+const encryptKeystore = (web3, rawInfo) => {
+  if (web3 && rawInfo) {
+    return web3.eth.accounts.encrypt(
+      rawInfo,
+      process.env.REACT_APP_KEYSTORE_ENCRYPT_PASSWORD,
+    );
+  }
+  return [];
+};
+
+/**
+ * decryptKeystore
+ *
+ * Decrypt a keystore into wallet information by password
  * @param {Web3} web3 A Web3 object with supported APIs
  * @param {Wallet} rawInfo Encrypted Wallet object
  */
-const decryptWalletInfo = (web3, rawInfo) => {
+const decryptKeystore = (web3, rawInfo) => {
   if (web3 && rawInfo) {
-    return web3.eth.accounts.wallet.decrypt(
+    return web3.eth.accounts.decrypt(
       rawInfo,
-      process.env.REACT_APP_WALLET_ENCRYPT_PASSWORD,
+      process.env.REACT_APP_KEYSTORE_ENCRYPT_PASSWORD,
     );
   }
-  return null;
+  return {};
 };
 
 const estimateTRC21Fee = (web3, txData) => {
@@ -399,8 +416,8 @@ const decimalsToBN = (numberToConvert, decimals) => {
 // ===================
 
 export {
-  decryptWalletInfo,
-  // estimateGas,
+  decryptKeystore,
+  encryptKeystore,
   fromWei,
   generateWeb3,
   getWalletInfo,

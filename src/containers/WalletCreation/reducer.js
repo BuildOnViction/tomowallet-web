@@ -21,6 +21,7 @@ import {
   TOGGLE_KEY_VIEW_POPUP,
   TOGGLE_KEY_VISIBLE,
   UPDATE_ERRORS,
+  UPDATE_INPUT,
 } from './constants';
 import { shuffleArray } from '../../utils';
 // ===================
@@ -41,6 +42,7 @@ const initialState = fromJS({
     origin: '',
     compare: [],
   },
+  formValues: {},
 });
 // =================================
 
@@ -79,6 +81,11 @@ export default (state = initialState, action) => {
       return state.setIn(['keyView', 'isPKVisible'], action.bool);
     case UPDATE_ERRORS:
       return state.set('errors', action.errors);
+    case UPDATE_INPUT:
+      return state.update('formValues', values => ({
+        ...values,
+        [action.name]: action.value,
+      }));
     default:
       return state;
   }
