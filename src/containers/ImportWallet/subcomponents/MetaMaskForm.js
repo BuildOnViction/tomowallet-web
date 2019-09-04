@@ -12,7 +12,8 @@ import _isEqual from 'lodash.isequal';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
 import { getMessage } from '../../../components/IntlProvider';
-import { MSG } from '../../../constants';
+import { MSG, ENUM } from '../../../constants';
+import { getWeb3Info } from '../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -20,6 +21,14 @@ class MetaMaskForm extends PureComponent {
   componentDidMount() {
     const { setMetaMaskProvider } = this.props;
     setMetaMaskProvider();
+  }
+
+  componentWillUnmount() {
+    const { removeMetaMaskProvider } = this.props;
+    const web3Info = getWeb3Info();
+    if (_get(web3Info, 'loginType') !== ENUM.LOGIN_TYPE.META_MASK) {
+      removeMetaMaskProvider();
+    }
   }
 
   render() {
@@ -32,11 +41,14 @@ class MetaMaskForm extends PureComponent {
 
 // ===== PROP TYPES =====
 MetaMaskForm.propTypes = {
+  /** Action to remove MetaMask provider */
+  removeMetaMaskProvider: PropTypes.func,
   /** Action to set MetaMask provider */
   setMetaMaskProvider: PropTypes.func,
 };
 
 MetaMaskForm.defaultProps = {
+  removeMetaMaskProvider: () => {},
   setMetaMaskProvider: () => {},
 };
 // ======================

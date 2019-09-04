@@ -91,29 +91,38 @@ class Web3Provider extends Component {
   handleRemoveMetaMaskProvider() {
     if (this.checkMetaMaskLogin) {
       clearInterval(this.checkMetaMaskLogin);
+      this.checkMetaMaskLogin = null;
     }
-    window.ethereum.removeListener(
-      'accountsChanged',
-      this.handleUpdateMetaMaskAccount,
+    window.ethereum.removeListener('accountsChanged', () =>
+      this.handleUpdateMetaMaskAccount(),
     );
   }
 
   handleSetMetaMaskProvider() {
     const { onReleaseWallet } = this.props;
     if (Web3.givenProvider) {
-      this.handleUpdateMetaMaskAccount();
-      window.ethereum.enable();
-      window.ethereum.on('accountsChanged', this.handleSetMetaMaskProvider);
-      this.checkMetaMaskLogin = setInterval(() => {
-        Web3.givenProvider._metamask.isUnlocked().then(bool => {
-          const { wallet } = this.props;
-          if (!_isEmpty(wallet) && !bool) {
-            removeWeb3Info();
-            onReleaseWallet();
-            this.handleRemoveMetaMaskProvider();
-          }
-        });
-      }, 1000);
+      window.ethereum.enable().then(() => {
+        this.handleUpdateMetaMaskAccount();
+        window.ethereum.on('accountsChanged', () =>
+          this.handleUpdateMetaMaskAccount(),
+        );
+        if (!this.checkMetaMaskLogin) {
+          this.checkMetaMaskLogin = setInterval(() => {
+            Web3.givenProvider._metamask.isUnlocked().then(bool => {
+              const web3Info = getWeb3Info();
+              if (
+                !_isEmpty(web3Info) &&
+                web3Info.loginType === ENUM.LOGIN_TYPE.META_MASK &&
+                !bool
+              ) {
+                removeWeb3Info();
+                onReleaseWallet();
+                this.handleRemoveMetaMaskProvider();
+              }
+            });
+          }, 1000);
+        }
+      });
     }
   }
 
@@ -144,17 +153,21 @@ class Web3Provider extends Component {
   }
 
   handleUpdateMetaMaskAccount() {
-    const { onStoreWallet } = this.props;
+    const { onStoreWallet } = this.props || {};
     const newWeb3 = new Web3(Web3.givenProvider);
 
-    this.handleSetWeb3(newWeb3);
-    getWalletInfo(newWeb3).then(walletInfo => {
-      if (walletInfo) {
-        setWeb3Info({
-          address: walletInfo.address,
-          loginType: ENUM.LOGIN_TYPE.META_MASK,
+    Web3.givenProvider._metamask.isUnlocked().then(bool => {
+      if (bool) {
+        this.handleSetWeb3(newWeb3);
+        getWalletInfo(newWeb3).then(walletInfo => {
+          if (walletInfo) {
+            setWeb3Info({
+              address: walletInfo.address,
+              loginType: ENUM.LOGIN_TYPE.META_MASK,
+            });
+            onStoreWallet(walletInfo);
+          }
         });
-        onStoreWallet(walletInfo);
       }
     });
   }
