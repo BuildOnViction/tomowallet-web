@@ -21,5 +21,6 @@ export const DOMAIN_KEY = 'importWallet';
 // Other constants
 export const IMPORT_TYPES = {
   LEDGER: 1,
-  RP_OR_PK: 2,
+  META_MASK: 2,
+  RP_OR_PK: 3,
 };

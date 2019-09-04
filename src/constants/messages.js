@@ -373,6 +373,14 @@ export default defineMessages({
     defaultMessage:
       'To unlock the wallet, try paths {path1} or {path2} with Ethereum App, or try path {path3} with TomoChain App (on Ledger)',
   },
+  IMPORT_WALLET_TAB_METAMASK_IMAGE_ALT: {
+    id: `${importWalletPagePrefix}.tab.metamask.image.alt`,
+    defaultMessage: 'MetaMask',
+  },
+  IMPORT_WALLET_TAB_METAMASK_TEXT: {
+    id: `${importWalletPagePrefix}.tab.metamask.text`,
+    defaultMessage: 'MetaMask',
+  },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.text`,
     defaultMessage: 'Recovery Phrase/ Private Key',

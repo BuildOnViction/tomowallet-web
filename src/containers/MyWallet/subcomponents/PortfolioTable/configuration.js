@@ -17,10 +17,15 @@ import {
   DropdownMenuMainStyler,
 } from '../../../../styles';
 // Utilities & Constants
-import { convertLocaleNumber, getNetwork } from '../../../../utils';
+import {
+  convertLocaleNumber,
+  getNetwork,
+  getWeb3Info,
+} from '../../../../utils';
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
-import { MSG, ENUM } from '../../../../constants';
+import { MSG, ENUM, API } from '../../../../constants';
 import { convertAmountWithDecimals } from '../../../../utils/blockchain';
+import apis from '../../../../constants/apis';
 // ===================
 
 // ===== CONFIGURATION =====
@@ -103,17 +108,44 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       },
       {
         Cell: ({ original }) => {
-          const rpcServer = getNetwork();
-          let tomoScanLink = '';
-          switch (rpcServer) {
-            case ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET:
-              tomoScanLink = 'https://scan.testnet.tomochain.com/tokens';
-              break;
-            case ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET:
-              tomoScanLink = 'https://scan.tomochain.com/tokens';
-              break;
-            default:
-              tomoScanLink = 'https://scan.tomochain.com/tokens';
+          const networkKey = getNetwork();
+          const address = _get(getWeb3Info(), 'address', '');
+          const baseUrl = _get(API, [networkKey, 'VIEW_TOKEN'], '');
+          const tokenType = _get(original, [PORTFOLIO_COLUMNS.TYPE], '');
+          let viewLink = '';
+          if (tokenType === ENUM.TOKEN_TYPE.CURRENCY) {
+            viewLink = `${_get(
+              API,
+              [networkKey, 'VIEW_ADDRESS'],
+              '',
+            )}/${address}`;
+          } else {
+            switch (networkKey) {
+              case ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET:
+                viewLink = `${baseUrl}/${_get(
+                  original,
+                  [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
+                  '',
+                )}`;
+                break;
+              case ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET:
+                viewLink = `${baseUrl}/${_get(
+                  original,
+                  [PORTFOLIO_COLUMNS.TYPE],
+                  '',
+                ).toLowerCase()}/${_get(
+                  original,
+                  [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
+                  '',
+                )}`;
+                break;
+              default:
+                viewLink = `${baseUrl}/${_get(
+                  original,
+                  [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
+                  '',
+                )}`;
+            }
           }
 
           return (
@@ -124,11 +156,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
                 </div>
               </DropdownToggleMainStyle>
               <DropdownMenuMainStyler right>
-                <a
-                  href={tomoScanLink}
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
+                <a href={viewLink} rel='noopener noreferrer' target='_blank'>
                   {formatMessage(
                     MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN,
                     {

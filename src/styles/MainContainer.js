@@ -1,9 +1,6 @@
+import React from 'react';
 import styled from 'styled-components';
-import {
-  Card,
-  DropdownMenu,
-  DropdownToggle
-} from 'reactstrap';
+import { Card, DropdownMenu, DropdownToggle } from 'reactstrap';
 // Style Component//
 
 const BoxBtnStyler = styled.div`
@@ -15,6 +12,15 @@ const ContainerMin = styled.div`
   border-radius: 8px;
   padding: 3em 2em;
   max-width: 600px;
+  margin: 0 auto;
+`;
+const CustomContainer = styled(({ size, children, ...remains }) => (
+  <div {...remains}>{children}</div>
+))`
+  background-color: #272d40;
+  border-radius: 8px;
+  padding: 3em 2em;
+  max-width: ${({ size }) => (size === 'large' ? '800px' : '600px')};
   margin: 0 auto;
 `;
 const BoxCardStyled = styled(Card)`
@@ -37,7 +43,6 @@ const BoxFlexBetween = styled.div`
   padding: 1em;
 `;
 
-
 const DropdownMenuMainStyler = styled(DropdownMenu)`
   background-color: #202533;
   border-radius: 8px;
@@ -47,7 +52,7 @@ const DropdownMenuMainStyler = styled(DropdownMenu)`
   padding: 0.5em 1em;
   min-width: 200px;
   a {
-    color: #5692CD;
+    color: #5692cd;
     font-size: 14px;
     white-space: nowrap;
     &:hover {
@@ -59,7 +64,7 @@ const DropdownMenuMainStyler = styled(DropdownMenu)`
 const DropdownToggleMainStyle = styled(DropdownToggle)`
   background: transparent !important;
   border: 0;
-  color: #9EAACC;
+  color: #9eaacc;
   &:active {
     &:focus {
       border: 0;
@@ -71,13 +76,14 @@ const DropdownToggleMainStyle = styled(DropdownToggle)`
     box-shadow: 0 0 0 0 !important;
   }
   &:hover {
-    color: #5692CD;
+    color: #5692cd;
   }
 `;
 
 export {
   BoxBtnStyler,
   ContainerMin,
+  CustomContainer,
   BoxCardStyled,
   BoxImages,
   BoxFlexBetween,

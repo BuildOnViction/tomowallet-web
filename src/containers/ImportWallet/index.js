@@ -28,7 +28,7 @@ import {
 import { Helmet } from 'react-helmet';
 // Custom Components
 import {
-  ContainerMin,
+  CustomContainer,
   ButtonStyler,
   HeadingLarge,
   TextBlue,
@@ -304,7 +304,7 @@ class ImportWallet extends PureComponent {
         <Helmet>
           <title>{formatMessage(MSG.IMPORT_WALLET_TITLE)}</title>
         </Helmet>
-        <ContainerMin>
+        <CustomContainer size='large'>
           <BoxCardStyled>
             <CardHeader>
               <HeadingLarge>
@@ -322,7 +322,7 @@ class ImportWallet extends PureComponent {
             </CardHeader>
             <CardBody>
               <Row noGutters>
-                <Col className='pr-5'>
+                <Col className='pr-3'>
                   <ImporWalletStyler
                     isActive={
                       _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
@@ -340,7 +340,27 @@ class ImportWallet extends PureComponent {
                     </CardText>
                   </ImporWalletStyler>
                 </Col>
-                <Col className='pl-5'>
+                <Col className='px-3'>
+                  <ImporWalletStyler
+                    isActive={
+                      _get(importWallet, 'type') === IMPORT_TYPES.META_MASK
+                    }
+                    onClick={() =>
+                      this.handleChangeType(IMPORT_TYPES.META_MASK)
+                    }
+                  >
+                    <CardImg
+                      src={LogoLedger}
+                      alt={formatMessage(
+                        MSG.IMPORT_WALLET_TAB_METAMASK_IMAGE_ALT,
+                      )}
+                    />
+                    <CardText className='mt-3'>
+                      {formatMessage(MSG.IMPORT_WALLET_TAB_METAMASK_TEXT)}
+                    </CardText>
+                  </ImporWalletStyler>
+                </Col>
+                <Col className='pl-3'>
                   <ImporWalletStyler
                     isActive={
                       _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
@@ -415,7 +435,7 @@ class ImportWallet extends PureComponent {
             togglePopup={onToggleAddressPopup}
             updateChosenAddress={onUpdateChosenWallet}
           />
-        </ContainerMin>
+        </CustomContainer>
       </Fragment>
     );
   }

@@ -9,6 +9,7 @@ import { FormTextStyled } from './StyleForm';
 import {
   BoxBtnStyler,
   ContainerMin,
+  CustomContainer,
   BoxCardStyled,
   BoxImages,
   BoxFlexBetween,
@@ -46,6 +47,7 @@ export {
   //MainContainer
   BoxBtnStyler,
   ContainerMin,
+  CustomContainer,
   BoxCardStyled,
   BoxImages,
   BoxFlexBetween,
