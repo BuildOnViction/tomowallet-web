@@ -205,11 +205,57 @@ export default defineMessages({
     id: `${welcomePagePrefix}.image.alt`,
     defaultMessage: 'Welcome to TomoWallet',
   },
-  // Create Wallet - Warning Page
+  // Create Wallet Page
   CREATE_WALLET_TITLE: {
     id: `${createWalletPagePrefix}.title`,
     defaultMessage: 'Create New Wallet',
   },
+  CREATE_WALLET_POPUP_PASSWORD_TITLE: {
+    id: `${createWalletPagePrefix}.popup.password.title`,
+    defaultMessage: 'Password',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_LABEL: {
+    id: `${createWalletPagePrefix}.popup.password.input.label`,
+    defaultMessage: 'Your Password',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_PLACEHOLDER: {
+    id: `${createWalletPagePrefix}.popup.password.input.placeholder`,
+    defaultMessage: 'Type at least 8 characters',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_TOOLTIP: {
+    id: `${createWalletPagePrefix}.popup.password.input.tooltip`,
+    defaultMessage:
+      'This password is used to encrypt your private key, not to generate it as a seed.',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_1: {
+    id: `${createWalletPagePrefix}.popup.password.input.remindtext.part.1`,
+    defaultMessage: 'DO NOT FORGET',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_2: {
+    id: `${createWalletPagePrefix}.popup.password.input.remindtext.part.2`,
+    defaultMessage: "to save your password. You'll need",
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_3: {
+    id: `${createWalletPagePrefix}.popup.password.input.remindtext.part.3`,
+    defaultMessage: 'Password + Keystore',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_4: {
+    id: `${createWalletPagePrefix}.popup.password.input.remindtext.part.4`,
+    defaultMessage: 'to unlock your wallet.',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_ERROR_PASSWORD_REQUIRED: {
+    id: `${createWalletPagePrefix}.popup.password.error.passwordrequired`,
+    defaultMessage: 'Password is required.',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_ERROR_MINIMUM_PASSWORD: {
+    id: `${createWalletPagePrefix}.popup.password.error.minimumpassword`,
+    defaultMessage: 'Password should contain at least 8 characters.',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_ERROR_INVALID_CONFIRMATION: {
+    id: `${createWalletPagePrefix}.popup.password.error.invalidconfirmation`,
+    defaultMessage: "Password confirmation doesn't match password.",
+  },
+  // Create Wallet - Warning Page
   WARNING_HEADER_TITLE: {
     id: `${warningPagePrefix}.header.title`,
     defaultMessage: 'Create New Wallet',
@@ -260,7 +306,7 @@ export default defineMessages({
   },
   RECOVERY_PHRASE_BUTTON_SAVE: {
     id: `${recoveryPhrasePrefix}.button.save`,
-    defaultMessage: 'Save Recovery Phrase',
+    defaultMessage: 'Save as Keystore',
   },
   RECOVERY_PHRASE_BUTTON_VIEW_PRIVATE_KEY: {
     id: `${recoveryPhrasePrefix}.button.view.privatekey`,
@@ -417,6 +463,18 @@ export default defineMessages({
   IMPORT_WALLET_POPUP_ADDRESS_TITLE: {
     id: `${importWalletPagePrefix}.popup.address.title`,
     defaultMessage: 'Ledger Wallet',
+  },
+  IMPORT_WALLET_POPUP_PASSWORD_TITLE: {
+    id: `${importWalletPagePrefix}.popup.password.title`,
+    defaultMessage: 'Password',
+  },
+  IMPORT_WALLET_POPUP_PASSWORD_INPUT_PLACEHOLDER: {
+    id: `${importWalletPagePrefix}.popup.password.input.placeholder`,
+    defaultMessage: 'Enter password',
+  },
+  IMPORT_WALLET_POPUP_PASSWORD_INPUT_INVALID_PASSWORD: {
+    id: `${importWalletPagePrefix}.popup.password.input.invalidpassword`,
+    defaultMessage: 'Given password is incorrect.',
   },
   // My Wallet Page
   MY_WALLET_TITLE: {

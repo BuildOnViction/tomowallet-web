@@ -36,6 +36,10 @@ const selectMnemonic = createDeepEqualSelector(
   selectWalletCreationDomain,
   obj => obj.toJS().mnemonic,
 );
+const selectPasswordPopup = createDeepEqualSelector(
+  selectWalletCreationDomain,
+  obj => obj.toJS().passwordPopup,
+);
 // =====================
 
 export {
@@ -44,4 +48,5 @@ export {
   selectFormState,
   selectKeyViewState,
   selectMnemonic,
+  selectPasswordPopup,
 };

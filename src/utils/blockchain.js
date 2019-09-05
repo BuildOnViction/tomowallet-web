@@ -128,12 +128,9 @@ const initiateWallet = (mnemonic, serverConfig, callback = () => {}) => {
  * @param {Web3} web3 A Web3 object with supported APIs
  * @param {Wallet} rawInfo Plain wallet information
  */
-const encryptKeystore = (web3, rawInfo) => {
+const encryptKeystore = (web3, rawInfo, password) => {
   if (web3 && rawInfo) {
-    return web3.eth.accounts.encrypt(
-      rawInfo,
-      process.env.REACT_APP_KEYSTORE_ENCRYPT_PASSWORD,
-    );
+    return web3.eth.accounts.encrypt(rawInfo, password);
   }
   return [];
 };
@@ -145,12 +142,9 @@ const encryptKeystore = (web3, rawInfo) => {
  * @param {Web3} web3 A Web3 object with supported APIs
  * @param {Wallet} rawInfo Encrypted Wallet object
  */
-const decryptKeystore = (web3, rawInfo) => {
-  if (web3 && rawInfo) {
-    return web3.eth.accounts.decrypt(
-      rawInfo,
-      process.env.REACT_APP_KEYSTORE_ENCRYPT_PASSWORD,
-    );
+const decryptKeystore = (web3, encryptedInfo, password) => {
+  if (web3 && encryptedInfo) {
+    return web3.eth.accounts.decrypt(encryptedInfo, password);
   }
   return {};
 };

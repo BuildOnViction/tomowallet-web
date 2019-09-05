@@ -160,14 +160,7 @@ class WalletCreationPage extends PureComponent {
               storeMnemonic={onStoreMnemonic}
             />
           )) ||
-            (formState === FORM_STATES.RECOVERY_PHRASE && (
-              <RecoveryPhrase
-                mnemonic={_get(mnemonic, 'origin')}
-                setFormState={onSetFormState}
-                toggleKeyViewPopup={onToggleKeyViewPopup}
-                toggleConfirmationPopup={onToggleConfirmationPopup}
-              />
-            )) ||
+            (formState === FORM_STATES.RECOVERY_PHRASE && <RecoveryPhrase />) ||
             (formState === FORM_STATES.VERIFICATION && (
               <Verification
                 addWord={onAddWord}

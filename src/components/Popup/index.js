@@ -44,7 +44,6 @@ class Popup extends PureComponent {
         className={className}
         centered={centered}
         isOpen={isOpen}
-        title={title}
         toggle={toggle}
         {...getPopupProps}
       >
