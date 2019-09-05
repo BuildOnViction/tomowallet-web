@@ -21,6 +21,10 @@ const selectImportState = createDeepEqualSelector(
   selectImportWalletDomain,
   obj => obj.toJS().importWallet,
 );
+const selectPasswordPopup = createDeepEqualSelector(
+  selectImportWalletDomain,
+  obj => obj.toJS().passwordPopup,
+);
 // =====================
 
-export { selectAddressPopup, selectImportState };
+export { selectAddressPopup, selectImportState, selectPasswordPopup };

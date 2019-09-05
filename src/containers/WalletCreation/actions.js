@@ -10,6 +10,7 @@ import {
   CLEAR_COMPARISON,
   REMOVE_WORD,
   RESET_STATE,
+  REVEAL_PASSSWORD_INPUT,
   SET_FORM_STATES,
   SET_PRIVATE_KEY,
   SHUFFLE_MNEMONIC,
@@ -17,8 +18,12 @@ import {
   TOGGLE_CONFIRMATION_POPUP,
   TOGGLE_KEY_VIEW_POPUP,
   TOGGLE_KEY_VISIBLE,
+  TOGGLE_PASSWORD_POPUP,
   UPDATE_ERRORS,
   UPDATE_INPUT,
+  UPDATE_PASSWORD_POPUP_ERRORS,
+  UPDATE_PASSWORD_POPUP_INPUT,
+  UPDATE_PASSWORD_POPUP_STATE,
 } from './constants';
 // ===================
 
@@ -39,6 +44,11 @@ export const removeWord = index => ({
 
 export const resetState = () => ({
   type: RESET_STATE,
+});
+
+export const revealPasswordInput = bool => ({
+  type: REVEAL_PASSSWORD_INPUT,
+  bool,
 });
 
 export const setFormState = newState => ({
@@ -75,6 +85,11 @@ export const toggleKeyVisibile = bool => ({
   bool,
 });
 
+export const togglePasswordPopup = bool => ({
+  type: TOGGLE_PASSWORD_POPUP,
+  bool,
+});
+
 export const updateErrors = errors => ({
   type: UPDATE_ERRORS,
   errors,
@@ -84,5 +99,21 @@ export const updateInput = (name, value) => ({
   type: UPDATE_INPUT,
   name,
   value,
+});
+
+export const updatePasswordPopupErrors = errors => ({
+  type: UPDATE_PASSWORD_POPUP_ERRORS,
+  errors,
+});
+
+export const updatePasswordPopupInput = (name, value) => ({
+  type: UPDATE_PASSWORD_POPUP_INPUT,
+  name,
+  value,
+});
+
+export const updatePasswordPopupState = state => ({
+  type: UPDATE_PASSWORD_POPUP_STATE,
+  state,
 });
 // ===================

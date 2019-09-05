@@ -400,11 +400,7 @@ class ImportWallet extends PureComponent {
                     <MetaMaskForm />
                   )}
                   {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
-                    <RPOrPKForm
-                      errors={_get(importWallet, 'errors', [])}
-                      formValues={_get(importWallet, 'input', {})}
-                      updateInput={onUpdateInput}
-                    />
+                    <RPOrPKForm />
                   )}
                 </Col>
               </Row>

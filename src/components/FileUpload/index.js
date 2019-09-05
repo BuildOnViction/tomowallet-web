@@ -12,10 +12,8 @@ import _get from 'lodash.get';
 // Custom Components
 import { FileUploadInputStyler } from './style';
 // Utilities & Constants
-import { withWeb3 } from '../Web3';
 import { getMessage } from '../IntlProvider';
 import { MSG } from '../../constants';
-import { decryptKeystore } from '../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -36,7 +34,7 @@ class FileUploadInput extends PureComponent {
   }
 
   handleChangeFile(e) {
-    const { onError, onLoaded, web3 } = this.props;
+    const { onError, onLoaded } = this.props;
     const file = _get(e, 'dataTransfer.files.0') || _get(e, 'target.files.0');
 
     const fileReader = new FileReader();
@@ -44,8 +42,7 @@ class FileUploadInput extends PureComponent {
     fileReader.readAsText(file);
     fileReader.onloadend = () => {
       try {
-        const walletInfo = decryptKeystore(web3, fileReader.result);
-        onLoaded(walletInfo.privateKey);
+        onLoaded(fileReader.result);
         this.setState({
           active: false,
           fileName: file.name,
@@ -106,15 +103,12 @@ FileUploadInput.propTypes = {
   onError: PropTypes.func,
   /** Action to handle file content after uploaded */
   onLoaded: PropTypes.func,
-  /** Web3 object */
-  web3: PropTypes.object,
 };
 
 FileUploadInput.defaultProps = {
   onError: () => {},
   onLoaded: () => {},
-  web3: {},
 };
 // ======================
 
-export default withWeb3(FileUploadInput);
+export default FileUploadInput;

@@ -135,7 +135,8 @@ a {
   .text-placeholder {
     color: #444b64;
   }
-  .input-group-append button {
+  .input-group-append button,
+  .input-group-append .input-group-text {
     background-color: #2d344a !important;
     border-radius: 0 8px 8px 0 !important;
     border: 0;

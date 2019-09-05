@@ -10,9 +10,11 @@ import { fromJS } from 'immutable';
 import {
   ADD_WORD,
   CLEAR_COMPARISON,
-  REMOVE_WORD,
   FORM_STATES,
+  PASSWORD_POPUP_STATES,
+  REMOVE_WORD,
   RESET_STATE,
+  REVEAL_PASSSWORD_INPUT,
   SET_FORM_STATES,
   SET_PRIVATE_KEY,
   SHUFFLE_MNEMONIC,
@@ -20,19 +22,31 @@ import {
   TOGGLE_CONFIRMATION_POPUP,
   TOGGLE_KEY_VIEW_POPUP,
   TOGGLE_KEY_VISIBLE,
+  TOGGLE_PASSWORD_POPUP,
   UPDATE_ERRORS,
   UPDATE_INPUT,
+  UPDATE_PASSWORD_POPUP_ERRORS,
+  UPDATE_PASSWORD_POPUP_INPUT,
+  UPDATE_PASSWORD_POPUP_STATE,
 } from './constants';
 import { shuffleArray } from '../../utils';
 // ===================
 
 // ===== PRE-DEFINED VARIABLES =====
+const initialPasswordPopupState = {
+  errors: {},
+  input: {},
+  isRevealed: false,
+  state: PASSWORD_POPUP_STATES.PASSWORD,
+};
+
 const initialState = fromJS({
   confirmation: {
     isOpen: false,
   },
   errors: [],
   formState: FORM_STATES.WARNING,
+  formValues: {},
   keyView: {
     isOpen: false,
     key: '',
@@ -42,7 +56,10 @@ const initialState = fromJS({
     origin: '',
     compare: [],
   },
-  formValues: {},
+  passwordPopup: {
+    isOpen: false,
+    ...initialPasswordPopupState,
+  },
 });
 // =================================
 
@@ -61,6 +78,8 @@ export default (state = initialState, action) => {
       );
     case RESET_STATE:
       return initialState;
+    case REVEAL_PASSSWORD_INPUT:
+      return state.setIn(['passwordPopup', 'isRevealed'], action.bool);
     case SET_FORM_STATES:
       return state.set('formState', action.newState);
     case SET_PRIVATE_KEY:
@@ -79,6 +98,13 @@ export default (state = initialState, action) => {
       return state.setIn(['keyView', 'isOpen'], action.bool);
     case TOGGLE_KEY_VISIBLE:
       return state.setIn(['keyView', 'isPKVisible'], action.bool);
+    case TOGGLE_PASSWORD_POPUP:
+      return action.bool
+        ? state.set('passwordPopup', {
+            isOpen: action.bool,
+            ...initialPasswordPopupState,
+          })
+        : state.setIn(['passwordPopup', 'isOpen'], action.bool);
     case UPDATE_ERRORS:
       return state.set('errors', action.errors);
     case UPDATE_INPUT:
@@ -86,6 +112,19 @@ export default (state = initialState, action) => {
         ...values,
         [action.name]: action.value,
       }));
+    case UPDATE_PASSWORD_POPUP_ERRORS:
+      return state.setIn(['passwordPopup', 'errors'], action.errors);
+    case UPDATE_PASSWORD_POPUP_INPUT:
+      return state
+        .updateIn(['passwordPopup', 'input'], values => ({
+          ...values,
+          [action.name]: action.value,
+        }))
+        .setIn(['passwordPopup', 'errors'], {});
+    case UPDATE_PASSWORD_POPUP_STATE:
+      return state
+        .setIn(['passwordPopup', 'state'], action.state)
+        .setIn(['passwordPopup', 'errors'], {});
     default:
       return state;
   }

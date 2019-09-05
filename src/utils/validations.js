@@ -85,13 +85,23 @@ const isMaxLength = ({ name, value, max }, message) => {
   }
   return {};
 };
+
+const isMinLength = ({ name, value, min }, message) => {
+  if (!_isEmpty(value) && value.length < min) {
+    return {
+      [name]: [message],
+    };
+  }
+  return {};
+};
 // =======================
 
 export default web3 => ({
-  isRequired,
-  isMaxNumber,
-  isMinNumber,
-  isMaxLength,
-  isHex: isHex(web3),
   isAddress: isAddress(web3),
+  isHex: isHex(web3),
+  isMaxLength,
+  isMaxNumber,
+  isMinLength,
+  isMinNumber,
+  isRequired,
 });
