@@ -111,11 +111,7 @@ Popup.propTypes = {
   onClosed: PropTypes.func,
   className: PropTypes.string,
   /** Pop-up body component */
-  Content: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.func,
-    PropTypes.string,
-  ]),
+  Content: PropTypes.any,
   /** Pop-up customized footer component */
   Footer: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   /** Body component's props */
@@ -142,7 +138,6 @@ Popup.defaultProps = {
     },
   },
   className: '',
-  Content: () => null,
   getContentProps: {},
   getFooterProps: {},
   getPopupProps: {},

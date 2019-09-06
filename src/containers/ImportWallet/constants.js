@@ -33,4 +33,5 @@ export const IMPORT_TYPES = {
   LEDGER: 1,
   META_MASK: 2,
   RP_OR_PK: 3,
+  KEYSTORE: 4,
 };

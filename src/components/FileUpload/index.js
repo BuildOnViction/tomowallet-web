@@ -6,9 +6,10 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import { FileUploadInputStyler } from './style';
 // Utilities & Constants
@@ -75,22 +76,27 @@ class FileUploadInput extends PureComponent {
     const { active, fileName } = this.state;
 
     return (
-      <FileUploadInputStyler
-        onDragEnter={this.handleDragEnter}
-        onDragLeave={this.handleDragLeave}
-        onDragOver={this.handleDragOver}
-        onDrop={this.handleDrop}
-        active={active}
-      >
-        <div className='upload-button'>
-          <span>{getMessage(MSG.INPUT_FILE_UPLOAD_BUTTON_LABEL)}</span>
+      <FileUploadInputStyler active={active}>
+        <label
+          className='upload-area align-center text-center'
+          onDragEnter={this.handleDragEnter}
+          onDragLeave={this.handleDragLeave}
+          onDragOver={this.handleDragOver}
+          onDrop={this.handleDrop}
+        >
+          {fileName ? (
+            <Fragment>
+              <FontAwesomeIcon icon={['far', 'file-alt']} />
+              <div className='file-name'>{fileName}</div>
+            </Fragment>
+          ) : (
+            <FontAwesomeIcon icon='upload' />
+          )}
+          <input type='file' name='file' onChange={this.handleChangeFile} />
+        </label>
+        <div className='upload-text'>
+          <span>{getMessage(MSG.INPUT_FILE_UPLOAD_PLACEHOLDER)}</span>
         </div>
-        <div className='upload-input text-truncate'>
-          <span className={fileName && 'loaded'}>
-            {fileName || getMessage(MSG.INPUT_FILE_UPLOAD_PLACEHOLDER)}
-          </span>
-        </div>
-        <input type='file' name='file' onChange={this.handleChangeFile} />
       </FileUploadInputStyler>
     );
   }

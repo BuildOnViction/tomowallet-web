@@ -38,6 +38,7 @@ import {
 import LedgerForm from './subcomponents/LedgerForm';
 import MetaMaskForm from './subcomponents/MetaMaskForm';
 import RPOrPKForm from './subcomponents/RPOrPKForm';
+import KeystoreForm from './subcomponents/KeystoreForm';
 import AddressPopup from './subcomponents/AddressPopup';
 // Utilities, Constants & Styles
 import { IMPORT_TYPES, DOMAIN_KEY } from './constants';
@@ -361,7 +362,7 @@ class ImportWallet extends PureComponent {
                     </CardText>
                   </ImporWalletStyler>
                 </Col>
-                <Col className='pl-3'>
+                <Col className='px-3'>
                   <ImporWalletStyler
                     isActive={
                       _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
@@ -379,7 +380,30 @@ class ImportWallet extends PureComponent {
                         MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
                       )}
                     </CardText>
-                    <CardText className='mt-3 small text-danger'>
+                    <CardText className='text-end small text-danger'>
+                      {formatMessage(
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT,
+                      )}
+                    </CardText>
+                  </ImporWalletStyler>
+                </Col>
+                <Col className='pl-3'>
+                  <ImporWalletStyler
+                    isActive={
+                      _get(importWallet, 'type') === IMPORT_TYPES.KEYSTORE
+                    }
+                    onClick={() => this.handleChangeType(IMPORT_TYPES.KEYSTORE)}
+                  >
+                    <CardImg
+                      src={LogoKey}
+                      alt={formatMessage(
+                        MSG.IMPORT_WALLET_TAB_KEYSTORE_IMAGE_ALT,
+                      )}
+                    />
+                    <CardText className='mt-3'>
+                      {formatMessage(MSG.IMPORT_WALLET_TAB_KEYSTORE_TEXT)}
+                    </CardText>
+                    <CardText className='text-end small text-danger'>
                       {formatMessage(
                         MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT,
                       )}
@@ -387,7 +411,7 @@ class ImportWallet extends PureComponent {
                   </ImporWalletStyler>
                 </Col>
               </Row>
-              <Row noGutters className='mt-4'>
+              <Row noGutters className='mt-5'>
                 <Col>
                   {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
                     <LedgerForm
@@ -402,10 +426,17 @@ class ImportWallet extends PureComponent {
                   {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
                     <RPOrPKForm />
                   )}
+                  {_get(importWallet, 'type') === IMPORT_TYPES.KEYSTORE && (
+                    <KeystoreForm
+                      accessWallet={this.handleAccessByRecoveryPhrase}
+                    />
+                  )}
                 </Col>
               </Row>
             </CardBody>
-            {_get(importWallet, 'type') !== IMPORT_TYPES.META_MASK && (
+            {![IMPORT_TYPES.META_MASK, IMPORT_TYPES.KEYSTORE].includes(
+              _get(importWallet, 'type'),
+            ) && (
               <CardFooter>
                 <Row>
                   <Col size={6}>

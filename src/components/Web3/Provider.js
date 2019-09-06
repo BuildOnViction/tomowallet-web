@@ -93,13 +93,16 @@ class Web3Provider extends Component {
       clearInterval(this.checkMetaMaskLogin);
       this.checkMetaMaskLogin = null;
     }
-    window.ethereum.removeListener('accountsChanged', () =>
-      this.handleUpdateMetaMaskAccount(),
-    );
+    if (window.ethereum) {
+      window.ethereum.removeListener('accountsChanged', () =>
+        this.handleUpdateMetaMaskAccount(),
+      );
+    }
   }
 
   handleSetMetaMaskProvider() {
     const { onReleaseWallet } = this.props;
+
     if (Web3.givenProvider) {
       window.ethereum.enable().then(() => {
         this.handleUpdateMetaMaskAccount();
