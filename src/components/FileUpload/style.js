@@ -11,40 +11,39 @@ import styled from 'styled-components';
 
 // ===== STYLE =====
 const FileUploadInputStyler = styled(({ active, children, ...remains }) => (
-  <label {...remains}>{children}</label>
+  <div {...remains}>{children}</div>
 ))`
-  height: 40px;
   display: flex !important;
+  flex-direction: column;
   align-items: center;
-  ${({ active }) => active && 'filter: brightness(120%);'}
-  &:hover {
-    filter: brightness(120%);
-  }
-  .upload-button {
-    width: 33%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px 10px;
-    border: 0px;
-    border-radius: 0px 0px 0px 8px;
-    background-color: #e4ae63;
-    color: #444b64;
-    line-height: 40px;
-    text-align: center;
-    pointer-events: none;
-  }
-  .upload-input {
-    width: 67%;
-    height: 100%;
-    margin: 0px;
-    padding-left: 10px;
+  justify-content: center;
+  .upload-area {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
     border: 2px dashed #3f3e4e;
-    border-left: 0px;
-    border-radius: 0px 0px 8px 0px;
-    line-height: 40px;
-    .loaded {
-      color: #9aa3b3;
+    color: ${({ uploaded }) => (uploaded ? '#9aa3b3' : 'inherit')};
+    ${({ active }) => active && 'filter: brightness(120%);'}
+    &:hover {
+      filter: brightness(120%);
     }
+    svg {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 15px;
+      pointer-events: none;
+    }
+    .file-name {
+      width: 100%;
+      pointer-events: none;
+    }
+  }
+  .upload-text {
+    width: 250px;
     pointer-events: none;
   }
   input[type='file'] {

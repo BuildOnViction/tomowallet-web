@@ -31,7 +31,14 @@ const initialState = fromJS({
   importWallet: {
     errors: [],
     input: {},
-    type: IMPORT_TYPES.RP_OR_PK,
+    type: IMPORT_TYPES.LEDGER,
+  },
+  passwordPopup: {
+    errors: {},
+    fileData: null,
+    input: {},
+    isOpen: false,
+    isRevealed: false,
   },
   passwordPopup: {
     errors: {},

@@ -177,7 +177,7 @@ export default defineMessages({
   },
   INPUT_FILE_UPLOAD_PLACEHOLDER: {
     id: `${fileUploadInputPrefix}.placeholder`,
-    defaultMessage: 'Drag/drop or click to open...',
+    defaultMessage: 'Drag/drop a file or click to browse...',
   },
   // Welcome Page
   WELCOME_TITLE: {
@@ -242,6 +242,14 @@ export default defineMessages({
   CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_4: {
     id: `${createWalletPagePrefix}.popup.password.input.remindtext.part.4`,
     defaultMessage: 'to unlock your wallet.',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_CONFIRMATION_LABEL: {
+    id: `${createWalletPagePrefix}.popup.password.input.confirmation.label`,
+    defaultMessage: 'Password Confirmation',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_CONFIRMATION_PLACEHOLDER: {
+    id: `${createWalletPagePrefix}.popup.password.input.confirmation.placeholder`,
+    defaultMessage: 'Type your password again',
   },
   CREATE_WALLET_POPUP_PASSWORD_ERROR_PASSWORD_REQUIRED: {
     id: `${createWalletPagePrefix}.popup.password.error.passwordrequired`,
@@ -451,6 +459,14 @@ export default defineMessages({
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_OPTION_IMPORT_VIA_QRCODE: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.option.importviaqrcode`,
     defaultMessage: 'Import Private Key via QR code',
+  },
+  IMPORT_WALLET_TAB_KEYSTORE_IMAGE_ALT: {
+    id: `${importWalletPagePrefix}.tab.keystore.image.alt`,
+    defaultMessage: 'Keystore',
+  },
+  IMPORT_WALLET_TAB_KEYSTORE_TEXT: {
+    id: `${importWalletPagePrefix}.tab.keystore.text`,
+    defaultMessage: 'Keystore File',
   },
   IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE: {
     id: `${importWalletPagePrefix}.error.invalid.recoveryphrase`,
