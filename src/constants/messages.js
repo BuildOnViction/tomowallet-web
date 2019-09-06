@@ -243,6 +243,14 @@ export default defineMessages({
     id: `${createWalletPagePrefix}.popup.password.input.remindtext.part.4`,
     defaultMessage: 'to unlock your wallet.',
   },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_CONFIRMATION_LABEL: {
+    id: `${createWalletPagePrefix}.popup.password.input.confirmation.label`,
+    defaultMessage: 'Password Confirmation',
+  },
+  CREATE_WALLET_POPUP_PASSWORD_INPUT_CONFIRMATION_PLACEHOLDER: {
+    id: `${createWalletPagePrefix}.popup.password.input.confirmation.placeholder`,
+    defaultMessage: 'Type your password again',
+  },
   CREATE_WALLET_POPUP_PASSWORD_ERROR_PASSWORD_REQUIRED: {
     id: `${createWalletPagePrefix}.popup.password.error.passwordrequired`,
     defaultMessage: 'Password is required.',

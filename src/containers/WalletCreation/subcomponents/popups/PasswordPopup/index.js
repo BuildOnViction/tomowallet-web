@@ -47,7 +47,10 @@ class PasswordPopup extends PureComponent {
     super(props);
 
     this.handleEncryptData = this.handleEncryptData.bind(this);
-    this.handleMoveToConfirmation = this.handleMoveToConfirmation.bind(this);
+    this.handleMoveToConfirmationForm = this.handleMoveToConfirmationForm.bind(
+      this,
+    );
+    this.handleMoveToPasswordForm = this.handleMoveToPasswordForm.bind(this);
     this.handleValidateForm = this.handleValidateForm.bind(this);
   }
 
@@ -101,7 +104,7 @@ class PasswordPopup extends PureComponent {
     }
   }
 
-  handleMoveToConfirmation() {
+  handleMoveToConfirmationForm() {
     const { onUpdateErrors, onUpdateState } = this.props;
     const errors = this.handleValidateForm();
 
@@ -112,6 +115,13 @@ class PasswordPopup extends PureComponent {
     }
   }
 
+  handleMoveToPasswordForm() {
+    const { onUpdateInput, onUpdateState } = this.props;
+
+    onUpdateState(PASSWORD_POPUP_STATES.PASSWORD);
+    onUpdateInput('confirmation', '');
+  }
+
   handleValidateForm() {
     const {
       intl: { formatMessage },
@@ -119,6 +129,7 @@ class PasswordPopup extends PureComponent {
       web3,
     } = this.props;
     const { isRequired, isMinLength } = getValidations(web3);
+
     return mergeErrors(
       [
         {
@@ -152,42 +163,42 @@ class PasswordPopup extends PureComponent {
       onUpdateInput,
       popupData,
     } = this.props;
-    const state = _get(popupData, 'state');
+    const formState = _get(popupData, 'state');
 
     return (
       <PasswordPopupStyler
         button={
-          state === PASSWORD_POPUP_STATES.PASSWORD
-            ? {
-                primary: {
-                  action: this.handleEncryptData,
-                  btnYellow: true,
-                  label: formatMessage(MSG.COMMON_BUTTON_SAVE),
-                },
-                secondary: {
-                  action: () => onTogglePopup(false),
-                  label: formatMessage(MSG.COMMON_BUTTON_BACK),
-                },
-              }
-            : {
-                primary: {
-                  action: this.handleEncryptData,
-                  btnYellow: true,
-                  label: formatMessage(MSG.COMMON_BUTTON_SAVE),
-                },
-                secondary: {
-                  action: () => onTogglePopup(false),
-                  label: formatMessage(MSG.COMMON_BUTTON_BACK),
-                },
-              }
+          (formState === PASSWORD_POPUP_STATES.PASSWORD && {
+            primary: {
+              action: this.handleMoveToConfirmationForm,
+              btnYellow: true,
+              label: formatMessage(MSG.COMMON_BUTTON_NEXT),
+            },
+            secondary: {
+              action: () => onTogglePopup(false),
+              label: formatMessage(MSG.COMMON_BUTTON_BACK),
+            },
+          }) ||
+          (formState === PASSWORD_POPUP_STATES.CONFIRMATION && {
+            primary: {
+              action: this.handleEncryptData,
+              btnYellow: true,
+              label: formatMessage(MSG.COMMON_BUTTON_SAVE),
+            },
+            secondary: {
+              action: this.handleMoveToPasswordForm,
+              label: formatMessage(MSG.COMMON_BUTTON_BACK),
+            },
+          })
         }
         Content={PasswordContent}
         getContentProps={{
           errors: _get(popupData, 'errors', {}),
+          formState: _get(popupData, 'state', PASSWORD_POPUP_STATES.PASSWORD),
+          formValues: _get(popupData, 'input', {}),
           isRevealed: _get(popupData, 'isRevealed', false),
           revealText: onRevealPasswordInput,
           updateInput: onUpdateInput,
-          value: _get(popupData, 'input.password', ''),
         }}
         isOpen={_get(popupData, 'isOpen', false)}
         title={formatMessage(MSG.CREATE_WALLET_POPUP_PASSWORD_TITLE)}

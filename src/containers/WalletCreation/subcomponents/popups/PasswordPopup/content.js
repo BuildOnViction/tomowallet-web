@@ -20,9 +20,12 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// Custom Components
+import Tooltip from '../../../../../components/Tooltip';
 // Utilities
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
+import { PASSWORD_POPUP_STATES } from '../../../constants';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -42,7 +45,32 @@ class PasswordContent extends PureComponent {
   }
 
   renderConfirmationForm() {
-    return <div />;
+    const {
+      errors,
+      formValues,
+      intl: { formatMessage },
+    } = this.props;
+    return (
+      <FormGroup>
+        <Label for='confirmationInput'>
+          {formatMessage(
+            MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_CONFIRMATION_LABEL,
+          )}
+        </Label>
+        <Input
+          id='confirmationInput'
+          type='password'
+          name='confirmation'
+          value={_get(formValues, 'confirmation')}
+          placeholder={formatMessage(
+            MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_CONFIRMATION_PLACEHOLDER,
+          )}
+          onChange={e => this.handleChangeInput('confirmation', e)}
+          invalid={!!_get(errors, 'confirmation')}
+        />
+        {this.renderInputErrors('confirmation')}
+      </FormGroup>
+    );
   }
 
   renderInputErrors(name) {
@@ -61,10 +89,10 @@ class PasswordContent extends PureComponent {
   renderPasswordForm() {
     const {
       errors,
+      formValues,
       intl: { formatMessage },
       isRevealed,
       revealText,
-      value,
     } = this.props;
     return (
       <FormGroup>
@@ -75,15 +103,16 @@ class PasswordContent extends PureComponent {
           <span id='passwordGuide'>
             <FontAwesomeIcon icon='info-circle' />
           </span>
-          <UncontrolledTooltip placement='top' target='passwordGuide'>
+          <Tooltip placement='top' target='passwordGuide'>
             {formatMessage(MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_TOOLTIP)}
-          </UncontrolledTooltip>
+          </Tooltip>
         </Label>
         <InputGroup>
           <Input
+            id='passwordInput'
             type={isRevealed ? 'text' : 'password'}
             name='password'
-            value={value}
+            value={_get(formValues, 'password', '')}
             placeholder={formatMessage(
               MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_PLACEHOLDER,
             )}
@@ -103,7 +132,7 @@ class PasswordContent extends PureComponent {
           {this.renderInputErrors('password')}
         </InputGroup>
         <FormText>
-          <span className='text-danger'>
+          <span className='text-warning'>
             {formatMessage(
               MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_1,
             )}
@@ -111,7 +140,7 @@ class PasswordContent extends PureComponent {
           {` ${formatMessage(
             MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_2,
           )} `}
-          <span className='text-danger'>
+          <span className='text-warning'>
             {formatMessage(
               MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_3,
             )}
@@ -125,68 +154,13 @@ class PasswordContent extends PureComponent {
   }
 
   render() {
-    const {
-      errors,
-      intl: { formatMessage },
-      isRevealed,
-      revealText,
-      value,
-    } = this.props;
+    const { formState } = this.props;
+
     return (
-      <FormGroup>
-        <Label for='passwordInput'>
-          <span>
-            {formatMessage(MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_LABEL)}
-          </span>
-          <span id='passwordGuide'>
-            <FontAwesomeIcon icon='info-circle' />
-          </span>
-          <UncontrolledTooltip placement='top' target='passwordGuide'>
-            {formatMessage(MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_TOOLTIP)}
-          </UncontrolledTooltip>
-        </Label>
-        <InputGroup>
-          <Input
-            type={isRevealed ? 'text' : 'password'}
-            name='password'
-            value={value}
-            placeholder={formatMessage(
-              MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_PLACEHOLDER,
-            )}
-            onChange={e => this.handleChangeInput('password', e)}
-            invalid={!!_get(errors, 'password')}
-          />
-          <InputGroupAddon addonType='append'>
-            <InputGroupText
-              role='presentation'
-              onClick={() => revealText(!isRevealed)}
-            >
-              <FontAwesomeIcon
-                icon={['far', isRevealed ? 'eye-slash' : 'eye']}
-              />
-            </InputGroupText>
-          </InputGroupAddon>
-          {this.renderInputErrors('password')}
-        </InputGroup>
-        <FormText>
-          <span className='text-danger'>
-            {formatMessage(
-              MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_1,
-            )}
-          </span>
-          {` ${formatMessage(
-            MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_2,
-          )} `}
-          <span className='text-danger'>
-            {formatMessage(
-              MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_3,
-            )}
-          </span>
-          {` ${formatMessage(
-            MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_REMIND_TEXT_PART_4,
-          )} `}
-        </FormText>
-      </FormGroup>
+      (formState === PASSWORD_POPUP_STATES.PASSWORD &&
+        this.renderPasswordForm()) ||
+      (formState === PASSWORD_POPUP_STATES.CONFIRMATION &&
+        this.renderConfirmationForm())
     );
   }
 }
@@ -196,6 +170,10 @@ class PasswordContent extends PureComponent {
 PasswordContent.propTypes = {
   /** Popup's error messages */
   errors: PropTypes.object,
+  /** Password form's state */
+  formState: PropTypes.number,
+  /** Password form values */
+  formValues: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Condition flag to hide/reveal password input */
@@ -204,17 +182,16 @@ PasswordContent.propTypes = {
   revealText: PropTypes.func,
   /** Action to handle input change */
   updateInput: PropTypes.func,
-  /** Password input's value */
-  value: PropTypes.string,
 };
 
 PasswordContent.defaultProps = {
   errors: {},
+  formState: PASSWORD_POPUP_STATES.PASSWORD,
+  formValues: {},
   intl: {},
   isRevealed: false,
   revealText: () => {},
   updateInput: () => {},
-  value: '',
 };
 // ======================
 
