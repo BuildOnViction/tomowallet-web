@@ -59,6 +59,8 @@ class Web3Provider extends Component {
   }
 
   componentDidMount() {
+    // console.warn('web3 mount', chrome, chrome.ipcRenderer);
+
     if (!_isEmpty(getWeb3Info()) && Web3.givenProvider) {
       this.handleSetMetaMaskProvider();
     } else {

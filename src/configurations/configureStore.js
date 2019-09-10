@@ -7,7 +7,6 @@
 // Modules
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import logger from 'redux-logger';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleWare from 'redux-saga';
 // Utilities
@@ -19,7 +18,6 @@ export default history => {
   const sagaMiddleware = createSagaMiddleWare({});
   const middlewares = [
     thunkMiddleware,
-    logger,
     sagaMiddleware,
     routerMiddleware(history),
   ];

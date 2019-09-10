@@ -2,6 +2,7 @@
   "name": "tomowallet-project-v1.0",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@babel/polyfill": "7.4.4",
     "@fortawesome/fontawesome-svg-core": "1.2.20",
@@ -49,8 +50,6 @@
     "reactstrap": "8.0.1",
     "recharts": "1.6.2",
     "redux": "4.0.4",
-    "redux-logger": "3.0.6",
-    "redux-persist": "5.10.0",
     "redux-saga": "1.0.5",
     "redux-thunk": "2.3.0",
     "reselect": "4.0.0",
@@ -60,8 +59,9 @@
   },
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
-    "build:dev": "webpack -d --config webpack.dev.js",
-    "build:prod": "webpack -p --config webpack.prod.js",
+    "build:dev": "rm -rf dist/dev/* && webpack -d --config webpack.dev.js",
+    "build:prod": "rm -rf dist/prod/* && webpack -p --config webpack.prod.js",
+    "build:electron": "rm -rf dist/electron/* && webpack -p --config webpack.electron.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

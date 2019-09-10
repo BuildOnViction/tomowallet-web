@@ -12,8 +12,6 @@ import '@babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { persistStore } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
 // Custom Component
 import App from './containers/App';
 // Utilities & Constants
@@ -35,18 +33,15 @@ addLocaleData([...locale_en, ...locale_fr]);
 
 // Configure Redux store
 const store = configureStore(history);
-const persistor = persistStore(store);
 // ========================================
 
 ReactDOM.render(
   <Provider store={store}>
-    {/* <PersistGate loading={null} persistor={persistor}> */}
     <Web3Provider>
       <CustomIntlProvider>
         <App />
       </CustomIntlProvider>
     </Web3Provider>
-    {/* </PersistGate> */}
   </Provider>,
   document.getElementById('root'),
 );
