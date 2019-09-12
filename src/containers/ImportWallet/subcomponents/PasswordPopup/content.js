@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
+import { changeInputWithSubmit, detectSubmit } from '../../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -27,16 +28,17 @@ class PasswordContent extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleChangeInput = this.handleChangeInput.bind(this);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
   }
 
-  handleChangeInput(name, e) {
+  handleChangePassword(value) {
     const { updateInput } = this.props;
-    updateInput(name, _get(e, 'target.value', ''));
+    updateInput('password', value);
   }
 
   render() {
     const {
+      decryptData,
       errors,
       intl: { formatMessage },
       isRevealed,
@@ -53,7 +55,8 @@ class PasswordContent extends PureComponent {
             placeholder={formatMessage(
               MSG.IMPORT_WALLET_POPUP_PASSWORD_INPUT_PLACEHOLDER,
             )}
-            onChange={e => this.handleChangeInput('password', e)}
+            onChange={changeInputWithSubmit(this.handleChangePassword)}
+            onKeyDown={detectSubmit(decryptData)}
             invalid={!!_get(errors, 'password')}
           />
           <InputGroupAddon addonType='append'>

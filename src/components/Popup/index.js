@@ -138,6 +138,7 @@ Popup.defaultProps = {
     },
   },
   className: '',
+  Content: () => null,
   getContentProps: {},
   getFooterProps: {},
   getPopupProps: {},

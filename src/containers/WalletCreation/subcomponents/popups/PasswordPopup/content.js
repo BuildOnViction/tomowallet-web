@@ -17,7 +17,6 @@ import {
   InputGroupAddon,
   InputGroupText,
   Label,
-  UncontrolledTooltip,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
@@ -26,6 +25,7 @@ import Tooltip from '../../../../../components/Tooltip';
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
 import { PASSWORD_POPUP_STATES } from '../../../constants';
+import { changeInputWithSubmit, detectSubmit } from '../../../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -33,21 +33,28 @@ class PasswordContent extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleChangeInput = this.handleChangeInput.bind(this);
+    this.handleChangeConfirmation = this.handleChangeConfirmation.bind(this);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
     this.renderConfirmationForm = this.renderConfirmationForm.bind(this);
     this.renderInputErrors = this.renderInputErrors.bind(this);
     this.renderPasswordForm = this.renderPasswordForm.bind(this);
   }
 
-  handleChangeInput(name, e) {
+  handleChangeConfirmation(value) {
     const { updateInput } = this.props;
-    updateInput(name, _get(e, 'target.value', ''));
+    updateInput('confirmation', value);
+  }
+
+  handleChangePassword(value) {
+    const { updateInput } = this.props;
+    updateInput('password', value);
   }
 
   renderConfirmationForm() {
     const {
       errors,
       formValues,
+      handleSubmit,
       intl: { formatMessage },
     } = this.props;
     return (
@@ -65,7 +72,8 @@ class PasswordContent extends PureComponent {
           placeholder={formatMessage(
             MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_CONFIRMATION_PLACEHOLDER,
           )}
-          onChange={e => this.handleChangeInput('confirmation', e)}
+          onChange={changeInputWithSubmit(this.handleChangeConfirmation)}
+          onKeyDown={detectSubmit(handleSubmit)}
           invalid={!!_get(errors, 'confirmation')}
         />
         {this.renderInputErrors('confirmation')}
@@ -90,6 +98,7 @@ class PasswordContent extends PureComponent {
     const {
       errors,
       formValues,
+      handleSubmit,
       intl: { formatMessage },
       isRevealed,
       revealText,
@@ -116,7 +125,8 @@ class PasswordContent extends PureComponent {
             placeholder={formatMessage(
               MSG.CREATE_WALLET_POPUP_PASSWORD_INPUT_PLACEHOLDER,
             )}
-            onChange={e => this.handleChangeInput('password', e)}
+            onChange={changeInputWithSubmit(this.handleChangePassword)}
+            onKeyDown={detectSubmit(handleSubmit)}
             invalid={!!_get(errors, 'password')}
           />
           <InputGroupAddon addonType='append'>
@@ -174,6 +184,8 @@ PasswordContent.propTypes = {
   formState: PropTypes.number,
   /** Password form values */
   formValues: PropTypes.object,
+  /** Action to handle form submit */
+  handleSubmit: PropTypes.func,
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Condition flag to hide/reveal password input */
@@ -188,6 +200,7 @@ PasswordContent.defaultProps = {
   errors: {},
   formState: PASSWORD_POPUP_STATES.PASSWORD,
   formValues: {},
+  handleSubmit: () => {},
   intl: {},
   isRevealed: false,
   revealText: () => {},

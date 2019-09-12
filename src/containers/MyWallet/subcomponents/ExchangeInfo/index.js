@@ -43,8 +43,8 @@ class ExchangeInfo extends PureComponent {
   handleGetExchangeData() {
     const { coinData } = this.props;
     return {
-      name: _get(coinData, 'data.name', ''),
-      symbol: _get(coinData, 'data.symbol', ''),
+      name: _get(coinData, 'data.name', '-----'),
+      symbol: _get(coinData, 'data.symbol', '---'),
       usdPrice: _get(coinData, 'data.quotes.USD.price', 0),
       changeRate: _get(coinData, 'data.quotes.USD.percent_change_24h', 0),
       btcPrice: _get(coinData, 'data.quotes.BTC.price', 0),
@@ -79,7 +79,7 @@ class ExchangeInfo extends PureComponent {
               <span className='exchange-info__data-rate--usd'>
                 {data.usdPrice}
                 <span
-                  className={isDecrease ? '--negative' : undefined}
+                  className={isDecrease ? 'text-danger' : ''}
                 >{` (${data.changeRate}%)`}</span>
               </span>
               <br />

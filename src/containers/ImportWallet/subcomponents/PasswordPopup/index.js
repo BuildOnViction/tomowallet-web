@@ -52,6 +52,7 @@ class PasswordPopup extends PureComponent {
         }}
         Content={PasswordContent}
         getContentProps={{
+          decryptData,
           errors: _get(popupData, 'errors', {}),
           isRevealed: _get(popupData, 'isRevealed', false),
           revealText: onRevealPasswordInput,

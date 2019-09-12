@@ -199,6 +199,10 @@ class PasswordPopup extends PureComponent {
           isRevealed: _get(popupData, 'isRevealed', false),
           revealText: onRevealPasswordInput,
           updateInput: onUpdateInput,
+          handleSubmit:
+            formState === PASSWORD_POPUP_STATES.PASSWORD
+              ? this.handleMoveToConfirmationForm
+              : this.handleEncryptData,
         }}
         isOpen={_get(popupData, 'isOpen', false)}
         title={formatMessage(MSG.CREATE_WALLET_POPUP_PASSWORD_TITLE)}

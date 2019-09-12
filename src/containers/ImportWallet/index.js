@@ -424,7 +424,9 @@ class ImportWallet extends PureComponent {
                     <MetaMaskForm />
                   )}
                   {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
-                    <RPOrPKForm />
+                    <RPOrPKForm
+                      handleSubmit={this.handleAccessByRecoveryPhrase}
+                    />
                   )}
                   {_get(importWallet, 'type') === IMPORT_TYPES.KEYSTORE && (
                     <KeystoreForm

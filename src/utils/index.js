@@ -3,8 +3,10 @@ import injectSaga from './injectSaga';
 import history from './history';
 import createDeepEqualSelector from './deepSelector';
 import {
+  changeInputWithSubmit,
   convertLocaleNumber,
   copyToClipboard,
+  detectSubmit,
   downloadFile,
   removeTrailingZero,
   shuffleArray,
@@ -48,12 +50,14 @@ import {
 
 export {
   bnToDecimals,
+  changeInputWithSubmit,
   convertLocaleNumber,
   convertAmountWithDecimals,
   copyToClipboard,
   createDeepEqualSelector,
   decimalsToBN,
   decryptKeystore,
+  detectSubmit,
   downloadFile,
   encryptKeystore,
   estimateCurrencyFee,
