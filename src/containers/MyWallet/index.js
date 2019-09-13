@@ -93,7 +93,6 @@ class MyWallet extends PureComponent {
     this.handleCloseSendTokenPopup = this.handleCloseSendTokenPopup.bind(this);
     this.handleConfirmBeforeSend = this.handleConfirmBeforeSend.bind(this);
     this.handleGetContractData = this.handleGetContractData.bind(this);
-    this.handleGetTrc20Fee = this.handleValidateCurrencyFee.bind(this);
     this.handleGetSendAction = this.handleGetSendAction.bind(this);
     this.handleOpenSendTokenPopup = this.handleOpenSendTokenPopup.bind(this);
     this.handleSendMoneyByLedger = this.handleSendMoneyByLedger.bind(this);
@@ -412,11 +411,15 @@ class MyWallet extends PureComponent {
           .sub(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals))),
         decimals,
       );
+
       if (remainAmount.includes('-')) {
-        onUpdateSendTokenInput(
-          SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-          bnToDecimals(web3.utils.toBN(0), decimals),
-        );
+        onUpdateSendTokenErrors({
+          [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [
+            formatMessage(
+              MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
+            ),
+          ],
+        });
       } else {
         onUpdateSendTokenInput(
           SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
@@ -427,9 +430,9 @@ class MyWallet extends PureComponent {
             decimals,
           ),
         );
+        onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+        onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
       }
-      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
-      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
     } else if (
       !web3.utils
         .toBN(
