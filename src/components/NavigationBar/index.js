@@ -113,7 +113,7 @@ class NavigationBar extends PureComponent {
           {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
           <i className='font-chevron-down' />
         </DropdownToggleHeader>
-        <DropdownMenuStyler right>
+        <DropdownMenuStyler right className='shadow'>
           {LIST.LANGUAGES.map((opt, optIdx) => (
             <DropdownItemStyler
               key={`language_${optIdx + 1}`}
@@ -143,7 +143,7 @@ class NavigationBar extends PureComponent {
             {_get(network, 'data.label')}
             <i className='font-chevron-down' />
           </DropdownToggleHeader>
-          <DropdownMenuStyler right className='box_onl'>
+          <DropdownMenuStyler right className='box_onl shadow'>
             {LIST.NETWORKS.map((opt, optIdx) => (
               <DropdownItemStyler
                 key={`network_${optIdx + 1}`}
@@ -161,7 +161,7 @@ class NavigationBar extends PureComponent {
             {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
             <i className='font-chevron-down' />
           </DropdownToggleHeader>
-          <DropdownMenuStyler right>
+          <DropdownMenuStyler right className='shadow'>
             {hasPrivateKey && (
               <DropdownItemStyler onClick={() => onToggleWalletPopup(true)}>
                 {formatMessage(
