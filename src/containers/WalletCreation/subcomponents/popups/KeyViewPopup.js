@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import _get from 'lodash.get';
-import QRCode from 'qrcode.react';
 import { CardText } from 'reactstrap';
 // Custom Component
 import Popup from '../../../../components/Popup';
@@ -40,7 +39,13 @@ const Content = ({
     </CardText>
     <BoxImages>
       {_get(keyView, 'isPKVisible') ? (
-        <QRCode value={_get(keyView, 'key')} />
+        <TextBlue
+          role='presentation'
+          onClick={saveToClipboard}
+          className='d-block text-break text-center mt-3'
+        >
+          {_get(keyView, 'key')}
+        </TextBlue>
       ) : (
         <div
           role='presentation'
@@ -51,13 +56,6 @@ const Content = ({
         </div>
       )}
     </BoxImages>
-    <TextBlue
-      role='presentation'
-      onClick={saveToClipboard}
-      className='d-block text-break text-center mt-3'
-    >
-      {_get(keyView, 'key')}
-    </TextBlue>
   </div>
 );
 // =========================
@@ -104,12 +102,8 @@ class KeyViewPopup extends PureComponent {
         }}
         button={{
           primary: {
-            btnYellow: true,
-            label: formatMessage(MSG.COMMON_BUTTON_SAVE),
-          },
-          secondary: {
             action: this.handleClosePopup,
-            label: formatMessage(MSG.COMMON_BUTTON_BACK),
+            label: formatMessage(MSG.COMMON_BUTTON_CLOSE),
           },
         }}
       />
