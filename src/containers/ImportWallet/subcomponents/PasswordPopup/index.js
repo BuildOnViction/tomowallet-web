@@ -19,21 +19,33 @@ import PasswordContent from './content';
 import { withIntl } from '../../../../components/IntlProvider';
 import { selectPasswordPopup } from '../../selectors';
 import {
+  loadKeystoreFile,
+  revealPasswordInput,
   togglePasswordPopup,
   updatePasswordPopupInput,
-  revealPasswordInput,
 } from '../../actions';
 import { MSG } from '../../../../constants';
 // ===================
 
 // ===== MAIN COMPONENT =====
 class PasswordPopup extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.handleClosePasswordPopup = this.handleClosePasswordPopup.bind(this);
+  }
+
+  handleClosePasswordPopup() {
+    const { onLoadKeystoreFile, onTogglePasswordPopup } = this.props;
+    onLoadKeystoreFile({});
+    onTogglePasswordPopup(false);
+  }
+
   render() {
     const {
       decryptData,
       intl: { formatMessage },
       onRevealPasswordInput,
-      onTogglePasswordPopup,
       onUpdatePasswordPopupInput,
       popupData,
     } = this.props;
@@ -46,7 +58,7 @@ class PasswordPopup extends PureComponent {
             label: formatMessage(MSG.COMMON_BUTTON_CONFIRM),
           },
           secondary: {
-            action: () => onTogglePasswordPopup(false),
+            action: this.handleClosePasswordPopup,
             label: formatMessage(MSG.COMMON_BUTTON_BACK),
           },
         }}
@@ -99,6 +111,7 @@ const mapStateToProps = () =>
     popupData: selectPasswordPopup,
   });
 const mapDispatchToProps = dispatch => ({
+  onLoadKeystoreFile: data => dispatch(loadKeystoreFile(data)),
   onRevealPasswordInput: bool => dispatch(revealPasswordInput(bool)),
   onTogglePasswordPopup: bool => dispatch(togglePasswordPopup(bool)),
   onUpdatePasswordPopupInput: (name, value) =>

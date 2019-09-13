@@ -40,6 +40,22 @@ class PasswordContent extends PureComponent {
     this.renderPasswordForm = this.renderPasswordForm.bind(this);
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      document.getElementById('passwordInput').focus();
+    }, 100);
+  }
+
+  componentDidUpdate() {
+    const { formState } = this.props;
+
+    if (formState === PASSWORD_POPUP_STATES.PASSWORD) {
+      document.getElementById('passwordInput').focus();
+    } else if (formState === PASSWORD_POPUP_STATES.CONFIRMATION) {
+      document.getElementById('confirmationInput').focus();
+    }
+  }
+
   handleChangeConfirmation(value) {
     const { updateInput } = this.props;
     updateInput('confirmation', value);

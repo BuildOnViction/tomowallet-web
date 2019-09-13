@@ -40,13 +40,6 @@ const initialState = fromJS({
     isOpen: false,
     isRevealed: false,
   },
-  passwordPopup: {
-    errors: {},
-    fileData: null,
-    input: {},
-    isOpen: false,
-    isRevealed: false,
-  },
 });
 
 export default (state = initialState, action) => {

@@ -31,6 +31,12 @@ class PasswordContent extends PureComponent {
     this.handleChangePassword = this.handleChangePassword.bind(this);
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      document.getElementById('passwordInput').focus();
+    }, 100);
+  }
+
   handleChangePassword(value) {
     const { updateInput } = this.props;
     updateInput('password', value);
@@ -49,6 +55,7 @@ class PasswordContent extends PureComponent {
       <FormGroup>
         <InputGroup>
           <Input
+            id='passwordInput'
             type={isRevealed ? 'text' : 'password'}
             name='password'
             value={value}

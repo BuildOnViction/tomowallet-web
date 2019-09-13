@@ -32,26 +32,29 @@ class FileUploadInput extends PureComponent {
     this.handleDragLeave = this.handleDragLeave.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
+    this.handleResetInput = this.handleResetInput.bind(this);
   }
 
   handleChangeFile(e) {
     const { onError, onLoaded } = this.props;
     const file = _get(e, 'dataTransfer.files.0') || _get(e, 'target.files.0');
 
-    const fileReader = new FileReader();
+    if (file) {
+      const fileReader = new FileReader();
 
-    fileReader.readAsText(file);
-    fileReader.onloadend = () => {
-      try {
-        onLoaded(fileReader.result);
-        this.setState({
-          active: false,
-          fileName: file.name,
-        });
-      } catch (error) {
-        onError(error.message);
-      }
-    };
+      fileReader.readAsText(file);
+      fileReader.onloadend = () => {
+        try {
+          onLoaded(fileReader.result);
+          this.setState({
+            active: false,
+            fileName: file.name,
+          });
+        } catch (error) {
+          onError(error.message);
+        }
+      };
+    }
   }
 
   handleDragEnter() {
@@ -70,6 +73,10 @@ class FileUploadInput extends PureComponent {
     e.preventDefault();
     this.setState({ active: false });
     this.handleChangeFile(e);
+  }
+
+  handleResetInput(e) {
+    e.target.value = '';
   }
 
   render() {
@@ -92,7 +99,12 @@ class FileUploadInput extends PureComponent {
           ) : (
             <FontAwesomeIcon icon='upload' />
           )}
-          <input type='file' name='file' onChange={this.handleChangeFile} />
+          <input
+            type='file'
+            name='file'
+            onClick={this.handleResetInput}
+            onChange={this.handleChangeFile}
+          />
         </label>
         <div className='upload-text'>
           <span>{getMessage(MSG.INPUT_FILE_UPLOAD_PLACEHOLDER)}</span>

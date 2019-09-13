@@ -19,6 +19,10 @@ import { MSG } from '../../../constants';
 
 // ===== MAIN COMPONENT =====
 class LedgerForm extends PureComponent {
+  componentDidMount() {
+    document.getElementById('hdPathInput').focus();
+  }
+
   render() {
     const {
       errors,
@@ -30,6 +34,7 @@ class LedgerForm extends PureComponent {
       <FormGroup>
         <Label>{formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_INPUT_LABEL)}</Label>
         <Input
+          id='hdPathInput'
           name='hdPath'
           value={_get(formValues, 'hdPath', '')}
           placeholder={formatMessage(

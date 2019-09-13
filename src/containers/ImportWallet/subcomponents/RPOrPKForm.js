@@ -28,6 +28,10 @@ class RPOrPKForm extends PureComponent {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  componentDidMount() {
+    document.getElementById('recoveryPhraseInput').focus();
+  }
+
   handleInputChange(value) {
     const { onUpdateInput } = this.props;
     onUpdateInput('recoveryPhrase', value);
@@ -49,6 +53,7 @@ class RPOrPKForm extends PureComponent {
             <FontAwesomeIcon icon='unlock' />
           </Label>
           <Input
+            id='recoveryPhraseInput'
             type='textarea'
             name='recoveryPhrase'
             placeholder={formatMessage(
