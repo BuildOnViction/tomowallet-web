@@ -406,15 +406,28 @@ class MyWallet extends PureComponent {
       )
     ) {
       toggleLoading(false);
-      onUpdateSendTokenInput(
-        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-        bnToDecimals(
-          web3.utils
-            .toBN(balance)
-            .sub(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals))),
-          decimals,
-        ),
+      const remainAmount = bnToDecimals(
+        web3.utils
+          .toBN(balance)
+          .sub(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals))),
+        decimals,
       );
+      if (remainAmount.includes('-')) {
+        onUpdateSendTokenInput(
+          SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+          bnToDecimals(web3.utils.toBN(0), decimals),
+        );
+      } else {
+        onUpdateSendTokenInput(
+          SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+          bnToDecimals(
+            web3.utils
+              .toBN(balance)
+              .sub(web3.utils.toBN(decimalsToBN(feeObj.amount, decimals))),
+            decimals,
+          ),
+        );
+      }
       onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
       onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
     } else if (
