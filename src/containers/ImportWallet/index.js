@@ -5,14 +5,14 @@
  */
 // Modules
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
-import PropTypes from 'prop-types';
-import TransportU2F from '@ledgerhq/hw-transport-u2f';
+// import TransportU2F from '@ledgerhq/hw-transport-u2f';
 import Eth from '@ledgerhq/hw-app-eth';
 import * as HDKey from 'hdkey';
 import * as ethUtils from 'ethereumjs-util';
@@ -63,6 +63,7 @@ import {
   trimMnemonic,
   getBalance,
   removeWeb3Info,
+  isElectron,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -265,6 +266,30 @@ class ImportWallet extends PureComponent {
     const { importWallet } = this.props;
     const hdPath = _get(importWallet, 'input.hdPath', '');
 
+    if (isElectron()) {
+      const TransportNodeHid = require('@ledgerhq/hw-transport-node-hid')
+        .default;
+
+      return TransportNodeHid.isSupported()
+        .then(nodeSupported => {
+          if (!nodeSupported) {
+            throw new Error(
+              'Node Transport not supported in this application.',
+            );
+          }
+          return TransportNodeHid.create()
+            .then(transport =>
+              new Eth(transport).getAddress(hdPath, false, true),
+            )
+            .catch(error => {
+              this.handleUpdateError(error.message);
+            });
+        })
+        .catch(error => {
+          this.handleUpdateError(error.message);
+        });
+    }
+    const TransportU2F = require('@ledgerhq/hw-transport-u2f').default;
     return TransportU2F.isSupported()
       .then(u2fSupported => {
         if (!u2fSupported) {
@@ -342,26 +367,28 @@ class ImportWallet extends PureComponent {
                     </CardText>
                   </ImporWalletStyler>
                 </Col>
-                <Col className='px-3'>
-                  <ImporWalletStyler
-                    isActive={
-                      _get(importWallet, 'type') === IMPORT_TYPES.META_MASK
-                    }
-                    onClick={() =>
-                      this.handleChangeType(IMPORT_TYPES.META_MASK)
-                    }
-                  >
-                    <CardImg
-                      src={LogoLedger}
-                      alt={formatMessage(
-                        MSG.IMPORT_WALLET_TAB_METAMASK_IMAGE_ALT,
-                      )}
-                    />
-                    <CardText className='mt-3'>
-                      {formatMessage(MSG.IMPORT_WALLET_TAB_METAMASK_TEXT)}
-                    </CardText>
-                  </ImporWalletStyler>
-                </Col>
+                {!isElectron() && (
+                  <Col className='px-3'>
+                    <ImporWalletStyler
+                      isActive={
+                        _get(importWallet, 'type') === IMPORT_TYPES.META_MASK
+                      }
+                      onClick={() =>
+                        this.handleChangeType(IMPORT_TYPES.META_MASK)
+                      }
+                    >
+                      <CardImg
+                        src={LogoLedger}
+                        alt={formatMessage(
+                          MSG.IMPORT_WALLET_TAB_METAMASK_IMAGE_ALT,
+                        )}
+                      />
+                      <CardText className='mt-3'>
+                        {formatMessage(MSG.IMPORT_WALLET_TAB_METAMASK_TEXT)}
+                      </CardText>
+                    </ImporWalletStyler>
+                  </Col>
+                )}
                 <Col className='px-3'>
                   <ImporWalletStyler
                     isActive={

@@ -47,6 +47,7 @@ import {
   setLocale,
   setWeb3Info,
 } from './storage';
+import { isElectron } from './electron';
 
 export {
   bnToDecimals,
@@ -76,6 +77,7 @@ export {
   history,
   injectReducer,
   injectSaga,
+  isElectron,
   mergeErrors,
   mnemonicToPrivateKey,
   removeLedger,
