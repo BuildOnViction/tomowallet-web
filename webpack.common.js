@@ -65,11 +65,14 @@ module.exports = options => {
         },
       ],
     },
-    node: {
-      fs: 'empty',
-      net: 'empty',
-      child_process: 'empty',
-    },
+    node: Object.assign(
+      {
+        fs: 'empty',
+        net: 'empty',
+        child_process: 'empty',
+      },
+      options.node,
+    ),
     plugins: [
       new webpack.DefinePlugin(envKeys),
       new HtmlWebpackPlugin({
@@ -81,7 +84,8 @@ module.exports = options => {
       }),
       new webpack.optimize.ModuleConcatenationPlugin(),
     ].concat(options.plugins || []),
-    target: 'web',
+    target: options.target || 'web',
+    externals: options.externals,
     performance: options.performance || {},
   };
 };

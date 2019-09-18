@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const common = require('./webpack.common.js');
-const nodeExternals = require('webpack-node-externals');
 
 module.exports = common({
   mode: 'production',
@@ -27,8 +26,15 @@ module.exports = common({
   plugins: [
     new webpack.IgnorePlugin(/^\.\/(?!english)/, /bip39\/src\/wordlists$/),
   ],
-  target: 'node',
-  externals: [nodeExternals()],
+  // target: 'node',
+  // externals: {
+  //   fs: 'commonjs fs',
+  // },
+  // node: {
+  //   fs: false,
+  //   net: true,
+  //   child_process: true,
+  // },
   performance: {
     maxEntrypointSize: 512000,
     maxAssetSize: 512000,

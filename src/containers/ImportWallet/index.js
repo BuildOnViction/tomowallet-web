@@ -13,6 +13,7 @@ import { withRouter } from 'react-router-dom';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
 // import TransportU2F from '@ledgerhq/hw-transport-u2f';
+// import TransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Eth from '@ledgerhq/hw-app-eth';
 import * as HDKey from 'hdkey';
 import * as ethUtils from 'ethereumjs-util';
@@ -140,7 +141,8 @@ class ImportWallet extends PureComponent {
 
     if (
       recoveryPhrase &&
-      (web3.utils.isHex(recoveryPhrase) ||
+      ((web3.utils.isHex(recoveryPhrase) &&
+        recoveryPhrase.replace(/^0x/, '').length === 64) ||
         recoveryPhrase.split(' ').length === 12)
     ) {
       try {
@@ -267,8 +269,9 @@ class ImportWallet extends PureComponent {
     const hdPath = _get(importWallet, 'input.hdPath', '');
 
     if (isElectron()) {
-      const TransportNodeHid = require('@ledgerhq/hw-transport-node-hid')
-        .default;
+      const TransportNodeHid = new Function(
+        "return require('@ledgerhq/hw-transport-node-hid').default",
+      )();
 
       return TransportNodeHid.isSupported()
         .then(nodeSupported => {
@@ -277,10 +280,8 @@ class ImportWallet extends PureComponent {
               'Node Transport not supported in this application.',
             );
           }
-          return TransportNodeHid.create()
-            .then(transport =>
-              new Eth(transport).getAddress(hdPath, false, true),
-            )
+          return TransportNodeHid.open('')
+            .then(transport => Eth(transport).getAddress(hdPath, false, true))
             .catch(error => {
               this.handleUpdateError(error.message);
             });
