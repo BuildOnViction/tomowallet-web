@@ -25,7 +25,7 @@ import {
   updatePasswordPopupErrors,
   updateInput,
 } from '../actions';
-import { decryptKeystore, isElectron } from '../../../utils';
+import { decryptKeystore, isElectron, electron } from '../../../utils';
 import { MSG } from '../../../constants';
 
 const path = require('path');
@@ -56,11 +56,9 @@ class KeystoreForm extends PureComponent {
       const decryptedData = decryptKeystore(web3, fileData, password);
 
       if (isElectron()) {
-        const fs = new Function('return require("fs")')();
-
-        fs.writeFile(
-          path.resolve(`${__dirname}`, 'electron/store/keystore.txt'),
-          JSON.stringify(fileData),
+        electron.fs.writeFile(
+          path.join(`${__dirname}`, '\\..\\store\\keystore.json'),
+          fileData,
           error => {
             if (error) {
               onUpdatePasswordPopupErrors({

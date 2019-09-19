@@ -32,11 +32,14 @@ export const shuffleArray = array => {
 };
 
 export const trimMnemonic = rawMnemonic => {
-  const words = rawMnemonic
-    .trim() // Remove beginning & end spaces
-    .replace(/[\r\n]+/g, '') // Remove break-line characters
-    .split(/[ ]+/);
-  return words.join(' ');
+  if (rawMnemonic) {
+    const words = rawMnemonic
+      .trim() // Remove beginning & end spaces
+      .replace(/[\r\n]+/g, '') // Remove break-line characters
+      .split(/[ ]+/);
+    return words.join(' ');
+  }
+  return '';
 };
 
 export const convertLocaleNumber = (rawNumber, decimals = 3) => {

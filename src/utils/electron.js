@@ -5,7 +5,6 @@ export const isElectron = () => {
     typeof window.process === 'object' &&
     window.process.type === 'renderer'
   ) {
-    console.warn('window detected!');
     return true;
   }
 
@@ -15,7 +14,6 @@ export const isElectron = () => {
     typeof process.versions === 'object' &&
     !!process.versions.electron
   ) {
-    console.warn('process detected!');
     return true;
   }
 
@@ -25,9 +23,19 @@ export const isElectron = () => {
     typeof navigator.userAgent === 'string' &&
     navigator.userAgent.indexOf('Electron') >= 0
   ) {
-    console.warn('navigator detected!');
     return true;
   }
 
   return false;
 };
+
+const electronAPI = isElectron()
+  ? {
+      fs: new Function('return require("fs")')(),
+      transportNodeHid: new Function(
+        "return require('@ledgerhq/hw-transport-node-hid').default",
+      )(),
+    }
+  : {};
+
+export default electronAPI;

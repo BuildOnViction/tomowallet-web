@@ -17,9 +17,9 @@ import createReducer from './rootReducer';
 export default history => {
   const sagaMiddleware = createSagaMiddleWare({});
   const middlewares = [
-    thunkMiddleware,
-    sagaMiddleware,
     routerMiddleware(history),
+    sagaMiddleware,
+    thunkMiddleware,
   ];
   const enhancers = [applyMiddleware(...middlewares)];
   const store = createStore(createReducer(), undefined, compose(...enhancers));

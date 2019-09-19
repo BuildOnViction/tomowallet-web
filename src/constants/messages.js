@@ -205,6 +205,48 @@ export default defineMessages({
     id: `${welcomePagePrefix}.image.alt`,
     defaultMessage: 'Welcome to TomoWallet',
   },
+  WELCOME_FORM_PASSWORD_TITLE: {
+    id: `${welcomePagePrefix}.form.password.title`,
+    defaultMessage: 'Wallet Quick Access',
+  },
+  WELCOME_FORM_PASSWORD_DESCRIPTION: {
+    id: `${welcomePagePrefix}.form.password.description`,
+    defaultMessage:
+      'You can type in password to continue accessing your previous wallet, or you can {alternative}',
+  },
+  WELCOME_FORM_PASSWORD_DESCRIPTION_ALTERNATIVE_LOGIN: {
+    id: `${welcomePagePrefix}.form.password.description.alternative.login`,
+    defaultMessage: 'choose different wallet',
+  },
+  WELCOME_FORM_PASSWORD_BUTTON_LOGIN: {
+    id: `${welcomePagePrefix}.form.password.button.login`,
+    defaultMessage: 'Log In',
+  },
+  WELCOME_FORM_PASSWORD_INPUT_PASSWORD_LABEL: {
+    id: `${welcomePagePrefix}.form.password.input.password.label`,
+    defaultMessage: 'Password',
+  },
+  WELCOME_FORM_PASSWORD_INPUT_PASSWORD_PLACEHOLDER: {
+    id: `${welcomePagePrefix}.form.password.input.password.placeholder`,
+    defaultMessage: 'Enter password...',
+  },
+  WELCOME_FORM_PASSWORD_ERROR_INVALID_PASSWORD: {
+    id: `${welcomePagePrefix}.form.password.error.invalid.password`,
+    defaultMessage: 'Given password is incorrect',
+  },
+  WELCOME_FORM_PASSWORD_ERROR_KEYSTORE_NOT_EXISTS: {
+    id: `${welcomePagePrefix}.form.password.error.keystore.not.exists`,
+    defaultMessage: 'Cannot find any keystore file.',
+  },
+  WELCOME_FORM_PASSWORD_ERROR_INVALID_PRIVATE_KEY: {
+    id: `${welcomePagePrefix}.form.password.error.invalid.privatekey`,
+    defaultMessage: 'Received private key is invalid.',
+  },
+  WELCOME_FORM_PASSWORD_ERROR_RETRIEVE_WALLET_FAILED: {
+    id: `${welcomePagePrefix}.form.password.error.retrieve.wallet.failed`,
+    defaultMessage:
+      'Cannot retrieve wallet information due to corrupted Web3 provider.',
+  },
   // Create Wallet Page
   CREATE_WALLET_TITLE: {
     id: `${createWalletPagePrefix}.title`,

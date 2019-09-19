@@ -65,6 +65,9 @@ import {
   getBalance,
   removeWeb3Info,
   isElectron,
+  electron,
+  isRecoveryPhrase,
+  isPrivateKey,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -133,18 +136,12 @@ class ImportWallet extends PureComponent {
       rpcServer,
       toggleLoading,
       updateWeb3,
-      web3,
     } = this.props;
     const recoveryPhrase = trimMnemonic(
       _get(importWallet, 'input.recoveryPhrase', ''),
     );
 
-    if (
-      recoveryPhrase &&
-      ((web3.utils.isHex(recoveryPhrase) &&
-        recoveryPhrase.replace(/^0x/, '').length === 64) ||
-        recoveryPhrase.split(' ').length === 12)
-    ) {
+    if (isRecoveryPhrase(recoveryPhrase) || isPrivateKey(recoveryPhrase)) {
       try {
         toggleLoading(true);
         const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
@@ -269,18 +266,14 @@ class ImportWallet extends PureComponent {
     const hdPath = _get(importWallet, 'input.hdPath', '');
 
     if (isElectron()) {
-      const TransportNodeHid = new Function(
-        "return require('@ledgerhq/hw-transport-node-hid').default",
-      )();
-
-      return TransportNodeHid.isSupported()
+      return electron.TransportNodeHid.isSupported()
         .then(nodeSupported => {
           if (!nodeSupported) {
             throw new Error(
               'Node Transport not supported in this application.',
             );
           }
-          return TransportNodeHid.open('')
+          return electron.TransportNodeHid.open('')
             .then(transport => Eth(transport).getAddress(hdPath, false, true))
             .catch(error => {
               this.handleUpdateError(error.message);
@@ -573,9 +566,9 @@ const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 
 export default compose(
   withConnect,
+  withIntl,
+  withLoading,
   withReducer,
   withRouter,
   withWeb3,
-  withIntl,
-  withLoading,
 )(ImportWallet);

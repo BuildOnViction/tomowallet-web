@@ -11,6 +11,7 @@ import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
 import _isEqual from 'lodash.isequal';
 // Utilities & Constants
+import { trimMnemonic } from './miscellaneous';
 import { getNetwork } from './storage';
 import { ENUM, RPC_SERVER } from '../constants';
 import trc20 from '../contractABIs/trc20.json';
@@ -407,25 +408,74 @@ const decimalsToBN = (numberToConvert, decimals) => {
     .mul(web3.utils.toBN(10 ** remainDecimals))
     .toString(10);
 };
+
+/**
+ * isRecoveryPhrase
+ *
+ * Check if the input string is a valid recovery phrase
+ * @param {String} rawData recovery phrase input's value
+ */
+const isRecoveryPhrase = rawData => {
+  if (rawData) {
+    const trimData = trimMnemonic(rawData);
+
+    return trimData.split(' ').length === 12;
+  }
+  return false;
+};
+
+/**
+ * isPrivateKey
+ *
+ * Check if the input string is a valid private key
+ * @param {String} rawData private key input's value
+ */
+const isPrivateKey = rawData => {
+  if (rawData) {
+    const web3 = new Web3();
+    const trimData = rawData.trim().replace(/^0x/, '');
+
+    return web3.utils.isHex(trimData) && trimData.length === 64;
+  }
+  return false;
+};
+
+/**
+ * isAddress
+ *
+ * Check if the input string is a valid private key
+ * @param {String} rawData address input's value
+ */
+const isAddress = rawData => {
+  if (rawData) {
+    const web3 = new Web3();
+
+    return web3.utils.isAddress(rawData);
+  }
+  return false;
+};
 // ===================
 
 export {
+  bnToDecimals,
+  convertAmountWithDecimals,
+  decimalsToBN,
   decryptKeystore,
   encryptKeystore,
-  fromWei,
-  generateWeb3,
-  getWalletInfo,
-  initiateWallet,
-  mnemonicToPrivateKey,
-  sendMoney,
-  sendToken,
-  convertAmountWithDecimals,
-  getBalance,
-  repeatGetTransaction,
   estimateCurrencyFee,
   estimateTRC20Fee,
   estimateTRC21Fee,
-  bnToDecimals,
-  decimalsToBN,
+  fromWei,
+  generateWeb3,
+  getBalance,
   getLedgerTokenTransferData,
+  getWalletInfo,
+  initiateWallet,
+  isAddress,
+  isPrivateKey,
+  isRecoveryPhrase,
+  mnemonicToPrivateKey,
+  repeatGetTransaction,
+  sendMoney,
+  sendToken,
 };

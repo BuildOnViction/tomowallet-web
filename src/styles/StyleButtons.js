@@ -115,15 +115,17 @@ const ButtonLineStyler = styled.button`
   }
 `;
 
-const ButtonLinkStyler = styled(({ btnRed, children, ...remain }) => (
+const ButtonLinkStyler = styled(({ btnBlue, btnRed, children, ...remain }) => (
   <span {...remain}>{children}</span>
 ))`
   font-family: 'Nunito Sans', sans-serif;
   transition: all 0.3s;
   ${({ btnRed }) => btnRed && 'color: #dc3545;'}
+  ${({ btnBlue }) => btnBlue && 'color: #5692cd;'}
   &:focus,
   &:hover {
     ${({ btnRed }) => btnRed && 'color: #8b0000;'}
+    ${({ btnBlue }) => btnBlue && 'color: #0056b3;'}
     cursor: pointer;
   }
   &:disabled {

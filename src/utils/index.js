@@ -26,6 +26,9 @@ import {
   getBalance,
   getLedgerTokenTransferData,
   getWalletInfo,
+  isAddress,
+  isPrivateKey,
+  isRecoveryPhrase,
   mnemonicToPrivateKey,
   repeatGetTransaction,
   sendMoney,
@@ -47,7 +50,7 @@ import {
   setLocale,
   setWeb3Info,
 } from './storage';
-import { isElectron } from './electron';
+import electron, { isElectron } from './electron';
 
 export {
   bnToDecimals,
@@ -60,6 +63,7 @@ export {
   decryptKeystore,
   detectSubmit,
   downloadFile,
+  electron,
   encryptKeystore,
   estimateCurrencyFee,
   estimateTRC20Fee,
@@ -77,7 +81,10 @@ export {
   history,
   injectReducer,
   injectSaga,
+  isAddress,
   isElectron,
+  isPrivateKey,
+  isRecoveryPhrase,
   mergeErrors,
   mnemonicToPrivateKey,
   removeLedger,

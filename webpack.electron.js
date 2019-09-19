@@ -35,6 +35,10 @@ module.exports = common({
   //   net: true,
   //   child_process: true,
   // },
+  node: {
+    __dirname: false,
+    __filename: false,
+  },
   performance: {
     maxEntrypointSize: 512000,
     maxAssetSize: 512000,
