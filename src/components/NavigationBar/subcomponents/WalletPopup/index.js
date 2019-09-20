@@ -79,7 +79,6 @@ class WalletPopup extends PureComponent {
       intl: { formatMessage },
       onUpdatePopupContentTab,
       walletPopup,
-      web3,
     } = this.props;
     if (_get(walletPopup, 'stage') === WALLET_POPUP_STAGE.WARNING) {
       return {
@@ -93,7 +92,6 @@ class WalletPopup extends PureComponent {
         Content: WalletView,
         getContentProps: {
           formatMessage,
-          isPrivateKey: web3.utils.isHex,
           updateTab: onUpdatePopupContentTab,
           walletPopup,
         },

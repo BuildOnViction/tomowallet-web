@@ -13,9 +13,11 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import MnemonicBox from '../../../MnemonicBox';
 // Utilities, Constants & Styles
 import {
+  getNetwork,
   getWeb3Info,
   mnemonicToPrivateKey,
-  getNetwork,
+  withGlobal,
+  isPrivateKey,
 } from '../../../../utils';
 import { WALLET_POPUP_CONTENT_TAB } from '../../../../containers/Global/constants';
 import { MSG, RPC_SERVER } from '../../../../constants';
@@ -33,7 +35,6 @@ class WalletViewContent extends PureComponent {
   }
 
   handleCheckPrivateKey() {
-    const { isPrivateKey } = this.props;
     const { recoveryPhrase } = getWeb3Info();
     return isPrivateKey(recoveryPhrase);
   }
@@ -53,7 +54,12 @@ class WalletViewContent extends PureComponent {
   }
 
   render() {
-    const { formatMessage, updateTab, walletPopup } = this.props;
+    const {
+      formatMessage,
+      handleCopyToClipboard,
+      updateTab,
+      walletPopup,
+    } = this.props;
     const activeTab = _get(walletPopup, 'tabType');
     const isLoggedInByPK = this.handleCheckPrivateKey();
 
@@ -95,9 +101,13 @@ class WalletViewContent extends PureComponent {
             tabId={WALLET_POPUP_CONTENT_TAB.PRIVATE_KEY}
             className='text-center mt-5 px-lg-5'
           >
-            <div className='text-break'>
-              <TextBlue>{this.handleGetPrivateKey()}</TextBlue>
-            </div>
+            <TextBlue
+              role='presentation'
+              onClick={() => handleCopyToClipboard(this.handleGetPrivateKey())}
+              className='text-break'
+            >
+              {this.handleGetPrivateKey()}
+            </TextBlue>
             <div className='mt-5'>
               {formatMessage(
                 MSG.HEADER_NAVBAR_POPUP_SHOW_WALLET_TAB_PRIVATE_KEY_NOTE,
@@ -115,8 +125,8 @@ class WalletViewContent extends PureComponent {
 WalletViewContent.propTypes = {
   /** React Intl's API to get message */
   formatMessage: PropTypes.func,
-  /** Action to check if the stored recovery phrase is private key */
-  isPrivateKey: PropTypes.func,
+  /** Action to copy text to clipboard with notification */
+  handleCopyToClipboard: PropTypes.func,
   /** Action to change view's tab */
   updateTab: PropTypes.func,
   /** Wallet popup's data */
@@ -125,10 +135,10 @@ WalletViewContent.propTypes = {
 
 WalletViewContent.defaultProps = {
   formatMessage: () => {},
-  isPrivateKey: () => {},
+  handleCopyToClipboard: () => {},
   updateTab: () => {},
   walletPopup: {},
 };
 // ======================
 
-export default WalletViewContent;
+export default withGlobal(WalletViewContent);

@@ -52,7 +52,7 @@ import {
   generateWeb3,
   getWalletInfo,
   setWeb3Info,
-  withLoading,
+  withGlobal,
 } from '../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG, ENUM } from '../../constants';
@@ -311,5 +311,5 @@ export default compose(
   withIntl,
   withWeb3,
   withRouter,
-  withLoading,
+  withGlobal,
 )(WalletCreationPage);

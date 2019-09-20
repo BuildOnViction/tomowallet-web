@@ -35,7 +35,7 @@ import {
   sendToken,
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
-import { withLoading } from './injectLoading';
+import { withGlobal } from './injectGlobal';
 import {
   getLedger,
   getLocale,
@@ -50,7 +50,13 @@ import {
   setLocale,
   setWeb3Info,
 } from './storage';
-import electron, { isElectron } from './electron';
+import electron, {
+  detectKeystore,
+  isElectron,
+  readKeystore,
+  removeKeystore,
+  writeKeystore,
+} from './electron';
 
 export {
   bnToDecimals,
@@ -61,6 +67,7 @@ export {
   createDeepEqualSelector,
   decimalsToBN,
   decryptKeystore,
+  detectKeystore,
   detectSubmit,
   downloadFile,
   electron,
@@ -87,6 +94,8 @@ export {
   isRecoveryPhrase,
   mergeErrors,
   mnemonicToPrivateKey,
+  readKeystore,
+  removeKeystore,
   removeLedger,
   removeLocale,
   removeNetwork,
@@ -101,5 +110,6 @@ export {
   setWeb3Info,
   shuffleArray,
   trimMnemonic,
-  withLoading,
+  withGlobal,
+  writeKeystore,
 };

@@ -62,7 +62,7 @@ import {
   mergeErrors,
   injectSaga,
   sendToken,
-  withLoading,
+  withGlobal,
   getWeb3Info,
   getNetwork,
   sendMoney,
@@ -829,5 +829,5 @@ export default compose(
   withIntl,
   withRouter,
   withWeb3,
-  withLoading,
+  withGlobal,
 )(MyWallet);

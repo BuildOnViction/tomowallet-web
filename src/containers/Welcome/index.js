@@ -33,19 +33,18 @@ import { withWeb3 } from '../../components/Web3';
 import {
   injectReducer,
   decryptKeystore,
-  electron,
   isPrivateKey,
-  withLoading,
+  withGlobal,
   getNetwork,
   generateWeb3,
   getBalance,
   setWeb3Info,
   isElectron,
+  detectKeystore,
+  readKeystore,
 } from '../../utils';
 import { MSG, ROUTE, RPC_SERVER, ENUM } from '../../constants';
 import { toggleLoading, storeWallet } from '../Global/actions';
-
-const path = require('path');
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -63,13 +62,8 @@ class WelcomePage extends PureComponent {
   componentDidMount() {
     const { onTogglePasswordForm } = this.props;
     if (isElectron()) {
-      const rootFolders = __dirname.split('\\');
-      const filePath = `${rootFolders
-        .slice(0, rootFolders.length - 1)
-        .join('\\')}\\store\\keystore.json`;
-
-      electron.fs.readFile(filePath, err => {
-        if (err) {
+      detectKeystore().then(({ error }) => {
+        if (error) {
           onTogglePasswordForm(false);
         } else {
           onTogglePasswordForm(true);
@@ -163,27 +157,43 @@ class WelcomePage extends PureComponent {
     const pwd = _get(passwordForm, 'input.password', '');
 
     try {
-      electron.fs.readFile(
-        path.join(`${__dirname}`, '\\..\\store\\keystore.json'),
-        (err, data) => {
-          if (err) {
-            onUpdatePasswordErrors({ password: [err.message] });
-          } else {
-            try {
-              const addressObj = decryptKeystore(web3, JSON.parse(data), pwd);
-              this.handleQuickAccess(addressObj);
-            } catch (error) {
-              onUpdatePasswordErrors({
-                password: [
-                  formatMessage(
-                    MSG.WELCOME_FORM_PASSWORD_ERROR_INVALID_PASSWORD,
-                  ),
-                ],
-              });
-            }
+      readKeystore().then(({ error, data }) => {
+        if (error) {
+          onUpdatePasswordErrors({ password: [error.message] });
+        } else {
+          try {
+            const addressObj = decryptKeystore(web3, JSON.parse(data), pwd);
+            this.handleQuickAccess(addressObj);
+          } catch (error) {
+            onUpdatePasswordErrors({
+              password: [
+                formatMessage(MSG.WELCOME_FORM_PASSWORD_ERROR_INVALID_PASSWORD),
+              ],
+            });
           }
-        },
-      );
+        }
+      });
+      // electron.fs.readFile(
+      //   path.join(`${__dirname}`, '\\..\\store\\keystore.json'),
+      //   (err, data) => {
+      //     if (err) {
+      //       onUpdatePasswordErrors({ password: [err.message] });
+      //     } else {
+      //       try {
+      //         const addressObj = decryptKeystore(web3, JSON.parse(data), pwd);
+      //         this.handleQuickAccess(addressObj);
+      //       } catch (error) {
+      //         onUpdatePasswordErrors({
+      //           password: [
+      //             formatMessage(
+      //               MSG.WELCOME_FORM_PASSWORD_ERROR_INVALID_PASSWORD,
+      //             ),
+      //           ],
+      //         });
+      //       }
+      //     }
+      //   },
+      // );
     } catch (error) {
       onUpdatePasswordErrors({
         password: [
@@ -289,7 +299,7 @@ const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 export default compose(
   withConnect,
   withIntl,
-  withLoading,
+  withGlobal,
   withReducer,
   withRouter,
   withWeb3,

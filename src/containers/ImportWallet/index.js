@@ -12,8 +12,6 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
-// import TransportU2F from '@ledgerhq/hw-transport-u2f';
-// import TransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Eth from '@ledgerhq/hw-app-eth';
 import * as HDKey from 'hdkey';
 import * as ethUtils from 'ethereumjs-util';
@@ -43,7 +41,7 @@ import KeystoreForm from './subcomponents/KeystoreForm';
 import AddressPopup from './subcomponents/AddressPopup';
 // Utilities, Constants & Styles
 import { IMPORT_TYPES, DOMAIN_KEY } from './constants';
-import { selectImportState, selectAddressPopup } from './selectors';
+import { selectAddressPopup, selectImportState } from './selectors';
 import {
   resetState,
   updateErrors,
@@ -59,7 +57,7 @@ import {
   injectReducer,
   generateWeb3,
   setWeb3Info,
-  withLoading,
+  withGlobal,
   getValidations,
   trimMnemonic,
   getBalance,
@@ -68,6 +66,7 @@ import {
   electron,
   isRecoveryPhrase,
   isPrivateKey,
+  removeKeystore,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -123,6 +122,11 @@ class ImportWallet extends PureComponent {
             'chosenIndex',
           )}`,
         });
+        if (isElectron()) {
+          removeKeystore().then(
+            ({ error }) => error && this.handleUpdateError(error.message),
+          );
+        }
       });
     }
   }
@@ -266,22 +270,22 @@ class ImportWallet extends PureComponent {
     const hdPath = _get(importWallet, 'input.hdPath', '');
 
     if (isElectron()) {
-      return electron.TransportNodeHid.isSupported()
+      return electron.transportNodeHid
+        .isSupported()
         .then(nodeSupported => {
           if (!nodeSupported) {
             throw new Error(
               'Node Transport not supported in this application.',
             );
           }
-          return electron.TransportNodeHid.open('')
-            .then(transport => Eth(transport).getAddress(hdPath, false, true))
-            .catch(error => {
-              this.handleUpdateError(error.message);
-            });
+          return electron.transportNodeHid
+            .create()
+            .then(transport =>
+              new Eth(transport).getAddress(hdPath, false, true),
+            )
+            .catch(error => this.handleUpdateError(error.message));
         })
-        .catch(error => {
-          this.handleUpdateError(error.message);
-        });
+        .catch(error => this.handleUpdateError(error.message));
     }
     const TransportU2F = require('@ledgerhq/hw-transport-u2f').default;
     return TransportU2F.isSupported()
@@ -567,7 +571,7 @@ const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 export default compose(
   withConnect,
   withIntl,
-  withLoading,
+  withGlobal,
   withReducer,
   withRouter,
   withWeb3,
