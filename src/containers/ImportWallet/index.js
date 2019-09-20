@@ -131,7 +131,7 @@ class ImportWallet extends PureComponent {
     }
   }
 
-  handleAccessByRecoveryPhrase() {
+  handleAccessByRecoveryPhrase(accessType) {
     const {
       history,
       importWallet,
@@ -164,6 +164,11 @@ class ImportWallet extends PureComponent {
             });
           })
           .then(() => {
+            if (accessType !== 'keystore') {
+              removeKeystore().then(
+                ({ error }) => error && this.handleUpdateError(error.message),
+              );
+            }
             toggleLoading(false);
             history.push(ROUTE.MY_WALLET);
           });

@@ -74,7 +74,7 @@ class KeystoreForm extends PureComponent {
         r(onUpdateInput('recoveryPhrase', _get(decryptedData, 'privateKey'))),
       )
         .then(() => {
-          accessWallet();
+          accessWallet('keystore');
         })
         .then(() => {
           onTogglePasswordPopup(false);

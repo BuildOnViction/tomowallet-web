@@ -66,24 +66,32 @@ export const detectKeystore = () => {
 export const readKeystore = () =>
   new Promise(resolve =>
     electronAPI.fs.readFile(
-      path.join(`${__dirname}`, '\\..\\store\\keystore.json'),
+      path.join(__dirname, '\\..\\store\\keystore.json'),
       (error, data) => resolve({ error, data }),
     ),
   );
 
 export const writeKeystore = content =>
   new Promise(resolve =>
-    electronAPI.fs.writeFile(
-      path.join(`${__dirname}`, '\\..\\store\\keystore.json'),
-      content,
-      error => resolve({ error }),
+    electronAPI.fs.mkdir(
+      path.join(__dirname, '\\..\\store'),
+      { recursive: true },
+      err => {
+        if (!err) {
+          electronAPI.fs.writeFile(
+            path.join(__dirname, '\\..\\store\\keystore.json'),
+            content,
+            error => resolve({ error }),
+          );
+        }
+      },
     ),
   );
 
 export const removeKeystore = () =>
   new Promise(resolve =>
     electronAPI.fs.unlink(
-      path.join(`${__dirname}`, '\\..\\store\\keystore.json'),
+      path.join(__dirname, '\\..\\store\\keystore.json'),
       error => resolve({ error }),
     ),
   );
