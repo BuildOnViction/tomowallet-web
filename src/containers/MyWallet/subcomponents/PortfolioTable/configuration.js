@@ -111,7 +111,13 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           const address = _get(getWeb3Info(), 'address', '');
           const baseUrl = _get(API, [networkKey, 'VIEW_TOKEN'], '');
           const tokenType = _get(original, [PORTFOLIO_COLUMNS.TYPE], '');
+          const tokenAddress = _get(
+            original,
+            [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
+            '',
+          );
           let viewLink = '';
+
           if (tokenType === ENUM.TOKEN_TYPE.CURRENCY) {
             viewLink = `${_get(
               API,
@@ -121,29 +127,13 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           } else {
             switch (networkKey) {
               case ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET:
-                viewLink = `${baseUrl}/${_get(
-                  original,
-                  [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
-                  '',
-                )}`;
+                viewLink = `${baseUrl}/${tokenAddress}`;
                 break;
               case ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET:
-                viewLink = `${baseUrl}/${_get(
-                  original,
-                  [PORTFOLIO_COLUMNS.TYPE],
-                  '',
-                ).toLowerCase()}/${_get(
-                  original,
-                  [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
-                  '',
-                )}`;
+                viewLink = `${baseUrl}/${tokenAddress}/${tokenType.toLowerCase()}/${address}`;
                 break;
               default:
-                viewLink = `${baseUrl}/${_get(
-                  original,
-                  [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
-                  '',
-                )}`;
+                viewLink = `${baseUrl}/${tokenAddress}`;
             }
           }
 

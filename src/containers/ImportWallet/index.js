@@ -273,7 +273,10 @@ class ImportWallet extends PureComponent {
   }
 
   handleUnlockLedger() {
-    const { importWallet } = this.props;
+    const {
+      intl: { formatMessage },
+      importWallet,
+    } = this.props;
     const hdPath = _get(importWallet, 'input.hdPath', '');
 
     if (isElectron()) {
@@ -282,7 +285,9 @@ class ImportWallet extends PureComponent {
         .then(nodeSupported => {
           if (!nodeSupported) {
             throw new Error(
-              'Node Transport not supported in this application.',
+              formatMessage(
+                MSG.IMPORT_WALLET_ERROR_TRANSPORT_NODE_NOT_SUPPORTED,
+              ),
             );
           }
           return Promise.race([
@@ -290,7 +295,11 @@ class ImportWallet extends PureComponent {
             new Promise((_, reject) => {
               const timeout = setTimeout(() => {
                 clearTimeout(timeout);
-                reject({ message: "The system can't find any Ledger device." });
+                reject({
+                  message: formatMessage(
+                    MSG.IMPORT_WALLET_ERROR_DEVICE_NOT_FOUND,
+                  ),
+                });
               }, 5000);
             }),
           ])
@@ -306,7 +315,7 @@ class ImportWallet extends PureComponent {
       .then(u2fSupported => {
         if (!u2fSupported) {
           throw new Error(
-            'U2F not supported in this browser. Please try using Google Chrome with a secure (SSL / HTTPS) connection!',
+            formatMessage(MSG.IMPORT_WALLET_ERROR_TRANSPORT_U2F_NOT_SUPPORTED),
           );
         }
         return TransportU2F.create()

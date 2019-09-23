@@ -518,6 +518,19 @@ export default defineMessages({
     id: `${importWalletPagePrefix}.error.invalid.hdpath`,
     defaultMessage: 'Invalid HD Path',
   },
+  IMPORT_WALLET_ERROR_DEVICE_NOT_FOUND: {
+    id: `${importWalletPagePrefix}.error.device.notfound`,
+    defaultMessage: "The system can't find any Ledger device.",
+  },
+  IMPORT_WALLET_ERROR_TRANSPORT_NODE_NOT_SUPPORTED: {
+    id: `${importWalletPagePrefix}.error.transport.node.notsupported`,
+    defaultMessage: 'Node transport not supported in this application.',
+  },
+  IMPORT_WALLET_ERROR_TRANSPORT_U2F_NOT_SUPPORTED: {
+    id: `${importWalletPagePrefix}.error.transport.u2t.notsuppported`,
+    defaultMessage:
+      'U2F not supported in this browser. Please try using Google Chrome with a secure (SSL / HTTPS) connection!',
+  },
   IMPORT_WALLET_POPUP_ADDRESS_TITLE: {
     id: `${importWalletPagePrefix}.popup.address.title`,
     defaultMessage: 'Ledger Wallet',
