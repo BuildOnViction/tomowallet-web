@@ -90,9 +90,16 @@ export const writeKeystore = content =>
 
 export const removeKeystore = () =>
   new Promise(resolve =>
-    electronAPI.fs.unlink(
+    electronAPI.fs.stat(
       path.join(__dirname, '\\..\\store\\keystore.json'),
-      error => resolve({ error }),
+      error => {
+        if (!error) {
+          electronAPI.fs.unlink(
+            path.join(__dirname, '\\..\\store\\keystore.json'),
+            error => resolve({ error }),
+          );
+        }
+      },
     ),
   );
 

@@ -243,11 +243,13 @@ class ImportWallet extends PureComponent {
     } else {
       toggleLoading(true);
       onUpdateErrors([]);
-      this.handleUnlockLedger().then(payload => {
-        if (payload) {
-          this.handleLoadLedgerWallets(payload, 0);
-        }
-      });
+      this.handleUnlockLedger()
+        .then(payload => {
+          if (payload) {
+            this.handleLoadLedgerWallets(payload, 0);
+          }
+        })
+        .catch(error => this.handleUpdateError(error.message));
     }
   }
 
@@ -283,11 +285,18 @@ class ImportWallet extends PureComponent {
               'Node Transport not supported in this application.',
             );
           }
-          return electron.transportNodeHid
-            .create()
-            .then(transport =>
-              new Eth(transport).getAddress(hdPath, false, true),
-            )
+          return Promise.race([
+            electron.transportNodeHid.create(),
+            new Promise((_, reject) => {
+              const timeout = setTimeout(() => {
+                clearTimeout(timeout);
+                reject({ message: "The system can't find any Ledger device." });
+              }, 5000);
+            }),
+          ])
+            .then(transport => {
+              return new Eth(transport).getAddress(hdPath, false, true);
+            })
             .catch(error => this.handleUpdateError(error.message));
         })
         .catch(error => this.handleUpdateError(error.message));
