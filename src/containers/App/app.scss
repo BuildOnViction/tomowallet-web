@@ -1,5 +1,28 @@
 // Style Global
 @import './iconfont/style.css';
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes bouncer {
+  0% {
+    transform: translateY(0%);
+  }
+  25% {
+    transform: translateY(-10%);
+  }
+  50% {
+    transform: translateY(-3%);
+  }
+  75% {
+    transform: translateY(-7%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
 * {
   box-sizing: border-box;
 }

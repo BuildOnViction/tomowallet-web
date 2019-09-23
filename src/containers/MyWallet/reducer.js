@@ -80,7 +80,6 @@ export default (state = initialState, action) => {
     case LOAD_COIN_DATA:
       return state
         .setIn(['coinData', 'isLoaded'], false)
-        .setIn(['coinData', 'data'], {})
         .setIn(['coinData', 'errorMessage'], '');
     case LOAD_COIN_DATA_FAILED:
       return state

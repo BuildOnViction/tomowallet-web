@@ -42,7 +42,6 @@ class AddressInfo extends PureComponent {
 
   render() {
     const {
-      coinData,
       intl: { formatMessage },
       openReceiveTokenPopup,
       openSendTokenPopup,
@@ -58,7 +57,7 @@ class AddressInfo extends PureComponent {
               className='mb-sm-3 mb-lg-0'
             >
               <div className='bg_gray'>
-                <ExchangeInfo coinData={coinData} />
+                <ExchangeInfo />
               </div>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
@@ -109,8 +108,6 @@ class AddressInfo extends PureComponent {
 
 // ===== PROP TYPES =====
 AddressInfo.propTypes = {
-  /** TomoChain coin data */
-  coinData: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Action to show/hide clipboard popup */
@@ -124,7 +121,6 @@ AddressInfo.propTypes = {
 };
 
 AddressInfo.defaultProps = {
-  coinData: {},
   intl: {},
   onToggleClipboardPopup: () => {},
   openReceiveTokenPopup: () => {},

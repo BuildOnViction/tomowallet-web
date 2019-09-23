@@ -35,9 +35,7 @@ import {
   toggleSuccessPopup,
   resetSendTokenForm,
   toggleReceiveTokenPopup,
-  loadCoinData,
   resetState,
-  loadWalletTransactionData,
 } from './actions';
 import {
   selectTableType,
@@ -46,7 +44,6 @@ import {
   selectSendTokenForm,
   selectSuccessPopup,
   selectTokenOptions,
-  selectCoinData,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -103,11 +100,6 @@ class MyWallet extends PureComponent {
     this.handleValidateTrc20Fee = this.handleValidateTrc20Fee.bind(this);
     this.handleValidateTrc21Fee = this.handleValidateTrc21Fee.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
-  }
-
-  componentDidMount() {
-    const { onLoadCoinData } = this.props;
-    onLoadCoinData();
   }
 
   componentWillUnmount() {
@@ -674,7 +666,6 @@ class MyWallet extends PureComponent {
           <title>{formatMessage(MSG.MY_WALLET_TITLE)}</title>
         </Helmet>
         <AddressInfo
-          coinData={coinData}
           openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
           openSendTokenPopup={this.handleOpenSendTokenPopup}
           wallet={wallet}
@@ -761,9 +752,7 @@ MyWallet.propTypes = {
 };
 
 MyWallet.defaultProps = {
-  coinData: {},
   intl: {},
-  onLoadCoinData: () => {},
   onResetSendTokenForm: () => {},
   onResetState: () => {},
   onSetTableType: () => {},
@@ -787,7 +776,6 @@ MyWallet.defaultProps = {
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
-    coinData: selectCoinData,
     receivePopup: selectReceiveToKenPopup,
     sendTokenForm: selectSendTokenForm,
     sendToKenPopup: selectSendTokenPopup,
@@ -797,7 +785,6 @@ const mapStateToProps = () =>
     wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
-  onLoadCoinData: () => dispatch(loadCoinData()),
   onResetSendTokenForm: () => dispatch(resetSendTokenForm()),
   onResetState: () => dispatch(resetState()),
   onSetTableType: type => dispatch(setTableType(type)),

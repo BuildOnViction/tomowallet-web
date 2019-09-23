@@ -9,6 +9,8 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import _get from 'lodash.get';
 // Custom Components
 import Image from '../../../../components/Image';
@@ -17,6 +19,9 @@ import { ExchangeInfoStyler } from './style';
 import { withIntl } from '../../../../components/IntlProvider';
 import { convertLocaleNumber } from '../../../../utils';
 import { MSG } from '../../../../constants';
+import { createStructuredSelector } from 'reselect';
+import { selectCoinData } from '../../selectors';
+import { loadCoinData } from '../../actions';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -26,6 +31,18 @@ class ExchangeInfo extends PureComponent {
 
     this.handleFormatMoney = this.handleFormatMoney.bind(this);
     this.handleGetExchangeData = this.handleGetExchangeData.bind(this);
+  }
+
+  componentDidMount() {
+    const { onLoadCoinData } = this.props;
+    onLoadCoinData();
+    this.requestCoinData = setInterval(() => {
+      onLoadCoinData();
+    }, 15000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.requestCoinData);
   }
 
   handleFormatMoney(number) {
@@ -56,13 +73,14 @@ class ExchangeInfo extends PureComponent {
 
   render() {
     const {
+      coinData,
       intl: { formatMessage },
     } = this.props;
     const data = this.handleGetExchangeData();
     const isDecrease = Math.sign(data.changeRate) === -1;
 
     return (
-      <ExchangeInfoStyler>
+      <ExchangeInfoStyler isLoaded={_get(coinData, 'isLoaded', false)}>
         <div className='exchange-info__container'>
           <div>
             <div className='exchange-info__data'>
@@ -136,12 +154,32 @@ ExchangeInfo.propTypes = {
   coinData: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Action to get currency statistic from CoinMarketCap */
+  onLoadCoinData: PropTypes.func,
 };
 
 ExchangeInfo.defaultProps = {
   coinData: {},
   intl: {},
+  onLoadCoinData: () => {},
 };
 // ======================
 
-export default withIntl(ExchangeInfo);
+// ===== INJECTIONS =====
+const mapStateToProps = () =>
+  createStructuredSelector({
+    coinData: selectCoinData,
+  });
+const mapDispatchToProps = dispatch => ({
+  onLoadCoinData: () => dispatch(loadCoinData()),
+});
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+// ======================
+
+export default compose(
+  withIntl,
+  withConnect,
+)(ExchangeInfo);
