@@ -31,6 +31,7 @@ const DropdownToggleHeader = styled(DropdownToggle)`
     left: -5px;
     top: 50%;
     transform: translateY(-50%);
+    animation: blinker 1s linear infinite;
   }
 `;
 
