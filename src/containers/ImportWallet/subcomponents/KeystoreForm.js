@@ -25,15 +25,8 @@ import {
   updatePasswordPopupErrors,
   updateInput,
 } from '../actions';
-import {
-  decryptKeystore,
-  isElectron,
-  electron,
-  writeKeystore,
-} from '../../../utils';
+import { decryptKeystore, isElectron, writeKeystore } from '../../../utils';
 import { MSG } from '../../../constants';
-
-const path = require('path');
 // ===================
 
 // ===== MAIN COMPONENT =====

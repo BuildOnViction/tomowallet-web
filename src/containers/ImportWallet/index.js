@@ -164,7 +164,7 @@ class ImportWallet extends PureComponent {
             });
           })
           .then(() => {
-            if (accessType !== 'keystore') {
+            if (isElectron() && accessType !== 'keystore') {
               removeKeystore().then(
                 ({ error }) => error && this.handleUpdateError(error.message),
               );
