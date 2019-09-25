@@ -64,7 +64,6 @@ import {
   getNetwork,
   sendMoney,
   getWalletInfo,
-  convertAmountWithDecimals,
   getBalance,
   repeatGetTransaction,
   estimateCurrencyFee,
@@ -119,7 +118,7 @@ class MyWallet extends PureComponent {
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
       0,
     );
-    const normalBalance = convertAmountWithDecimals(rawBalance, decimals);
+    const normalBalance = bnToDecimals(rawBalance, decimals);
 
     onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, normalBalance);
   }
@@ -160,7 +159,7 @@ class MyWallet extends PureComponent {
         } else {
           estimateTRC21Fee(web3, contractData).then(feeObj => {
             if (feeObj.type === ENUM.TOKEN_TYPE.TRC21) {
-              this.handleValidateCurrencyFee(feeObj);
+              this.handleValidateTrc21Fee(feeObj);
             } else {
               this.handleValidateTrc20Fee(feeObj);
             }
@@ -607,7 +606,7 @@ class MyWallet extends PureComponent {
           name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
           max: parseFloat(
-            convertAmountWithDecimals(
+            bnToDecimals(
               _get(sendTokenForm, [
                 SEND_TOKEN_FIELDS.TOKEN,
                 PORTFOLIO_COLUMNS.BALANCE,
@@ -644,7 +643,6 @@ class MyWallet extends PureComponent {
 
   render() {
     const {
-      coinData,
       intl: { formatMessage },
       onSetTableType,
       onToggleReceiveTokenPopup,

@@ -7,6 +7,7 @@
 // Modules
 import Web3 from 'web3';
 import HDWalletProvider from 'truffle-hdwallet-provider';
+// import { stealth as Stealth, address as Address } from 'tomoprivacyjs';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
 import _isEqual from 'lodash.isequal';
@@ -16,6 +17,7 @@ import { getNetwork } from './storage';
 import { ENUM, RPC_SERVER } from '../constants';
 import trc20 from '../contractABIs/trc20.json';
 import trc21 from '../contractABIs/trc21.json';
+import trc21Issuer from '../contractABIs/trc21Issuer.json';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
@@ -23,6 +25,10 @@ const DEFAULT_GAS_PRICE = '250000000';
 const DEFAULT_GAS_TOKEN = '500000';
 const DEFAULT_GAS_CURRENCY = '21000';
 const DEFAULT_CURRENCY_DECIMALS = 18;
+const TOMO_Z_CONTRACT_ADDRESS = {
+  TOMOCHAIN_MAINNET: '0x8c0faeb5c6bed2129b8674f262fd45c4e9468bee',
+  TOMOCHAIN_TESTNET: '0x7081c72c9dc44686c7b7eab1d338ea137fa9f0d3',
+};
 // ===============================
 
 // ===== METHODS =====
@@ -150,25 +156,53 @@ const decryptKeystore = (web3, encryptedInfo, password) => {
   return {};
 };
 
+/**
+ * isAppliedTomoZ
+ *
+ * Check if the given token is applied TomoZ (has its own transaction fee)
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {String} tokenAddress Address of token to verify
+ */
+const isAppliedTomoZ = (web3, txData) => {
+  const { contractAddress, from } = txData;
+  const networkKey = getNetwork();
+  const tomoZContract = new web3.eth.Contract(
+    trc21Issuer,
+    TOMO_Z_CONTRACT_ADDRESS[networkKey],
+  );
+  return tomoZContract.methods
+    .getTokenCapacity(contractAddress)
+    .call({ from })
+    .then(cap => {
+      if (Number(cap)) {
+        return true;
+      }
+      return false;
+    })
+    .catch(() => false);
+};
+
 const estimateTRC21Fee = (web3, txData) => {
   const { amount, contractAddress, decimals, from, to } = txData;
-  const contract = new web3.eth.Contract(trc21, contractAddress);
+  const contract = new web3.eth.Contract(trc21, contractAddress, from);
   const weiAmount = decimalsToBN(amount, decimals);
 
-  return contract.methods
-    .estimateFee(weiAmount)
-    .call({ from, to })
-    .then(fee => {
-      if (fee !== '0') {
-        return {
-          type: ENUM.TOKEN_TYPE.TRC21,
-          amount: bnToDecimals(fee, decimals),
-          gas: DEFAULT_GAS_TOKEN,
-          gasPrice: DEFAULT_GAS_PRICE,
-        };
-      }
-      return estimateTRC20Fee(web3, txData);
-    });
+  return isAppliedTomoZ(web3, txData).then(isApplied => {
+    if (isApplied) {
+      return contract.methods
+        .estimateFee(weiAmount)
+        .call({ from, to })
+        .then(fee => {
+          return {
+            type: ENUM.TOKEN_TYPE.TRC21,
+            amount: bnToDecimals(fee, decimals),
+            gas: DEFAULT_GAS_TOKEN,
+            gasPrice: DEFAULT_GAS_PRICE,
+          };
+        });
+    }
+    return estimateTRC20Fee(web3, txData);
+  });
 };
 
 const estimateTRC20Fee = (web3, txData) => {
@@ -339,14 +373,6 @@ const fromWei = amount => {
   return web3.utils.fromWei(amount);
 };
 
-const convertAmountWithDecimals = (number, decimals) => {
-  const web3 = new Web3();
-  const normalNumber = web3.utils
-    .toBN(number)
-    .divmod(web3.utils.toBN(10 ** decimals));
-  return `${normalNumber.div}.${normalNumber.mod.toString(10, decimals)}`;
-};
-
 /**
  * repeatGetTransaction
  *
@@ -456,9 +482,34 @@ const isAddress = rawData => {
 };
 // ===================
 
+// ===== EXPERIMENTING METHODS =====
+// const setSenderCommitment = (sender, receiverPrivateAddr, amountInDecimals) => {
+//   const receiver = Stealth.fromString(receiverPrivateAddr);
+//   const proof = sender.genTransactionProof(
+//     amountInDecimals,
+//     receiver.pubSpendKey,
+//     receiver.pubViewKey,
+//   );
+
+//   return sender.genCommiment(receiver.pubSpendKey, receiver.pubViewKey);
+// };
+
+// const getPaymentResult = (privKey, proof) => {
+//   const receiver = new Stealth({
+//     ...Address.generateKeys(privKey),
+//   });
+
+//   return receiver.checkTransactionProof(
+//     proof.txPublicKey,
+//     proof.onetimeAddress,
+//     proof.mask,
+//   );
+// };
+
+// =================================
+
 export {
   bnToDecimals,
-  convertAmountWithDecimals,
   decimalsToBN,
   decryptKeystore,
   encryptKeystore,

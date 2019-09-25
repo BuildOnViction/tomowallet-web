@@ -43,6 +43,7 @@ class CustomImage extends PureComponent {
   render() {
     const { alt, defaultSrc, src } = this.props;
     const { isLoaded } = this.state;
+
     return (
       <Fragment>
         {!isLoaded && <img src={defaultSrc} alt={alt} />}

@@ -6,39 +6,34 @@
 // ===== IMPORTS =====
 // Modules
 import React, { PureComponent } from 'react';
+import _get from 'lodash.get';
 // Custom Components
 import { TokenCellStyler } from '../style';
 import Image from '../../../../../components/Image';
 // Utilities, Constants & Styles
+import { PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
-import logoTomo from '../../../../../assets/images/logo-tomo.png';
-import logoKyper from '../../../../../assets/images/logo-kyper.png';
-import logoKucoin from '../../../../../assets/images/logo-kucoin.png';
 // ===================
-
-const LogoToken = {
-  TOMO: logoTomo,
-  KYPER: logoKyper,
-  KUCOIN: logoKucoin,
-};
 
 // ===== MAIN COMPONENT =====
 class TokenCell extends PureComponent {
   render() {
-    const { formatMessage, value } = this.props;
+    const { formatMessage, values } = this.props;
+    const tokenName = _get(values, [PORTFOLIO_COLUMNS.TOKEN_NAME], '');
+    const iconSrc = _get(values, [PORTFOLIO_COLUMNS.ICON], '');
     return (
       <TokenCellStyler>
         <div className='block-symbol'>
           <Image
-            src={LogoToken[value]}
+            src={iconSrc}
             alt={formatMessage(
               MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_IMAGE_ALT,
-              { name: value },
+              { name: tokenName },
             )}
           />
         </div>
         <div className='block-token'>
-          <div className='block-token__name'>{value}</div>
+          <div className='block-token__name'>{tokenName}</div>
           <div className='block-token__publisher'>
             {formatMessage(
               MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_PUBLISHER,
