@@ -21,6 +21,7 @@ import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
 import { SEND_TOKEN_STAGES } from '../../../constants';
 import { selectWallet } from '../../../../Global/selectors';
+import { withGlobal } from '../../../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -40,11 +41,15 @@ class SendTokenPopup extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (
-      !_isEqual(
+      (!_isEqual(
         _get(prevProps, 'popupData.stage'),
         _get(this.props, 'popupData.stage'),
       ) &&
-      _isEqual(_get(this.props, 'popupData.stage'), SEND_TOKEN_STAGES.FORM)
+        _isEqual(
+          _get(this.props, 'popupData.stage'),
+          SEND_TOKEN_STAGES.FORM,
+        )) ||
+      (_get(prevProps, 'loading') && !_get(this.props, 'loading'))
     ) {
       this.handleSendRequest(false);
     }
@@ -166,6 +171,8 @@ SendTokenPopup.propTypes = {
   formValues: PropTypes.object,
   /** React Intl's instance object */
   intl: PropTypes.object,
+  /** Condition flag to show/hide loading screen */
+  loading: PropTypes.bool,
   /** Popup's object data */
   popupData: PropTypes.object,
   /** Action to submit send token's form */
@@ -186,6 +193,7 @@ SendTokenPopup.defaultProps = {
   confirmBeforeSend: () => {},
   formValues: {},
   intl: {},
+  loading: false,
   popupData: {},
   submitSendToken: () => {},
   tokenOptions: [],
@@ -204,6 +212,7 @@ const withConnect = connect(mapStateToProps);
 // ======================
 
 export default compose(
-  withIntl,
   withConnect,
+  withGlobal,
+  withIntl,
 )(SendTokenPopup);

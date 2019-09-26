@@ -16,9 +16,6 @@ import { createStructuredSelector } from 'reselect';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
 import { Helmet } from 'react-helmet';
-import Transaction from 'ethereumjs-tx';
-import Eth from '@ledgerhq/hw-app-eth';
-import TransportU2F from '@ledgerhq/hw-transport-u2f';
 // Custom Components
 import AddressInfo from './subcomponents/AddressInfo';
 import DataTables from './subcomponents/DataTables';
@@ -63,15 +60,14 @@ import {
   getWeb3Info,
   getNetwork,
   sendMoney,
+  sendSignedTransaction,
   getWalletInfo,
   getBalance,
-  repeatGetTransaction,
   estimateCurrencyFee,
   estimateTRC20Fee,
   estimateTRC21Fee,
   bnToDecimals,
   decimalsToBN,
-  getLedgerTokenTransferData,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
 import { withWeb3 } from '../../components/Web3';
@@ -227,15 +223,6 @@ class MyWallet extends PureComponent {
     onToggleSendTokenPopup(true, initialValues);
   }
 
-  handleSendMoneyByLedger() {
-    const { sendTokenForm, toggleLoading } = this.props;
-
-    toggleLoading(true);
-    this.handleSendSignedTransactionLedger(
-      _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE]),
-    );
-  }
-
   handleSendMoneyByPK() {
     const {
       onStoreWallet,
@@ -261,7 +248,7 @@ class MyWallet extends PureComponent {
       .catch(this.handleTransactionError);
   }
 
-  handleSendSignedTransactionLedger(tokenType) {
+  handleSendMoneyByLedger() {
     const {
       onStoreWallet,
       onToggleSuccessPopup,
@@ -279,71 +266,26 @@ class MyWallet extends PureComponent {
     ]);
     const gas = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'gas']);
 
-    try {
-      const transData = getLedgerTokenTransferData(web3, contract);
-      web3.eth.getTransactionCount(contract.from).then(nonce => {
-        const txParams = {
-          from: contract.from,
-          ...(tokenType === ENUM.TOKEN_TYPE.CURRENCY
-            ? {
-                to: contract.to,
-                value: `0x${web3.utils
-                  .toBN(decimalsToBN(contract.amount, contract.decimals))
-                  .toString('hex')}`,
-              }
-            : {
-                to: contract.contractAddress,
-                data: transData,
-              }),
-          nonce: `0x${web3.utils.toBN(nonce).toString('hex')}`,
-          gas: `0x${web3.utils.toBN(gas).toString('hex')}`,
-          gasPrice: `0x${web3.utils.toBN(gasPrice).toString('hex')}`,
-          chainId: networkId,
-        };
-
-        const rawTx = new Transaction(txParams);
-        rawTx.v = Buffer.from([networkId]);
-        const serializedRawTx = rawTx.serialize().toString('hex');
-        TransportU2F.create().then(transport =>
-          new Eth(transport)
-            .signTransaction(hdPath, serializedRawTx)
-            .then(signature => {
-              const hexifySignature = {};
-              Object.keys(signature).forEach(key => {
-                hexifySignature[key] = signature[key].startsWith('0x')
-                  ? signature[key]
-                  : `0x${signature[key]}`;
-              });
-              const txObj = {
-                ...txParams,
-                ...hexifySignature,
-              };
-              const tx = new Transaction(txObj);
-              const serializedTx = `0x${tx.serialize().toString('hex')}`;
-
-              web3.eth
-                .sendSignedTransaction(serializedTx)
-                .on('transactionHash', txHash => {
-                  repeatGetTransaction(web3, txHash);
-                })
-                .then(txObj => {
-                  getBalance(address).then(balance => {
-                    onStoreWallet({
-                      address,
-                      balance,
-                    });
-                  });
-
-                  toggleLoading(false);
-                  this.handleCloseSendTokenPopup();
-                  onToggleSuccessPopup(true, txObj);
-                });
-            }),
-        );
-      });
-    } catch (error) {
-      this.handleTransactionError(error);
-    }
+    toggleLoading(true);
+    sendSignedTransaction(web3, {
+      ...contract,
+      chainId: networkId,
+      gas,
+      gasPrice,
+      hdPath,
+    })
+      .then(txObj => {
+        getBalance(address).then(balance => {
+          onStoreWallet({
+            address,
+            balance,
+          });
+        });
+        toggleLoading(false);
+        this.handleCloseSendTokenPopup();
+        onToggleSuccessPopup(true, txObj);
+      })
+      .catch(error => this.handleTransactionError(error));
   }
 
   handleSendTokenByPK() {

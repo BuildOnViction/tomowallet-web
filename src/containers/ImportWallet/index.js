@@ -12,9 +12,6 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import _get from 'lodash.get';
 import _isEmpty from 'lodash.isempty';
-import Eth from '@ledgerhq/hw-app-eth';
-import * as HDKey from 'hdkey';
-import * as ethUtils from 'ethereumjs-util';
 import {
   CardBody,
   Row,
@@ -55,7 +52,7 @@ import reducer from './reducer';
 import { ROUTE, MSG, ENUM } from '../../constants';
 import {
   injectReducer,
-  generateWeb3,
+  createWeb3,
   setWeb3Info,
   withGlobal,
   getValidations,
@@ -63,10 +60,10 @@ import {
   getBalance,
   removeWeb3Info,
   isElectron,
-  electron,
   isRecoveryPhrase,
   isPrivateKey,
   removeKeystore,
+  selectHDPath,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -86,11 +83,8 @@ class ImportWallet extends PureComponent {
       this,
     );
     this.handleChangeType = this.handleChangeType.bind(this);
-    this.handleCreateHWAddress = this.handleCreateHWAddress.bind(this);
-    this.handleLoadLedgerWallets = this.handleLoadLedgerWallets.bind(this);
     this.handleRedirect = this.handleRedirect.bind(this);
-    this.handleSelectHDPath = this.handleSelectHDPath.bind(this);
-    this.handleUnlockLedger = this.handleUnlockLedger.bind(this);
+    this.handleGetLedgerAddresses = this.handleGetLedgerAddresses.bind(this);
     this.handleUpdateError = this.handleUpdateError.bind(this);
   }
 
@@ -148,7 +142,7 @@ class ImportWallet extends PureComponent {
     if (isRecoveryPhrase(recoveryPhrase) || isPrivateKey(recoveryPhrase)) {
       try {
         toggleLoading(true);
-        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+        const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
         updateWeb3(newWeb3);
         getBalance(newWeb3.currentProvider.addresses[0])
           .then(balance => {
@@ -187,55 +181,20 @@ class ImportWallet extends PureComponent {
     onUpdateImportType(newType);
   }
 
-  handleCreateHWAddress(payload, index) {
-    const { web3 } = this.props;
-    const { publicKey, chainCode } = payload;
-    try {
-      // Get wallet address from ledger payload & index
-      const hdKey = new HDKey();
-      hdKey.publicKey = Buffer.from(publicKey, 'hex');
-      hdKey.chainCode = Buffer.from(chainCode, 'hex');
-      const derivedKey = hdKey.derive('m/' + index);
-      const convertedPubKey = ethUtils.bufferToHex(derivedKey.publicKey);
-      const addressBuff = ethUtils.publicToAddress(convertedPubKey, true);
-      const walletAddress = ethUtils.bufferToHex(addressBuff);
-
-      // Return full wallet object
-      return web3.eth.getBalance(walletAddress).then(balance => ({
-        address: walletAddress,
-        balance: web3.utils
-          .fromWei(balance)
-          .slice(0, web3.utils.fromWei(balance).indexOf('.') + 4),
-      }));
-    } catch (error) {
-      this.handleUpdateError(error.message);
-    }
-  }
-
-  handleLoadLedgerWallets(payload, offset) {
-    const { onLoadWalletAddresses, toggleLoading } = this.props;
-    const walletPromises = [];
-
-    for (let i = offset; i < offset + this.LEDGER_WALLET_LIMIT; i++) {
-      walletPromises.push(this.handleCreateHWAddress(payload, i));
-    }
-    Promise.all(walletPromises)
-      .then(wallets => {
-        toggleLoading(false);
-        onLoadWalletAddresses(wallets);
-      })
-      .catch(error => {
-        this.handleUpdateError(error.message);
-      });
-  }
-
   handleRedirect(newRoute) {
     const { history } = this.props;
     history.push(newRoute);
   }
 
-  handleSelectHDPath() {
-    const { onUpdateErrors, toggleLoading } = this.props;
+  handleGetLedgerAddresses() {
+    const {
+      importWallet,
+      onLoadWalletAddresses,
+      onUpdateErrors,
+      toggleLoading,
+      web3,
+    } = this.props;
+    const hdPath = _get(importWallet, 'input.hdPath', '');
     const errorList = this.handleValidateHDPath();
 
     if (!_isEmpty(errorList)) {
@@ -243,11 +202,10 @@ class ImportWallet extends PureComponent {
     } else {
       toggleLoading(true);
       onUpdateErrors([]);
-      this.handleUnlockLedger()
-        .then(payload => {
-          if (payload) {
-            this.handleLoadLedgerWallets(payload, 0);
-          }
+      selectHDPath(web3, hdPath)
+        .then(wallets => {
+          toggleLoading(false);
+          onLoadWalletAddresses(wallets);
         })
         .catch(error => this.handleUpdateError(error.message));
     }
@@ -270,63 +228,6 @@ class ImportWallet extends PureComponent {
         formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH),
       ),
     };
-  }
-
-  handleUnlockLedger() {
-    const {
-      intl: { formatMessage },
-      importWallet,
-    } = this.props;
-    const hdPath = _get(importWallet, 'input.hdPath', '');
-
-    if (isElectron()) {
-      return electron.transportNodeHid
-        .isSupported()
-        .then(nodeSupported => {
-          if (!nodeSupported) {
-            throw new Error(
-              formatMessage(
-                MSG.IMPORT_WALLET_ERROR_TRANSPORT_NODE_NOT_SUPPORTED,
-              ),
-            );
-          }
-          return Promise.race([
-            electron.transportNodeHid.create(),
-            new Promise((_, reject) => {
-              const timeout = setTimeout(() => {
-                clearTimeout(timeout);
-                reject({
-                  message: formatMessage(
-                    MSG.IMPORT_WALLET_ERROR_DEVICE_NOT_FOUND,
-                  ),
-                });
-              }, 5000);
-            }),
-          ])
-            .then(transport => {
-              return new Eth(transport).getAddress(hdPath, false, true);
-            })
-            .catch(error => this.handleUpdateError(error.message));
-        })
-        .catch(error => this.handleUpdateError(error.message));
-    }
-    const TransportU2F = require('@ledgerhq/hw-transport-u2f').default;
-    return TransportU2F.isSupported()
-      .then(u2fSupported => {
-        if (!u2fSupported) {
-          throw new Error(
-            formatMessage(MSG.IMPORT_WALLET_ERROR_TRANSPORT_U2F_NOT_SUPPORTED),
-          );
-        }
-        return TransportU2F.create()
-          .then(transport => new Eth(transport).getAddress(hdPath, false, true))
-          .catch(error => {
-            this.handleUpdateError(error.message);
-          });
-      })
-      .catch(error => {
-        this.handleUpdateError(error.message);
-      });
   }
 
   handleUpdateError(errorMsg, clientMode) {
@@ -502,7 +403,7 @@ class ImportWallet extends PureComponent {
                       onClick={
                         _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
                           ? this.handleAccessByRecoveryPhrase
-                          : this.handleSelectHDPath
+                          : this.handleGetLedgerAddresses
                       }
                     >
                       {formatMessage(MSG.COMMON_BUTTON_IMPORT)}

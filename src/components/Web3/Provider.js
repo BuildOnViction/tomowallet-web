@@ -18,7 +18,7 @@ import { FailureComponent, LoadingComponent } from './';
 // Utilities & Constants
 import {
   getWeb3Info,
-  generateWeb3,
+  createWeb3,
   getNetwork,
   setNetwork,
   getWalletInfo,
@@ -79,7 +79,7 @@ class Web3Provider extends Component {
         const { recoveryPhrase } = web3Info;
         const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
         const rpcServer = _get(RPC_SERVER, [networkKey]);
-        const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+        const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
 
         this.handleSetWeb3(newWeb3);
         this.setState({
@@ -115,11 +115,7 @@ class Web3Provider extends Component {
         this.updateMetaMaskAccountListener,
       );
     }
-    this.handleInitiateDefaultWeb3();
-  }
-
-  static updateMetaMaskAccountListener() {
-    this.handleUpdateMetaMaskAccount();
+    // this.handleInitiateDefaultWeb3();
   }
 
   handleSetMetaMaskProvider() {
@@ -184,7 +180,12 @@ class Web3Provider extends Component {
 
     Web3.givenProvider._metamask.isUnlocked().then(bool => {
       if (bool) {
+        const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+        const rpcServer = _get(RPC_SERVER, [networkKey]);
         this.handleSetWeb3(newWeb3);
+        this.setState({
+          rpcServer,
+        });
         getWalletInfo(newWeb3).then(walletInfo => {
           if (walletInfo) {
             setWeb3Info({

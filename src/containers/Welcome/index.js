@@ -36,7 +36,7 @@ import {
   isPrivateKey,
   withGlobal,
   getNetwork,
-  generateWeb3,
+  createWeb3,
   getBalance,
   setWeb3Info,
   isElectron,
@@ -103,7 +103,7 @@ class WelcomePage extends PureComponent {
     if (isPrivateKey(privKey)) {
       try {
         const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
-        const newWeb3 = generateWeb3(privKey, rpcServer);
+        const newWeb3 = createWeb3(privKey, rpcServer);
         updateWeb3(newWeb3);
         getBalance(newWeb3.currentProvider.addresses[0])
           .then(balance => {

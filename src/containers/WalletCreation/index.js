@@ -49,7 +49,7 @@ import { withIntl } from '../../components/IntlProvider';
 import { withWeb3 } from '../../components/Web3';
 import {
   injectReducer,
-  generateWeb3,
+  createWeb3,
   getWalletInfo,
   setWeb3Info,
   withGlobal,
@@ -101,7 +101,7 @@ class WalletCreationPage extends PureComponent {
 
     if (_isEqual(recoveryPhrase, _get(mnemonic, 'compare', []).join(' '))) {
       toggleLoading(true);
-      const newWeb3 = generateWeb3(recoveryPhrase, rpcServer);
+      const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
       getWalletInfo(newWeb3)
         .then(walletInfo => {
           this.setState({

@@ -20,7 +20,7 @@ class AddressContent extends PureComponent {
     return (
       <BoxText>
         {_get(data, 'wallets', []).map((wallet, walletIdx) => (
-          <Row className='py-3'>
+          <Row key={`address_row_${walletIdx + 1}`} className='py-3'>
             <Col xs={8} className='text-truncate'>
               <label
                 className='pl-5 m-0 position-relative'

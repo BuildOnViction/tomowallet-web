@@ -11,7 +11,6 @@ import _get from 'lodash.get';
 import { FormattedMessage } from 'react-intl';
 import {
   Card,
-  CardBody,
   CardFooter,
   CardHeader,
   CardText,
@@ -84,7 +83,11 @@ class QuickAccessSection extends PureComponent {
                 {...MSG.WELCOME_FORM_PASSWORD_DESCRIPTION}
                 values={{
                   alternative: (
-                    <ButtonLinkStyler btnBlue onClick={redirectToFreshLogin}>
+                    <ButtonLinkStyler
+                      btnBlue
+                      onClick={redirectToFreshLogin}
+                      className='font-weight-bold'
+                    >
                       {formatMessage(
                         MSG.WELCOME_FORM_PASSWORD_DESCRIPTION_ALTERNATIVE_LOGIN,
                       )}

@@ -14,25 +14,25 @@ import {
 } from './miscellaneous';
 import {
   bnToDecimals,
-  convertAmountWithDecimals,
+  createWeb3,
   decimalsToBN,
   decryptKeystore,
   encryptKeystore,
   estimateCurrencyFee,
   estimateTRC20Fee,
   estimateTRC21Fee,
-  fromWei,
-  generateWeb3,
   getBalance,
-  getLedgerTokenTransferData,
   getWalletInfo,
   isAddress,
   isPrivateKey,
   isRecoveryPhrase,
   mnemonicToPrivateKey,
   repeatGetTransaction,
+  selectHDPath,
   sendMoney,
+  sendSignedTransaction,
   sendToken,
+  weiToDecimals,
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
 import { withGlobal } from './injectGlobal';
@@ -57,14 +57,15 @@ import electron, {
   removeKeystore,
   writeKeystore,
 } from './electron';
+import { getGlobalIntl } from './intl';
 
 export {
   bnToDecimals,
   changeInputWithSubmit,
   convertLocaleNumber,
-  convertAmountWithDecimals,
   copyToClipboard,
   createDeepEqualSelector,
+  createWeb3,
   decimalsToBN,
   decryptKeystore,
   detectKeystore,
@@ -75,11 +76,9 @@ export {
   estimateCurrencyFee,
   estimateTRC20Fee,
   estimateTRC21Fee,
-  fromWei,
-  generateWeb3,
   getBalance,
+  getGlobalIntl,
   getLedger,
-  getLedgerTokenTransferData,
   getLocale,
   getNetwork,
   getValidations,
@@ -102,7 +101,9 @@ export {
   removeTrailingZero,
   removeWeb3Info,
   repeatGetTransaction,
+  selectHDPath,
   sendMoney,
+  sendSignedTransaction,
   sendToken,
   setLedger,
   setLocale,
@@ -110,6 +111,7 @@ export {
   setWeb3Info,
   shuffleArray,
   trimMnemonic,
+  weiToDecimals,
   withGlobal,
   writeKeystore,
 };
