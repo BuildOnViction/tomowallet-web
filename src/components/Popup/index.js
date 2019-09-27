@@ -1,8 +1,11 @@
 /**
  *
- * Common Component - Pop-up
+ * TomoWallet - Common Popup
  *
+ * This component defines a basic popup, with configuration options
+ * to modify & extend into more specific popup types
  */
+// ===== IMPORTS =====
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
@@ -18,6 +21,7 @@ import {
 // Custom Components
 import ModalStyles from './style';
 import { ButtonStyler } from '../../styles';
+// ===================
 
 // ===== MAIN COMPONENT =====
 class Popup extends PureComponent {

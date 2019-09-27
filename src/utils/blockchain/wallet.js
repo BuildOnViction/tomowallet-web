@@ -18,12 +18,6 @@ import { ENUM } from '../../constants';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
-const DEFAULT_RPC_SERVER = {
-  type: 'http',
-  host: 'https://rpc.tomochain.com',
-  networkId: 88,
-  hdPath: "m/44'/889'/0'/0/",
-};
 const TOMO_Z_CONTRACT_ADDRESS = {
   TOMOCHAIN_MAINNET: '0x8c0faeb5c6bed2129b8674f262fd45c4e9468bee',
   TOMOCHAIN_TESTNET: '0x7081c72c9dc44686c7b7eab1d338ea137fa9f0d3',
@@ -44,24 +38,25 @@ const defaultCallback = error => console.error('[ERROR]: ', error);
  * @param {Object} serverConfig Current RPC server configuration
  * @param {Function} callback (optional) Action to handle exception
  */
-const createWeb3 = (
-  mnemonic = '',
-  serverConfig = {},
-  callback = defaultCallback,
-) => {
-  const { hdPath, host, type } = serverConfig;
+const createWeb3 = (mnemonic, serverConfig, callback = defaultCallback) => {
   let provider;
 
   try {
-    if (mnemonic) {
+    if (mnemonic && typeof serverConfig === 'object') {
+      const { hdPath, host } = serverConfig;
       provider = new HDWalletProvider(mnemonic, host, 0, 1, true, hdPath);
     } else if (!_isEmpty(serverConfig)) {
-      if (type === 'ws') {
-        provider = new Web3.providers.WebsocketProvider(host);
-      } else if (type === 'ipc') {
-        provider = new Web3.providers.IpcProvider(host);
-      } else {
-        provider = new Web3.providers.HttpProvider(host);
+      if (typeof serverConfig === 'object') {
+        const { host, type } = serverConfig;
+        if (type === 'ws') {
+          provider = new Web3.providers.WebsocketProvider(host);
+        } else if (type === 'ipc') {
+          provider = new Web3.providers.IpcProvider(host);
+        } else {
+          provider = new Web3.providers.HttpProvider(host);
+        }
+      } else if (typeof serverConfig === 'string') {
+        provider = new Web3.providers.HttpProvider(serverConfig);
       }
     }
 
@@ -133,21 +128,19 @@ const getWalletInfo = web3 => {
  * @param {String} address A valid hex-string address
  * @param {Object} customServer (optional) Custom RPC server configuration
  */
-const getBalance = (address, customServer) => {
-  const network =
-    typeof customServer === 'object' ? customServer : DEFAULT_RPC_SERVER;
-  const web3 = createWeb3(null, network);
+const getBalance = (address, serverConfig) => {
+  const web3 = createWeb3(null, serverConfig);
 
   if (web3.utils.isAddress(address)) {
-    return web3.eth.getBalance(address);
+    return web3.eth.getBalance(address).catch(() => {
+      throw new Error(
+        'Cannot get wallet balance. Please recheck RPC server configuration.',
+      );
+    });
   }
 
   return new Promise((_, rj) =>
-    rj(
-      new Error(
-        'Cannot get address balance. Either given address or RPC server is invalid.',
-      ),
-    ),
+    rj(new Error('Cannot get wallet balance due to invalid address.')),
   );
 };
 

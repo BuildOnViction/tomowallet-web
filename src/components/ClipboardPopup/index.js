@@ -13,10 +13,10 @@ import { createStructuredSelector } from 'reselect';
 // Custom Components
 import { ClipboardPopupStyler } from './style';
 // Utilities & Constants
-import { getMessage } from '../IntlProvider';
-import { MSG } from '../../constants';
 import { selectClipboardPopup } from '../../containers/Global/selectors';
 import { toggleClipboardCopyState } from '../../containers/Global/actions';
+import { getMessage } from '../IntlProvider';
+import { MSG } from '../../constants';
 // ==================
 
 // ===== MAIN COMPONENT =====
@@ -45,10 +45,13 @@ class ClipboardPopup extends PureComponent {
 ClipboardPopup.propTypes = {
   /** Popup's data */
   data: PropTypes.object,
+  /** Action to show/hide clipboard popup */
+  onTogglePopup: PropTypes.func,
 };
 
 ClipboardPopup.defaultProps = {
   data: {},
+  onTogglePopup: () => {},
 };
 // ======================
 

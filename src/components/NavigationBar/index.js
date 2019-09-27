@@ -1,3 +1,10 @@
+/**
+ *
+ * TomoWallet - Header Navigation Bar
+ *
+ * This component defines a header menu for web page,
+ * with different kinds of options (public & private)
+ */
 // Modules
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';

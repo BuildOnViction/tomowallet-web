@@ -71,7 +71,7 @@ class WalletPopup extends PureComponent {
       };
     }
 
-    return undefined;
+    return {};
   }
 
   handleGetContent() {

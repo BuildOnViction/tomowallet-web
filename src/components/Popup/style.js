@@ -1,8 +1,15 @@
+/**
+ *
+ * TomoWallet - Common Popup - Style
+ *
+ */
+// ===== IMPORTS =====
+// Modules
 import styled from 'styled-components';
-import {
-  Modal
-} from 'reactstrap';
+import { Modal } from 'reactstrap';
+// ===================
 
+// ===== STYLE =====
 const ModalStyles = styled(Modal)`
   .modal-content {
     padding: 2em;
@@ -26,4 +33,6 @@ const ModalStyles = styled(Modal)`
     padding: 0;
   }
 `;
-export default ModalStyles
+// =================
+
+export default ModalStyles;

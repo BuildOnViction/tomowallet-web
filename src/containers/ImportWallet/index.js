@@ -49,7 +49,7 @@ import {
   updateChosenWallet,
 } from './actions';
 import reducer from './reducer';
-import { ROUTE, MSG, ENUM } from '../../constants';
+import { ROUTE, MSG, ENUM, RPC_SERVER } from '../../constants';
 import {
   injectReducer,
   createWeb3,
@@ -64,6 +64,7 @@ import {
   isPrivateKey,
   removeKeystore,
   selectHDPath,
+  getNetwork,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -99,9 +100,10 @@ class ImportWallet extends PureComponent {
       'wallets',
       _get(addressPopup, 'chosenIndex'),
     ]);
+    const serverConfig = _get(RPC_SERVER, [getNetwork()], {});
 
     if (chosenWallet) {
-      getBalance(chosenWallet.address).then(balance => {
+      getBalance(chosenWallet.address, serverConfig).then(balance => {
         const walletInfo = {
           address: chosenWallet.address,
           balance,
@@ -144,7 +146,7 @@ class ImportWallet extends PureComponent {
         toggleLoading(true);
         const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
         updateWeb3(newWeb3);
-        getBalance(newWeb3.currentProvider.addresses[0])
+        getBalance(newWeb3.currentProvider.addresses[0], rpcServer)
           .then(balance => {
             const walletInfo = {
               address: newWeb3.currentProvider.addresses[0],

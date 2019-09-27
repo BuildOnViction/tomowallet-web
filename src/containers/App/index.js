@@ -1,5 +1,13 @@
+/**
+ *
+ * TomoWallet - Application Container
+ *
+ * This component contains all possible pages of this website,
+ * with supported router methods to navigate between pages & handle log-in cases
+ */
 // Modules
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -24,10 +32,16 @@ import { TextLinkBlue } from '../../styles';
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet, selectClipboardPopup } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
-import { ROUTE, RPC_SERVER, ENUM } from '../../constants';
+import { ROUTE, RPC_SERVER, ENUM, MSG } from '../../constants';
 import './app.scss';
-import { getWeb3Info, getNetwork } from '../../utils';
-import { initiateWallet, getBalance } from '../../utils/blockchain';
+import {
+  createWeb3,
+  getBalance,
+  getNetwork,
+  getWalletInfo,
+  getWeb3Info,
+} from '../../utils';
+import { withIntl } from '../../components/IntlProvider';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -41,18 +55,17 @@ class App extends PureComponent {
     const { onStoreWallet, updateWeb3 } = this.props;
     const walletParams = getWeb3Info();
     const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+    const serverConfig = _get(RPC_SERVER, [networkKey], {});
 
     if (_get(walletParams, 'recoveryPhrase')) {
       const { recoveryPhrase } = walletParams;
-      const serverConfig = _get(RPC_SERVER, [networkKey], {});
-      initiateWallet(recoveryPhrase, serverConfig).then(
-        ({ web3, walletInfo }) => {
-          updateWeb3(web3);
-          onStoreWallet(walletInfo);
-        },
-      );
+      const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
+      getWalletInfo(newWeb3).then(wallet => {
+        updateWeb3(newWeb3);
+        onStoreWallet(wallet);
+      });
     } else if (_get(walletParams, 'address')) {
-      getBalance(walletParams.address).then(balance => {
+      getBalance(walletParams.address, serverConfig).then(balance => {
         const walletInfo = {
           address: walletParams.address,
           balance,
@@ -68,7 +81,10 @@ class App extends PureComponent {
   }
 
   render() {
-    const { clipboardData } = this.props;
+    const {
+      clipboardData,
+      intl: { formatMessage },
+    } = this.props;
     const isLoggedIn = this.handleCheckLoggedIn();
 
     return (
@@ -79,14 +95,17 @@ class App extends PureComponent {
           <div className='maincontent d-flex d-md-none align-items-center'>
             <div className='text-center'>
               <p>
-                Sorry! We don’t support TomoWallet web version on mobile
-                browsers. Please download app version to access TomoWallet.
+                {formatMessage(
+                  MSG.WELCOME_NOTIFICATION_MOBILE_BROWSER_NOT_SUPPORTED,
+                )}
               </p>
               <p>
-                Download TomoWallet app
+                {formatMessage(MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_1)}
                 <br />
                 <TextLinkBlue href='http://l.ead.me/bb0oA6'>
-                  Link: http://l.ead.me/bb0oA6
+                  {formatMessage(
+                    MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_2,
+                  )}
                 </TextLinkBlue>
               </p>
             </div>
@@ -142,11 +161,33 @@ class App extends PureComponent {
 }
 // ==========================
 
+// ===== PROP TYPES =====
+App.propTypes = {
+  /** Clipboard popup's state */
+  clipboardData: PropTypes.object,
+  /** React Intl's instance object */
+  intl: PropTypes.object,
+  /** Action to save new wallet data into state */
+  onStoreWallet: PropTypes.func,
+  /** Action to save new Web3 provider into state */
+  updateWeb3: PropTypes.func,
+  /** Wallet's state */
+  wallet: PropTypes.object,
+};
+App.defaultProps = {
+  clipboardData: {},
+  intl: {},
+  onStoreWallet: () => {},
+  updateWeb3: () => {},
+  wallet: {},
+};
+// ======================
+
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
-    wallet: selectWallet,
     clipboardData: selectClipboardPopup,
+    wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),
@@ -158,6 +199,7 @@ const withConnect = connect(
 // ======================
 
 export default compose(
-  withWeb3,
   withConnect,
+  withIntl,
+  withWeb3,
 )(App);

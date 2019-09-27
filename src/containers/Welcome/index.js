@@ -105,7 +105,7 @@ class WelcomePage extends PureComponent {
         const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
         const newWeb3 = createWeb3(privKey, rpcServer);
         updateWeb3(newWeb3);
-        getBalance(newWeb3.currentProvider.addresses[0])
+        getBalance(newWeb3.currentProvider.addresses[0], rpcServer)
           .then(balance => {
             const walletInfo = {
               address: newWeb3.currentProvider.addresses[0],

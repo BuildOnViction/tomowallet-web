@@ -259,7 +259,7 @@ class MyWallet extends PureComponent {
     const { address, hdPath } = getWeb3Info();
     const contract = this.handleGetContractData();
     const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
-    const networkId = _get(RPC_SERVER, [networkKey, 'networkId']);
+    const serverConfig = _get(RPC_SERVER, [networkKey]);
     const gasPrice = _get(sendTokenForm, [
       SEND_TOKEN_FIELDS.TRANSACTION_FEE,
       'gasPrice',
@@ -269,13 +269,13 @@ class MyWallet extends PureComponent {
     toggleLoading(true);
     sendSignedTransaction(web3, {
       ...contract,
-      chainId: networkId,
+      chainId: serverConfig.networkId,
       gas,
       gasPrice,
       hdPath,
     })
       .then(txObj => {
-        getBalance(address).then(balance => {
+        getBalance(address, serverConfig).then(balance => {
           onStoreWallet({
             address,
             balance,

@@ -1,8 +1,16 @@
+/**
+ *
+ * TomoWallet - Application Container - Style
+ *
+ */
+// ===== IMPORTS =====
+// Modules
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
+// ===================
 
-const AppStyler = styled(Container)`
-
-`;
+// ===== STYLE =====
+const AppStyler = styled(Container)``;
+// =================
 
 export default AppStyler;

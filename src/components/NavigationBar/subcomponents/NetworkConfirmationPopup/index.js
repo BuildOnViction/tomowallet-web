@@ -78,12 +78,15 @@ NetworkConfirmationPopup.propTypes = {
   intl: PropTypes.object,
   /** Popup's data */
   popupData: PropTypes.object,
+  /** Action to show/hide popup */
+  togglePopup: PropTypes.func,
 };
 
 NetworkConfirmationPopup.defaultProps = {
   changeNetwork: () => {},
   intl: {},
   popupData: {},
+  togglePopup: () => {},
 };
 // ======================
 

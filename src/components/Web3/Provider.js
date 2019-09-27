@@ -2,6 +2,8 @@
  *
  * TomoWallet - Web3 Provider
  *
+ * This component provides initiated Web3 object with supported methods,
+ * in order to handle blockchain transactions throughout the application.
  */
 // ===== IMPORTS =====
 // Modules
@@ -115,7 +117,6 @@ class Web3Provider extends Component {
         this.updateMetaMaskAccountListener,
       );
     }
-    // this.handleInitiateDefaultWeb3();
   }
 
   handleSetMetaMaskProvider() {

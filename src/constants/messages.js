@@ -247,6 +247,19 @@ export default defineMessages({
     defaultMessage:
       'Cannot retrieve wallet information due to corrupted Web3 provider.',
   },
+  WELCOME_NOTIFICATION_MOBILE_BROWSER_NOT_SUPPORTED: {
+    id: `${welcomePagePrefix}.notification.mobile.browser.not.supported`,
+    defaultMessage:
+      'Sorry! We don’t support TomoWallet web version on mobile browsers. Please download app version to access TomoWallet.',
+  },
+  WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_1: {
+    id: `${welcomePagePrefix}.notification.mobile.download.part1`,
+    defaultMessage: 'Download TomoWallet app',
+  },
+  WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_2: {
+    id: `${welcomePagePrefix}.notification.mobile.download.part2`,
+    defaultMessage: 'Link: http://l.ead.me/bb0oA6',
+  },
   // Create Wallet Page
   CREATE_WALLET_TITLE: {
     id: `${createWalletPagePrefix}.title`,

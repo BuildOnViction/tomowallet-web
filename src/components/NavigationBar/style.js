@@ -1,3 +1,10 @@
+/**
+ *
+ * TomoWallet - Header Navigation Bar - Style
+ *
+ */
+// ===== IMPORTS =====
+// Modules
 import styled from 'styled-components';
 import {
   Navbar,
@@ -6,14 +13,14 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-// Style Component//
+// ===================
 
+// ===== STYLE =====
 const LinkHeader = styled(NavLink)`
   color: #9eaacc !important;
   font-weight: normal;
   cursor: pointer;
 `;
-
 const DropdownToggleHeader = styled(DropdownToggle)`
   color: #9eaacc !important;
   font-weight: normal;
@@ -34,7 +41,6 @@ const DropdownToggleHeader = styled(DropdownToggle)`
     animation: blinker 1s linear infinite;
   }
 `;
-
 const NavBarStyler = styled(Navbar)`
   padding: 15px 0;
   width: 100%;
@@ -59,7 +65,6 @@ const NavBarStyler = styled(Navbar)`
     }
   }
 `;
-
 const DropdownMenuStyler = styled(DropdownMenu)`
   background-color: #272d40;
   border-radius: 8px;
@@ -85,6 +90,7 @@ const DropdownItemStyler = styled(DropdownItem)`
     outline: 0 auto -webkit-focus-ring-color;
   }
 `;
+// =================
 
 export {
   NavBarStyler,

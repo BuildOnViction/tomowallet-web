@@ -1,10 +1,10 @@
 // Modules
 /**
  *
- * TomoWallet - Welcome Page
+ * TomoWallet - Screen Footer
  *
- * This is the default page when user visits TomoWallet Web.
- * It provides 2 options to access to wallet: "Create New Wallet" & "Import Wallet".
+ * This component defines TomoWallet website footer.
+ * All supported & social network share links are here.
  */
 // ===== IMPORTS =====
 // Modules
@@ -22,8 +22,11 @@ import { MSG } from '../../constants';
 class Footer extends PureComponent {
   constructor(props) {
     super(props);
+    const {
+      intl: { formatMessage },
+    } = props;
 
-    this.FOOTER_BUTTONS = [
+    this.SOCIAL_NETWORKS = [
       {
         className: 'font-icon-facebook',
         link: 'https://www.facebook.com/tomochainofficial',
@@ -49,6 +52,24 @@ class Footer extends PureComponent {
         link: 'https://www.reddit.com/r/Tomochain/',
       },
     ];
+    this.WEBSITE_SUPPORTED_LINKS = [
+      {
+        url: 'https://docs.tomochain.com/products/tomowallet/features/',
+        content: formatMessage(MSG.FOOTER_OPTION_HELP),
+      },
+      {
+        url: 'https://docs.tomochain.com/products/tomowallet/terms/',
+        content: formatMessage(MSG.FOOTER_OPTION_TERMS_PRIVACY),
+      },
+      {
+        url: 'https://tomochain.com',
+        content: formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT),
+      },
+      {
+        url: 'https://docs.tomochain.com/general/faq/#tomowallet',
+        content: formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS),
+      },
+    ];
   }
 
   render() {
@@ -63,51 +84,30 @@ class Footer extends PureComponent {
           </TextGray>
           <Row className='footer-menu'>
             <Nav>
-              <NavItem>
-                <LinkFooter
-                  href='https://docs.tomochain.com/products/tomowallet/features/'
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {formatMessage(MSG.FOOTER_OPTION_HELP)}
-                </LinkFooter>
-              </NavItem>
-              <NavItem>
-                <LinkFooter
-                  href='https://docs.tomochain.com/products/tomowallet/terms/'
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {formatMessage(MSG.FOOTER_OPTION_TERMS_PRIVACY)}
-                </LinkFooter>
-              </NavItem>
-              <NavItem>
-                <LinkFooter
-                  href='https://tomochain.com'
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT)}
-                </LinkFooter>
-              </NavItem>
-              <NavItem>
-                <LinkFooter
-                  href='https://docs.tomochain.com/general/faq/#tomowallet'
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS)}
-                </LinkFooter>
-              </NavItem>
+              {this.WEBSITE_SUPPORTED_LINKS.map((link, linkIdx) => (
+                <NavItem key={`website_link_${linkIdx + 1}`}>
+                  <LinkFooter
+                    href={link.url}
+                    rel='noopener noreferrer'
+                    target='_blank'
+                  >
+                    {link.content}
+                  </LinkFooter>
+                </NavItem>
+              ))}
             </Nav>
           </Row>
         </Col>
         <Col xs={12} md={5}>
           <Nav className='footer-buttons'>
-            {this.FOOTER_BUTTONS.map((item, itemIdx) => (
+            {this.SOCIAL_NETWORKS.map((item, itemIdx) => (
               <NavItem key={`footer_button_${itemIdx + 1}`}>
-                <LinkFooter href={item.link} target='_blank'>
-                  <i className={item.className} />
+                <LinkFooter
+                  href={item.url}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  {<i className={item.className} />}
                 </LinkFooter>
               </NavItem>
             ))}

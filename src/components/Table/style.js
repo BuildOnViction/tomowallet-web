@@ -1,6 +1,6 @@
 /**
  *
- * TomoWallet - Common Table Style
+ * TomoWallet - Common Table - Style
  *
  */
 // ===== IMPORTS =====
@@ -22,7 +22,7 @@ const CommonTableStyler = styled(ReactTable)`
       width: auto !important;
       color: #5e677f;
       &.box_search {
-        width: 100%!important;
+        width: 100% !important;
       }
     }
     .rt-td {
@@ -45,7 +45,7 @@ const PaginationStyler = styled(Pagination)`
   }
   .disabled {
     .page-link {
-      opacity: .3;
+      opacity: 0.3;
     }
   }
   ul {
@@ -54,7 +54,6 @@ const PaginationStyler = styled(Pagination)`
       background: transparent !important;
       border: 0;
     }
-
   }
 `;
 
