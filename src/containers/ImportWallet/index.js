@@ -65,6 +65,7 @@ import {
   removeKeystore,
   selectHDPath,
   getNetwork,
+  getWalletInfo,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
@@ -146,12 +147,8 @@ class ImportWallet extends PureComponent {
         toggleLoading(true);
         const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
         updateWeb3(newWeb3);
-        getBalance(newWeb3.currentProvider.addresses[0], rpcServer)
-          .then(balance => {
-            const walletInfo = {
-              address: newWeb3.currentProvider.addresses[0],
-              balance,
-            };
+        getWalletInfo(newWeb3)
+          .then(walletInfo => {
             onStoreWallet(walletInfo);
             setWeb3Info({
               loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,

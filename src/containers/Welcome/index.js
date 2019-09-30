@@ -152,7 +152,6 @@ class WelcomePage extends PureComponent {
       intl: { formatMessage },
       onUpdatePasswordErrors,
       passwordForm,
-      web3,
     } = this.props;
     const pwd = _get(passwordForm, 'input.password', '');
 
@@ -162,7 +161,7 @@ class WelcomePage extends PureComponent {
           onUpdatePasswordErrors({ password: [error.message] });
         } else {
           try {
-            const addressObj = decryptKeystore(web3, JSON.parse(data), pwd);
+            const addressObj = decryptKeystore(JSON.parse(data), pwd);
             this.handleQuickAccess(addressObj);
           } catch (error) {
             onUpdatePasswordErrors({
@@ -173,27 +172,6 @@ class WelcomePage extends PureComponent {
           }
         }
       });
-      // electron.fs.readFile(
-      //   path.join(`${__dirname}`, '\\..\\store\\keystore.json'),
-      //   (err, data) => {
-      //     if (err) {
-      //       onUpdatePasswordErrors({ password: [err.message] });
-      //     } else {
-      //       try {
-      //         const addressObj = decryptKeystore(web3, JSON.parse(data), pwd);
-      //         this.handleQuickAccess(addressObj);
-      //       } catch (error) {
-      //         onUpdatePasswordErrors({
-      //           password: [
-      //             formatMessage(
-      //               MSG.WELCOME_FORM_PASSWORD_ERROR_INVALID_PASSWORD,
-      //             ),
-      //           ],
-      //         });
-      //       }
-      //     }
-      //   },
-      // );
     } catch (error) {
       onUpdatePasswordErrors({
         password: [

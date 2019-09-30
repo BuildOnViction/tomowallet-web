@@ -96,7 +96,7 @@ const getAddressFromProvider = web3 => {
 const mnemonicToPrivateKey = (mnemonic = '', serverConfig = {}) => {
   const web3 = createWeb3(mnemonic, serverConfig);
   if (web3) {
-    const address = getAddressFromProvider;
+    const address = getAddressFromProvider(web3);
     const pkInBytes = web3.currentProvider.wallets[address]._privKey;
 
     return web3.utils.bytesToHex(pkInBytes).replace(/^0x/, '');

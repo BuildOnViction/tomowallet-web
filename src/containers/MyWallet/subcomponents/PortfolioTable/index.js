@@ -32,7 +32,6 @@ import { PORTFOLIO_COLUMNS } from '../../constants';
 import { selectWallet } from '../../../Global/selectors';
 import { LIST, ENUM } from '../../../../constants';
 import tomoIcon from '../../../../assets/images/logo-tomo.png';
-import { getNetwork } from '../../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====

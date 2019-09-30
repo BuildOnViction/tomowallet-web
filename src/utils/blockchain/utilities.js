@@ -25,12 +25,14 @@ const web3Utils = new Web3().utils;
  * @param {Number} decimals Decimal unit (10, 2, 16...)
  */
 const addBN = (number1, number2, decimals) => {
-  const convertedNo1 = web3Utils.isBN(number1)
-    ? number1
-    : web3Utils.toBN(decimalsToBN(number1, decimals));
-  const convertedNo2 = web3Utils.isBN(number2)
-    ? number2
-    : web3Utils.toBN(decimalsToBN(number2, decimals));
+  const convertedNo1 =
+    typeof number1 === 'object'
+      ? number1
+      : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 =
+    typeof number2 === 'object'
+      ? number2
+      : web3Utils.toBN(decimalsToBN(number2, decimals));
 
   return bnToDecimals(convertedNo1.add(convertedNo2), decimals);
 };
@@ -47,16 +49,11 @@ const bnToDecimals = (numberToConvert, decimals) => {
     return '0';
   }
 
-  return divBN(
-    web3Utils.toBN(numberToConvert),
-    web3Utils.toBN(10 ** decimals),
-    decimals,
-  );
-  // const numberObj = web3Utils
-  //   .toBN(numberToConvert)
-  //   .divmod(web3Utils.toBN(10 ** decimals));
-
-  // return `${numberObj.div}.${numberObj.mod.toString(10, decimals)}`;
+  const numberObj = web3Utils
+    .toBN(numberToConvert)
+    .divmod(web3Utils.toBN(10 ** decimals));
+  const mod = numberObj.mod.toString(10, decimals).replace(/0+$/, '');
+  return `${numberObj.div}${mod.length > 0 ? `.${mod}` : ''}`;
 };
 
 /**
@@ -121,12 +118,14 @@ const decryptKeystore = (encryptedInfo, password) => {
  * @param {Number} decimals Decimal unit (10, 2, 16...)
  */
 const divBN = (number1, number2, decimals) => {
-  const convertedNo1 = web3Utils.isBN(number1)
-    ? number1
-    : web3Utils.toBN(decimalsToBN(number1, decimals));
-  const convertedNo2 = web3Utils.isBN(number2)
-    ? number2
-    : web3Utils.toBN(decimalsToBN(number2, decimals));
+  const convertedNo1 =
+    typeof number1 === 'object'
+      ? number1
+      : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 =
+    typeof number2 === 'object'
+      ? number2
+      : web3Utils.toBN(decimalsToBN(number2, decimals));
 
   const quotient = convertedNo1.divmod(convertedNo2);
   const quotientMod = quotient.mod.toString(10, decimals).replace(/0+$/, '');
@@ -195,12 +194,14 @@ const isPrivateKey = rawData => {
  * @param {Number} decimals Decimal unit (10, 2, 16...)
  */
 const mulBN = (number1, number2, decimals) => {
-  const convertedNo1 = web3Utils.isBN(number1)
-    ? number1
-    : web3Utils.toBN(decimalsToBN(number1, decimals));
-  const convertedNo2 = web3Utils.isBN(number2)
-    ? number2
-    : web3Utils.toBN(decimalsToBN(number2, decimals));
+  const convertedNo1 =
+    typeof number1 === 'object'
+      ? number1
+      : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 =
+    typeof number2 === 'object'
+      ? number2
+      : web3Utils.toBN(decimalsToBN(number2, decimals));
 
   return bnToDecimals(convertedNo1.mul(convertedNo2), decimals);
 };
@@ -257,12 +258,14 @@ const repeatGetTransaction = (web3, txHash) => {
  * @param {Number} decimals Decimal unit (10, 2, 16...)
  */
 const subBN = (number1, number2, decimals) => {
-  const convertedNo1 = web3Utils.isBN(number1)
-    ? number1
-    : web3Utils.toBN(decimalsToBN(number1, decimals));
-  const convertedNo2 = web3Utils.isBN(number2)
-    ? number2
-    : web3Utils.toBN(decimalsToBN(number2, decimals));
+  const convertedNo1 =
+    typeof number1 === 'object'
+      ? number1
+      : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 =
+    typeof number2 === 'object'
+      ? number2
+      : web3Utils.toBN(decimalsToBN(number2, decimals));
 
   return bnToDecimals(convertedNo1.sub(convertedNo2), decimals);
 };

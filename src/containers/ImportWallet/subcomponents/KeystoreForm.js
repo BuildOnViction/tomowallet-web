@@ -46,12 +46,11 @@ class KeystoreForm extends PureComponent {
       onUpdateInput,
       onUpdatePasswordPopupErrors,
       passwordPopup,
-      web3,
     } = this.props;
     const password = _get(passwordPopup, 'input.password', '');
     const fileData = _get(passwordPopup, 'fileData', {});
     try {
-      const decryptedData = decryptKeystore(web3, fileData, password);
+      const decryptedData = decryptKeystore(fileData, password);
 
       if (isElectron()) {
         writeKeystore(fileData).then(({ error }) => {

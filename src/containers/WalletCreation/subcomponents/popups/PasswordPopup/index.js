@@ -62,7 +62,6 @@ class PasswordPopup extends PureComponent {
       onUpdateErrors,
       popupData,
       rpcServer,
-      web3,
     } = this.props;
 
     if (
@@ -84,17 +83,13 @@ class PasswordPopup extends PureComponent {
         rpcServer,
       );
       const encryptedData = encryptKeystore(
-        web3,
         `0x${privKey}`,
         _get(popupData, 'input.password', ''),
       );
       const timePrefix = moment().format('ZZ--YYYY-MM-DD-HH-mm-ss');
       const { address } =
-        decryptKeystore(
-          web3,
-          encryptedData,
-          _get(popupData, 'input.password', ''),
-        ) || {};
+        decryptKeystore(encryptedData, _get(popupData, 'input.password', '')) ||
+        {};
 
       downloadFile({
         content: JSON.stringify(encryptedData),
