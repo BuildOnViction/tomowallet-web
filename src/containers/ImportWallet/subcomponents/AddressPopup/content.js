@@ -9,6 +9,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
+// Custom Components
 import { InputStylerRadio } from './style';
 import { TextBlue, BoxText } from '../../../../styles';
 // ===================

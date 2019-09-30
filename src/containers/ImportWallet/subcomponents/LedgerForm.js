@@ -49,7 +49,6 @@ class LedgerForm extends PureComponent {
           ))}
         </FormFeedback>
         <FormTextStyled>
-          {/* -- TO-DO: Update style for Import Ledger description text */}
           <FormattedMessage
             {...MSG.IMPORT_WALLET_TAB_LEDGER_INPUT_DESCRIPTION}
             values={{

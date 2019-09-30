@@ -1,6 +1,6 @@
 /**
  *
- * Import Wallet Page
+ * TomoWallet - Import Wallet Page
  *
  */
 // Modules

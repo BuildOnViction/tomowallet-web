@@ -19,8 +19,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
-import { MSG } from '../../../../constants';
 import { changeInputWithSubmit, detectSubmit } from '../../../../utils';
+import { MSG } from '../../../../constants';
 // ===================
 
 // ===== MAIN COMPONENT =====

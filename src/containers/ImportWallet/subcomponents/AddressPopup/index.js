@@ -10,9 +10,8 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 // Custom Components
 import AddressContent from './content';
-// -- TO-DO: Update style for Ledger Address popup
 import { AddressPopupStyler } from './style';
-// Utilities
+// Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import { MSG } from '../../../../constants';
 // ===================

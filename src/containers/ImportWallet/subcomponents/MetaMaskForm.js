@@ -8,7 +8,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
-import _isEqual from 'lodash.isequal';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
 import { getMessage } from '../../../components/IntlProvider';

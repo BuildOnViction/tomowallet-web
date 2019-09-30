@@ -17,13 +17,22 @@ const web3Utils = new Web3().utils;
 
 // ===== METHODS =====
 /**
- * weiToDecimals
+ * addBN
  *
- * Convert a Wei-format number into a decimal number
- * @param {Number} amount An amount of TOMO in Wei format
+ * Sum 2 numbers as Big Number, return a number in given decimal format
+ * @param {String|BN|Number} number1 Addend
+ * @param {String|BN|Number} number2 Addend
+ * @param {Number} decimals Decimal unit (10, 2, 16...)
  */
-const weiToDecimals = amount => {
-  return web3Utils.fromWei(amount);
+const addBN = (number1, number2, decimals) => {
+  const convertedNo1 = web3Utils.isBN(number1)
+    ? number1
+    : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 = web3Utils.isBN(number2)
+    ? number2
+    : web3Utils.toBN(decimalsToBN(number2, decimals));
+
+  return bnToDecimals(convertedNo1.add(convertedNo2), decimals);
 };
 
 /**
@@ -37,11 +46,17 @@ const bnToDecimals = (numberToConvert, decimals) => {
   if (!numberToConvert) {
     return '0';
   }
-  const numberObj = web3Utils
-    .toBN(numberToConvert)
-    .divmod(web3Utils.toBN(10 ** decimals));
 
-  return `${numberObj.div}.${numberObj.mod.toString(10, decimals)}`;
+  return divBN(
+    web3Utils.toBN(numberToConvert),
+    web3Utils.toBN(10 ** decimals),
+    decimals,
+  );
+  // const numberObj = web3Utils
+  //   .toBN(numberToConvert)
+  //   .divmod(web3Utils.toBN(10 ** decimals));
+
+  // return `${numberObj.div}.${numberObj.mod.toString(10, decimals)}`;
 };
 
 /**
@@ -84,6 +99,64 @@ const decimalsToBN = (numberToConvert, decimals) => {
 };
 
 /**
+ * decryptKeystore
+ *
+ * Retrieve wallet's original data from keystore data by password
+ * @param {Object} encryptedInfo Encrypted wallet's data
+ * @param {String} password Pass phrase which was used to encrypt wallet's data
+ */
+const decryptKeystore = (encryptedInfo, password) => {
+  if (encryptedInfo && password) {
+    const web3 = new Web3();
+    return web3.eth.accounts.decrypt(encryptedInfo, password);
+  }
+  return {};
+};
+/**
+ * divBN
+ *
+ * Divide 2 numbers as Big Number, return a number in given decimal format
+ * @param {String|BN|Number} number1 Dividend
+ * @param {String|BN|Number} number2 Divisor
+ * @param {Number} decimals Decimal unit (10, 2, 16...)
+ */
+const divBN = (number1, number2, decimals) => {
+  const convertedNo1 = web3Utils.isBN(number1)
+    ? number1
+    : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 = web3Utils.isBN(number2)
+    ? number2
+    : web3Utils.toBN(decimalsToBN(number2, decimals));
+
+  const quotient = convertedNo1.divmod(convertedNo2);
+  const quotientMod = quotient.mod.toString(10, decimals).replace(/0+$/, '');
+  return `${quotient.div}${quotientMod.length > 0 ? `.${quotientMod}` : ''}`;
+};
+
+/**
+ * encryptKeystore
+ *
+ * Encrypt wallet's private key into keystore data by a given password
+ * @param {String} rawInfo Wallet's data to be encrypted
+ * @param {String} password A pass phrase for encryption
+ */
+const encryptKeystore = (rawInfo, password) => {
+  if (rawInfo && password) {
+    const web3 = new Web3();
+    return web3.eth.accounts.encrypt(rawInfo, password);
+  }
+  return {};
+};
+
+/**
+ * isAddress
+ *
+ * Check if the input string is a valid private key
+ * @param {String} rawData address input's value
+ */
+const isAddress = rawData => !!rawData && web3Utils.isAddress(rawData);
+
+/**
  * isRecoveryPhrase
  *
  * Check if the input string is a valid recovery phrase
@@ -114,41 +187,22 @@ const isPrivateKey = rawData => {
 };
 
 /**
- * isAddress
+ * mulBN
  *
- * Check if the input string is a valid private key
- * @param {String} rawData address input's value
+ * Multiply 2 numbers as Big Number, return a number in given decimal format
+ * @param {String|BN|Number} number1 Factor
+ * @param {String|BN|Number} number2 Factor
+ * @param {Number} decimals Decimal unit (10, 2, 16...)
  */
-const isAddress = rawData => !!rawData && web3Utils.isAddress(rawData);
+const mulBN = (number1, number2, decimals) => {
+  const convertedNo1 = web3Utils.isBN(number1)
+    ? number1
+    : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 = web3Utils.isBN(number2)
+    ? number2
+    : web3Utils.toBN(decimalsToBN(number2, decimals));
 
-/**
- * encryptKeystore
- *
- * Encrypt wallet's private key into keystore data by a given password
- * @param {String} rawInfo Wallet's data to be encrypted
- * @param {String} password A pass phrase for encryption
- */
-const encryptKeystore = (rawInfo, password) => {
-  if (rawInfo && password) {
-    const web3 = new Web3();
-    return web3.eth.accounts.encrypt(rawInfo, password);
-  }
-  return {};
-};
-
-/**
- * decryptKeystore
- *
- * Retrieve wallet's original data from keystore data by password
- * @param {Object} encryptedInfo Encrypted wallet's data
- * @param {String} password Pass phrase which was used to encrypt wallet's data
- */
-const decryptKeystore = (encryptedInfo, password) => {
-  if (encryptedInfo && password) {
-    const web3 = new Web3();
-    return web3.eth.accounts.decrypt(encryptedInfo, password);
-  }
-  return {};
+  return bnToDecimals(convertedNo1.mul(convertedNo2), decimals);
 };
 
 /**
@@ -193,17 +247,49 @@ const repeatGetTransaction = (web3, txHash) => {
     },
   });
 };
+
+/**
+ * subBN
+ *
+ * Subtract 2 numbers as Big Number, return a number in given decimal format
+ * @param {String|BN|Number} number1 Minuend
+ * @param {String|BN|Number} number2 Subtrahend
+ * @param {Number} decimals Decimal unit (10, 2, 16...)
+ */
+const subBN = (number1, number2, decimals) => {
+  const convertedNo1 = web3Utils.isBN(number1)
+    ? number1
+    : web3Utils.toBN(decimalsToBN(number1, decimals));
+  const convertedNo2 = web3Utils.isBN(number2)
+    ? number2
+    : web3Utils.toBN(decimalsToBN(number2, decimals));
+
+  return bnToDecimals(convertedNo1.sub(convertedNo2), decimals);
+};
+
+/**
+ * weiToDecimals
+ *
+ * Convert a Wei-format number into a decimal number
+ * @param {Number} amount An amount of TOMO in Wei format
+ */
+const weiToDecimals = amount => {
+  return web3Utils.fromWei(amount);
+};
 // ===================
 
 export {
+  addBN,
   bnToDecimals,
   decimalsToBN,
   decryptKeystore,
+  divBN,
   encryptKeystore,
   isAddress,
   isPrivateKey,
   isRecoveryPhrase,
-  repeatCall,
+  mulBN,
   repeatGetTransaction,
+  subBN,
   weiToDecimals,
 };

@@ -13,12 +13,15 @@ import {
   trimMnemonic,
 } from './miscellaneous';
 import {
+  addBN,
   bnToDecimals,
   createWeb3,
   decimalsToBN,
   decryptKeystore,
+  divBN,
   encryptKeystore,
   estimateCurrencyFee,
+  estimateFee,
   estimateTRC20Fee,
   estimateTRC21Fee,
   getBalance,
@@ -27,11 +30,13 @@ import {
   isPrivateKey,
   isRecoveryPhrase,
   mnemonicToPrivateKey,
+  mulBN,
   repeatGetTransaction,
   selectHDPath,
   sendMoney,
   sendSignedTransaction,
   sendToken,
+  subBN,
   weiToDecimals,
 } from './blockchain';
 import getValidations, { mergeErrors } from './validations';
@@ -60,6 +65,7 @@ import electron, {
 import { getGlobalIntl } from './intl';
 
 export {
+  addBN,
   bnToDecimals,
   changeInputWithSubmit,
   convertLocaleNumber,
@@ -70,10 +76,12 @@ export {
   decryptKeystore,
   detectKeystore,
   detectSubmit,
+  divBN,
   downloadFile,
   electron,
   encryptKeystore,
   estimateCurrencyFee,
+  estimateFee,
   estimateTRC20Fee,
   estimateTRC21Fee,
   getBalance,
@@ -93,6 +101,7 @@ export {
   isRecoveryPhrase,
   mergeErrors,
   mnemonicToPrivateKey,
+  mulBN,
   readKeystore,
   removeKeystore,
   removeLedger,
@@ -110,6 +119,7 @@ export {
   setNetwork,
   setWeb3Info,
   shuffleArray,
+  subBN,
   trimMnemonic,
   weiToDecimals,
   withGlobal,

@@ -10,11 +10,11 @@ import HDWalletProvider from 'truffle-hdwallet-provider';
 import _isEmpty from 'lodash.isempty';
 import _isEqual from 'lodash.isequal';
 // Utilities
-import trc20 from '../../contractABIs/trc20.json';
-import trc21 from '../../contractABIs/trc21.json';
-import trc21Issuer from '../../contractABIs/trc21Issuer.json';
+import trc20 from './abi/trc20.json';
+import trc21 from './abi/trc21.json';
+import trc21Issuer from './abi/trc21Issuer.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
-import { ENUM } from '../../constants';
+import { mulBN } from './index.js';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
@@ -26,7 +26,13 @@ const DEFAULT_GAS_PRICE = '250000000';
 const DEFAULT_GAS_TOKEN = '500000';
 const DEFAULT_GAS_CURRENCY = '21000';
 const DEFAULT_CURRENCY_DECIMALS = 18;
+const TOKEN_TYPE = {
+  TRC20: 'TRC20',
+  TRC21: 'TRC21',
+  CURRENCY: 'CURRENCY',
+};
 const defaultCallback = error => console.error('[ERROR]: ', error);
+const defaultReject = message => new Promise((_, rj) => rj(new Error(message)));
 // ===============================
 
 // ===== METHODS =====
@@ -114,12 +120,8 @@ const getWalletInfo = web3 => {
       }));
     }
   }
-  return new Promise((_, rj) =>
-    rj(
-      new Error(
-        'Cannot find wallet information. Please check your web3 provider.',
-      ),
-    ),
+  return defaultReject(
+    'Cannot find wallet information. Please check your web3 provider.',
   );
 };
 
@@ -139,9 +141,7 @@ const getBalance = (address, serverConfig) => {
     });
   }
 
-  return new Promise((_, rj) =>
-    rj(new Error('Cannot get wallet balance due to invalid address.')),
-  );
+  return defaultReject('Cannot get wallet balance due to invalid address.');
 };
 
 /**
@@ -163,12 +163,7 @@ const isAppliedTomoZ = (web3, txData, isTestnet) => {
   return tomoZContract.methods
     .getTokenCapacity(contractAddress)
     .call({ from })
-    .then(cap => {
-      if (Number(cap)) {
-        return true;
-      }
-      return false;
-    })
+    .then(cap => !!Number(cap))
     .catch(() => false);
 };
 
@@ -189,13 +184,14 @@ const estimateTRC20Fee = (web3, txData) => {
     .estimateGas({ from })
     .then(gas =>
       web3.eth.getGasPrice().then(price => {
-        const fee = bnToDecimals(
-          web3.utils.toBN(gas).mul(web3.utils.toBN(price)),
+        const fee = mulBN(
+          web3.utils.toBN(gas),
+          web3.utils.toBN(price),
           DEFAULT_CURRENCY_DECIMALS,
         );
 
         return {
-          type: ENUM.TOKEN_TYPE.TRC20,
+          type: TOKEN_TYPE.TRC20,
           amount: fee,
           gas,
           gasPrice: price,
@@ -211,18 +207,18 @@ const estimateTRC20Fee = (web3, txData) => {
  * @param {Web3} web3 A Web3 object with provider initiated
  * @param {Object} txData Set of transaction data
  */
-const estimateTRC21Fee = (web3, txData) => {
+const estimateTRC21Fee = (web3, txData, isTestnet) => {
   const { amount, contractAddress, decimals, from, to } = txData;
   const contract = new web3.eth.Contract(trc21, contractAddress || from);
   const weiAmount = decimalsToBN(amount, decimals);
 
-  return isAppliedTomoZ(web3, txData).then(isApplied => {
+  return isAppliedTomoZ(web3, txData, isTestnet).then(isApplied => {
     if (isApplied) {
       return contract.methods
         .estimateFee(weiAmount)
         .call({ from, to })
         .then(fee => ({
-          type: ENUM.TOKEN_TYPE,
+          type: TOKEN_TYPE.TRC21,
           amount: bnToDecimals(fee, decimals),
           gas: DEFAULT_GAS_TOKEN,
           gasPrice: DEFAULT_GAS_PRICE,
@@ -240,21 +236,41 @@ const estimateTRC21Fee = (web3, txData) => {
  * @param {Object} txData Set of transaction data
  */
 const estimateCurrencyFee = (web3, txData) => {
-  const { decimals, type } = txData;
-  const fee = bnToDecimals(
-    web3.utils
-      .toBN(DEFAULT_GAS_PRICE)
-      .mul(web3.utils.toBN(DEFAULT_GAS_CURRENCY)),
+  const { decimals } = txData;
+  const fee = mulBN(
+    web3.utils.toBN(DEFAULT_GAS_PRICE),
+    web3.utils.toBN(DEFAULT_GAS_CURRENCY),
     decimals,
   );
 
   return new Promise(rs =>
     rs({
-      type,
+      type: TOKEN_TYPE.CURRENCY,
       amount: fee,
       gas: DEFAULT_GAS_CURRENCY,
       gasPrice: DEFAULT_GAS_PRICE,
     }),
+  );
+};
+
+/**
+ * estimateFee
+ *
+ * General method which is a combination of 3 estimation methods based on given token type
+ * @param {Web3} web3 A Web3 object with provider initiated
+ * @param {String} tokenType One of 3 types: "TRC20", "TRC21" or "CURRENCY"
+ * @param {Object} txData Set of transaction data
+ */
+const estimateFee = (web3, tokenType, txData, isTestnet = false) => {
+  if (tokenType === TOKEN_TYPE.trc20) {
+    return estimateTRC20Fee(web3, txData);
+  } else if (tokenType === TOKEN_TYPE.TRC21) {
+    return estimateTRC21Fee(web3, txData, isTestnet);
+  } else if (tokenType === TOKEN_TYPE.CURRENCY) {
+    return estimateCurrencyFee(web3, txData);
+  }
+  return defaultReject(
+    'Token type is invalid. Please choose between 3 options: "TRC20", "TRC21" or "CURRENCY".',
   );
 };
 
@@ -267,14 +283,14 @@ const estimateCurrencyFee = (web3, txData) => {
  */
 const sendToken = (web3, txData) => {
   const { amount, contractAddress, decimals, from, to, type } = txData;
-  const tokenAbi = _isEqual(type, ENUM.TOKEN_TYPE.TRC21) ? trc21 : trc20;
+  const tokenAbi = _isEqual(type, TOKEN_TYPE.TRC21) ? trc21 : trc20;
   const contract = new web3.eth.Contract(tokenAbi, contractAddress);
   const weiAmount = decimalsToBN(amount, decimals);
 
   return new Promise(rs => {
-    if (type === ENUM.TOKEN_TYPE.TRC20) {
+    if (type === TOKEN_TYPE.TRC20) {
       rs(estimateTRC20Fee(web3, txData));
-    } else if (type === ENUM.TOKEN_TYPE.TRC21) {
+    } else if (type === TOKEN_TYPE.TRC21) {
       rs(estimateTRC21Fee(web3, txData));
     }
   }).then(priceObj =>
@@ -322,6 +338,7 @@ const sendMoney = (web3, txData) => {
 export {
   createWeb3,
   estimateCurrencyFee,
+  estimateFee,
   estimateTRC20Fee,
   estimateTRC21Fee,
   getBalance,
