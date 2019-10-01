@@ -21,6 +21,7 @@ import QuickAccess from './subcomponents/QuickAccess';
 // Utilities, Constants & Styles
 import { selectPasswordForm } from './selectors';
 import {
+  loadKeystoreData,
   resetState,
   togglePasswordForm,
   updatePasswordErrors,
@@ -37,14 +38,15 @@ import {
   withGlobal,
   getNetwork,
   createWeb3,
-  getBalance,
   setWeb3Info,
   isElectron,
   detectKeystore,
   readKeystore,
+  getWalletInfo,
 } from '../../utils';
 import { MSG, ROUTE, RPC_SERVER, ENUM } from '../../constants';
 import { toggleLoading, storeWallet } from '../Global/actions';
+import { detectRPFile, readRPFile } from '../../utils/electron';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -60,13 +62,34 @@ class WelcomePage extends PureComponent {
   }
 
   componentDidMount() {
-    const { onTogglePasswordForm } = this.props;
+    const { onLoadKeystoreData, onTogglePasswordForm } = this.props;
     if (isElectron()) {
-      detectKeystore().then(({ error }) => {
+      detectRPFile().then(({ error }) => {
         if (error) {
-          onTogglePasswordForm(false);
+          detectKeystore().then(({ error }) => {
+            if (error) {
+              onTogglePasswordForm(false);
+            } else {
+              readKeystore().then(({ error, data }) => {
+                if (error) {
+                  onTogglePasswordForm(false);
+                } else {
+                  onLoadKeystoreData(JSON.parse(data));
+                  onTogglePasswordForm(true);
+                }
+              });
+            }
+          });
         } else {
-          onTogglePasswordForm(true);
+          readRPFile().then(({ error, data }) => {
+            if (error) {
+              onTogglePasswordForm(false);
+            } else {
+              this.handleQuickAccess(
+                decryptKeystore(JSON.parse(data), 'recoveryPhrase'),
+              );
+            }
+          });
         }
       });
     } else {
@@ -94,6 +117,7 @@ class WelcomePage extends PureComponent {
       intl: { formatMessage },
       onStoreWallet,
       onUpdatePasswordErrors,
+      rpcServer,
       toggleLoading,
       updateWeb3,
     } = this.props;
@@ -102,15 +126,11 @@ class WelcomePage extends PureComponent {
     toggleLoading(true);
     if (isPrivateKey(privKey)) {
       try {
-        const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
+        // const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
         const newWeb3 = createWeb3(privKey, rpcServer);
         updateWeb3(newWeb3);
-        getBalance(newWeb3.currentProvider.addresses[0], rpcServer)
-          .then(balance => {
-            const walletInfo = {
-              address: newWeb3.currentProvider.addresses[0],
-              balance,
-            };
+        getWalletInfo(newWeb3)
+          .then(walletInfo => {
             onStoreWallet(walletInfo);
             setWeb3Info({
               loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
@@ -154,28 +174,15 @@ class WelcomePage extends PureComponent {
       passwordForm,
     } = this.props;
     const pwd = _get(passwordForm, 'input.password', '');
+    const keystoreData = _get(passwordForm, 'data', {});
 
     try {
-      readKeystore().then(({ error, data }) => {
-        if (error) {
-          onUpdatePasswordErrors({ password: [error.message] });
-        } else {
-          try {
-            const addressObj = decryptKeystore(JSON.parse(data), pwd);
-            this.handleQuickAccess(addressObj);
-          } catch (error) {
-            onUpdatePasswordErrors({
-              password: [
-                formatMessage(MSG.WELCOME_FORM_PASSWORD_ERROR_INVALID_PASSWORD),
-              ],
-            });
-          }
-        }
-      });
+      const addressObj = decryptKeystore(keystoreData, pwd);
+      this.handleQuickAccess(addressObj);
     } catch (error) {
       onUpdatePasswordErrors({
         password: [
-          formatMessage(MSG.WELCOME_FORM_PASSWORD_ERROR_KEYSTORE_NOT_EXISTS),
+          formatMessage(MSG.WELCOME_FORM_PASSWORD_ERROR_INVALID_PASSWORD),
         ],
       });
     }
@@ -195,6 +202,7 @@ class WelcomePage extends PureComponent {
         </Helmet>
         {(hasKeystore && (
           <QuickAccess
+            address={_get(passwordForm, 'data.address', '')}
             changePasswordInput={this.handleChangePasswordInput}
             errors={_get(passwordForm, 'errors', {})}
             formValues={_get(passwordForm, 'input', {})}
@@ -258,6 +266,7 @@ const mapStateToProps = () =>
     passwordForm: selectPasswordForm,
   });
 const mapDispatchToProps = dispatch => ({
+  onLoadKeystoreData: data => dispatch(loadKeystoreData(data)),
   onResetState: () => dispatch(resetState()),
   onStoreWallet: walletInfo => dispatch(storeWallet(walletInfo)),
   onTogglePasswordForm: bool => dispatch(togglePasswordForm(bool)),

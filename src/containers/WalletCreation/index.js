@@ -53,11 +53,16 @@ import {
   getWalletInfo,
   setWeb3Info,
   withGlobal,
+  isElectron,
+  mnemonicToPrivateKey,
+  removeKeystore,
+  encryptKeystore,
 } from '../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG, ENUM } from '../../constants';
 import { storeWallet } from '../Global/actions';
 import { ContainerMin } from '../../styles';
+import { writeRPFile } from '../../utils/electron';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -117,6 +122,15 @@ class WalletCreationPage extends PureComponent {
           });
         })
         .then(() => {
+          if (isElectron()) {
+            const privKey = mnemonicToPrivateKey(recoveryPhrase, rpcServer);
+            removeKeystore().then(
+              ({ error }) => error && onUpdateErrors([error.message]),
+            );
+            writeRPFile(
+              JSON.stringify(encryptKeystore(privKey, 'recoveryPhrase')),
+            ).then(({ error }) => error && onUpdateErrors([error.message]));
+          }
           toggleLoading(false);
           onSetFormState(FORM_STATES.SUCCESS);
         });

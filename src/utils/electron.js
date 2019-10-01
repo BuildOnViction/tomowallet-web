@@ -8,6 +8,7 @@ const path = require('path');
 // ===================
 
 // ===== API =====
+/* eslint-disable no-new-func */
 export const isElectron = () => {
   // Renderer process
   if (
@@ -96,6 +97,59 @@ export const removeKeystore = () =>
         if (!error) {
           electronAPI.fs.unlink(
             path.join(__dirname, '\\..\\store\\keystore.json'),
+            error => resolve({ error }),
+          );
+        }
+      },
+    ),
+  );
+
+export const detectRPFile = () => {
+  const rootFolders = __dirname.split('\\');
+  const filePath = `${rootFolders
+    .slice(0, rootFolders.length - 1)
+    .join('\\')}\\store\\recovery_phrase.json`;
+
+  return new Promise(resolve =>
+    electronAPI.fs.readFile(filePath, (error, data) =>
+      resolve({ error, data }),
+    ),
+  );
+};
+
+export const readRPFile = () =>
+  new Promise(resolve =>
+    electronAPI.fs.readFile(
+      path.join(__dirname, '\\..\\store\\recovery_phrase.json'),
+      (error, data) => resolve({ error, data }),
+    ),
+  );
+
+export const writeRPFile = content =>
+  new Promise(resolve =>
+    electronAPI.fs.mkdir(
+      path.join(__dirname, '\\..\\store'),
+      { recursive: true },
+      err => {
+        if (!err) {
+          electronAPI.fs.writeFile(
+            path.join(__dirname, '\\..\\store\\recovery_phrase.json'),
+            content,
+            error => resolve({ error }),
+          );
+        }
+      },
+    ),
+  );
+
+export const removeRPFile = () =>
+  new Promise(resolve =>
+    electronAPI.fs.stat(
+      path.join(__dirname, '\\..\\store\\recovery_phrase.json'),
+      error => {
+        if (!error) {
+          electronAPI.fs.unlink(
+            path.join(__dirname, '\\..\\store\\recovery_phrase.json'),
             error => resolve({ error }),
           );
         }

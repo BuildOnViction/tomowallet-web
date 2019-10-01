@@ -6,6 +6,7 @@
 // ===== IMPORTS =====
 // Constants
 import {
+  LOAD_KEYSTORE_DATA,
   RESET_STATE,
   TOGGLE_PASSWORD_FORM,
   UPDATE_PASSWORD_ERRORS,
@@ -14,6 +15,11 @@ import {
 // ===================
 
 // ===== ACTIONS =====
+export const loadKeystoreData = data => ({
+  type: LOAD_KEYSTORE_DATA,
+  data,
+});
+
 export const resetState = () => ({
   type: RESET_STATE,
 });

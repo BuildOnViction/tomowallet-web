@@ -12,7 +12,8 @@ import { CardBody } from 'reactstrap';
 
 // ===== STYLER =====
 const FormBodyStyler = styled(CardBody)`
-  padding-top: 90px !important;
+  padding-top: 45px !important;
+  padding-bottom: 45 !important;
 `;
 // ==================
 

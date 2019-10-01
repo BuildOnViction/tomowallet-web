@@ -209,14 +209,18 @@ export default defineMessages({
     id: `${welcomePagePrefix}.form.password.title`,
     defaultMessage: 'Wallet Quick Access',
   },
+  WELCOME_FORM_PASSWORD_ADDRESS_VIEW: {
+    id: `${welcomePagePrefix}.form.password.addressview`,
+    defaultMessage: 'Address: ',
+  },
   WELCOME_FORM_PASSWORD_DESCRIPTION: {
     id: `${welcomePagePrefix}.form.password.description`,
     defaultMessage:
-      'You can type in password to continue accessing your previous wallet, or you can {alternative}',
+      'Type in password to continue accessing your previous wallet',
   },
   WELCOME_FORM_PASSWORD_DESCRIPTION_ALTERNATIVE_LOGIN: {
     id: `${welcomePagePrefix}.form.password.description.alternative.login`,
-    defaultMessage: 'choose different wallet',
+    defaultMessage: 'Access different wallet',
   },
   WELCOME_FORM_PASSWORD_BUTTON_LOGIN: {
     id: `${welcomePagePrefix}.form.password.button.login`,

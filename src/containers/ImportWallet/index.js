@@ -66,12 +66,15 @@ import {
   selectHDPath,
   getNetwork,
   getWalletInfo,
+  encryptKeystore,
+  mnemonicToPrivateKey,
 } from '../../utils';
 import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
 import { storeWallet } from '../Global/actions';
 import LogoLedger from '../../assets/images/logo-ledger.png';
 import LogoKey from '../../assets/images/logo-key.png';
+import { writeRPFile } from '../../utils/electron';
 
 // ===== MAIN COMPONENT =====
 class ImportWallet extends PureComponent {
@@ -158,7 +161,15 @@ class ImportWallet extends PureComponent {
           })
           .then(() => {
             if (isElectron() && accessType !== 'keystore') {
+              const privKey = isRecoveryPhrase(recoveryPhrase)
+                ? mnemonicToPrivateKey(recoveryPhrase, rpcServer)
+                : recoveryPhrase;
               removeKeystore().then(
+                ({ error }) => error && this.handleUpdateError(error.message),
+              );
+              writeRPFile(
+                JSON.stringify(encryptKeystore(privKey, 'recoveryPhrase')),
+              ).then(
                 ({ error }) => error && this.handleUpdateError(error.message),
               );
             }

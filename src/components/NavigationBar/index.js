@@ -48,12 +48,14 @@ import {
   getNetwork,
   removeLedger,
   getWeb3Info,
+  isElectron,
 } from '../../utils';
 import {
   selectNetworkData,
   selectNetworkConfirmationPopup,
 } from '../../containers/Global/selectors';
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
+import { removeRPFile } from '../../utils/electron';
 
 // ===== MAIN COMPONENT =====
 class NavigationBar extends PureComponent {
@@ -103,6 +105,7 @@ class NavigationBar extends PureComponent {
       removeWeb3Info(),
       removeLedger(),
       removeMetaMaskProvider(),
+      isElectron && removeRPFile(),
     ]).then(() => this.handleRedirectToHomepage());
   }
 

@@ -8,7 +8,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
-import { FormattedMessage } from 'react-intl';
 import {
   Card,
   CardFooter,
@@ -17,6 +16,7 @@ import {
   Col,
   FormFeedback,
   FormGroup,
+  FormText,
   Input,
   Label,
   Row,
@@ -24,10 +24,12 @@ import {
 // Custom Components
 import { FormBodyStyler } from '../style';
 import {
+  ButtonLinkStyler,
   ButtonStyler,
   ContainerMin,
   HeadingLarge,
-  ButtonLinkStyler,
+  HeadingMedium,
+  TextBlue,
 } from '../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../components/IntlProvider';
@@ -63,6 +65,7 @@ class QuickAccessSection extends PureComponent {
 
   render() {
     const {
+      address,
       changePasswordInput,
       errors,
       formValues,
@@ -78,23 +81,12 @@ class QuickAccessSection extends PureComponent {
             <HeadingLarge>
               {formatMessage(MSG.WELCOME_FORM_PASSWORD_TITLE)}
             </HeadingLarge>
+            <HeadingMedium>
+              {formatMessage(MSG.WELCOME_FORM_PASSWORD_ADDRESS_VIEW)}
+              <TextBlue>{`0x${address}`}</TextBlue>
+            </HeadingMedium>
             <CardText>
-              <FormattedMessage
-                {...MSG.WELCOME_FORM_PASSWORD_DESCRIPTION}
-                values={{
-                  alternative: (
-                    <ButtonLinkStyler
-                      btnBlue
-                      onClick={redirectToFreshLogin}
-                      className='font-weight-bold'
-                    >
-                      {formatMessage(
-                        MSG.WELCOME_FORM_PASSWORD_DESCRIPTION_ALTERNATIVE_LOGIN,
-                      )}
-                    </ButtonLinkStyler>
-                  ),
-                }}
-              />
+              {formatMessage(MSG.WELCOME_FORM_PASSWORD_DESCRIPTION)}
             </CardText>
           </CardHeader>
           <FormBodyStyler>
@@ -119,6 +111,17 @@ class QuickAccessSection extends PureComponent {
                   <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
                 ))}
               </FormFeedback>
+              <FormText>
+                <ButtonLinkStyler
+                  btnBlue
+                  onClick={redirectToFreshLogin}
+                  className='font-weight-bold'
+                >
+                  {formatMessage(
+                    MSG.WELCOME_FORM_PASSWORD_DESCRIPTION_ALTERNATIVE_LOGIN,
+                  )}
+                </ButtonLinkStyler>
+              </FormText>
             </FormGroup>
           </FormBodyStyler>
           <CardFooter>
@@ -139,6 +142,8 @@ class QuickAccessSection extends PureComponent {
 
 // ===== PROP TYPES =====
 QuickAccessSection.propTypes = {
+  /** Extracted wallet address */
+  address: PropTypes.string,
   /** Action to update password input's value */
   changePasswordInput: PropTypes.func,
   /** Form's error messages */
@@ -154,6 +159,7 @@ QuickAccessSection.propTypes = {
 };
 
 QuickAccessSection.defaultProps = {
+  address: '',
   changePasswordInput: () => {},
   errors: {},
   formValues: {},
