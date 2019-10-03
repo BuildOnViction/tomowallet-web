@@ -12,7 +12,7 @@ import Transaction from 'ethereumjs-tx';
 import _isEqual from 'lodash.isequal';
 // Utilities & Constants
 import electron, { isElectron } from '../electron';
-import { getGlobalIntl } from '../intl';
+import { getGlobalIntl } from '../../components/IntlProvider';
 import trc20 from '../../contractABIs/trc20.json';
 import trc21 from '../../contractABIs/trc21.json';
 import { MSG, ENUM } from '../../constants';

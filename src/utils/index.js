@@ -62,7 +62,6 @@ import electron, {
   removeKeystore,
   writeKeystore,
 } from './electron';
-import { getGlobalIntl } from './intl';
 
 export {
   addBN,
@@ -85,7 +84,6 @@ export {
   estimateTRC20Fee,
   estimateTRC21Fee,
   getBalance,
-  getGlobalIntl,
   getLedger,
   getLocale,
   getNetwork,

@@ -1,4 +1,4 @@
 import CustomIntlProvider, { withIntl } from './Provider';
-import { getMessage } from './utilities';
+import { getGlobalIntl, getMessage } from './utilities';
 
-export { CustomIntlProvider, withIntl, getMessage };
+export { CustomIntlProvider, getGlobalIntl, getMessage, withIntl };
