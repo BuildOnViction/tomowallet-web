@@ -10,7 +10,7 @@ import { IntlProvider, FormattedMessage } from 'react-intl';
 import _get from 'lodash.get';
 // Utilities & Constants
 import { getLocale } from '../../utils';
-import { ENUM, LIST } from '../constants';
+import { ENUM, LIST } from '../../constants';
 // ===================
 
 // ===== UTILITIES =====

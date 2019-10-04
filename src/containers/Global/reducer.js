@@ -69,8 +69,13 @@ export default (state = initialState, action) => {
       return state.set('wallet', action.data);
     case TOGGLE_CLIPBOARD_COPY_STATE:
       return state.setIn(['clipboardPopup', 'isOpen'], action.bool);
-    case TOGGLE_LOADING_SCREEN:
-      return state.set('loading', action.bool);
+    case TOGGLE_LOADING_SCREEN: {
+      const oldLoadingState = state.get('loading');
+      if (oldLoadingState !== action.bool) {
+        return state.set('loading', action.bool);
+      }
+      return state;
+    }
     case TOGGLE_NETWORK_CONFIRMATION_POPUP:
       return state
         .setIn(['networkConfirmationPopup', 'isOpen'], action.bool)

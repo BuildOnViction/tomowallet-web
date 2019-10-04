@@ -41,10 +41,10 @@ class LedgerForm extends PureComponent {
             MSG.IMPORT_WALLET_TAB_LEDGER_INPUT_PLACEHOLDER,
           )}
           onChange={e => updateInput('hdPath', e.target.value)}
-          invalid={errors.length > 0}
+          invalid={_get(errors, 'hdPath', []).length > 0}
         />
         <FormFeedback>
-          {errors.map((err, errIdx) => (
+          {_get(errors, 'hdPath', []).map((err, errIdx) => (
             <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
           ))}
         </FormFeedback>
@@ -88,7 +88,7 @@ class LedgerForm extends PureComponent {
 // ===== PROP TYPES =====
 LedgerForm.propTypes = {
   /** Form errors */
-  errors: PropTypes.arrayOf(PropTypes.string),
+  errors: PropTypes.objectOf(PropTypes.array),
   /** Form's input values */
   formValues: PropTypes.object,
   /** React Intl' instance object */

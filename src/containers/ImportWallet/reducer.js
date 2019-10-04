@@ -16,10 +16,12 @@ import {
   TOGGLE_PASSWORD_POPUP,
   UPDATE_CHOSEN_WALLET,
   UPDATE_ERRORS,
+  UPDATE_KEY_INPUT_TYPE,
   UPDATE_INPUT,
   UPDATE_PASSWORD_POPUP_ERRORS,
   UPDATE_PASSWORD_POPUP_INPUT,
   UPDATE_TYPE,
+  KEY_INPUT_TYPE,
 } from './constants';
 
 const initialState = fromJS({
@@ -29,9 +31,10 @@ const initialState = fromJS({
     wallets: [],
   },
   importWallet: {
-    errors: [],
+    errors: {},
     input: {},
     type: IMPORT_TYPES.LEDGER,
+    keyInputType: KEY_INPUT_TYPE.PRIVATE_KEY,
   },
   passwordPopup: {
     errors: {},
@@ -71,10 +74,21 @@ export default (state = initialState, action) => {
       return state.setIn(['addressPopup', 'chosenIndex'], action.index);
     case UPDATE_ERRORS:
       return state.setIn(['importWallet', 'errors'], action.errors);
+    case UPDATE_KEY_INPUT_TYPE: {
+      const initialInput =
+        action.newType === KEY_INPUT_TYPE.RECOVERY_PHRASE
+          ? {
+              hdPath: "m/44'/889'/0'/0",
+            }
+          : {};
+      return state
+        .setIn(['importWallet', 'keyInputType'], action.newType)
+        .setIn(['importWallet', 'input'], initialInput);
+    }
     case UPDATE_INPUT:
       return state
         .setIn(['importWallet', 'input', action.name], action.value)
-        .setIn(['importWallet', 'errors'], []);
+        .setIn(['importWallet', 'errors'], {});
     case UPDATE_PASSWORD_POPUP_ERRORS:
       return state.setIn(['passwordPopup', 'errors'], action.errors);
     case UPDATE_PASSWORD_POPUP_INPUT:
@@ -87,8 +101,9 @@ export default (state = initialState, action) => {
     case UPDATE_TYPE:
       return state
         .setIn(['importWallet', 'type'], action.importType)
+        .setIn(['importWallet', 'keyInputType'], KEY_INPUT_TYPE.PRIVATE_KEY)
         .setIn(['importWallet', 'input'], {})
-        .setIn(['importWallet', 'errors'], []);
+        .setIn(['importWallet', 'errors'], {});
     default:
       return state;
   }

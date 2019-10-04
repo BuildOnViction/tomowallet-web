@@ -507,6 +507,7 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.tab.recoveryphrase.notrecommmended.text`,
     defaultMessage: '(Not Recommended)',
   },
+  // ===== TO-BE-REMOVED =====
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_LABEL: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.input.label`,
     defaultMessage: 'Enter your Recovery Phrase or Private Key',
@@ -515,9 +516,38 @@ export default defineMessages({
     id: `${importWalletPagePrefix}.tab.recoveryphrase.input.placeholder`,
     defaultMessage: 'Enter your Recovery Phrase or Private Key...',
   },
-  IMPORT_WALLET_TAB_RECOVERY_PHRASE_OPTION_IMPORT_VIA_QRCODE: {
-    id: `${importWalletPagePrefix}.tab.recoveryphrase.option.importviaqrcode`,
-    defaultMessage: 'Import Private Key via QR code',
+  // =========================
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_PRIVATE_KEY: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.privatekey`,
+    defaultMessage: 'Private Key',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_PRIVATE_KEY_INPUT_PRIVATE_KEY_LABEL: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.privatekey.input.privatekey.label`,
+    defaultMessage: 'Enter your Private Key',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_PRIVATE_KEY_INPUT_PRIVATE_KEY_PLACEHOLDER: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.privatekey.input.privatekey.placeholder`,
+    defaultMessage: 'Type a 64-character-length hex string',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.mnemonic`,
+    defaultMessage: 'Recovery Phrase',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_MNEMONIC_LABEL: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.mnemonic.input.mnemonic.label`,
+    defaultMessage: 'Enter your Recovery Phrase',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_MNEMONIC_PLACEHOLDER: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.mnemonic.input.mnemonic.placeholder`,
+    defaultMessage: 'Type a 12-word phrase',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_HD_PATH_LABEL: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.mnemonic.input.hdpath.label`,
+    defaultMessage: 'Enter HD Path',
+  },
+  IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_HD_PATH_PLACEHOLDER: {
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.type.mnemonic.input.hdpath.placeholder`,
+    defaultMessage: "e.g. m/44'/889'/0'/0, m/44'/60'/0'...",
   },
   IMPORT_WALLET_TAB_KEYSTORE_IMAGE_ALT: {
     id: `${importWalletPagePrefix}.tab.keystore.image.alt`,
@@ -529,7 +559,11 @@ export default defineMessages({
   },
   IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE: {
     id: `${importWalletPagePrefix}.error.invalid.recoveryphrase`,
-    defaultMessage: 'Invalid recovery phrase/private key',
+    defaultMessage: 'Invalid recovery phrase.',
+  },
+  IMPORT_WALLET_ERROR_INVALID_PRIVATE_KEY: {
+    id: `${importWalletPagePrefix}.error.invalid.privatekey`,
+    defaultMessage: 'Invalid private key.',
   },
   IMPORT_WALLET_ERROR_INVALID_HD_PATH: {
     id: `${importWalletPagePrefix}.error.invalid.hdpath`,

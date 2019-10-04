@@ -3,6 +3,12 @@
  * Import Wallet Page - Constants
  *
  */
+// ===== IMPORTS =====
+// Utilities & Constants
+import { getMessage } from '../../components/IntlProvider';
+import { MSG } from '../../constants';
+// ===================
+
 // Actions
 export const LOAD_KEYSTORE_FILE =
   'TOMO_WALLET/IMPORT_WALLET/LOAD_KEYSTORE_FILE';
@@ -18,6 +24,8 @@ export const TOGGLE_PASSWORD_POPUP =
 export const UPDATE_CHOSEN_WALLET =
   'TOMO_WALLET/IMPORT_WALLET/UPDATE_CHOSEN_WALLET';
 export const UPDATE_ERRORS = 'TOMO_WALLET/IMPORT_WALLET/UPDATE_ERRORS';
+export const UPDATE_KEY_INPUT_TYPE =
+  'TOMO_WALLET/IMPORT_WALLET/UPDATE_KEY_INPUT_TYPE';
 export const UPDATE_INPUT = 'TOMO_WALLET/IMPORT_WALLET/UPDATE_INPUT';
 export const UPDATE_PASSWORD_POPUP_ERRORS =
   'TOMO_WALLET/IMPORT_WALLET/UPDATE_PASSWORD_POPUP_ERRORS';
@@ -35,3 +43,17 @@ export const IMPORT_TYPES = {
   RP_OR_PK: 3,
   KEYSTORE: 4,
 };
+export const KEY_INPUT_TYPE = {
+  PRIVATE_KEY: 1,
+  RECOVERY_PHRASE: 2,
+};
+export const KEY_INPUT_OPTIONS = [
+  {
+    label: getMessage(MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_PRIVATE_KEY),
+    value: 1,
+  },
+  {
+    label: getMessage(MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC),
+    value: 2,
+  },
+];

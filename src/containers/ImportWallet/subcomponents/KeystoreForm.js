@@ -63,7 +63,7 @@ class KeystoreForm extends PureComponent {
       }
 
       new Promise(r =>
-        r(onUpdateInput('recoveryPhrase', _get(decryptedData, 'privateKey'))),
+        r(onUpdateInput('privateKey', _get(decryptedData, 'privateKey'))),
       )
         .then(() => {
           accessWallet('keystore');

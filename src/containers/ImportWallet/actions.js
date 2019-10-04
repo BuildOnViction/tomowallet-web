@@ -12,6 +12,7 @@ import {
   TOGGLE_PASSWORD_POPUP,
   UPDATE_CHOSEN_WALLET,
   UPDATE_ERRORS,
+  UPDATE_KEY_INPUT_TYPE,
   UPDATE_INPUT,
   UPDATE_PASSWORD_POPUP_ERRORS,
   UPDATE_PASSWORD_POPUP_INPUT,
@@ -55,6 +56,11 @@ export const updateChosenWallet = index => ({
 export const updateErrors = errors => ({
   type: UPDATE_ERRORS,
   errors,
+});
+
+export const updateKeyInputType = newType => ({
+  type: UPDATE_KEY_INPUT_TYPE,
+  newType,
 });
 
 export const updateInput = (name, value) => ({

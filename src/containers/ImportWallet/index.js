@@ -37,7 +37,7 @@ import RPOrPKForm from './subcomponents/RPOrPKForm';
 import KeystoreForm from './subcomponents/KeystoreForm';
 import AddressPopup from './subcomponents/AddressPopup';
 // Utilities, Constants & Styles
-import { IMPORT_TYPES, DOMAIN_KEY } from './constants';
+import { IMPORT_TYPES, DOMAIN_KEY, KEY_INPUT_TYPE } from './constants';
 import { selectAddressPopup, selectImportState } from './selectors';
 import {
   resetState,
@@ -56,7 +56,6 @@ import {
   setWeb3Info,
   withGlobal,
   getValidations,
-  trimMnemonic,
   getBalance,
   removeWeb3Info,
   isElectron,
@@ -141,29 +140,61 @@ class ImportWallet extends PureComponent {
       toggleLoading,
       updateWeb3,
     } = this.props;
-    const recoveryPhrase = trimMnemonic(
-      _get(importWallet, 'input.recoveryPhrase', ''),
+    const formValues = _get(importWallet, 'input', {});
+    const keyInputType = _get(
+      importWallet,
+      'keyInputType',
+      KEY_INPUT_TYPE.PRIVATE_KEY,
     );
+    let errorList = {};
 
-    if (isRecoveryPhrase(recoveryPhrase) || isPrivateKey(recoveryPhrase)) {
+    // Validate form inputs
+    if (keyInputType === KEY_INPUT_TYPE.PRIVATE_KEY) {
+      errorList = {
+        ...(!isPrivateKey(formValues.privateKey)
+          ? {
+              privateKey: [
+                formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_PRIVATE_KEY),
+              ],
+            }
+          : {}),
+      };
+    } else if (keyInputType === KEY_INPUT_TYPE.RECOVERY_PHRASE) {
+      errorList = {
+        ...(!isRecoveryPhrase(formValues.recoveryPhrase)
+          ? {
+              recoveryPhrase: [
+                formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
+              ],
+            }
+          : {}),
+        ...this.handleValidateHDPath(),
+      };
+    }
+
+    if (_isEmpty(errorList)) {
+      // Create Web3 provider & store wallet data into state if form validation is passed.
       try {
         toggleLoading(true);
-        const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
+        const accessKey = formValues.recoveryPhrase || formValues.privateKey;
+        const newWeb3 = createWeb3(accessKey, rpcServer);
         updateWeb3(newWeb3);
         getWalletInfo(newWeb3)
           .then(walletInfo => {
             onStoreWallet(walletInfo);
             setWeb3Info({
               loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
-              recoveryPhrase,
+              recoveryPhrase: accessKey,
               address: walletInfo.address,
             });
           })
           .then(() => {
             if (isElectron() && accessType !== 'keystore') {
-              const privKey = isRecoveryPhrase(recoveryPhrase)
-                ? mnemonicToPrivateKey(recoveryPhrase, rpcServer)
-                : recoveryPhrase;
+              // Specific handle in Electron app:
+              // Store encrypted wallet key into temporary file for quick access
+              const privKey = formValues.recoveryPhrase
+                ? mnemonicToPrivateKey(formValues.recoveryPhrase, rpcServer)
+                : formValues.privateKey;
               removeKeystore().then(
                 ({ error }) => error && this.handleUpdateError(error.message),
               );
@@ -180,9 +211,7 @@ class ImportWallet extends PureComponent {
         this.handleUpdateError(error.message);
       }
     } else {
-      this.handleUpdateError(
-        formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
-      );
+      this.handleUpdateError(errorList);
     }
   }
 
@@ -240,12 +269,28 @@ class ImportWallet extends PureComponent {
     };
   }
 
-  handleUpdateError(errorMsg, clientMode) {
-    const { onUpdateErrors, toggleLoading } = this.props;
+  handleUpdateError(error, clientMode) {
+    const { importWallet, onUpdateErrors, toggleLoading } = this.props;
+    const keyInputType = _get(
+      importWallet,
+      'keyInputType',
+      KEY_INPUT_TYPE.PRIVATE_KEY,
+    );
     if (!clientMode) {
       toggleLoading(false);
     }
-    onUpdateErrors([errorMsg]);
+    if (typeof error === 'string') {
+      const field =
+        (keyInputType === KEY_INPUT_TYPE.PRIVATE_KEY && 'privateKey') ||
+        (keyInputType === KEY_INPUT_TYPE.RECOVERY_PHRASE && 'recoveryPhrase');
+      if (field) {
+        onUpdateErrors({
+          [field]: [error],
+        });
+      }
+    } else if (typeof error === 'object') {
+      onUpdateErrors(error);
+    }
   }
 
   render() {
