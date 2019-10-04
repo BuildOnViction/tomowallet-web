@@ -105,7 +105,7 @@ class NavigationBar extends PureComponent {
       removeWeb3Info(),
       removeLedger(),
       removeMetaMaskProvider(),
-      isElectron && removeRPFile(),
+      isElectron() && removeRPFile(),
     ]).then(() => this.handleRedirectToHomepage());
   }
 
