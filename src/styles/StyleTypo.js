@@ -46,6 +46,7 @@ const TextLinkYellow = styled.a`
 `;
 const TextYellowPointer = styled.span`
   color: #e4ae63;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.3s;
   &:hover {

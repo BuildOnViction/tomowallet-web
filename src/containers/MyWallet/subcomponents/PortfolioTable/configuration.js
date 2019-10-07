@@ -5,17 +5,12 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React from 'react';
+import React, { Fragment } from 'react';
 import _get from 'lodash.get';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UncontrolledDropdown } from 'reactstrap';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
-import {
-  TextYellowPointer,
-  DropdownToggleMainStyle,
-  DropdownMenuMainStyler,
-} from '../../../../styles';
+import { TextYellowPointer } from '../../../../styles';
 // Utilities & Constants
 import {
   convertLocaleNumber,
@@ -25,6 +20,7 @@ import {
 import { PORTFOLIO_COLUMNS, SEND_TOKEN_FIELDS } from '../../constants';
 import { MSG, ENUM, API } from '../../../../constants';
 import { bnToDecimals } from '../../../../utils';
+import Tooltip from '../../../../components/Tooltip';
 // ===================
 
 // ===== CONFIGURATION =====
@@ -91,22 +87,28 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       {
         headerClassName: 'd-none',
         accessor: PORTFOLIO_COLUMNS.SEND,
-        Cell: ({ original }) => (
-          <TextYellowPointer
-            role='presentation'
-            onClick={() =>
-              openSendTokenPopup({
-                [SEND_TOKEN_FIELDS.TOKEN]: original,
-                isTokenSpecific: true,
-              })
-            }
-          >
-            {formatMessage(MSG.COMMON_BUTTON_SEND)}
-          </TextYellowPointer>
+        Cell: ({ index, original }) => (
+          <Fragment>
+            <TextYellowPointer
+              id={`sendIcon_${index + 1}`}
+              role='presentation'
+              onClick={() =>
+                openSendTokenPopup({
+                  [SEND_TOKEN_FIELDS.TOKEN]: original,
+                  isTokenSpecific: true,
+                })
+              }
+            >
+              <FontAwesomeIcon icon='share' />
+            </TextYellowPointer>
+            <Tooltip placement='top' target={`sendIcon_${index + 1}`}>
+              {formatMessage(MSG.COMMON_BUTTON_SEND)}
+            </Tooltip>
+          </Fragment>
         ),
       },
       {
-        Cell: ({ original }) => {
+        Cell: ({ index, original }) => {
           const networkKey = getNetwork();
           const address = _get(getWeb3Info(), 'address', '');
           const baseUrl = _get(API, [networkKey, 'VIEW_TOKEN'], '');
@@ -138,23 +140,19 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           }
 
           return (
-            <UncontrolledDropdown>
-              <DropdownToggleMainStyle>
-                <div className='text-right'>
-                  <FontAwesomeIcon icon='ellipsis-v' />
-                </div>
-              </DropdownToggleMainStyle>
-              <DropdownMenuMainStyler right>
-                <a href={viewLink} rel='noopener noreferrer' target='_blank'>
-                  {formatMessage(
-                    MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN,
-                    {
-                      token: _get(original, [PORTFOLIO_COLUMNS.TOKEN_NAME], ''),
-                    },
-                  )}
-                </a>
-              </DropdownMenuMainStyler>
-            </UncontrolledDropdown>
+            <a href={viewLink} rel='noopener noreferrer' target='_blank'>
+              <TextYellowPointer id={`view_link_${index + 1}`}>
+                <FontAwesomeIcon icon='globe-asia' />
+              </TextYellowPointer>
+              <Tooltip placement='top' target={`view_link_${index + 1}`}>
+                {formatMessage(
+                  MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_ON_TOMOSCAN,
+                  {
+                    token: _get(original, [PORTFOLIO_COLUMNS.TOKEN_NAME], ''),
+                  },
+                )}
+              </Tooltip>
+            </a>
           );
         },
       },

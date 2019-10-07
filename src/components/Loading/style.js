@@ -28,6 +28,7 @@ const LoadingStyler = styled(({ loading, children, ...remain }) => (
     width: 60px;
     height: 60px;
   }
+  cursor: progress;
 `;
 // =================
 
