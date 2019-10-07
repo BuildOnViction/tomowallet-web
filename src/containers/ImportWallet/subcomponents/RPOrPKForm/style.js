@@ -37,7 +37,7 @@ const RPOrPKFormStyler = styled(({ errors, children, ...remains }) => (
           position: absolute;
           bottom: 0;
           left: 0;
-          animation: slideRight 0.5s ease-out 1;
+          animation: slideRight 0.3s ease-out 1;
         }
       }
     }
@@ -48,7 +48,7 @@ const RPOrPKFormStyler = styled(({ errors, children, ...remains }) => (
         svg {
           animation: ${({ errors }) =>
             _get(errors, 'privateKey', [].length > 0)
-              ? 'bouncerHigh 0.7s linear 1'
+              ? 'bouncerHigh 0.5s linear 1'
               : 'none'};
         }
       }
@@ -56,7 +56,7 @@ const RPOrPKFormStyler = styled(({ errors, children, ...remains }) => (
         svg {
           animation: ${({ errors }) =>
             _get(errors, 'recoveryPhrase', [].length > 0)
-              ? 'bouncerHigh 0.7s linear 1'
+              ? 'bouncerHigh 0.5s linear 1'
               : 'none'};
         }
       }
