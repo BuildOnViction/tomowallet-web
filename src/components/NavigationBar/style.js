@@ -51,6 +51,10 @@ const NavBarStyler = styled(Navbar)`
       width: auto;
       max-width: 100%;
       cursor: pointer;
+      transition: 0.5s ease-out;
+      &:hover {
+        transform: translateX(10%);
+      }
     }
   }
   .nav-item {

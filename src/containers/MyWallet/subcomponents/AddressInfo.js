@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 import QRCode from 'qrcode.react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import ExchangeInfo from './ExchangeInfo';
 import { MediumButtonStyler, HeadingSmall } from '../../../styles';
@@ -65,6 +66,7 @@ class AddressInfo extends PureComponent {
                 <Row className='fullwidth align-items-center'>
                   <Col md={8}>
                     <HeadingSmall>
+                      <FontAwesomeIcon icon='wallet' className='mr-2' />
                       {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
                     </HeadingSmall>
                     <TextBlue
@@ -78,6 +80,7 @@ class AddressInfo extends PureComponent {
                       <Col md={6} className='pr-2'>
                         <MediumButtonStyler onClick={openSendTokenPopup}>
                           {formatMessage(MSG.COMMON_BUTTON_SEND)}
+                          <FontAwesomeIcon icon='share' className='ml-2' />
                         </MediumButtonStyler>
                       </Col>
                       <Col md={6} className='pl-2'>
@@ -85,6 +88,7 @@ class AddressInfo extends PureComponent {
                           btnBlue
                           onClick={openReceiveTokenPopup}
                         >
+                          <FontAwesomeIcon icon='reply' className='mr-2' />
                           {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
                         </MediumButtonStyler>
                       </Col>

@@ -5,7 +5,7 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React from 'react';
+import React, { Fragment } from 'react';
 import _get from 'lodash.get';
 // Custom Components
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,7 +20,12 @@ import { MSG, API } from '../../../../constants';
 // ===== CONFIGURATION =====
 export default ({ formatMessage }) => [
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_TX_HASH),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon='hashtag' className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_TX_HASH)}
+      </Fragment>
+    ),
     accessor: TRANSACTION_COLUMNS.TX_HASH,
     Cell: ({ value }) => (
       <EllipsisCellStyler title={value}>
@@ -37,7 +42,12 @@ export default ({ formatMessage }) => [
     ),
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_CREATE_TIME),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon='history' className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_CREATE_TIME)}
+      </Fragment>
+    ),
     accessor: TRANSACTION_COLUMNS.CREATE_TIME,
     Cell: ({ value }) => {
       const timeStr = value.format('HH:MM, DD MMM YYYY');
@@ -45,7 +55,12 @@ export default ({ formatMessage }) => [
     },
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_FROM),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon={['far', 'address-card']} className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_FROM)}
+      </Fragment>
+    ),
     accessor: TRANSACTION_COLUMNS.FROM,
     Cell: ({ value }) => (
       <EllipsisCellStyler title={value}>
@@ -73,7 +88,12 @@ export default ({ formatMessage }) => [
     className: 'text-center',
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_TO),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon={['far', 'address-card']} className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_TO)}
+      </Fragment>
+    ),
     accessor: TRANSACTION_COLUMNS.TO,
     Cell: ({ value }) => (
       <EllipsisCellStyler title={value}>
@@ -90,7 +110,12 @@ export default ({ formatMessage }) => [
     ),
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_QUANTITY),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon='funnel-dollar' className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_TRANSACTIONS_HEADER_QUANTITY)}
+      </Fragment>
+    ),
     accessor: TRANSACTION_COLUMNS.QUANTITY,
     Cell: ({ value, original }) => {
       const displayValue = `${value} ${_get(original, [

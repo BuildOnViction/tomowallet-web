@@ -29,13 +29,9 @@ class ReceiveTokenPopup extends PureComponent {
         isOpen={isOpen}
         title={formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE)}
         button={{
-          secondary: {
-            label: formatMessage(MSG.COMMON_BUTTON_BACK),
-            action: () => togglePopup(false),
-          },
           primary: {
-            label: formatMessage(MSG.COMMON_BUTTON_RECEIVE),
-            btnBlue: true,
+            label: formatMessage(MSG.COMMON_BUTTON_CLOSE),
+            action: () => togglePopup(false),
           },
         }}
       />

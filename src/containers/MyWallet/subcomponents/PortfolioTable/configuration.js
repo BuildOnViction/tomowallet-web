@@ -26,7 +26,12 @@ import Tooltip from '../../../../components/Tooltip';
 // ===== CONFIGURATION =====
 export default ({ formatMessage, openSendTokenPopup }) => [
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon='money-check-alt' className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME)}
+      </Fragment>
+    ),
     columns: [
       {
         headerClassName: 'd-none',
@@ -38,7 +43,12 @@ export default ({ formatMessage, openSendTokenPopup }) => [
     ],
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_BALANCE),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon='coins' className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_BALANCE)}
+      </Fragment>
+    ),
     columns: [
       {
         headerClassName: 'd-none',
@@ -54,7 +64,12 @@ export default ({ formatMessage, openSendTokenPopup }) => [
     ],
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon='dollar-sign' className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE)}
+      </Fragment>
+    ),
     columns: [
       {
         headerClassName: 'd-none',
@@ -72,7 +87,12 @@ export default ({ formatMessage, openSendTokenPopup }) => [
     ],
   },
   {
-    Header: formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_PRICE),
+    Header: () => (
+      <Fragment>
+        <FontAwesomeIcon icon='dollar-sign' className='mr-2' />
+        {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_PRICE)}
+      </Fragment>
+    ),
     columns: [
       {
         headerClassName: 'd-none',

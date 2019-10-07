@@ -73,6 +73,7 @@ import { withWeb3 } from '../../components/Web3';
 import { withIntl } from '../../components/IntlProvider';
 import { storeWallet } from '../Global/actions';
 import LogoLedger from '../../assets/images/logo-ledger.png';
+import LogoMetaMask from '../../assets/images/logo-metamask.png';
 import LogoKey from '../../assets/images/logo-key.png';
 import { writeRPFile } from '../../utils/electron';
 
@@ -373,7 +374,7 @@ class ImportWallet extends PureComponent {
                       }
                     >
                       <CardImg
-                        src={LogoLedger}
+                        src={LogoMetaMask}
                         alt={formatMessage(
                           MSG.IMPORT_WALLET_TAB_METAMASK_IMAGE_ALT,
                         )}
