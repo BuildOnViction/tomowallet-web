@@ -54,7 +54,7 @@ class RPOrPKForm extends PureComponent {
     );
 
     return (
-      <RPOrPKFormStyler>
+      <RPOrPKFormStyler errors={_get(importWallet, 'errors', {})}>
         <Nav tabs className='mt-2 mb-4'>
           {KEY_INPUT_OPTIONS.map((opt, optIdx) => (
             <NavItem key={`key_input_type_${optIdx + 1}`}>

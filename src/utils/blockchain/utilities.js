@@ -156,19 +156,13 @@ const encryptKeystore = (rawInfo, password) => {
 const isAddress = rawData => !!rawData && web3Utils.isAddress(rawData);
 
 /**
- * isRecoveryPhrase
+ * isHDPath
  *
- * Check if the input string is a valid recovery phrase
- * @param {String} rawData recovery phrase input's value
+ * Check if the input string is a valid HD path
+ * @param {String} hdPath A string of HD path to validate
  */
-const isRecoveryPhrase = rawData => {
-  if (rawData) {
-    const trimData = trimMnemonic(rawData);
-
-    return trimData.split(' ').length === 12;
-  }
-  return false;
-};
+const isHDPath = hdPath =>
+  !!hdPath && /^m(\/\d+'?)+(\/\d*'?)$/.test(hdPath.trim());
 
 /**
  * isPrivateKey
@@ -181,6 +175,21 @@ const isPrivateKey = rawData => {
     const trimData = rawData.trim().replace(/^0x/, '');
 
     return web3Utils.isHex(trimData) && trimData.length === 64;
+  }
+  return false;
+};
+
+/**
+ * isRecoveryPhrase
+ *
+ * Check if the input string is a valid recovery phrase
+ * @param {String} rawData recovery phrase input's value
+ */
+const isRecoveryPhrase = rawData => {
+  if (rawData) {
+    const trimData = trimMnemonic(rawData);
+
+    return trimData.split(' ').length === 12;
   }
   return false;
 };
@@ -289,6 +298,7 @@ export {
   divBN,
   encryptKeystore,
   isAddress,
+  isHDPath,
   isPrivateKey,
   isRecoveryPhrase,
   mulBN,

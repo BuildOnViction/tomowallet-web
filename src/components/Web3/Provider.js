@@ -80,7 +80,13 @@ class Web3Provider extends Component {
       if (_get(web3Info, 'recoveryPhrase')) {
         const { recoveryPhrase } = web3Info;
         const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
-        const rpcServer = _get(RPC_SERVER, [networkKey]);
+        // const rpcServer = _get(RPC_SERVER, [networkKey]);
+        const rpcServer = _get(web3Info, 'hdPath')
+          ? {
+              ..._get(RPC_SERVER, [networkKey]),
+              hdPath: _get(web3Info, 'hdPath'),
+            }
+          : _get(RPC_SERVER, [networkKey]);
         const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
 
         this.handleSetWeb3(newWeb3);

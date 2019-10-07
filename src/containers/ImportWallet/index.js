@@ -60,6 +60,7 @@ import {
   removeWeb3Info,
   isElectron,
   isRecoveryPhrase,
+  isHDPath,
   isPrivateKey,
   removeKeystore,
   selectHDPath,
@@ -177,7 +178,14 @@ class ImportWallet extends PureComponent {
       try {
         toggleLoading(true);
         const accessKey = formValues.recoveryPhrase || formValues.privateKey;
-        const newWeb3 = createWeb3(accessKey, rpcServer);
+        const hdPath = _get(importWallet, 'input.hdPath', '');
+        const updatedRpcServer = hdPath
+          ? {
+              ...rpcServer,
+              hdPath,
+            }
+          : rpcServer;
+        const newWeb3 = createWeb3(accessKey, updatedRpcServer);
         updateWeb3(newWeb3);
         getWalletInfo(newWeb3)
           .then(walletInfo => {
@@ -186,6 +194,11 @@ class ImportWallet extends PureComponent {
               loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
               recoveryPhrase: accessKey,
               address: walletInfo.address,
+              ...(hdPath
+                ? {
+                    hdPath,
+                  }
+                : {}),
             });
           })
           .then(() => {
@@ -266,6 +279,11 @@ class ImportWallet extends PureComponent {
         },
         formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH),
       ),
+      ...(!isHDPath(_get(importWallet, 'input.hdPath'))
+        ? {
+            hdPath: [formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH)],
+          }
+        : {}),
     };
   }
 

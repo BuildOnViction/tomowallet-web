@@ -78,12 +78,13 @@ export default (state = initialState, action) => {
       const initialInput =
         action.newType === KEY_INPUT_TYPE.RECOVERY_PHRASE
           ? {
-              hdPath: "m/44'/889'/0'/0",
+              hdPath: "m/44'/889'/0'/0/",
             }
           : {};
       return state
         .setIn(['importWallet', 'keyInputType'], action.newType)
-        .setIn(['importWallet', 'input'], initialInput);
+        .setIn(['importWallet', 'input'], initialInput)
+        .setIn(['importWallet', 'errors'], {});
     }
     case UPDATE_INPUT:
       return state

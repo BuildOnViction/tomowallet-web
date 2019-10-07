@@ -36,7 +36,6 @@ import {
   decryptKeystore,
   isPrivateKey,
   withGlobal,
-  getNetwork,
   createWeb3,
   setWeb3Info,
   isElectron,
@@ -44,7 +43,7 @@ import {
   readKeystore,
   getWalletInfo,
 } from '../../utils';
-import { MSG, ROUTE, RPC_SERVER, ENUM } from '../../constants';
+import { MSG, ROUTE, ENUM } from '../../constants';
 import { toggleLoading, storeWallet } from '../Global/actions';
 import { detectRPFile, readRPFile } from '../../utils/electron';
 // ===================
@@ -126,7 +125,6 @@ class WelcomePage extends PureComponent {
     toggleLoading(true);
     if (isPrivateKey(privKey)) {
       try {
-        // const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
         const newWeb3 = createWeb3(privKey, rpcServer);
         updateWeb3(newWeb3);
         getWalletInfo(newWeb3)

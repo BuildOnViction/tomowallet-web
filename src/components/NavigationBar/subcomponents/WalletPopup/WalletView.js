@@ -7,20 +7,22 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import _get from 'lodash.get';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 // Custom Components
 import MnemonicBox from '../../../MnemonicBox';
 // Utilities, Constants & Styles
 import {
-  getNetwork,
+  // getNetwork,
   getWeb3Info,
+  isPrivateKey,
   mnemonicToPrivateKey,
   withGlobal,
-  isPrivateKey,
 } from '../../../../utils';
+import { withWeb3 } from '../../../Web3';
 import { WALLET_POPUP_CONTENT_TAB } from '../../../../containers/Global/constants';
-import { MSG, RPC_SERVER } from '../../../../constants';
+import { MSG } from '../../../../constants';
 import { TextBlue } from '../../../../styles';
 // ===================
 
@@ -40,8 +42,9 @@ class WalletViewContent extends PureComponent {
   }
 
   handleGetPrivateKey() {
+    const { rpcServer } = this.props;
     const { recoveryPhrase } = getWeb3Info();
-    const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
+    // const rpcServer = _get(RPC_SERVER, [getNetwork()], {});
     if (this.handleCheckPrivateKey()) {
       return recoveryPhrase.replace(/^0x/, '');
     }
@@ -141,4 +144,7 @@ WalletViewContent.defaultProps = {
 };
 // ======================
 
-export default withGlobal(WalletViewContent);
+export default compose(
+  withGlobal,
+  withWeb3,
+)(WalletViewContent);

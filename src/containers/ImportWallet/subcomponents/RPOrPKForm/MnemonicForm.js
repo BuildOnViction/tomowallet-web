@@ -62,7 +62,7 @@ class PrivateKeyForm extends PureComponent {
     return (
       <Fragment>
         <FormGroup className='mb-2'>
-          <Label>
+          <Label for='recoveryPhrase'>
             {formatMessage(
               MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_MNEMONIC_LABEL,
             )}
@@ -87,7 +87,7 @@ class PrivateKeyForm extends PureComponent {
           </FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Label>
+          <Label for='hdPath'>
             {formatMessage(
               MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_HD_PATH_LABEL,
             )}
@@ -99,8 +99,7 @@ class PrivateKeyForm extends PureComponent {
               MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_HD_PATH_PLACEHOLDER,
             )}
             value={_get(formValues, 'hdPath', '')}
-            // onChange={this.handleChangeHDPath}
-            onChange={() => {}}
+            onChange={this.handleChangeHDPath}
             invalid={_get(errors, 'hdPath', []).length > 0}
           />
           <FormFeedback>

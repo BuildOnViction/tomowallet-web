@@ -52,22 +52,26 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
-    const { onStoreWallet, updateWeb3 } = this.props;
-    const walletParams = getWeb3Info();
-    const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
-    const serverConfig = _get(RPC_SERVER, [networkKey], {});
+    const { onStoreWallet } = this.props;
 
-    if (_get(walletParams, 'recoveryPhrase')) {
-      const { recoveryPhrase } = walletParams;
+    const { address, hdPath, recoveryPhrase } = getWeb3Info() || {};
+    const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+    const serverConfig = hdPath
+      ? {
+          ..._get(RPC_SERVER, [networkKey], {}),
+          hdPath,
+        }
+      : _get(RPC_SERVER, [networkKey], {});
+
+    if (recoveryPhrase) {
       const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
       getWalletInfo(newWeb3).then(wallet => {
-        updateWeb3(newWeb3);
         onStoreWallet(wallet);
       });
-    } else if (_get(walletParams, 'address')) {
-      getBalance(walletParams.address, serverConfig).then(balance => {
+    } else if (address) {
+      getBalance(address, serverConfig).then(balance => {
         const walletInfo = {
-          address: walletParams.address,
+          address,
           balance,
         };
         onStoreWallet(walletInfo);
@@ -169,8 +173,6 @@ App.propTypes = {
   intl: PropTypes.object,
   /** Action to save new wallet data into state */
   onStoreWallet: PropTypes.func,
-  /** Action to save new Web3 provider into state */
-  updateWeb3: PropTypes.func,
   /** Wallet's state */
   wallet: PropTypes.object,
 };
@@ -178,7 +180,6 @@ App.defaultProps = {
   clipboardData: {},
   intl: {},
   onStoreWallet: () => {},
-  updateWeb3: () => {},
   wallet: {},
 };
 // ======================

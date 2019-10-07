@@ -57,7 +57,7 @@ class PrivateKeyForm extends PureComponent {
 
     return (
       <FormGroup>
-        <Label>
+        <Label for='privateKey'>
           {formatMessage(
             MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_PRIVATE_KEY_INPUT_PRIVATE_KEY_LABEL,
           )}

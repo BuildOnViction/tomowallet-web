@@ -22,6 +22,31 @@
     transform: translateY(0%);
   }
 }
+@keyframes bouncerHigh {
+  0% {
+    transform: translateY(0%);
+  }
+  25% {
+    transform: translateY(-35%);
+  }
+  50% {
+    transform: translateY(-7%);
+  }
+  75% {
+    transform: translateY(-25%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+@keyframes slideRight {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
 
 * {
   box-sizing: border-box;
