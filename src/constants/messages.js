@@ -504,19 +504,9 @@ export default defineMessages({
     defaultMessage: 'Recovery Phrase/ Private Key',
   },
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT: {
-    id: `${myWalletPagePrefix}.tab.recoveryphrase.notrecommmended.text`,
+    id: `${importWalletPagePrefix}.tab.recoveryphrase.notrecommmended.text`,
     defaultMessage: '(Not Recommended)',
   },
-  // ===== TO-BE-REMOVED =====
-  IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_LABEL: {
-    id: `${importWalletPagePrefix}.tab.recoveryphrase.input.label`,
-    defaultMessage: 'Enter your Recovery Phrase or Private Key',
-  },
-  IMPORT_WALLET_TAB_RECOVERY_PHRASE_INPUT_PLACEHOLDER: {
-    id: `${importWalletPagePrefix}.tab.recoveryphrase.input.placeholder`,
-    defaultMessage: 'Enter your Recovery Phrase or Private Key...',
-  },
-  // =========================
   IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_PRIVATE_KEY: {
     id: `${importWalletPagePrefix}.tab.recoveryphrase.type.privatekey`,
     defaultMessage: 'Private Key',
@@ -675,10 +665,6 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.tab.transaction.title`,
     defaultMessage: 'TRANSACTIONS',
   },
-  MY_WALLET_TABLE_TRANSACTIONS_HEADER_TOKEN_TYPE: {
-    id: `${myWalletPagePrefix}.table.transactions.header.tokentype`,
-    defaultMessage: 'Token',
-  },
   MY_WALLET_TABLE_TRANSACTIONS_HEADER_TX_HASH: {
     id: `${myWalletPagePrefix}.table.transactions.header.txhash`,
     defaultMessage: 'Txn Hash',
@@ -772,8 +758,8 @@ export default defineMessages({
     defaultMessage: 'Remaining token is insufficient for transaction fee.',
   },
   MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY: {
-    id: `${myWalletPagePrefix}.popup.sendtoken.error.insufficientfee.fromcurrency`,
-    defaultMessage: 'Remaining currency is insufficient for transaction fee.',
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.insufficientfee.frombalance`,
+    defaultMessage: 'Remaining balance is insufficient for transaction fee.',
   },
   MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID: {
     id: `${myWalletPagePrefix}.popup.sendtoken.error.amount.invalid`,
