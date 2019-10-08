@@ -38,7 +38,7 @@ const BoxPortfolio = styled.div`
     grid-template-columns: 20% 20% 20% 20% 20%;
     .rt-th {
       position: relative;
-      &:before {
+      &:not(.no-header):before {
         content '';
         position: absolute;
         bottom: 0;

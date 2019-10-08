@@ -78,6 +78,7 @@ export default ({ formatMessage }) => [
   },
   {
     Header: '',
+    headerClassName: 'no-header',
     accessor: 'connectArrow',
     Cell: ({ original }) =>
       _get(original, [TRANSACTION_COLUMNS.TYPE]) === 'IN' ? (

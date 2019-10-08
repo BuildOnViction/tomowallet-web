@@ -102,6 +102,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
     ],
   },
   {
+    headerClassName: 'no-header',
     accessor: 'abc',
     columns: [
       {
