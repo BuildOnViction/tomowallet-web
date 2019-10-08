@@ -26,7 +26,7 @@ import Tooltip from '../../../../components/Tooltip';
 // ===== CONFIGURATION =====
 export default ({ formatMessage, openSendTokenPopup }) => [
   {
-    Header: () => (
+    Header: (
       <Fragment>
         <FontAwesomeIcon icon='money-check-alt' className='mr-2' />
         {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME)}
@@ -43,7 +43,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
     ],
   },
   {
-    Header: () => (
+    Header: (
       <Fragment>
         <FontAwesomeIcon icon='coins' className='mr-2' />
         {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_BALANCE)}
@@ -64,7 +64,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
     ],
   },
   {
-    Header: () => (
+    Header: (
       <Fragment>
         <FontAwesomeIcon icon='dollar-sign' className='mr-2' />
         {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE)}
@@ -87,7 +87,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
     ],
   },
   {
-    Header: () => (
+    Header: (
       <Fragment>
         <FontAwesomeIcon icon='dollar-sign' className='mr-2' />
         {formatMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_HEADER_PRICE)}
