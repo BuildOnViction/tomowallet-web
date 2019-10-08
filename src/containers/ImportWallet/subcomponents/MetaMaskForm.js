@@ -7,10 +7,11 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import _get from 'lodash.get';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
-import { getMessage } from '../../../components/IntlProvider';
+import { withIntl } from '../../../components/IntlProvider';
 import { MSG, ENUM } from '../../../constants';
 import { getWeb3Info } from '../../../utils';
 // ===================
@@ -31,8 +32,12 @@ class MetaMaskForm extends PureComponent {
   }
 
   render() {
+    const {
+      intl: { formatMessage },
+    } = this.props;
+
     return (
-      <div>{getMessage(MSG.IMPORT_WALLET_TAB_METAMASK_CONTENT_MESSAGE)}</div>
+      <div>{formatMessage(MSG.IMPORT_WALLET_TAB_METAMASK_CONTENT_MESSAGE)}</div>
     );
   }
 }
@@ -40,6 +45,8 @@ class MetaMaskForm extends PureComponent {
 
 // ===== PROP TYPES =====
 MetaMaskForm.propTypes = {
+  /** React Intl's instance object */
+  intl: PropTypes.object,
   /** Action to remove MetaMask provider */
   removeMetaMaskProvider: PropTypes.func,
   /** Action to set MetaMask provider */
@@ -47,9 +54,13 @@ MetaMaskForm.propTypes = {
 };
 
 MetaMaskForm.defaultProps = {
+  intl: {},
   removeMetaMaskProvider: () => {},
   setMetaMaskProvider: () => {},
 };
 // ======================
 
-export default withWeb3(MetaMaskForm);
+export default compose(
+  withIntl,
+  withWeb3,
+)(MetaMaskForm);

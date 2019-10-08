@@ -1,5 +1,7 @@
 // Style Global
 @import './iconfont/style.css';
+
+// ===== Animations =====
 @keyframes blinker {
   50% {
     opacity: 0;
@@ -47,6 +49,15 @@
     width: 100%;
   }
 }
+@keyframes roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+// ======================
 
 * {
   box-sizing: border-box;

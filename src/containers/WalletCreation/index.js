@@ -23,6 +23,7 @@ import Verification from './subcomponents/Verification';
 import SuccessNotification from './subcomponents/Success';
 import ConfirmationPopup from './subcomponents/popups/ConfirmationPopup';
 import KeyViewPopup from './subcomponents/popups/KeyViewPopup';
+import { WalletCreationStyler } from './style';
 // Utilities
 import {
   selectConfirmationState,
@@ -61,7 +62,6 @@ import {
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG, ENUM } from '../../constants';
 import { storeWallet } from '../Global/actions';
-import { ContainerMin } from '../../styles';
 import { writeRPFile } from '../../utils/electron';
 // ===================
 
@@ -166,7 +166,7 @@ class WalletCreationPage extends PureComponent {
         <Helmet>
           <title>{formatMessage(MSG.CREATE_WALLET_TITLE)}</title>
         </Helmet>
-        <ContainerMin>
+        <WalletCreationStyler>
           {(formState === FORM_STATES.WARNING && (
             <Warning
               setFormState={onSetFormState}
@@ -202,7 +202,7 @@ class WalletCreationPage extends PureComponent {
             toggleKeyVisibile={onToggleKeyVisible}
             togglePopup={onToggleKeyViewPopup}
           />
-        </ContainerMin>
+        </WalletCreationStyler>
       </Fragment>
     );
   }

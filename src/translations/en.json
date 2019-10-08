@@ -79,6 +79,7 @@
   "tomowallet.container.createwallet.recoveryphrase.title": "Recovery Phrase",
   "tomowallet.container.createwallet.recoveryphrase.notification.title": "Please back up recovery phrase",
   "tomowallet.container.createwallet.recoveryphrase.notification.description": "Back up the text below on paper and keep it somewhere secret and save.",
+  "tomowallet.container.createwallet.recoveryphrase.button.reload": "Reload",
   "tomowallet.container.createwallet.recoveryphrase.button.save": "Save as Keystore",
   "tomowallet.container.createwallet.recoveryphrase.button.view.privatekey": "View my private key",
   "tomowallet.container.createwallet.recoveryphrase.button.confirmation": "I Wrote My Recovery Phrase",

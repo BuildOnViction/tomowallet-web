@@ -371,6 +371,10 @@ export default defineMessages({
     defaultMessage:
       'Back up the text below on paper and keep it somewhere secret and save.',
   },
+  RECOVERY_PHRASE_BUTTON_RELOAD: {
+    id: `${recoveryPhrasePrefix}.button.reload`,
+    defaultMessage: 'Reload',
+  },
   RECOVERY_PHRASE_BUTTON_SAVE: {
     id: `${recoveryPhrasePrefix}.button.save`,
     defaultMessage: 'Save as Keystore',

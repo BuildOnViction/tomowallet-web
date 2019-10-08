@@ -10,6 +10,7 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { generateMnemonic } from 'bip39';
 import _get from 'lodash.get';
 import {
   Row,
@@ -38,10 +39,11 @@ import { MSG } from '../../../constants';
 import { FORM_STATES } from '../constants';
 import { createStructuredSelector } from 'reselect';
 import {
-  togglePasswordPopup,
   setFormState,
+  storeMnemonic,
   toggleConfirmationPopup,
   toggleKeyViewPopup,
+  togglePasswordPopup,
 } from '../actions';
 import { selectMnemonic } from '../selectors';
 // ===================
@@ -52,11 +54,17 @@ class RecoveryPhrase extends PureComponent {
     super(props);
 
     this.handleConvertMnemonic = this.handleConvertMnemonic.bind(this);
+    this.handleReloadNewMnemonic = this.handleReloadNewMnemonic.bind(this);
   }
 
   handleConvertMnemonic() {
     const { mnemonicState } = this.props;
     return _get(mnemonicState, 'origin', '').split(' ');
+  }
+
+  handleReloadNewMnemonic() {
+    const { onStoreMnemonic } = this.props;
+    onStoreMnemonic(generateMnemonic());
   }
 
   render() {
@@ -83,6 +91,16 @@ class RecoveryPhrase extends PureComponent {
             </HeadingMedium>
             <CardText>
               {formatMessage(MSG.RECOVERY_PHRASE_NOTIFICATION_DESCRIPTION)}
+            </CardText>
+            <CardText className='text-right'>
+              <TextBlue
+                role='presentation'
+                onClick={this.handleReloadNewMnemonic}
+                className='btn-reload'
+              >
+                <FontAwesomeIcon icon='sync-alt' className='mr-2' />
+                {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_RELOAD)}
+              </TextBlue>
             </CardText>
             <MnemonicBox
               className='mb-4 mt-4 box-border'
@@ -141,6 +159,8 @@ RecoveryPhrase.propTypes = {
   mnemonicState: PropTypes.object,
   /** Action to update Wallet Creation form state */
   onSetFormState: PropTypes.func,
+  /** Action to save generated mnemonic into state */
+  onStoreMnemonic: PropTypes.func,
   /** Action to toggle recovery phrase confirmation popup */
   onToggleConfirmationPopup: PropTypes.func,
   /** Action to toggle private key view popup */
@@ -155,6 +175,7 @@ RecoveryPhrase.defaultProps = {
   intl: {},
   mnemonicState: {},
   onSetFormState: () => {},
+  onStoreMnemonic: () => {},
   onToggleConfirmationPopup: () => {},
   onToggleKeyViewPopup: () => {},
   onTogglePasswordPopup: () => {},
@@ -169,6 +190,7 @@ const mapStateToProps = () =>
   });
 const mapDispatchToProps = dispatch => ({
   onSetFormState: newState => dispatch(setFormState(newState)),
+  onStoreMnemonic: mnemonic => dispatch(storeMnemonic(mnemonic)),
   onToggleConfirmationPopup: bool => dispatch(toggleConfirmationPopup(bool)),
   onToggleKeyViewPopup: bool => dispatch(toggleKeyViewPopup(bool)),
   onTogglePasswordPopup: bool => dispatch(togglePasswordPopup(bool)),

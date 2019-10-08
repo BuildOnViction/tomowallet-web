@@ -79,6 +79,7 @@
   "tomowallet.container.createwallet.recoveryphrase.title": "Phrase de Récupération",
   "tomowallet.container.createwallet.recoveryphrase.notification.title": "S'il vous plaît sauvegarder phrase de récupération",
   "tomowallet.container.createwallet.recoveryphrase.notification.description": "Sauvegardez le texte ci-dessous sur papier et conservez-le dans un endroit secret pour le sauvegarder.",
+  "tomowallet.container.createwallet.recoveryphrase.button.reload": "Recharger",
   "tomowallet.container.createwallet.recoveryphrase.button.save": "Enregistrer la Phrase de Récupération",
   "tomowallet.container.createwallet.recoveryphrase.button.view.privatekey": "Voir ma clé privée",
   "tomowallet.container.createwallet.recoveryphrase.button.confirmation": "J'ai écrit ma Phrase de Récupération",
