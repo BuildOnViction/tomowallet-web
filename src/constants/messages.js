@@ -94,6 +94,10 @@ export default defineMessages({
     id: `${navbarPrefix}.logo.alt`,
     defaultMessage: 'TOMOCHAIN LOGO',
   },
+  HEADER_NAVBAR_OPTION_PRIVACY_MODE_LABEL: {
+    id: `${navbarPrefix}.option.privacymode.label`,
+    defaultMessage: 'Privacy Mode',
+  },
   HEADER_NAVBAR_OPTION_ABOUT: {
     id: `${navbarPrefix}.option.about`,
     defaultMessage: 'About',

@@ -22,6 +22,7 @@ import {
   UncontrolledDropdown,
   CardImg,
 } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import WalletPopup from './subcomponents/WalletPopup';
 import NetworkConfirmationPopup from './subcomponents/NetworkConfirmationPopup';
@@ -61,6 +62,10 @@ import { removeRPFile } from '../../utils/electron';
 class NavigationBar extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isTurnedOn: '',
+    };
 
     this.handleChangeLocale = this.handleChangeLocale.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
@@ -205,6 +210,7 @@ class NavigationBar extends PureComponent {
       networkConfirmationPopup,
       onToggleNetworkConfirmationPopup,
     } = this.props;
+    const { isTurnedOn } = this.state;
 
     return (
       <Fragment>
@@ -213,6 +219,23 @@ class NavigationBar extends PureComponent {
             <CardImg
               src={logo_tomochain}
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
+            />
+          </NavbarBrand>
+          <NavbarBrand className='btn-privacy-mode'>
+            <FontAwesomeIcon icon='shield-alt' />
+            <span className='mr-2'>
+              {formatMessage(MSG.HEADER_NAVBAR_OPTION_PRIVACY_MODE_LABEL)}
+            </span>
+            <FontAwesomeIcon
+              icon='power-off'
+              onClick={() =>
+                this.setState(({ isTurnedOn }) => ({ isTurnedOn: !isTurnedOn }))
+              }
+              className={
+                (isTurnedOn && 'active') ||
+                (isTurnedOn === false && 'inactive') ||
+                ''
+              }
             />
           </NavbarBrand>
           <Collapse navbar>

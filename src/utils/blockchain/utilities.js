@@ -280,6 +280,14 @@ const subBN = (number1, number2, decimals) => {
 };
 
 /**
+ * toBN
+ *
+ * Convert a decimal number into a Big Number instance
+ * @param {String|Number} decimalAmount A decimal number to convert
+ */
+const toBN = decimalAmount => web3Utils.utils.toBN(decimalAmount);
+
+/**
  * weiToDecimals
  *
  * Convert a Wei-format number into a decimal number
@@ -304,5 +312,6 @@ export {
   mulBN,
   repeatGetTransaction,
   subBN,
+  toBN,
   weiToDecimals,
 };

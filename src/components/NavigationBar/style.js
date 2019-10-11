@@ -16,6 +16,7 @@ import {
 // ===================
 
 // ===== STYLE =====
+
 const LinkHeader = styled(NavLink)`
   color: #9eaacc !important;
   font-weight: normal;
@@ -46,6 +47,48 @@ const NavBarStyler = styled(Navbar)`
   width: 100%;
   text-align: center;
   .navbar-brand {
+    &.btn-privacy-mode {
+      display: flex;
+      align-items: center;
+      padding: 0;
+      margin: 0px 30px;
+      font-size: 14px;
+      color: #9eaacc;
+    }
+    svg.fa-shield-alt {
+      width: 30px;
+      height: 30px;
+      padding: 5px;
+    }
+    svg.fa-power-off {
+      width: 30px;
+      height: 30px;
+      border: 2px solid;
+      border-radius: 50%;
+      padding: 5px;
+      opacity: 0.5;
+      box-shadow: 0px 5px 1px;
+      transform: translateY(-3px);
+      cursor: pointer;
+      &:hover {
+        opacity: 1;
+      }
+      &:active {
+        box-shadow: 0px 3px 1px;
+        transform: translateY(-1px);
+      }
+      &.inactive {
+        animation: turnOff 0.3s linear 1;
+      }
+      &.active {
+        opacity: 1;
+        color: aqua;
+        border-color: aqua;
+        box-shadow: 0px 3px 1px;
+        transform: translateY(-1px);
+        animation: turnOn 0.3s linear 1;
+      }
+    }
     > img {
       height: 45px;
       width: auto;

@@ -13,6 +13,7 @@ import {
   mulBN,
   repeatGetTransaction,
   subBN,
+  toBN,
   weiToDecimals,
 } from './utilities';
 import {
@@ -54,5 +55,6 @@ export {
   sendSignedTransaction,
   sendToken,
   subBN,
+  toBN,
   weiToDecimals,
 };

@@ -14,6 +14,7 @@
   "tomowallet.common.list.network.tomochain.testnet": "Réseau de Test TomoChain",
   "tomowallet.common.list.network.tomochain.mainnet": "Réseau Principal TomoChain",
   "tomowallet.component.navbar.logo.alt": "TOMOCHAIN LOGO",
+  "tomowallet.component.navbar.option.privacymode.label": "Mode de Confidentialité",
   "tomowallet.component.navbar.option.about": "Sur",
   "tomowallet.component.navbar.option.faqs": "FAQ",
   "tomowallet.component.navbar.option.mywallet": "Mon Portefeuille",

@@ -57,6 +57,28 @@
     transform: rotate(360deg);
   }
 }
+@keyframes turnOn {
+  0% {
+    color: inherit;
+    border-color: inherit;
+  }
+  100% {
+    opacity: 1;
+    color: aqua;
+    border-color: aqua;
+  }
+}
+@keyframes turnOff {
+  0% {
+    color: aqua;
+    border-color: aqua;
+  }
+  100% {
+    opacity: 1;
+    color: inherit;
+    border-color: inherit;
+  }
+}
 // ======================
 
 * {
