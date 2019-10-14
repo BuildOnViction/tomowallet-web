@@ -58,9 +58,16 @@ const findOwnedUTXO = (privacyContract, address, index) =>
       .then(utxo => rs({ ...utxo, _index: index }))
       .catch(error => rj(error));
   });
+const getAddressFromProvider = web3 => {
+  return (
+    web3.currentProvider.selectedAddress ||
+    (web3.currentProvider.addresses && web3.currentProvider.addresses[0])
+  );
+};
+const defaultReject = message => new Promise((_, rj) => rj(new Error(message)));
 
 export const createPrivateWeb3 = (mnemonic, serverConfig) => {
-  let secretKey =
+  const secretKey =
     (isRecoveryPhrase(mnemonic) &&
       mnemonicToPrivateKey(mnemonic, serverConfig)) ||
     (isPrivateKey(mnemonic) && mnemonic) ||
@@ -91,8 +98,6 @@ export const createPrivateWeb3 = (mnemonic, serverConfig) => {
 
   return null;
 };
-
-export const getKeys = privKey => Address.generateKeys(privKey);
 
 export const depositPrivateCoin = (privWeb3, contractData) => {
   const {
@@ -166,6 +171,9 @@ export const findUTXOsToUse = (utxoList, amount, decimals) => {
   return results;
 };
 
+export const getKeys = privKey =>
+  Address.generateKeys(privKey.replace('0x', ''));
+
 export const getPrivacyWalletBalance = async (privWeb3, walletInfo) => {
   const { address, privSpendKey } = walletInfo;
   let index = 0;
@@ -180,6 +188,12 @@ export const getPrivacyWalletBalance = async (privWeb3, walletInfo) => {
   );
   do {
     try {
+      console.warn(
+        'getPrivacyWalletBalance -- ',
+        privacyContract,
+        address,
+        index,
+      );
       utxo = await findOwnedUTXO(privacyContract, address, index);
       const utxoIns = new UTXO(utxo);
       const isOwned = utxoIns.checkOwnership(privSpendKey);
@@ -202,6 +216,41 @@ export const getPrivacyWalletBalance = async (privWeb3, walletInfo) => {
     utxos,
     balance: balance.toString(10),
   };
+};
+
+export const getPrivacyWalletInfo = (mnemonic, serverConfig) => {
+  const secretKey =
+    (isRecoveryPhrase(mnemonic) &&
+      mnemonicToPrivateKey(mnemonic, serverConfig)) ||
+    (isPrivateKey(mnemonic) && mnemonic) ||
+    '';
+  const privacyKeys = getKeys(secretKey);
+  const newWeb3 = createPrivateWeb3(mnemonic, serverConfig);
+  if (newWeb3) {
+    const address = getAddressFromProvider(newWeb3);
+    if (address) {
+      return getPrivacyWalletBalance(newWeb3, {
+        address,
+        ...privacyKeys,
+      })
+        .then(balanceInfo => ({
+          ...privacyKeys,
+          ...balanceInfo,
+          address: privacyKeys.pubAddr,
+        }))
+        .catch(error => {
+          console.error('[ERROR]:', error);
+
+          throw new Error(
+            "Cannot get wallet balance. Please recheck wallet's privacy keys.",
+          );
+        });
+    }
+    return defaultReject('Cannot get wallet balance due to invalid address.');
+  }
+  return defaultReject(
+    'Cannot get wallet balance due to lack of Web3 provider.',
+  );
 };
 
 export const sendPrivateCoin = (privWeb3, contractData) => {

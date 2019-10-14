@@ -8,6 +8,7 @@
 // ===== IMPORTS =====
 // Modules
 import React, { Component, createContext } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import { createStructuredSelector } from 'reselect';
@@ -19,17 +20,21 @@ import _isEqual from 'lodash.isequal';
 import { FailureComponent, LoadingComponent } from './';
 // Utilities & Constants
 import {
-  getWeb3Info,
+  createPrivateWeb3,
   createWeb3,
   getNetwork,
-  setNetwork,
   getWalletInfo,
+  getWeb3Info,
   removeWeb3Info,
+  setNetwork,
   setWeb3Info,
+  withGlobal,
 } from '../../utils';
 import { RPC_SERVER, ENUM } from '../../constants';
 import { storeWallet, releaseWallet } from '../../containers/Global/actions';
 import { selectWallet } from '../../containers/Global/selectors';
+import { getPrivacyMode } from '../../utils/storage';
+import {} from '../../utils/blockchain/privacy';
 // ===================
 
 // ===== Web3 Context =====
@@ -76,26 +81,46 @@ class Web3Provider extends Component {
       Web3.givenProvider
     ) {
       this.handleSetMetaMaskProvider();
-    } else {
-      if (_get(web3Info, 'recoveryPhrase')) {
-        const { recoveryPhrase } = web3Info;
-        const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
-        // const rpcServer = _get(RPC_SERVER, [networkKey]);
-        const rpcServer = _get(web3Info, 'hdPath')
-          ? {
-              ..._get(RPC_SERVER, [networkKey]),
-              hdPath: _get(web3Info, 'hdPath'),
-            }
-          : _get(RPC_SERVER, [networkKey]);
-        const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
-
-        this.handleSetWeb3(newWeb3);
-        this.setState({
-          rpcServer,
-        });
+    } else if (_get(web3Info, 'recoveryPhrase')) {
+      const { recoveryPhrase } = web3Info;
+      const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+      const rpcServer = _get(web3Info, 'hdPath')
+        ? {
+            ..._get(RPC_SERVER, [networkKey]),
+            hdPath: _get(web3Info, 'hdPath'),
+          }
+        : _get(RPC_SERVER, [networkKey]);
+      const privacyMode = getPrivacyMode();
+      let newWeb3;
+      if (privacyMode) {
+        newWeb3 = createPrivateWeb3(recoveryPhrase, rpcServer);
       } else {
-        this.handleInitiateDefaultWeb3();
+        newWeb3 = createWeb3(recoveryPhrase, rpcServer);
       }
+
+      this.handleSetWeb3(newWeb3);
+      this.setState({
+        rpcServer,
+      });
+    } else {
+      this.handleInitiateDefaultWeb3();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      !_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode'))
+    ) {
+      const web3Info = getWeb3Info() || {};
+      const { recoveryPhrase } = web3Info;
+      const { rpcServer } = this.state;
+      let newWeb3;
+      if (_get(this.props, 'privacyMode')) {
+        newWeb3 = createPrivateWeb3(recoveryPhrase, rpcServer);
+      } else {
+        newWeb3 = createWeb3(recoveryPhrase, rpcServer);
+      }
+      this.handleSetWeb3(newWeb3);
     }
   }
 
@@ -207,13 +232,19 @@ class Web3Provider extends Component {
   }
 
   handleUpdateRpcServer(newKey) {
+    const privacyMode = getPrivacyMode();
     this.setState(
       {
         rpcServer: _get(RPC_SERVER, newKey, {}),
       },
       () => {
         setNetwork(newKey);
-        const newWeb3 = new Web3(this.state.rpcServer.host, null, {});
+        let newWeb3;
+        if (privacyMode) {
+          newWeb3 = createPrivateWeb3(null, this.state.rpcServer);
+        } else {
+          newWeb3 = createWeb3(null, this.state.rpcServer);
+        }
         this.handleSetWeb3(newWeb3);
       },
     );
@@ -256,7 +287,10 @@ const withConnect = connect(
 );
 // ======================
 
-export default withConnect(Web3Provider);
+export default compose(
+  withConnect,
+  withGlobal,
+)(Web3Provider);
 // ===================================
 
 // ===== Web3 Injection =====

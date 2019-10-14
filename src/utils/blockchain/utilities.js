@@ -285,7 +285,7 @@ const subBN = (number1, number2, decimals) => {
  * Convert a decimal number into a Big Number instance
  * @param {String|Number} decimalAmount A decimal number to convert
  */
-const toBN = decimalAmount => web3Utils.utils.toBN(decimalAmount);
+const toBN = decimalAmount => web3Utils.toBN(decimalAmount);
 
 /**
  * weiToDecimals

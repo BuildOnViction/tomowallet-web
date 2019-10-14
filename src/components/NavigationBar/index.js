@@ -41,7 +41,7 @@ import {
   setNetwork,
   toggleNetworkConfirmationPopup,
 } from '../../containers/Global/actions';
-import { ROUTE, LIST, MSG } from '../../constants';
+import { ROUTE, LIST, MSG, ENUM } from '../../constants';
 import {
   removeWeb3Info,
   setLocale,
@@ -50,6 +50,7 @@ import {
   removeLedger,
   getWeb3Info,
   isElectron,
+  withGlobal,
 } from '../../utils';
 import {
   selectNetworkData,
@@ -62,10 +63,6 @@ import { removeRPFile } from '../../utils/electron';
 class NavigationBar extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      isTurnedOn: '',
-    };
 
     this.handleChangeLocale = this.handleChangeLocale.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
@@ -209,8 +206,13 @@ class NavigationBar extends PureComponent {
       isLoggedIn,
       networkConfirmationPopup,
       onToggleNetworkConfirmationPopup,
+      privacyMode,
+      togglePrivacyMode,
     } = this.props;
-    const { isTurnedOn } = this.state;
+    const loggedInByModule = [
+      ENUM.LOGIN_TYPE.META_MASK,
+      ENUM.LOGIN_TYPE.LEDGER,
+    ].includes(_get(getWeb3Info(), 'loginType'));
 
     return (
       <Fragment>
@@ -221,23 +223,23 @@ class NavigationBar extends PureComponent {
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
             />
           </NavbarBrand>
-          <NavbarBrand className='btn-privacy-mode'>
-            <FontAwesomeIcon icon='shield-alt' />
-            <span className='mr-2'>
-              {formatMessage(MSG.HEADER_NAVBAR_OPTION_PRIVACY_MODE_LABEL)}
-            </span>
-            <FontAwesomeIcon
-              icon='power-off'
-              onClick={() =>
-                this.setState(({ isTurnedOn }) => ({ isTurnedOn: !isTurnedOn }))
-              }
-              className={
-                (isTurnedOn && 'active') ||
-                (isTurnedOn === false && 'inactive') ||
-                ''
-              }
-            />
-          </NavbarBrand>
+          {!loggedInByModule && (
+            <NavbarBrand className='btn-privacy-mode'>
+              <FontAwesomeIcon icon='shield-alt' />
+              <span className='mr-2'>
+                {formatMessage(MSG.HEADER_NAVBAR_OPTION_PRIVACY_MODE_LABEL)}
+              </span>
+              <FontAwesomeIcon
+                icon='power-off'
+                onClick={() => togglePrivacyMode(!privacyMode)}
+                className={
+                  (privacyMode && 'active') ||
+                  (privacyMode === false && 'inactive') ||
+                  ''
+                }
+              />
+            </NavbarBrand>
+          )}
           <Collapse navbar>
             <Nav className='ml-auto' navbar>
               {isLoggedIn && this.handleRenderPrivateBar()}
@@ -285,10 +287,14 @@ NavigationBar.propTypes = {
   onToggleNetworkConfirmationPopup: PropTypes.func,
   /** Action to show/hide show-wallet popup */
   onToggleWalletPopup: PropTypes.func,
+  /** Condition flag of privacy mode */
+  privacyMode: PropTypes.bool,
   /** Action to remove MetaMask provider */
   removeMetaMaskProvider: PropTypes.func,
   /** Action to change current RPC Server */
   switchRPCServer: PropTypes.func,
+  /** Action to enable/disable privacy mode */
+  togglePrivacyMode: PropTypes.func,
 };
 
 NavigationBar.defaultProps = {
@@ -304,8 +310,10 @@ NavigationBar.defaultProps = {
   onToggleNavbarOptions: () => {},
   onToggleNetworkConfirmationPopup: () => {},
   onToggleWalletPopup: () => {},
+  privacyMode: false,
   removeMetaMaskProvider: () => {},
   switchRPCServer: () => {},
+  togglePrivacyMode: () => {},
 };
 // ======================
 
@@ -331,6 +339,7 @@ const withConnect = connect(
 export default compose(
   withConnect,
   withRouter,
+  withGlobal,
   withWeb3,
   withIntl,
 )(NavigationBar);

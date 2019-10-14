@@ -11,9 +11,10 @@ import {
   SET_LANGUAGE,
   SET_NETWORK,
   STORE_WALLET_INFO,
-  TOGGLE_CLIPBOARD_COPY_STATE,
+  TOGGLE_CLIPBOARD_POPUP,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
+  TOGGLE_PRIVACY_MODE,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
@@ -45,7 +46,7 @@ export const storeWallet = data => ({
 });
 
 export const toggleClipboardCopyState = bool => ({
-  type: TOGGLE_CLIPBOARD_COPY_STATE,
+  type: TOGGLE_CLIPBOARD_POPUP,
   bool,
 });
 
@@ -58,6 +59,11 @@ export const toggleNetworkConfirmationPopup = (bool, networkOpt) => ({
   type: TOGGLE_NETWORK_CONFIRMATION_POPUP,
   bool,
   networkOpt,
+});
+
+export const togglePrivacyMode = bool => ({
+  type: TOGGLE_PRIVACY_MODE,
+  bool,
 });
 
 export const toggleWalletPopup = bool => ({

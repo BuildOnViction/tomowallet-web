@@ -61,37 +61,21 @@ export const getWeb3Info = () => {
 
   return web3Info;
 };
-export const removeWeb3Info = () => {
-  removeStorage('web3Info');
-};
+export const removeWeb3Info = () => removeStorage('web3Info');
 
-export const setLocale = locale => {
-  setStorage('locale', locale);
-};
-export const getLocale = () => {
-  return getStorage('locale');
-};
-export const removeLocale = () => {
-  removeStorage('locale');
-};
+export const setLocale = locale => setStorage('locale', locale);
+export const getLocale = () => getStorage('locale');
+export const removeLocale = () => removeStorage('locale');
 
-export const setNetwork = network => {
-  setStorage('network', network);
-};
-export const getNetwork = () => {
-  return getStorage('network');
-};
-export const removeNetwork = () => {
-  removeStorage('network');
-};
+export const setNetwork = network => setStorage('network', network);
+export const getNetwork = () => getStorage('network');
+export const removeNetwork = () => removeStorage('network');
 
-export const setLedger = ledger => {
-  setStorage('ledger', ledger);
-};
-export const getLedger = () => {
-  return getStorage('ledger');
-};
-export const removeLedger = () => {
-  return removeStorage('ledger');
-};
+export const setLedger = ledger => setStorage('ledger', ledger);
+export const getLedger = () => getStorage('ledger');
+export const removeLedger = () => removeStorage('ledger');
+
+export const setPrivacyMode = bool => setStorage('privacyMode', bool);
+export const getPrivacyMode = () => getStorage('privacyMode');
+export const removePrivacyMode = () => removeStorage('privacyMode');
 // ===================

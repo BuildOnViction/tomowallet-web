@@ -40,8 +40,10 @@ import {
   getNetwork,
   getWalletInfo,
   getWeb3Info,
+  getPrivacyWalletInfo,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
+import { getPrivacyMode } from '../../utils/storage';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -64,10 +66,17 @@ class App extends PureComponent {
       : _get(RPC_SERVER, [networkKey], {});
 
     if (recoveryPhrase) {
-      const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
-      getWalletInfo(newWeb3).then(wallet => {
-        onStoreWallet(wallet);
-      });
+      const privacyMode = getPrivacyMode();
+      if (privacyMode) {
+        getPrivacyWalletInfo(recoveryPhrase, serverConfig).then(walletInfo =>
+          onStoreWallet(walletInfo),
+        );
+      } else {
+        const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
+        getWalletInfo(newWeb3).then(wallet => {
+          onStoreWallet(wallet);
+        });
+      }
     } else if (address) {
       getBalance(address, serverConfig).then(balance => {
         const walletInfo = {
