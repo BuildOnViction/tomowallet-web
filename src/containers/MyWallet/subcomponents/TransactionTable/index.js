@@ -22,7 +22,6 @@ import { selectTransactionData, selectTableType } from '../../selectors';
 import { loadTransactionData } from '../../actions';
 import { LIST } from '../../../../constants';
 import { selectWallet } from '../../../Global/selectors';
-import { getNetwork } from '../../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -35,11 +34,12 @@ class TransactionTable extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (
-      !_isEqual(_get(prevProps, 'tableType'), _get(this.props, 'tableType')) &&
-      _isEqual(
-        _get(this.props, 'tableType'),
-        _get(LIST, ['MY_WALLET_TABLE_TYPES', 1, 'value']),
-      )
+      !_isEqual(_get(prevProps, 'wallet'), _get(this.props, 'wallet')) ||
+      (!_isEqual(_get(prevProps, 'tableType'), _get(this.props, 'tableType')) &&
+        _isEqual(
+          _get(this.props, 'tableType'),
+          _get(LIST, ['MY_WALLET_TABLE_TYPES', 1, 'value']),
+        ))
     ) {
       this.handleLoadTransactionData();
     }

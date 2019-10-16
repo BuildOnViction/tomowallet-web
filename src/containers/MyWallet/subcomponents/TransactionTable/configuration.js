@@ -9,7 +9,8 @@ import React, { Fragment } from 'react';
 import _get from 'lodash.get';
 // Custom Components
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { EllipsisCellStyler } from '../../../../components/Table/style';
+// import { EllipsisCellStyler } from '../../../../components/Table/style';
+import Ellipsis from '../../../../components/Ellipsis';
 import { TextBlue } from '../../../../styles';
 // Utilities & Constants
 import { getNetwork } from '../../../../utils';
@@ -28,17 +29,15 @@ export default ({ formatMessage }) => [
     ),
     accessor: TRANSACTION_COLUMNS.TX_HASH,
     Cell: ({ value }) => (
-      <EllipsisCellStyler title={value}>
-        <TextBlue>
-          <a
-            href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            {value}
-          </a>
-        </TextBlue>
-      </EllipsisCellStyler>
+      <TextBlue>
+        <a
+          href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
+          rel='noopener noreferrer'
+          target='_blank'
+        >
+          <Ellipsis middle>{value}</Ellipsis>
+        </a>
+      </TextBlue>
     ),
   },
   {
@@ -51,7 +50,7 @@ export default ({ formatMessage }) => [
     accessor: TRANSACTION_COLUMNS.CREATE_TIME,
     Cell: ({ value }) => {
       const timeStr = value.format('HH:MM, DD MMM YYYY');
-      return <EllipsisCellStyler title={timeStr}>{timeStr}</EllipsisCellStyler>;
+      return <Ellipsis>{timeStr}</Ellipsis>;
     },
   },
   {
@@ -63,17 +62,15 @@ export default ({ formatMessage }) => [
     ),
     accessor: TRANSACTION_COLUMNS.FROM,
     Cell: ({ value }) => (
-      <EllipsisCellStyler title={value}>
-        <TextBlue>
-          <a
-            href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            {value}
-          </a>
-        </TextBlue>
-      </EllipsisCellStyler>
+      <TextBlue>
+        <a
+          href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
+          rel='noopener noreferrer'
+          target='_blank'
+        >
+          <Ellipsis middle>{value}</Ellipsis>
+        </a>
+      </TextBlue>
     ),
   },
   {
@@ -97,17 +94,15 @@ export default ({ formatMessage }) => [
     ),
     accessor: TRANSACTION_COLUMNS.TO,
     Cell: ({ value }) => (
-      <EllipsisCellStyler title={value}>
-        <TextBlue>
-          <a
-            href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            {value}
-          </a>
-        </TextBlue>
-      </EllipsisCellStyler>
+      <TextBlue>
+        <a
+          href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
+          rel='noopener noreferrer'
+          target='_blank'
+        >
+          <Ellipsis middle>{value}</Ellipsis>
+        </a>
+      </TextBlue>
     ),
   },
   {
@@ -122,11 +117,7 @@ export default ({ formatMessage }) => [
       const displayValue = `${value} ${_get(original, [
         TRANSACTION_COLUMNS.TOKEN_TYPE,
       ])}`;
-      return (
-        <EllipsisCellStyler title={displayValue}>
-          {displayValue}
-        </EllipsisCellStyler>
-      );
+      return <Ellipsis>{displayValue}</Ellipsis>;
     },
   },
 ];

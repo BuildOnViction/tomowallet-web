@@ -34,6 +34,7 @@ import {
   getWalletInfo,
   isAddress,
   isHDPath,
+  isHex,
   isPrivateKey,
   isRecoveryPhrase,
   mnemonicToPrivateKey,
@@ -49,7 +50,7 @@ import {
   weiToDecimals,
   withdrawPrivateCoin,
 } from './blockchain';
-import getValidations, { mergeErrors } from './validations';
+import validations, { mergeErrors } from './validations';
 import { withGlobal } from './injectGlobal';
 import {
   getLedger,
@@ -103,7 +104,6 @@ export {
   getNetwork,
   getPrivacyWalletBalance,
   getPrivacyWalletInfo,
-  getValidations,
   getWalletInfo,
   getWeb3Info,
   history,
@@ -112,6 +112,7 @@ export {
   isAddress,
   isElectron,
   isHDPath,
+  isHex,
   isPrivateKey,
   isRecoveryPhrase,
   mergeErrors,
@@ -138,6 +139,7 @@ export {
   subBN,
   toBN,
   trimMnemonic,
+  validations,
   weiToDecimals,
   withdrawPrivateCoin,
   withGlobal,

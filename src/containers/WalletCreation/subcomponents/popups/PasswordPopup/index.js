@@ -20,7 +20,6 @@ import { PasswordPopupStyler } from './style';
 import PasswordContent from './content';
 // Utilities
 import { withIntl } from '../../../../../components/IntlProvider';
-import { withWeb3 } from '../../../../../components/Web3';
 import { selectPasswordPopup, selectMnemonic } from '../../../selectors';
 import {
   revealPasswordInput,
@@ -33,7 +32,7 @@ import {
   encryptKeystore,
   mergeErrors,
   mnemonicToPrivateKey,
-  getValidations,
+  validations,
   decryptKeystore,
   downloadFile,
 } from '../../../../../utils';
@@ -121,9 +120,8 @@ class PasswordPopup extends PureComponent {
     const {
       intl: { formatMessage },
       popupData,
-      web3,
     } = this.props;
-    const { isRequired, isMinLength } = getValidations(web3);
+    const { isRequired, isMinLength } = validations;
 
     return mergeErrors(
       [
@@ -223,8 +221,6 @@ PasswordPopup.propTypes = {
   onUpdateState: PropTypes.func,
   /** Popup's data */
   popupData: PropTypes.object,
-  /** Web3's object */
-  web3: PropTypes.object,
 };
 
 PasswordPopup.defaultProps = {
@@ -235,7 +231,6 @@ PasswordPopup.defaultProps = {
   onUpdateInput: () => {},
   onUpdateState: () => {},
   popupData: {},
-  web3: {},
 };
 // ======================
 
@@ -262,5 +257,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   withIntl,
-  withWeb3,
 )(PasswordPopup);

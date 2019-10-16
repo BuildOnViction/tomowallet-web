@@ -51,12 +51,12 @@ import {
   PORTFOLIO_COLUMNS,
 } from './constants';
 import {
+  addBN,
   bnToDecimals,
   decimalsToBN,
   estimateFee,
   getBalance,
   getNetwork,
-  getValidations,
   getWalletInfo,
   getWeb3Info,
   injectReducer,
@@ -67,8 +67,8 @@ import {
   sendSignedTransaction,
   sendToken,
   subBN,
+  validations,
   withGlobal,
-  addBN,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
 import { withWeb3 } from '../../components/Web3';
@@ -480,15 +480,14 @@ class MyWallet extends PureComponent {
     const {
       intl: { formatMessage },
       sendTokenForm,
-      web3,
     } = this.props;
     const {
-      isAddress,
+      isWalletAddress,
       isMaxLength,
       isMaxNumber,
       isMinNumber,
       isRequired,
-    } = getValidations(web3);
+    } = validations;
 
     const errorList = mergeErrors([
       isRequired(
@@ -505,7 +504,7 @@ class MyWallet extends PureComponent {
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED),
       ),
-      isAddress(
+      isWalletAddress(
         {
           name: SEND_TOKEN_FIELDS.RECIPIENT,
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT]),
@@ -567,7 +566,6 @@ class MyWallet extends PureComponent {
       onToggleSuccessPopup,
       onUpdateSendTokenInput,
       onUpdateSendTokenPopupStage,
-      receivePopup,
       sendTokenForm,
       sendToKenPopup,
       successPopup,
@@ -613,10 +611,7 @@ class MyWallet extends PureComponent {
             '',
           )}
         />
-        <ReceiveTokenPopup
-          isOpen={_get(receivePopup, 'isOpen', false)}
-          togglePopup={onToggleReceiveTokenPopup}
-        />
+        <ReceiveTokenPopup />
       </Fragment>
     );
   }
@@ -649,8 +644,6 @@ MyWallet.propTypes = {
   onUpdateSendTokenInput: PropTypes.func,
   /** Action to update send token popup's stage of content */
   onUpdateSendTokenPopupStage: PropTypes.func,
-  /** Receive token popup's data */
-  receivePopup: PropTypes.object,
   /** Send token popup's form values */
   sendTokenForm: PropTypes.object,
   /** Send token popup's data */
@@ -678,7 +671,6 @@ MyWallet.defaultProps = {
   onUpdateSendTokenErrors: () => {},
   onUpdateSendTokenInput: () => {},
   onUpdateSendTokenPopupStage: () => {},
-  receivePopup: {},
   sendTokenForm: {},
   sendToKenPopup: {},
   successPopup: {},
@@ -692,7 +684,6 @@ MyWallet.defaultProps = {
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
-    receivePopup: selectReceiveToKenPopup,
     sendTokenForm: selectSendTokenForm,
     sendToKenPopup: selectSendTokenPopup,
     successPopup: selectSuccessPopup,

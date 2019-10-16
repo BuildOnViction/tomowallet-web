@@ -10,44 +10,35 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 import QRCode from 'qrcode.react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import ExchangeInfo from './ExchangeInfo';
+import Ellipsis from '../../../components/Ellipsis';
 import { MediumButtonStyler, HeadingSmall } from '../../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
 import { TextBlue } from '../../../styles';
-import { toggleClipboardCopyState } from '../../Global/actions';
-import { copyToClipboard } from '../../../utils';
+import { withGlobal } from '../../../utils';
 // ===================
 
 // ===== MAIN COMPONENT =====
 class AddressInfo extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.handleCopyToClipboard = this.handleCopyToClipboard.bind(this);
-  }
-
-  handleCopyToClipboard() {
-    const { onToggleClipboardPopup, wallet } = this.props;
-    copyToClipboard(_get(wallet, 'address', ''));
-    onToggleClipboardPopup(true);
-  }
-
   render() {
     const {
       intl: { formatMessage },
+      handleCopyToClipboard,
       openReceiveTokenPopup,
       openSendTokenPopup,
+      privacyMode,
       wallet,
     } = this.props;
+    const walletAddress = _get(wallet, 'address', '');
+
     return (
       <div>
         <div className='box-address'>
@@ -71,10 +62,10 @@ class AddressInfo extends PureComponent {
                     </HeadingSmall>
                     <TextBlue
                       role='presentation'
-                      onClick={this.handleCopyToClipboard}
+                      onClick={() => handleCopyToClipboard(walletAddress)}
                       className='text-break'
                     >
-                      {_get(wallet, 'address', '')}
+                      <Ellipsis middle>{walletAddress}</Ellipsis>
                     </TextBlue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
@@ -89,14 +80,18 @@ class AddressInfo extends PureComponent {
                           onClick={openReceiveTokenPopup}
                         >
                           <FontAwesomeIcon icon='reply' className='mr-2' />
-                          {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
+                          {formatMessage(
+                            privacyMode
+                              ? MSG.COMMON_BUTTON_DEPOSIT
+                              : MSG.COMMON_BUTTON_RECEIVE,
+                          )}
                         </MediumButtonStyler>
                       </Col>
                     </Row>
                   </Col>
                   <Col md={4} className='d-flex justify-content-end'>
                     <div className='qrc_bd'>
-                      <QRCode value={_get(wallet, 'address', '')} />
+                      <QRCode value={walletAddress} />
                     </div>
                   </Col>
                 </Row>
@@ -115,36 +110,29 @@ AddressInfo.propTypes = {
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Action to show/hide clipboard popup */
-  onToggleClipboardPopup: PropTypes.func,
+  handleCopyToClipboard: PropTypes.func,
   /** Action to show receive token popup */
   openReceiveTokenPopup: PropTypes.func,
   /** Action to show send token popup */
   openSendTokenPopup: PropTypes.func,
+  /** Condition flag to enable/disable privacy mode */
+  privacyMode: PropTypes.bool,
   /** Wallet's data */
   wallet: PropTypes.object,
 };
 
 AddressInfo.defaultProps = {
   intl: {},
-  onToggleClipboardPopup: () => {},
+  handleCopyToClipboard: () => {},
   openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
+  privacyMode: false,
   wallet: {},
 };
 // ======================
 
-// ===== INJECTIONS =====
-const mapDispatchToProps = dispatch => ({
-  onToggleClipboardPopup: bool => dispatch(toggleClipboardCopyState(bool)),
-});
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
-// ======================
-
 export default compose(
+  withGlobal,
   withIntl,
   withWeb3,
-  withConnect,
 )(AddressInfo);

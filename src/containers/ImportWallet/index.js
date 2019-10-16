@@ -55,7 +55,7 @@ import {
   createWeb3,
   setWeb3Info,
   withGlobal,
-  getValidations,
+  validations,
   getBalance,
   removeWeb3Info,
   isElectron,
@@ -268,9 +268,8 @@ class ImportWallet extends PureComponent {
     const {
       importWallet,
       intl: { formatMessage },
-      web3,
     } = this.props;
-    const { isRequired } = getValidations(web3);
+    const { isRequired } = validations;
 
     return {
       ...isRequired(

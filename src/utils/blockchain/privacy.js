@@ -130,7 +130,7 @@ export const depositPrivateCoin = (privWeb3, contractData) => {
   const proof = sender.genTransactionProof(
     weiAmount,
     sender.pubSpendKey,
-    pubViewKey,
+    sender.pubViewKey,
   );
 
   return privacyContract.methods
@@ -188,12 +188,6 @@ export const getPrivacyWalletBalance = async (privWeb3, walletInfo) => {
   );
   do {
     try {
-      console.warn(
-        'getPrivacyWalletBalance -- ',
-        privacyContract,
-        address,
-        index,
-      );
       utxo = await findOwnedUTXO(privacyContract, address, index);
       const utxoIns = new UTXO(utxo);
       const isOwned = utxoIns.checkOwnership(privSpendKey);
@@ -206,7 +200,6 @@ export const getPrivacyWalletBalance = async (privWeb3, walletInfo) => {
       }
       index++;
     } catch (error) {
-      console.error('[ERROR] -- ', error);
       utxo = null;
       break;
     }
@@ -237,10 +230,9 @@ export const getPrivacyWalletInfo = (mnemonic, serverConfig) => {
           ...privacyKeys,
           ...balanceInfo,
           address: privacyKeys.pubAddr,
+          privAddr: address,
         }))
         .catch(error => {
-          console.error('[ERROR]:', error);
-
           throw new Error(
             "Cannot get wallet balance. Please recheck wallet's privacy keys.",
           );

@@ -20,6 +20,7 @@ import {
   LOAD_TRANSACTION_DATA,
   LOAD_TRANSACTION_DATA_SUCCESS,
   PORTFOLIO_COLUMNS,
+  RESET_RECEIVE_TOKEN_FORM,
   RESET_SEND_TOKEN_FORM,
   RESET_STATE,
   SEND_TOKEN_FIELDS,
@@ -29,6 +30,8 @@ import {
   TOGGLE_SEND_TOKEN_POPUP,
   TOGGLE_SUCCESS_POPUP,
   TRANSACTION_COLUMNS,
+  UPDATE_RECEIVE_TOKEN_ERRORS,
+  UPDATE_RECEIVE_TOKEN_INPUT,
   UPDATE_SEND_TOKEN_ERRORS,
   UPDATE_SEND_TOKEN_INPUT,
   UPDATE_SEND_TOKEN_POPUP_STAGE,
@@ -51,6 +54,8 @@ const initialState = fromJS({
     errorMessage: '',
   },
   receiveTokenPopup: {
+    errors: {},
+    input: {},
     isOpen: false,
   },
   sendForm: initialSendForm,
@@ -150,6 +155,10 @@ export default (state = initialState, action) => {
         total: _get(action, 'tableData.total', 0),
         pages: _get(action, 'tableData.pages', 1),
       });
+    case RESET_RECEIVE_TOKEN_FORM:
+      return state
+        .setIn(['receiveTokenPopup', 'input'], {})
+        .setIn(['receiveTokenPopup', 'errors'], {});
     case RESET_SEND_TOKEN_FORM:
       return state.set('sendForm', initialSendForm);
     case RESET_STATE:
@@ -182,6 +191,14 @@ export default (state = initialState, action) => {
       }
       return newState;
     }
+    case UPDATE_RECEIVE_TOKEN_ERRORS:
+      return state.setIn(['receiveTokenPopup', 'errors'], action.errors);
+    case UPDATE_RECEIVE_TOKEN_INPUT:
+      return state
+        .setIn(['receiveTokenPopup', 'input', action.name], action.value)
+        .updateIn(['receiveTokenPopup', 'errors'], errors =>
+          _omit(errors, action.name),
+        );
     case UPDATE_SEND_TOKEN_ERRORS:
       return state.setIn(['sendTokenPopup', 'errors'], action.errors);
     case UPDATE_SEND_TOKEN_INPUT:

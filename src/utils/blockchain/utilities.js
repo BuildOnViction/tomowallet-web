@@ -165,6 +165,21 @@ const isHDPath = hdPath =>
   !!hdPath && /^m(\/\d+'?)+(\/\d*'?)$/.test(hdPath.trim());
 
 /**
+ * isHex
+ *
+ * Check if the input string is a valid hex number
+ * @param {String} rawData A string of hex number to validate
+ */
+const isHex = rawData => {
+  if (rawData) {
+    const trimmedData = rawData.trim();
+
+    return web3Utils.isHex(trimmedData);
+  }
+  return false;
+};
+
+/**
  * isPrivateKey
  *
  * Check if the input string is a valid private key
@@ -307,6 +322,7 @@ export {
   encryptKeystore,
   isAddress,
   isHDPath,
+  isHex,
   isPrivateKey,
   isRecoveryPhrase,
   mulBN,

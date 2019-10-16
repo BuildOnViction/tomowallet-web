@@ -42,6 +42,7 @@
     "node-sass": "4.12.0",
     "prop-types": "15.7.2",
     "qrcode.react": "0.9.3",
+    "random-hash": "^4.0.1",
     "react": "16.8.6",
     "react-cookies": "0.1.1",
     "react-dom": "16.8.6",

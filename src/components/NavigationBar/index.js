@@ -66,6 +66,7 @@ class NavigationBar extends PureComponent {
 
     this.handleChangeLocale = this.handleChangeLocale.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
+    this.handleChangePrivacyMode = this.handleChangePrivacyMode.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleRedirectToHomepage = this.handleRedirectToHomepage.bind(this);
     this.handleRenderPrivateBar = this.handleRenderPrivateBar.bind(this);
@@ -97,6 +98,12 @@ class NavigationBar extends PureComponent {
     onSetNetwork(newNetwork);
     switchRPCServer(newNetwork.value);
     this.handleLogout();
+  }
+
+  handleChangePrivacyMode() {
+    const { privacyMode, toggleLoading, togglePrivacyMode } = this.props;
+    togglePrivacyMode(!privacyMode);
+    toggleLoading(true);
   }
 
   handleLogout() {
@@ -207,7 +214,6 @@ class NavigationBar extends PureComponent {
       networkConfirmationPopup,
       onToggleNetworkConfirmationPopup,
       privacyMode,
-      togglePrivacyMode,
     } = this.props;
     const loggedInByModule = [
       ENUM.LOGIN_TYPE.META_MASK,
@@ -231,7 +237,7 @@ class NavigationBar extends PureComponent {
               </span>
               <FontAwesomeIcon
                 icon='power-off'
-                onClick={() => togglePrivacyMode(!privacyMode)}
+                onClick={this.handleChangePrivacyMode}
                 className={
                   (privacyMode && 'active') ||
                   (privacyMode === false && 'inactive') ||
@@ -293,6 +299,8 @@ NavigationBar.propTypes = {
   removeMetaMaskProvider: PropTypes.func,
   /** Action to change current RPC Server */
   switchRPCServer: PropTypes.func,
+  /** Action to show/hide loading screen */
+  toggleLoading: PropTypes.func,
   /** Action to enable/disable privacy mode */
   togglePrivacyMode: PropTypes.func,
 };
@@ -313,6 +321,7 @@ NavigationBar.defaultProps = {
   privacyMode: false,
   removeMetaMaskProvider: () => {},
   switchRPCServer: () => {},
+  toggleLoading: () => {},
   togglePrivacyMode: () => {},
 };
 // ======================
@@ -338,8 +347,8 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
-  withRouter,
   withGlobal,
-  withWeb3,
   withIntl,
+  withRouter,
+  withWeb3,
 )(NavigationBar);

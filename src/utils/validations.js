@@ -7,6 +7,8 @@
 // Modules
 import _isEmpty from 'lodash.isempty';
 import _isNumber from 'lodash.isnumber';
+// Utilities
+import { isHex, isAddress } from './blockchain/utilities';
 // ===================
 
 // ===== VALIDATIONS =====
@@ -41,8 +43,8 @@ const isRequired = ({ name, value }, message) => {
   return {};
 };
 
-const isHex = web3 => ({ name, value }, message) => {
-  if (!_isEmpty(value) && !web3.utils.isHex(value)) {
+const isHexNumber = ({ name, value }, message) => {
+  if (!_isEmpty(value) && !isHex(value)) {
     return {
       [name]: [message],
     };
@@ -68,8 +70,8 @@ const isMinNumber = ({ name, value, min }, message) => {
   return {};
 };
 
-const isAddress = web3 => ({ name, value }, message) => {
-  if (!_isEmpty(value) && !web3.utils.isAddress(value)) {
+const isWalletAddress = ({ name, value }, message) => {
+  if (!_isEmpty(value) && !isAddress(value)) {
     return {
       [name]: [message],
     };
@@ -96,12 +98,12 @@ const isMinLength = ({ name, value, min }, message) => {
 };
 // =======================
 
-export default web3 => ({
-  isAddress: isAddress(web3),
-  isHex: isHex(web3),
+export default {
+  isWalletAddress,
+  isHexNumber,
   isMaxLength,
   isMaxNumber,
   isMinLength,
   isMinNumber,
   isRequired,
-});
+};
