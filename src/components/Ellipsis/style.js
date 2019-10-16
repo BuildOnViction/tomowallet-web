@@ -17,6 +17,7 @@ const EllipsisStyler = styled.div`
   white-space: nowrap;
 `;
 const MiddleEllipsisStyler = styled.div`
+  position: relative;
   span {
     display: inline-block;
     white-space: nowrap;
@@ -26,7 +27,10 @@ const MiddleEllipsisStyler = styled.div`
       text-overflow: ellipsis;
     }
     + span {
-      width: calc(50% - 10px);
+      position: absolute;
+      right: 0;
+      width: 53%;
+      text-overflow: ellipsis;
       direction: rtl;
       text-align: right;
     }
