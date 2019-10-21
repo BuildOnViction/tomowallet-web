@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
-import _isEqual from 'lodash.isequal';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 // Custom Components
 import LoadingComponent from '../../components/Loading';
@@ -41,11 +40,9 @@ import {
   getNetwork,
   getWalletInfo,
   getWeb3Info,
-  getPrivacyWalletInfo,
   withGlobal,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
-import { getPrivacyMode } from '../../utils/storage';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -68,17 +65,10 @@ class App extends PureComponent {
       : _get(RPC_SERVER, [networkKey], {});
 
     if (recoveryPhrase) {
-      const privacyMode = getPrivacyMode();
-      if (privacyMode) {
-        getPrivacyWalletInfo(recoveryPhrase, serverConfig).then(walletInfo =>
-          onStoreWallet(walletInfo),
-        );
-      } else {
-        const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
-        getWalletInfo(newWeb3).then(wallet => {
-          onStoreWallet(wallet);
-        });
-      }
+      const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
+      getWalletInfo(newWeb3).then(wallet => {
+        onStoreWallet(wallet);
+      });
     } else if (address) {
       getBalance(address, serverConfig).then(balance => {
         const walletInfo = {
@@ -87,28 +77,6 @@ class App extends PureComponent {
         };
         onStoreWallet(walletInfo);
       });
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const { onStoreWallet, privacyMode, rpcServer, toggleLoading } = this.props;
-    const { recoveryPhrase } = getWeb3Info() || {};
-
-    if (!_isEqual(_get(prevProps, 'privacyMode'), privacyMode)) {
-      if (privacyMode) {
-        getPrivacyWalletInfo(recoveryPhrase, rpcServer)
-          .then(walletInfo => onStoreWallet(walletInfo))
-          .catch(() => {
-            toggleLoading(false);
-          });
-      } else {
-        const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
-        getWalletInfo(newWeb3)
-          .then(wallet => onStoreWallet(wallet))
-          .catch(() => {
-            toggleLoading(false);
-          });
-      }
     }
   }
 
@@ -206,8 +174,6 @@ App.propTypes = {
   intl: PropTypes.object,
   /** Action to save new wallet data into state */
   onStoreWallet: PropTypes.func,
-  /** Condition flag to enable/disable privacy mode */
-  privacyMode: PropTypes.bool,
   /** Action to show/hide loading screen */
   toggleLoading: PropTypes.func,
   /** Wallet's state */
@@ -217,7 +183,6 @@ App.defaultProps = {
   clipboardData: {},
   intl: {},
   onStoreWallet: () => {},
-  privacyMode: false,
   toggleLoading: () => {},
   wallet: {},
 };

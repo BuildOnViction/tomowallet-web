@@ -22,7 +22,6 @@ import {
   UncontrolledDropdown,
   CardImg,
 } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import WalletPopup from './subcomponents/WalletPopup';
 import NetworkConfirmationPopup from './subcomponents/NetworkConfirmationPopup';
@@ -41,7 +40,7 @@ import {
   setNetwork,
   toggleNetworkConfirmationPopup,
 } from '../../containers/Global/actions';
-import { ROUTE, LIST, MSG, ENUM } from '../../constants';
+import { ROUTE, LIST, MSG } from '../../constants';
 import {
   removeWeb3Info,
   setLocale,
@@ -66,7 +65,6 @@ class NavigationBar extends PureComponent {
 
     this.handleChangeLocale = this.handleChangeLocale.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
-    this.handleChangePrivacyMode = this.handleChangePrivacyMode.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleRedirectToHomepage = this.handleRedirectToHomepage.bind(this);
     this.handleRenderPrivateBar = this.handleRenderPrivateBar.bind(this);
@@ -98,12 +96,6 @@ class NavigationBar extends PureComponent {
     onSetNetwork(newNetwork);
     switchRPCServer(newNetwork.value);
     this.handleLogout();
-  }
-
-  handleChangePrivacyMode() {
-    const { privacyMode, toggleLoading, togglePrivacyMode } = this.props;
-    togglePrivacyMode(!privacyMode);
-    toggleLoading(true);
   }
 
   handleLogout() {
@@ -213,12 +205,7 @@ class NavigationBar extends PureComponent {
       isLoggedIn,
       networkConfirmationPopup,
       onToggleNetworkConfirmationPopup,
-      privacyMode,
     } = this.props;
-    const loggedInByModule = [
-      ENUM.LOGIN_TYPE.META_MASK,
-      ENUM.LOGIN_TYPE.LEDGER,
-    ].includes(_get(getWeb3Info(), 'loginType'));
 
     return (
       <Fragment>
@@ -229,23 +216,6 @@ class NavigationBar extends PureComponent {
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
             />
           </NavbarBrand>
-          {!loggedInByModule && (
-            <NavbarBrand className='btn-privacy-mode'>
-              <FontAwesomeIcon icon='shield-alt' />
-              <span className='mr-2'>
-                {formatMessage(MSG.HEADER_NAVBAR_OPTION_PRIVACY_MODE_LABEL)}
-              </span>
-              <FontAwesomeIcon
-                icon='power-off'
-                onClick={this.handleChangePrivacyMode}
-                className={
-                  (privacyMode && 'active') ||
-                  (privacyMode === false && 'inactive') ||
-                  ''
-                }
-              />
-            </NavbarBrand>
-          )}
           <Collapse navbar>
             <Nav className='ml-auto' navbar>
               {isLoggedIn && this.handleRenderPrivateBar()}
@@ -293,16 +263,12 @@ NavigationBar.propTypes = {
   onToggleNetworkConfirmationPopup: PropTypes.func,
   /** Action to show/hide show-wallet popup */
   onToggleWalletPopup: PropTypes.func,
-  /** Condition flag of privacy mode */
-  privacyMode: PropTypes.bool,
   /** Action to remove MetaMask provider */
   removeMetaMaskProvider: PropTypes.func,
   /** Action to change current RPC Server */
   switchRPCServer: PropTypes.func,
   /** Action to show/hide loading screen */
   toggleLoading: PropTypes.func,
-  /** Action to enable/disable privacy mode */
-  togglePrivacyMode: PropTypes.func,
 };
 
 NavigationBar.defaultProps = {
@@ -318,11 +284,9 @@ NavigationBar.defaultProps = {
   onToggleNavbarOptions: () => {},
   onToggleNetworkConfirmationPopup: () => {},
   onToggleWalletPopup: () => {},
-  privacyMode: false,
   removeMetaMaskProvider: () => {},
   switchRPCServer: () => {},
   toggleLoading: () => {},
-  togglePrivacyMode: () => {},
 };
 // ======================
 

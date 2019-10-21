@@ -74,8 +74,4 @@ export const removeNetwork = () => removeStorage('network');
 export const setLedger = ledger => setStorage('ledger', ledger);
 export const getLedger = () => getStorage('ledger');
 export const removeLedger = () => removeStorage('ledger');
-
-export const setPrivacyMode = bool => setStorage('privacyMode', bool);
-export const getPrivacyMode = () => getStorage('privacyMode');
-export const removePrivacyMode = () => removeStorage('privacyMode');
 // ===================

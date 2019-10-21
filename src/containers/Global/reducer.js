@@ -17,7 +17,6 @@ import {
   TOGGLE_CLIPBOARD_POPUP,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
-  TOGGLE_PRIVACY_MODE,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
@@ -46,7 +45,6 @@ const initialState = fromJS({
     isOpen: false,
     selected: {},
   },
-  privacyMode: null,
   wallet: null,
   walletPopup: initialWalletPopupState,
 });
@@ -82,8 +80,6 @@ export default (state = initialState, action) => {
       return state
         .setIn(['networkConfirmationPopup', 'isOpen'], action.bool)
         .setIn(['networkConfirmationPopup', 'selected'], action.networkOpt);
-    case TOGGLE_PRIVACY_MODE:
-      return state.set('privacyMode', action.bool);
     case TOGGLE_WALLET_POPUP: {
       const newState = state.setIn(['walletPopup', 'isOpen'], action.bool);
       if (!action.bool) {

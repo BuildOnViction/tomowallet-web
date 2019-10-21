@@ -14,7 +14,6 @@ import {
   TOGGLE_CLIPBOARD_POPUP,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
-  TOGGLE_PRIVACY_MODE,
   TOGGLE_WALLET_POPUP,
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
@@ -59,11 +58,6 @@ export const toggleNetworkConfirmationPopup = (bool, networkOpt) => ({
   type: TOGGLE_NETWORK_CONFIRMATION_POPUP,
   bool,
   networkOpt,
-});
-
-export const togglePrivacyMode = bool => ({
-  type: TOGGLE_PRIVACY_MODE,
-  bool,
 });
 
 export const toggleWalletPopup = bool => ({

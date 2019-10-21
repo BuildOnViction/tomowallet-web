@@ -20,7 +20,6 @@ import _isEqual from 'lodash.isequal';
 import { FailureComponent, LoadingComponent } from './';
 // Utilities & Constants
 import {
-  createPrivateWeb3,
   createWeb3,
   getNetwork,
   getWalletInfo,
@@ -33,8 +32,6 @@ import {
 import { RPC_SERVER, ENUM } from '../../constants';
 import { storeWallet, releaseWallet } from '../../containers/Global/actions';
 import { selectWallet } from '../../containers/Global/selectors';
-import { getPrivacyMode } from '../../utils/storage';
-import {} from '../../utils/blockchain/privacy';
 // ===================
 
 // ===== Web3 Context =====
@@ -90,13 +87,7 @@ class Web3Provider extends Component {
             hdPath: _get(web3Info, 'hdPath'),
           }
         : _get(RPC_SERVER, [networkKey]);
-      const privacyMode = getPrivacyMode();
-      let newWeb3;
-      if (privacyMode) {
-        newWeb3 = createPrivateWeb3(recoveryPhrase, rpcServer);
-      } else {
-        newWeb3 = createWeb3(recoveryPhrase, rpcServer);
-      }
+      const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
 
       this.handleSetWeb3(newWeb3);
       this.setState({
@@ -104,23 +95,6 @@ class Web3Provider extends Component {
       });
     } else {
       this.handleInitiateDefaultWeb3();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      !_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode'))
-    ) {
-      const web3Info = getWeb3Info() || {};
-      const { recoveryPhrase } = web3Info;
-      const { rpcServer } = this.state;
-      let newWeb3;
-      if (_get(this.props, 'privacyMode')) {
-        newWeb3 = createPrivateWeb3(recoveryPhrase, rpcServer);
-      } else {
-        newWeb3 = createWeb3(recoveryPhrase, rpcServer);
-      }
-      this.handleSetWeb3(newWeb3);
     }
   }
 
@@ -232,19 +206,13 @@ class Web3Provider extends Component {
   }
 
   handleUpdateRpcServer(newKey) {
-    const privacyMode = getPrivacyMode();
     this.setState(
       {
         rpcServer: _get(RPC_SERVER, newKey, {}),
       },
       () => {
         setNetwork(newKey);
-        let newWeb3;
-        if (privacyMode) {
-          newWeb3 = createPrivateWeb3(null, this.state.rpcServer);
-        } else {
-          newWeb3 = createWeb3(null, this.state.rpcServer);
-        }
+        const newWeb3 = createWeb3(null, this.state.rpcServer);
         this.handleSetWeb3(newWeb3);
       },
     );

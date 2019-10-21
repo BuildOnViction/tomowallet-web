@@ -47,14 +47,6 @@ const NavBarStyler = styled(Navbar)`
   width: 100%;
   text-align: center;
   .navbar-brand {
-    &.btn-privacy-mode {
-      display: flex;
-      align-items: center;
-      padding: 0;
-      margin: 0px 30px;
-      font-size: 14px;
-      color: #9eaacc;
-    }
     svg.fa-shield-alt {
       width: 30px;
       height: 30px;

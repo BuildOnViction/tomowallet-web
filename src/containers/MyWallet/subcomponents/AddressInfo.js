@@ -34,7 +34,6 @@ class AddressInfo extends PureComponent {
       handleCopyToClipboard,
       openReceiveTokenPopup,
       openSendTokenPopup,
-      privacyMode,
       wallet,
     } = this.props;
     const walletAddress = _get(wallet, 'address', '');
@@ -80,11 +79,7 @@ class AddressInfo extends PureComponent {
                           onClick={openReceiveTokenPopup}
                         >
                           <FontAwesomeIcon icon='reply' className='mr-2' />
-                          {formatMessage(
-                            privacyMode
-                              ? MSG.COMMON_BUTTON_DEPOSIT
-                              : MSG.COMMON_BUTTON_RECEIVE,
-                          )}
+                          {formatMessage(MSG.COMMON_BUTTON_RECEIVE)}
                         </MediumButtonStyler>
                       </Col>
                     </Row>
@@ -115,8 +110,6 @@ AddressInfo.propTypes = {
   openReceiveTokenPopup: PropTypes.func,
   /** Action to show send token popup */
   openSendTokenPopup: PropTypes.func,
-  /** Condition flag to enable/disable privacy mode */
-  privacyMode: PropTypes.bool,
   /** Wallet's data */
   wallet: PropTypes.object,
 };
@@ -126,7 +119,6 @@ AddressInfo.defaultProps = {
   handleCopyToClipboard: () => {},
   openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
-  privacyMode: false,
   wallet: {},
 };
 // ======================
