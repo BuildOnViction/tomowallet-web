@@ -29,27 +29,27 @@ class Footer extends PureComponent {
     this.SOCIAL_NETWORKS = [
       {
         className: 'font-icon-facebook',
-        link: 'https://www.facebook.com/tomochainofficial',
+        url: 'https://www.facebook.com/tomochainofficial',
       },
       {
         className: 'font-icon-twitter',
-        link: 'https://twitter.com/TomoChainANN',
+        url: 'https://twitter.com/TomoChainANN',
       },
       {
         className: 'font-icon-telegram',
-        link: 'https://t.me/tomochain',
+        url: 'https://t.me/tomochain',
       },
       {
         className: 'font-icon-github',
-        link: 'https://github.com/tomochain/',
+        url: 'https://github.com/tomochain/',
       },
       {
         className: 'font-icon-linkedin',
-        link: 'https://www.linkedin.com/company/tomochain',
+        url: 'https://www.linkedin.com/company/tomochain',
       },
       {
         className: 'font-icon-reddit',
-        link: 'https://www.reddit.com/r/Tomochain/',
+        url: 'https://www.reddit.com/r/Tomochain/',
       },
     ];
     this.WEBSITE_SUPPORTED_LINKS = [
