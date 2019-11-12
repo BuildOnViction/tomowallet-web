@@ -4,14 +4,14 @@
  *
  */
 // Modules
-import React, { PureComponent, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { withRouter } from 'react-router-dom';
-import _get from 'lodash.get';
-import _isEmpty from 'lodash.isempty';
+import React, { PureComponent, Fragment } from "react";
+import PropTypes from "prop-types";
+import { createStructuredSelector } from "reselect";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
+import _get from "lodash.get";
+import _isEmpty from "lodash.isempty";
 import {
   CardBody,
   Row,
@@ -19,9 +19,9 @@ import {
   CardHeader,
   CardImg,
   CardText,
-  CardFooter,
-} from 'reactstrap';
-import { Helmet } from 'react-helmet';
+  CardFooter
+} from "reactstrap";
+import { Helmet } from "react-helmet";
 // Custom Components
 import {
   CustomContainer,
@@ -29,16 +29,16 @@ import {
   HeadingLarge,
   TextBlue,
   ImporWalletStyler,
-  BoxCardStyled,
-} from '../../styles';
-import LedgerForm from './subcomponents/LedgerForm';
-import MetaMaskForm from './subcomponents/MetaMaskForm';
-import RPOrPKForm from './subcomponents/RPOrPKForm';
-import KeystoreForm from './subcomponents/KeystoreForm';
-import AddressPopup from './subcomponents/AddressPopup';
+  BoxCardStyled
+} from "../../styles";
+import LedgerForm from "./subcomponents/LedgerForm";
+import MetaMaskForm from "./subcomponents/MetaMaskForm";
+import RPOrPKForm from "./subcomponents/RPOrPKForm";
+import KeystoreForm from "./subcomponents/KeystoreForm";
+import AddressPopup from "./subcomponents/AddressPopup";
 // Utilities, Constants & Styles
-import { IMPORT_TYPES, DOMAIN_KEY, KEY_INPUT_TYPE } from './constants';
-import { selectAddressPopup, selectImportState } from './selectors';
+import { IMPORT_TYPES, DOMAIN_KEY, KEY_INPUT_TYPE } from "./constants";
+import { selectAddressPopup, selectImportState } from "./selectors";
 import {
   resetState,
   updateErrors,
@@ -46,10 +46,10 @@ import {
   updateInput,
   loadWalletAddresses,
   toggleAddressPopup,
-  updateChosenWallet,
-} from './actions';
-import reducer from './reducer';
-import { ROUTE, MSG, ENUM, RPC_SERVER } from '../../constants';
+  updateChosenWallet
+} from "./actions";
+import reducer from "./reducer";
+import { ROUTE, MSG, ENUM, RPC_SERVER } from "../../constants";
 import {
   injectReducer,
   createWeb3,
@@ -68,14 +68,15 @@ import {
   getWalletInfo,
   encryptKeystore,
   mnemonicToPrivateKey,
-} from '../../utils';
-import { withWeb3 } from '../../components/Web3';
-import { withIntl } from '../../components/IntlProvider';
-import { storeWallet } from '../Global/actions';
-import LogoLedger from '../../assets/images/logo-ledger.png';
-import LogoMetaMask from '../../assets/images/logo-metamask.png';
-import LogoKey from '../../assets/images/logo-key.png';
-import { writeRPFile } from '../../utils/electron';
+  trimMnemonic
+} from "../../utils";
+import { withWeb3 } from "../../components/Web3";
+import { withIntl } from "../../components/IntlProvider";
+import { storeWallet } from "../Global/actions";
+import LogoLedger from "../../assets/images/logo-ledger.png";
+import LogoMetaMask from "../../assets/images/logo-metamask.png";
+import LogoKey from "../../assets/images/logo-key.png";
+import { writeRPFile } from "../../utils/electron";
 
 // ===== MAIN COMPONENT =====
 class ImportWallet extends PureComponent {
@@ -86,7 +87,7 @@ class ImportWallet extends PureComponent {
 
     this.handleAccessByLedger = this.handleAccessByLedger.bind(this);
     this.handleAccessByRecoveryPhrase = this.handleAccessByRecoveryPhrase.bind(
-      this,
+      this
     );
     this.handleChangeType = this.handleChangeType.bind(this);
     this.handleRedirect = this.handleRedirect.bind(this);
@@ -102,8 +103,8 @@ class ImportWallet extends PureComponent {
   handleAccessByLedger() {
     const { addressPopup, importWallet, onStoreWallet } = this.props;
     const chosenWallet = _get(addressPopup, [
-      'wallets',
-      _get(addressPopup, 'chosenIndex'),
+      "wallets",
+      _get(addressPopup, "chosenIndex")
     ]);
     const serverConfig = _get(RPC_SERVER, [getNetwork()], {});
 
@@ -111,21 +112,21 @@ class ImportWallet extends PureComponent {
       getBalance(chosenWallet.address, serverConfig).then(balance => {
         const walletInfo = {
           address: chosenWallet.address,
-          balance,
+          balance
         };
         onStoreWallet(walletInfo);
         removeWeb3Info();
         setWeb3Info({
           loginType: ENUM.LOGIN_TYPE.LEDGER,
           address: chosenWallet.address,
-          hdPath: `${_get(importWallet, 'input.hdPath')}/${_get(
+          hdPath: `${_get(importWallet, "input.hdPath")}/${_get(
             addressPopup,
-            'chosenIndex',
-          )}`,
+            "chosenIndex"
+          )}`
         });
         if (isElectron()) {
           removeKeystore().then(
-            ({ error }) => error && this.handleUpdateError(error.message),
+            ({ error }) => error && this.handleUpdateError(error.message)
           );
         }
       });
@@ -140,13 +141,13 @@ class ImportWallet extends PureComponent {
       onStoreWallet,
       rpcServer,
       toggleLoading,
-      updateWeb3,
+      updateWeb3
     } = this.props;
-    const formValues = _get(importWallet, 'input', {});
+    const formValues = _get(importWallet, "input", {});
     const keyInputType = _get(
       importWallet,
-      'keyInputType',
-      KEY_INPUT_TYPE.PRIVATE_KEY,
+      "keyInputType",
+      KEY_INPUT_TYPE.PRIVATE_KEY
     );
     let errorList = {};
 
@@ -156,21 +157,21 @@ class ImportWallet extends PureComponent {
         ...(!isPrivateKey(formValues.privateKey)
           ? {
               privateKey: [
-                formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_PRIVATE_KEY),
-              ],
+                formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_PRIVATE_KEY)
+              ]
             }
-          : {}),
+          : {})
       };
     } else if (keyInputType === KEY_INPUT_TYPE.RECOVERY_PHRASE) {
       errorList = {
         ...(!isRecoveryPhrase(formValues.recoveryPhrase)
           ? {
               recoveryPhrase: [
-                formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE),
-              ],
+                formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_RECOVERY_PHRASE)
+              ]
             }
           : {}),
-        ...this.handleValidateHDPath(),
+        ...this.handleValidateHDPath()
       };
     }
 
@@ -178,12 +179,14 @@ class ImportWallet extends PureComponent {
       // Create Web3 provider & store wallet data into state if form validation is passed.
       try {
         toggleLoading(true);
-        const accessKey = formValues.recoveryPhrase || formValues.privateKey;
-        const hdPath = _get(importWallet, 'input.hdPath', '');
+        const accessKey = trimMnemonic(
+          formValues.recoveryPhrase || formValues.privateKey
+        );
+        const hdPath = _get(importWallet, "input.hdPath", "");
         const updatedRpcServer = hdPath
           ? {
               ...rpcServer,
-              hdPath,
+              hdPath
             }
           : rpcServer;
         const newWeb3 = createWeb3(accessKey, updatedRpcServer);
@@ -197,25 +200,25 @@ class ImportWallet extends PureComponent {
               address: walletInfo.address,
               ...(hdPath
                 ? {
-                    hdPath,
+                    hdPath
                   }
-                : {}),
+                : {})
             });
           })
           .then(() => {
-            if (isElectron() && accessType !== 'keystore') {
+            if (isElectron() && accessType !== "keystore") {
               // Specific handle in Electron app:
               // Store encrypted wallet key into temporary file for quick access
               const privKey = formValues.recoveryPhrase
                 ? mnemonicToPrivateKey(formValues.recoveryPhrase, rpcServer)
                 : formValues.privateKey;
               removeKeystore().then(
-                ({ error }) => error && this.handleUpdateError(error.message),
+                ({ error }) => error && this.handleUpdateError(error.message)
               );
               writeRPFile(
-                JSON.stringify(encryptKeystore(privKey, 'recoveryPhrase')),
+                JSON.stringify(encryptKeystore(privKey, "recoveryPhrase"))
               ).then(
-                ({ error }) => error && this.handleUpdateError(error.message),
+                ({ error }) => error && this.handleUpdateError(error.message)
               );
             }
             toggleLoading(false);
@@ -245,9 +248,9 @@ class ImportWallet extends PureComponent {
       onLoadWalletAddresses,
       onUpdateErrors,
       toggleLoading,
-      web3,
+      web3
     } = this.props;
-    const hdPath = _get(importWallet, 'input.hdPath', '');
+    const hdPath = _get(importWallet, "input.hdPath", "");
     const errorList = this.handleValidateHDPath();
 
     if (!_isEmpty(errorList)) {
@@ -267,23 +270,23 @@ class ImportWallet extends PureComponent {
   handleValidateHDPath() {
     const {
       importWallet,
-      intl: { formatMessage },
+      intl: { formatMessage }
     } = this.props;
     const { isRequired } = validations;
 
     return {
       ...isRequired(
         {
-          name: 'hdPath',
-          value: _get(importWallet, 'input.hdPath'),
+          name: "hdPath",
+          value: _get(importWallet, "input.hdPath")
         },
-        formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH),
+        formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH)
       ),
-      ...(!isHDPath(_get(importWallet, 'input.hdPath'))
+      ...(!isHDPath(_get(importWallet, "input.hdPath"))
         ? {
-            hdPath: [formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH)],
+            hdPath: [formatMessage(MSG.IMPORT_WALLET_ERROR_INVALID_HD_PATH)]
           }
-        : {}),
+        : {})
     };
   }
 
@@ -291,22 +294,22 @@ class ImportWallet extends PureComponent {
     const { importWallet, onUpdateErrors, toggleLoading } = this.props;
     const keyInputType = _get(
       importWallet,
-      'keyInputType',
-      KEY_INPUT_TYPE.PRIVATE_KEY,
+      "keyInputType",
+      KEY_INPUT_TYPE.PRIVATE_KEY
     );
     if (!clientMode) {
       toggleLoading(false);
     }
-    if (typeof error === 'string') {
+    if (typeof error === "string") {
       const field =
-        (keyInputType === KEY_INPUT_TYPE.PRIVATE_KEY && 'privateKey') ||
-        (keyInputType === KEY_INPUT_TYPE.RECOVERY_PHRASE && 'recoveryPhrase');
+        (keyInputType === KEY_INPUT_TYPE.PRIVATE_KEY && "privateKey") ||
+        (keyInputType === KEY_INPUT_TYPE.RECOVERY_PHRASE && "recoveryPhrase");
       if (field) {
         onUpdateErrors({
-          [field]: [error],
+          [field]: [error]
         });
       }
-    } else if (typeof error === 'object') {
+    } else if (typeof error === "object") {
       onUpdateErrors(error);
     }
   }
@@ -318,7 +321,7 @@ class ImportWallet extends PureComponent {
       intl: { formatMessage },
       onToggleAddressPopup,
       onUpdateChosenWallet,
-      onUpdateInput,
+      onUpdateInput
     } = this.props;
 
     return (
@@ -326,7 +329,7 @@ class ImportWallet extends PureComponent {
         <Helmet>
           <title>{formatMessage(MSG.IMPORT_WALLET_TITLE)}</title>
         </Helmet>
-        <CustomContainer size='large'>
+        <CustomContainer size="large">
           <BoxCardStyled>
             <CardHeader>
               <HeadingLarge>
@@ -335,7 +338,7 @@ class ImportWallet extends PureComponent {
               <CardText>
                 {`${formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_TEXT)} `}
                 <TextBlue
-                  role='presentation'
+                  role="presentation"
                   onClick={() => this.handleRedirect(ROUTE.CREATE_WALLET)}
                 >
                   {formatMessage(MSG.IMPORT_WALLET_ALTERNATIVE_LINK)}
@@ -344,29 +347,29 @@ class ImportWallet extends PureComponent {
             </CardHeader>
             <CardBody>
               <Row noGutters>
-                <Col className='pr-3'>
+                <Col className="pr-3">
                   <ImporWalletStyler
                     isActive={
-                      _get(importWallet, 'type') === IMPORT_TYPES.LEDGER
+                      _get(importWallet, "type") === IMPORT_TYPES.LEDGER
                     }
                     onClick={() => this.handleChangeType(IMPORT_TYPES.LEDGER)}
                   >
                     <CardImg
                       src={LogoLedger}
                       alt={formatMessage(
-                        MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT,
+                        MSG.IMPORT_WALLET_TAB_LEDGER_IMAGE_ALT
                       )}
                     />
-                    <CardText className='mt-3'>
+                    <CardText className="mt-3">
                       {formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_TEXT)}
                     </CardText>
                   </ImporWalletStyler>
                 </Col>
                 {!isElectron() && (
-                  <Col className='px-3'>
+                  <Col className="px-3">
                     <ImporWalletStyler
                       isActive={
-                        _get(importWallet, 'type') === IMPORT_TYPES.META_MASK
+                        _get(importWallet, "type") === IMPORT_TYPES.META_MASK
                       }
                       onClick={() =>
                         this.handleChangeType(IMPORT_TYPES.META_MASK)
@@ -375,82 +378,82 @@ class ImportWallet extends PureComponent {
                       <CardImg
                         src={LogoMetaMask}
                         alt={formatMessage(
-                          MSG.IMPORT_WALLET_TAB_METAMASK_IMAGE_ALT,
+                          MSG.IMPORT_WALLET_TAB_METAMASK_IMAGE_ALT
                         )}
                       />
-                      <CardText className='mt-3'>
+                      <CardText className="mt-3">
                         {formatMessage(MSG.IMPORT_WALLET_TAB_METAMASK_TEXT)}
                       </CardText>
                     </ImporWalletStyler>
                   </Col>
                 )}
-                <Col className='px-3'>
+                <Col className="px-3">
                   <ImporWalletStyler
                     isActive={
-                      _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
+                      _get(importWallet, "type") === IMPORT_TYPES.RP_OR_PK
                     }
                     onClick={() => this.handleChangeType(IMPORT_TYPES.RP_OR_PK)}
                   >
                     <CardImg
                       src={LogoKey}
                       alt={formatMessage(
-                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT
                       )}
                     />
-                    <CardText className='mt-3'>
+                    <CardText className="mt-3">
                       {formatMessage(
-                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT,
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TEXT
                       )}
                     </CardText>
-                    <CardText className='text-end small text-danger'>
+                    <CardText className="text-end small text-danger">
                       {formatMessage(
-                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT,
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT
                       )}
                     </CardText>
                   </ImporWalletStyler>
                 </Col>
-                <Col className='pl-3'>
+                <Col className="pl-3">
                   <ImporWalletStyler
                     isActive={
-                      _get(importWallet, 'type') === IMPORT_TYPES.KEYSTORE
+                      _get(importWallet, "type") === IMPORT_TYPES.KEYSTORE
                     }
                     onClick={() => this.handleChangeType(IMPORT_TYPES.KEYSTORE)}
                   >
                     <CardImg
                       src={LogoKey}
                       alt={formatMessage(
-                        MSG.IMPORT_WALLET_TAB_KEYSTORE_IMAGE_ALT,
+                        MSG.IMPORT_WALLET_TAB_KEYSTORE_IMAGE_ALT
                       )}
                     />
-                    <CardText className='mt-3'>
+                    <CardText className="mt-3">
                       {formatMessage(MSG.IMPORT_WALLET_TAB_KEYSTORE_TEXT)}
                     </CardText>
-                    <CardText className='text-end small text-danger'>
+                    <CardText className="text-end small text-danger">
                       {formatMessage(
-                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT,
+                        MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_NOT_RECOMMENDED_TEXT
                       )}
                     </CardText>
                   </ImporWalletStyler>
                 </Col>
               </Row>
-              <Row noGutters className='mt-5'>
+              <Row noGutters className="mt-5">
                 <Col>
-                  {_get(importWallet, 'type') === IMPORT_TYPES.LEDGER && (
+                  {_get(importWallet, "type") === IMPORT_TYPES.LEDGER && (
                     <LedgerForm
-                      errors={_get(importWallet, 'errors', [])}
-                      formValues={_get(importWallet, 'input', {})}
+                      errors={_get(importWallet, "errors", [])}
+                      formValues={_get(importWallet, "input", {})}
                       updateInput={onUpdateInput}
                     />
                   )}
-                  {_get(importWallet, 'type') === IMPORT_TYPES.META_MASK && (
+                  {_get(importWallet, "type") === IMPORT_TYPES.META_MASK && (
                     <MetaMaskForm />
                   )}
-                  {_get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK && (
+                  {_get(importWallet, "type") === IMPORT_TYPES.RP_OR_PK && (
                     <RPOrPKForm
                       handleSubmit={this.handleAccessByRecoveryPhrase}
                     />
                   )}
-                  {_get(importWallet, 'type') === IMPORT_TYPES.KEYSTORE && (
+                  {_get(importWallet, "type") === IMPORT_TYPES.KEYSTORE && (
                     <KeystoreForm
                       accessWallet={this.handleAccessByRecoveryPhrase}
                     />
@@ -459,7 +462,7 @@ class ImportWallet extends PureComponent {
               </Row>
             </CardBody>
             {![IMPORT_TYPES.META_MASK, IMPORT_TYPES.KEYSTORE].includes(
-              _get(importWallet, 'type'),
+              _get(importWallet, "type")
             ) && (
               <CardFooter>
                 <Row>
@@ -474,7 +477,7 @@ class ImportWallet extends PureComponent {
                     <ButtonStyler
                       btnYellow
                       onClick={
-                        _get(importWallet, 'type') === IMPORT_TYPES.RP_OR_PK
+                        _get(importWallet, "type") === IMPORT_TYPES.RP_OR_PK
                           ? this.handleAccessByRecoveryPhrase
                           : this.handleGetLedgerAddresses
                       }
@@ -522,7 +525,7 @@ ImportWallet.propTypes = {
   /** Action to handle input change */
   onUpdateInput: PropTypes.func,
   /** Action to show/hide loading screen */
-  toggleLoading: PropTypes.func,
+  toggleLoading: PropTypes.func
 };
 
 ImportWallet.defaultProps = {
@@ -536,7 +539,7 @@ ImportWallet.defaultProps = {
   onUpdateErrors: () => {},
   onUpdateImportType: () => {},
   onUpdateInput: () => {},
-  toggleLoading: () => {},
+  toggleLoading: () => {}
 };
 // ======================
 
@@ -544,7 +547,7 @@ ImportWallet.defaultProps = {
 const mapStateToProps = () =>
   createStructuredSelector({
     addressPopup: selectAddressPopup,
-    importWallet: selectImportState,
+    importWallet: selectImportState
   });
 const mapDispatchToProps = dispatch => ({
   onLoadWalletAddresses: data => dispatch(loadWalletAddresses(data)),
@@ -554,13 +557,10 @@ const mapDispatchToProps = dispatch => ({
   onUpdateChosenWallet: index => dispatch(updateChosenWallet(index)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onUpdateImportType: type => dispatch(updateImportType(type)),
-  onUpdateInput: (name, value) => dispatch(updateInput(name, value)),
+  onUpdateInput: (name, value) => dispatch(updateInput(name, value))
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 // ======================
@@ -571,5 +571,5 @@ export default compose(
   withGlobal,
   withReducer,
   withRouter,
-  withWeb3,
+  withWeb3
 )(ImportWallet);

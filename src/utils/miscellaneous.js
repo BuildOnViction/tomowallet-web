@@ -5,8 +5,8 @@
  */
 // ===== IMPORTS =====
 // Modules
-import _isNumber from 'lodash.isnumber';
-import _get from 'lodash.get';
+import _isNumber from "lodash.isnumber";
+import _get from "lodash.get";
 // ===================
 
 // ===== METHODS =====
@@ -35,11 +35,11 @@ export const trimMnemonic = rawMnemonic => {
   if (rawMnemonic) {
     const words = rawMnemonic
       .trim() // Remove beginning & end spaces
-      .replace(/[\r\n]+/g, '') // Remove break-line characters
+      .replace(/[\r\n]+/g, "") // Remove break-line characters
       .split(/[ ]+/);
-    return words.join(' ');
+    return words.join(" ");
   }
-  return '';
+  return "";
 };
 
 export const convertLocaleNumber = (rawNumber, decimals = 3) => {
@@ -54,10 +54,10 @@ export const convertLocaleNumber = (rawNumber, decimals = 3) => {
 export const removeTrailingZero = rawNumber => {
   let result = `${rawNumber}`;
 
-  if (result.includes('.')) {
-    result = result.replace(/0+$/, '');
+  if (result.includes(".")) {
+    result = result.replace(/0+$/, "");
     if (result.match(/\.$/)) {
-      result = result.replace('.', '');
+      result = result.replace(".", "");
     }
   }
 
@@ -65,43 +65,41 @@ export const removeTrailingZero = rawNumber => {
 };
 
 export const copyToClipboard = content => {
-  const textHolder = document.createElement('input');
+  const textHolder = document.createElement("input");
   textHolder.defaultValue = content;
   document.body.appendChild(textHolder);
   textHolder.select();
-  document.execCommand('copy');
+  document.execCommand("copy");
   document.body.removeChild(textHolder);
 };
 
 export const downloadFile = ({ content, name, type }) => {
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   const blob = new Blob([content], { type });
   link.href = URL.createObjectURL(blob);
-  let extension = '';
-  let regExp = '';
+  let extension = "";
+  let regExp = "";
   switch (type) {
-    case 'plain/text':
-      extension = '.txt';
+    case "plain/text":
+      extension = ".txt";
       regExp = /\.txt$/;
       break;
-    case 'application/json':
-      extension = '.json';
+    case "application/json":
+      extension = ".json";
       regExp = /\.json$/;
       break;
     default:
       break;
   }
-  link.download = `${name.replace(regExp, '')}${extension}`;
+  link.download = `${name.replace(regExp, "")}${extension}`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 };
 
 export const changeInputWithSubmit = updateInput => event => {
-  const newValue = _get(event, 'target.value', '');
-  const isSubmitted =
-    newValue.split('\n').length === 2 &&
-    newValue.indexOf('\n') === newValue.length - 1;
+  const newValue = _get(event, "target.value", "");
+  const isSubmitted = newValue.lastIndexOf("\n") === newValue.length - 1;
   if (!isSubmitted && updateInput) {
     updateInput(newValue);
   }
