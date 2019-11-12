@@ -7,21 +7,21 @@
  */
 // ==== IMPORTS =====
 // Modules
-import React, { PureComponent, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import _get from 'lodash.get';
-import _isEmpty from 'lodash.isempty';
-import { Helmet } from 'react-helmet';
+import React, { PureComponent, Fragment } from "react";
+import PropTypes from "prop-types";
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import _get from "lodash.get";
+import _isEmpty from "lodash.isempty";
+import { Helmet } from "react-helmet";
 // Custom Components
-import AddressInfo from './subcomponents/AddressInfo';
-import DataTables from './subcomponents/DataTables';
-import SendTokenPopup from './subcomponents/popups/SendToken';
-import ReceiveTokenPopup from './subcomponents/popups/ReceiveToken';
-import SuccessPopup from './subcomponents/popups/Success';
+import AddressInfo from "./subcomponents/AddressInfo";
+import DataTables from "./subcomponents/DataTables";
+import SendTokenPopup from "./subcomponents/popups/SendToken";
+import ReceiveTokenPopup from "./subcomponents/popups/ReceiveToken";
+import SuccessPopup from "./subcomponents/popups/Success";
 // Utilities & Constants
 import {
   resetSendTokenForm,
@@ -32,24 +32,24 @@ import {
   toggleSuccessPopup,
   updateSendTokenInput,
   updateSendTokenErrors,
-  updateSendTokenPopupStage,
-} from './actions';
+  updateSendTokenPopupStage
+} from "./actions";
 import {
   selectReceiveToKenPopup,
   selectSendTokenForm,
   selectSendTokenPopup,
   selectSuccessPopup,
   selectTableType,
-  selectTokenOptions,
-} from './selectors';
-import reducer from './reducer';
-import saga from './saga';
+  selectTokenOptions
+} from "./selectors";
+import reducer from "./reducer";
+import saga from "./saga";
 import {
   DOMAIN_KEY,
   SEND_TOKEN_FIELDS,
   SEND_TOKEN_STAGES,
-  PORTFOLIO_COLUMNS,
-} from './constants';
+  PORTFOLIO_COLUMNS
+} from "./constants";
 import {
   addBN,
   bnToDecimals,
@@ -68,13 +68,13 @@ import {
   sendToken,
   subBN,
   validations,
-  withGlobal,
-} from '../../utils';
-import { withIntl } from '../../components/IntlProvider';
-import { withWeb3 } from '../../components/Web3';
-import { selectWallet } from '../Global/selectors';
-import { storeWallet } from '../Global/actions';
-import { MSG, LIST, ENUM, RPC_SERVER } from '../../constants';
+  withGlobal
+} from "../../utils";
+import { withIntl } from "../../components/IntlProvider";
+import { withWeb3 } from "../../components/Web3";
+import { selectWallet } from "../Global/selectors";
+import { storeWallet } from "../Global/actions";
+import { MSG, LIST, ENUM, RPC_SERVER } from "../../constants";
 // ==================
 
 // ===== MAIN COMPONENT =====
@@ -109,15 +109,15 @@ class MyWallet extends PureComponent {
     const rawBalance = _get(
       sendTokenForm,
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
-      0,
+      0
     );
     const decimals = _get(
       sendTokenForm,
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0,
+      0
     );
     const normalBalance = removeTrailingZero(
-      bnToDecimals(rawBalance, decimals),
+      bnToDecimals(rawBalance, decimals)
     );
 
     onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, normalBalance);
@@ -132,7 +132,7 @@ class MyWallet extends PureComponent {
     const { onUpdateSendTokenErrors, toggleLoading } = this.props;
     toggleLoading(false);
     onUpdateSendTokenErrors({
-      [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [message],
+      [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [message]
     });
   }
 
@@ -141,14 +141,14 @@ class MyWallet extends PureComponent {
       onUpdateSendTokenErrors,
       sendTokenForm,
       toggleLoading,
-      web3,
+      web3
     } = this.props;
     const contractData = this.handleGetContractData();
     const errorList = this.handleValidationSendForm();
     const tokenType = _get(
       sendTokenForm,
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TYPE],
-      '',
+      ""
     );
     const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
 
@@ -182,25 +182,25 @@ class MyWallet extends PureComponent {
       contractAddress: _get(
         sendTokenForm,
         [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
-        '',
+        ""
       ),
       decimals: _get(
         sendTokenForm,
         [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-        0,
+        0
       ),
       from: address,
-      to: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT], ''),
+      to: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT], ""),
       type: _get(sendTokenForm, [
         SEND_TOKEN_FIELDS.TOKEN,
-        PORTFOLIO_COLUMNS.TYPE,
-      ]),
+        PORTFOLIO_COLUMNS.TYPE
+      ])
     };
   }
 
   handleGetSendAction() {
     const { sendTokenForm } = this.props;
-    const loginType = _get(getWeb3Info(), 'loginType');
+    const loginType = _get(getWeb3Info(), "loginType");
     let sendAction = () => {};
 
     if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
@@ -209,13 +209,15 @@ class MyWallet extends PureComponent {
       if (
         _get(sendTokenForm, [
           SEND_TOKEN_FIELDS.TOKEN,
-          PORTFOLIO_COLUMNS.TYPE,
+          PORTFOLIO_COLUMNS.TYPE
         ]) === ENUM.TOKEN_TYPE.CURRENCY
       ) {
         sendAction = this.handleSendMoneyByPK;
       } else {
         sendAction = this.handleSendTokenByPK;
       }
+    } else {
+      sendAction = this.handleSendMoneyByPK;
     }
 
     return sendAction();
@@ -231,7 +233,7 @@ class MyWallet extends PureComponent {
       onStoreWallet,
       web3,
       toggleLoading,
-      onToggleSuccessPopup,
+      onToggleSuccessPopup
     } = this.props;
     const contractData = this.handleGetContractData();
 
@@ -257,7 +259,7 @@ class MyWallet extends PureComponent {
       onToggleSuccessPopup,
       sendTokenForm,
       toggleLoading,
-      web3,
+      web3
     } = this.props;
     const { address, hdPath } = getWeb3Info();
     const contract = this.handleGetContractData();
@@ -265,9 +267,9 @@ class MyWallet extends PureComponent {
     const serverConfig = _get(RPC_SERVER, [networkKey]);
     const gasPrice = _get(sendTokenForm, [
       SEND_TOKEN_FIELDS.TRANSACTION_FEE,
-      'gasPrice',
+      "gasPrice"
     ]);
-    const gas = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, 'gas']);
+    const gas = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSACTION_FEE, "gas"]);
 
     toggleLoading(true);
     sendSignedTransaction(web3, {
@@ -275,13 +277,13 @@ class MyWallet extends PureComponent {
       chainId: serverConfig.networkId,
       gas,
       gasPrice,
-      hdPath,
+      hdPath
     })
       .then(txObj => {
         getBalance(address, serverConfig).then(balance => {
           onStoreWallet({
             address,
-            balance,
+            balance
           });
         });
         toggleLoading(false);
@@ -320,51 +322,51 @@ class MyWallet extends PureComponent {
       onUpdateSendTokenPopupStage,
       sendTokenForm,
       toggleLoading,
-      web3,
+      web3
     } = this.props;
     const decimals = _get(
       sendTokenForm,
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0,
+      0
     );
     const balance = _get(sendTokenForm, [
       SEND_TOKEN_FIELDS.TOKEN,
-      PORTFOLIO_COLUMNS.BALANCE,
+      PORTFOLIO_COLUMNS.BALANCE
     ]);
     const remainBalance = subBN(
       web3.utils.toBN(balance),
       addBN(
         _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
         feeObj.amount,
-        decimals,
+        decimals
       ),
-      decimals,
+      decimals
     );
 
     if (
       balance ===
       decimalsToBN(
         _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-        decimals,
+        decimals
       )
     ) {
       const remainAmount = subBN(
         web3.utils.toBN(balance),
         feeObj.amount,
-        decimals,
+        decimals
       );
 
       if (web3.utils.toBN(decimalsToBN(remainAmount, decimals)).isNeg()) {
         this.handleConfirmationError(
           formatMessage(
-            MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
-          ),
+            MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+          )
         );
       } else {
         toggleLoading(false);
         onUpdateSendTokenInput(
           SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-          removeTrailingZero(remainAmount),
+          removeTrailingZero(remainAmount)
         );
         onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
         onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
@@ -372,8 +374,8 @@ class MyWallet extends PureComponent {
     } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
       this.handleConfirmationError(
         formatMessage(
-          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
-        ),
+          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+        )
       );
     } else {
       toggleLoading(false);
@@ -390,24 +392,24 @@ class MyWallet extends PureComponent {
       sendTokenForm,
       toggleLoading,
       wallet,
-      web3,
+      web3
     } = this.props;
     const decimals = _get(
       sendTokenForm,
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0,
+      0
     );
     const remainBalance = subBN(
-      web3.utils.toBN(_get(wallet, 'balance')),
+      web3.utils.toBN(_get(wallet, "balance")),
       feeObj.amount,
-      decimals,
+      decimals
     );
 
     if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
       this.handleConfirmationError(
         formatMessage(
-          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
-        ),
+          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+        )
       );
     } else {
       toggleLoading(false);
@@ -423,51 +425,51 @@ class MyWallet extends PureComponent {
       onUpdateSendTokenPopupStage,
       sendTokenForm,
       toggleLoading,
-      web3,
+      web3
     } = this.props;
     const decimals = _get(
       sendTokenForm,
       [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0,
+      0
     );
     const balance = _get(sendTokenForm, [
       SEND_TOKEN_FIELDS.TOKEN,
-      PORTFOLIO_COLUMNS.BALANCE,
+      PORTFOLIO_COLUMNS.BALANCE
     ]);
     const remainBalance = subBN(
       web3.utils.toBN(balance),
       addBN(
         _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
         feeObj.amount,
-        decimals,
+        decimals
       ),
-      decimals,
+      decimals
     );
 
     if (
       balance ===
       decimalsToBN(
         _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-        decimals,
+        decimals
       )
     ) {
       toggleLoading(false);
       const remainAmount = subBN(
         web3.utils.toBN(balance),
         feeObj.amount,
-        decimals,
+        decimals
       );
       onUpdateSendTokenInput(
         SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-        removeTrailingZero(remainAmount),
+        removeTrailingZero(remainAmount)
       );
       onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
       onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
     } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
       this.handleConfirmationError(
         formatMessage(
-          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY,
-        ),
+          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+        )
       );
     } else {
       toggleLoading(false);
@@ -479,44 +481,44 @@ class MyWallet extends PureComponent {
   handleValidationSendForm() {
     const {
       intl: { formatMessage },
-      sendTokenForm,
+      sendTokenForm
     } = this.props;
     const {
       isWalletAddress,
       isMaxLength,
       isMaxNumber,
       isMinNumber,
-      isRequired,
+      isRequired
     } = validations;
 
     const errorList = mergeErrors([
       isRequired(
         {
           name: SEND_TOKEN_FIELDS.TOKEN,
-          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN]),
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TOKEN])
         },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_TOKEN_REQUIRED),
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_TOKEN_REQUIRED)
       ),
       isRequired(
         {
           name: SEND_TOKEN_FIELDS.RECIPIENT,
-          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT]),
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT])
         },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED),
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED)
       ),
       isWalletAddress(
         {
           name: SEND_TOKEN_FIELDS.RECIPIENT,
-          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT]),
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT])
         },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_INVALID),
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_INVALID)
       ),
       isRequired(
         {
           name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT])
         },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED),
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED)
       ),
       isMaxNumber(
         {
@@ -526,33 +528,33 @@ class MyWallet extends PureComponent {
             bnToDecimals(
               _get(sendTokenForm, [
                 SEND_TOKEN_FIELDS.TOKEN,
-                PORTFOLIO_COLUMNS.BALANCE,
+                PORTFOLIO_COLUMNS.BALANCE
               ]),
               _get(sendTokenForm, [
                 SEND_TOKEN_FIELDS.TOKEN,
-                PORTFOLIO_COLUMNS.DECIMALS,
-              ]),
-            ),
-          ),
+                PORTFOLIO_COLUMNS.DECIMALS
+              ])
+            )
+          )
         },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID),
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
       ),
       isMinNumber(
         {
           name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-          min: 0,
+          min: 0
         },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID),
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
       ),
       isMaxLength(
         {
           name: SEND_TOKEN_FIELDS.MESSAGE,
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.MESSAGE]),
-          max: 255,
+          max: 255
         },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_MESSAGE_MAXLENGTH),
-      ),
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_MESSAGE_MAXLENGTH)
+      )
     ]);
 
     return errorList;
@@ -571,7 +573,7 @@ class MyWallet extends PureComponent {
       successPopup,
       tableType,
       tokenOptions,
-      wallet,
+      wallet
     } = this.props;
 
     return (
@@ -608,7 +610,7 @@ class MyWallet extends PureComponent {
           symbol={_get(
             sendTokenForm,
             [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
-            '',
+            ""
           )}
         />
         <ReceiveTokenPopup />
@@ -657,7 +659,7 @@ MyWallet.propTypes = {
   /** List of token's data */
   tokenOptions: PropTypes.arrayOf(PropTypes.object),
   /** Current wallet's data */
-  wallet: PropTypes.object,
+  wallet: PropTypes.object
 };
 
 MyWallet.defaultProps = {
@@ -677,7 +679,7 @@ MyWallet.defaultProps = {
   tableType: LIST.MY_WALLET_TABLE_TYPES[0].value,
   toggleLoading: () => {},
   tokenOptions: [],
-  wallet: {},
+  wallet: {}
 };
 // ======================
 
@@ -689,7 +691,7 @@ const mapStateToProps = () =>
     successPopup: selectSuccessPopup,
     tableType: selectTableType,
     tokenOptions: selectTokenOptions,
-    wallet: selectWallet,
+    wallet: selectWallet
   });
 const mapDispatchToProps = dispatch => ({
   onResetSendTokenForm: () => dispatch(resetSendTokenForm()),
@@ -705,12 +707,9 @@ const mapDispatchToProps = dispatch => ({
   onUpdateSendTokenInput: (name, value) =>
     dispatch(updateSendTokenInput(name, value)),
   onUpdateSendTokenPopupStage: stage =>
-    dispatch(updateSendTokenPopupStage(stage)),
+    dispatch(updateSendTokenPopupStage(stage))
 });
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 const withReducer = injectReducer({ key: DOMAIN_KEY, reducer });
 const withSaga = injectSaga({ key: DOMAIN_KEY, saga });
@@ -723,5 +722,5 @@ export default compose(
   withIntl,
   withRouter,
   withWeb3,
-  withGlobal,
+  withGlobal
 )(MyWallet);
