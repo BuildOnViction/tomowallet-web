@@ -28,7 +28,7 @@ import Select, { components } from 'react-select';
 import Image from '../../../../../components/Image';
 // Utilities & Constants
 import { convertLocaleNumber } from '../../../../../utils';
-import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
+import { WITHDRAW_PRIVACY_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
 import { bnToDecimals } from '../../../../../utils';
 // ===================
@@ -143,7 +143,6 @@ class FormContent extends PureComponent {
       privacyData,
     } = this.props;
 
-
     return (
       <Form onSubmit={submitForm} className='cm_form'>
         <FormGroup>
@@ -152,10 +151,10 @@ class FormContent extends PureComponent {
           </Label>
           <Select
             className='box_select'
-            name={SEND_TOKEN_FIELDS.TOKEN}
-            value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
+            name={WITHDRAW_PRIVACY_FIELDS.TOKEN}
+            value={_get(formValues, [WITHDRAW_PRIVACY_FIELDS.TOKEN], '')}
             options={privacyMode ? privacyData : tokenOptions}
-            onChange={value => updateInput(SEND_TOKEN_FIELDS.TOKEN, value)}
+            onChange={value => updateInput(WITHDRAW_PRIVACY_FIELDS.TOKEN, value)}
             components={{
               Option: TokenOption,
               SingleValue: TokenInputValue,
@@ -176,26 +175,7 @@ class FormContent extends PureComponent {
             menuIsOpens
             classNamePrefix='my-select'
           />
-          {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TOKEN)}
-        </FormGroup>
-        <FormGroup>
-          <Label>
-            {formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_LABEL,
-            )}
-          </Label>
-          <Input
-            name={SEND_TOKEN_FIELDS.RECIPIENT}
-            value={_get(formValues, [SEND_TOKEN_FIELDS.RECIPIENT], '')}
-            placeholder={formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_PLACEHOLDER,
-            )}
-            onChange={e =>
-              updateInput(SEND_TOKEN_FIELDS.RECIPIENT, e.target.value)
-            }
-            invalid={this.handleMarkFieldInvalid(SEND_TOKEN_FIELDS.RECIPIENT)}
-          />
-          {this.handleRenderErrorList(SEND_TOKEN_FIELDS.RECIPIENT)}
+          {this.handleRenderErrorList(WITHDRAW_PRIVACY_FIELDS.TOKEN)}
         </FormGroup>
         <FormGroup>
           <Label>
@@ -206,21 +186,21 @@ class FormContent extends PureComponent {
           <InputGroup>
             <Input
               type='number'
-              name={SEND_TOKEN_FIELDS.TRANSFER_AMOUNT}
-              value={_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], '')}
+              name={WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT}
+              value={_get(formValues, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT], '')}
               max={_get(
                 formValues,
-                [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
+                [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
                 0,
               )}
               placeholder={formatMessage(
                 MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_PLACEHOLDER,
               )}
               onChange={e =>
-                updateInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, e.target.value)
+                updateInput(WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT, e.target.value)
               }
               invalid={this.handleMarkFieldInvalid(
-                SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+                WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
               )}
             />
             <InputGroupAddon addonType='append'>
@@ -228,7 +208,7 @@ class FormContent extends PureComponent {
                 {formatMessage(MSG.COMMON_BUTTON_MAXIMUM)}
               </Button>
             </InputGroupAddon>
-            {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT)}
+            {this.handleRenderErrorList(WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT)}
           </InputGroup>
         </FormGroup>
         {/* <FormGroup>
@@ -237,24 +217,24 @@ class FormContent extends PureComponent {
           </Label>
           <Input
             type='textarea'
-            name={SEND_TOKEN_FIELDS.MESSAGE}
-            value={_get(formValues, [SEND_TOKEN_FIELDS.MESSAGE], '')}
+            name={WITHDRAW_PRIVACY_FIELDS.MESSAGE}
+            value={_get(formValues, [WITHDRAW_PRIVACY_FIELDS.MESSAGE], '')}
             placeholder={formatMessage(
               MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_PLACEHOLDER,
             )}
             onChange={e =>
-              updateInput(SEND_TOKEN_FIELDS.MESSAGE, e.target.value)
+              updateInput(WITHDRAW_PRIVACY_FIELDS.MESSAGE, e.target.value)
             }
-            invalid={this.handleMarkFieldInvalid(SEND_TOKEN_FIELDS.MESSAGE)}
+            invalid={this.handleMarkFieldInvalid(WITHDRAW_PRIVACY_FIELDS.MESSAGE)}
           />
-          {this.handleRenderErrorList(SEND_TOKEN_FIELDS.MESSAGE)}
+          {this.handleRenderErrorList(WITHDRAW_PRIVACY_FIELDS.MESSAGE)}
         </FormGroup> */}
         {/* <Label>
           {`${formatMessage(
             MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,
           )}: ${_get(
             formValues,
-            [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TRANSACTION_FEE],
+            [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.TRANSACTION_FEE],
             0,
           )} TOMO`}
         </Label> */}
@@ -282,8 +262,6 @@ FormContent.propTypes = {
   updateInput: PropTypes.func,
   /** Privacy mode */
   privacyMode: PropTypes.bool,
-  /** List of privacy token options */
-  privacyData: PropTypes.arrayOf(PropTypes.object),
 };
 
 FormContent.defaultProps = {
@@ -294,7 +272,6 @@ FormContent.defaultProps = {
   tokenOptions: [],
   updateInput: () => {},
   privacyMode: false,
-  privacyData: [],
 };
 // ======================
 

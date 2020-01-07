@@ -35,8 +35,24 @@ import {
   UPDATE_SEND_TOKEN_ERRORS,
   UPDATE_SEND_TOKEN_INPUT,
   UPDATE_SEND_TOKEN_POPUP_STAGE,
+  SCAN_PRIVACY_DATA_SUCCESS,
+  TOGGLE_DEPOSIT_PRIVACY_POPUP,
+  UPDATE_DEPOSIT_PRIVACY_ERRORS,
+  DEPOSIT_PRIVACY_FIELDS,
+  UPDATE_DEPOSIT_PRIVACY_INPUT,
+  UPDATE_DEPOSIT_PRIVACY_POPUP_STAGE,
+  DEPOSIT_STAGES,
+  TOGGLE_DEPOSIT_SUCCESS_POPUP,
+  WITHDRAW_STAGES,
+  TOGGLE_WITHDRAW_PRIVACY_POPUP,
+  WITHDRAW_PRIVACY_FIELDS,
+  UPDATE_WITHDRAW_PRIVACY_INPUT,
+  UPDATE_WITHDRAW_PRIVACY_ERRORS,
+  TOGGLE_WITHDRAW_SUCCESS_POPUP,
+  UPDATE_WITHDRAW_PRIVACY_POPUP_STAGE,
 } from './constants';
 import { LIST } from '../../constants';
+import tomoIcon from '../../assets/images/logo-tomo.png';
 // ===================
 
 // ===== PRE-INITIATION VARIABLES =====
@@ -46,6 +62,17 @@ const initialSendForm = {
   [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: '',
   [SEND_TOKEN_FIELDS.MESSAGE]: '',
 };
+
+// ===== PRE-INITIATION VARIABLES =====
+const initialDepositForm = {
+  [DEPOSIT_PRIVACY_FIELDS.TOKEN]: '',
+  [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]: '',
+};
+
+const initialWithdrawForm = {
+  [WITHDRAW_PRIVACY_FIELDS.TOKEN]: '',
+  [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]: '',
+}
 
 const initialState = fromJS({
   coinData: {
@@ -75,6 +102,27 @@ const initialState = fromJS({
     page: 1,
     pages: 1,
     total: 0,
+  },
+  privacyData: [],
+  depositPrivacyPopup: {
+    errors: {},
+    isOpen: false,
+    stage: DEPOSIT_STAGES.FORM,
+  },
+  depositForm: initialDepositForm,
+  successDepositPopup: {
+    isOpen: false,
+    txHash: '',
+  },
+  withdrawPrivacyPopup: {
+    errors: {},
+    isOpen: false,
+    stage: WITHDRAW_STAGES.FORM,
+  },
+  withdrawForm: initialWithdrawForm,
+  successWithdrawPopup: {
+    isOpen: false,
+    txHash: '',
   },
 });
 // ====================================
@@ -211,6 +259,92 @@ export default (state = initialState, action) => {
       return state
         .setIn(['sendTokenPopup', 'stage'], action.stage)
         .setIn(['sendTokenPopup', 'errors'], {});
+    case SCAN_PRIVACY_DATA_SUCCESS:
+        return state
+          .set('privacyData', [{
+            [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO Privacy',
+            [PORTFOLIO_COLUMNS.SYMBOL]: 'TOMOP',
+            [PORTFOLIO_COLUMNS.ICON]: tomoIcon,
+            [PORTFOLIO_COLUMNS.BALANCE]: action.data.balance || 0,
+            [PORTFOLIO_COLUMNS.DECIMALS]: 9,
+            [PORTFOLIO_COLUMNS.PRICE]: 1,
+            [PORTFOLIO_COLUMNS.TOKEN_ADDRESS]: '',
+            [PORTFOLIO_COLUMNS.TYPE]: 'TRC21',
+            [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: '0.001',
+            [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
+          }]);
+      case TOGGLE_DEPOSIT_PRIVACY_POPUP:{
+        if (action.bool) {
+          return state
+            .setIn(['depositPrivacyPopup', 'isOpen'], true)
+            .set('depositForm', {
+              ...initialDepositForm,
+              ...(action.initialValues || {}),
+            })
+            .setIn(['depositPrivacyPopup', 'errors'], {});
+        }
+        return state.setIn(['depositPrivacyPopup', 'isOpen'], false);
+      }
+      case UPDATE_DEPOSIT_PRIVACY_ERRORS:
+        return state.setIn(['depositPrivacyPopup', 'errors'], action.errors);
+      case UPDATE_DEPOSIT_PRIVACY_INPUT:
+        return state
+          .setIn(['depositForm', action.name], action.value)
+          .updateIn(['depositPrivacyPopup', 'errors'], errors =>
+            _omit(errors, action.name),
+          );
+      case UPDATE_DEPOSIT_PRIVACY_POPUP_STAGE:
+        return state
+          .setIn(['depositPrivacyPopup', 'stage'], action.stage)
+          .setIn(['depositPrivacyPopup', 'errors'], {});
+      case TOGGLE_DEPOSIT_SUCCESS_POPUP: {
+        const newState = state
+          .setIn(['successDepositPopup', 'isOpen'], action.bool)
+          .setIn(['successDepositPopup', 'txHash'], action.hash);
+        if (!action.bool) {
+          return newState.setIn(
+            ['depositPrivacyPopup', 'stage'],
+            DEPOSIT_STAGES.FORM,
+          );
+        }
+        return newState;
+      }
+      case TOGGLE_WITHDRAW_PRIVACY_POPUP: {
+        if (action.bool) {
+          return state
+            .setIn(['withdrawPrivacyPopup', 'isOpen'], true)
+            .set('withdrawForm', {
+              ...initialWithdrawForm,
+              ...(action.initialValues || {}),
+            })
+            .setIn(['withdrawPrivacyPopup', 'errors'], {});
+        }
+        return state.setIn(['withdrawPrivacyPopup', 'isOpen'], false);
+      }
+      case UPDATE_WITHDRAW_PRIVACY_INPUT:
+        return state
+        .setIn(['withdrawForm', action.name], action.value)
+        .updateIn(['withdrawPrivacyPopup', 'errors'], errors =>
+          _omit(errors, action.name),
+        );
+      case UPDATE_WITHDRAW_PRIVACY_ERRORS:
+        return state.setIn(['withdrawPrivacyPopup', 'errors'], action.errors);
+      case UPDATE_WITHDRAW_PRIVACY_POPUP_STAGE:
+        return state
+          .setIn(['withdrawPrivacyPopup', 'stage'], action.stage)
+          .setIn(['withdrawPrivacyPopup', 'errors'], {});
+      case TOGGLE_WITHDRAW_SUCCESS_POPUP: {
+        const newState = state
+          .setIn(['successWithdrawPopup', 'isOpen'], action.bool)
+          .setIn(['successWithdrawPopup', 'txHash'], action.hash);
+        if (!action.bool) {
+          return newState.setIn(
+            ['withdrawPrivacyPopup', 'stage'],
+            DEPOSIT_STAGES.FORM,
+          );
+        }
+        return newState;
+    }
     default:
       return state;
   }

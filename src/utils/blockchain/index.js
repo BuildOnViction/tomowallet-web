@@ -16,6 +16,7 @@ import {
   subBN,
   toBN,
   weiToDecimals,
+  isPrivacyAddress
 } from './utilities';
 import {
   createWeb3,
@@ -28,6 +29,12 @@ import {
   mnemonicToPrivateKey,
   sendMoney,
   sendToken,
+  getPrivacyAddressInfo,
+  depositPrivacyMoney,
+  getPrivacyBalance,
+  sendMoneyPrivacy,
+  estimatePrivacyFee,
+  withdrawPrivacy,
 } from './wallet';
 
 export {
@@ -44,6 +51,7 @@ export {
   estimateTRC21Fee,
   getBalance,
   getWalletInfo,
+  getPrivacyAddressInfo,
   isAddress,
   isHDPath,
   isHex,
@@ -59,4 +67,10 @@ export {
   subBN,
   toBN,
   weiToDecimals,
+  depositPrivacyMoney,
+  getPrivacyBalance,
+  sendMoneyPrivacy,
+  isPrivacyAddress,
+  estimatePrivacyFee,
+  withdrawPrivacy,
 };

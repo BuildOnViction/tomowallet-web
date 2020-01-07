@@ -76,6 +76,10 @@ export default defineMessages({
     id: `${buttonPrefix}.deposit`,
     defaultMessage: 'Deposit',
   },
+  COMMON_BUTTON_WITHDRAW: {
+    id: `${buttonPrefix}.withdraw`,
+    defaultMessage: 'Withdraw',
+  },
   // Common - Lists
   COMMON_LIST_LANGUAGE_ENGLISH: {
     id: `${listPrefix}.language.english`,
@@ -105,6 +109,14 @@ export default defineMessages({
   HEADER_NAVBAR_OPTION_FAQS: {
     id: `${navbarPrefix}.option.faqs`,
     defaultMessage: 'FAQ',
+  },
+  HEADER_NAVBAR_PRIVACY_MOD: {
+    id: `${navbarPrefix}.privacy.mode`,
+    defaultMessage: 'Switch to Incognito mode',
+  },
+  HEADER_NAVBAR_NORMAL_MOD: {
+    id: `${navbarPrefix}.privacy.mode`,
+    defaultMessage: 'Switch to normal mode',
   },
   HEADER_NAVBAR_OPTION_MY_WALLET: {
     id: `${navbarPrefix}.option.mywallet`,
@@ -605,6 +617,10 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.section.address.title`,
     defaultMessage: 'Address',
   },
+  MY_WALLET_SECTION_PRIVACY_ADDRESS_TITLE: {
+    id: `${myWalletPagePrefix}.section.address.title`,
+    defaultMessage: 'Privacy Address',
+  },
   MY_WALLET_SECTION_EXCHANGE_CHART_RANK: {
     id: `${myWalletPagePrefix}.section.exchange.chart.rank`,
     defaultMessage: 'Rank',
@@ -636,6 +652,10 @@ export default defineMessages({
   MY_WALLET_TABLE_PORTFOLIO_HEADER_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
     defaultMessage: 'Balance',
+  },
+  MY_WALLET_TABLE_PORTFOLIO_PRIVACY_HEADER_BALANCE: {
+    id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
+    defaultMessage: 'Incognito Balance',
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.value`,
@@ -697,6 +717,14 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.popup.sendtoken.title`,
     defaultMessage: 'Send',
   },
+  MY_WALLET_POPUP_DEPOSIT_PRIVACY_TITLE: {
+    id: `${myWalletPagePrefix}.popup.deposit.title`,
+    defaultMessage: 'Deposit',
+  },
+  MY_WALLET_POPUP_WITHDRAW_PRIVACY_TITLE: {
+    id: `${myWalletPagePrefix}.popup.withdraw.title`,
+    defaultMessage: 'Withdraw',
+  },
   MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL: {
     id: `${myWalletPagePrefix}.popup.sendtoken.input.token.label`,
     defaultMessage: 'Token',
@@ -757,6 +785,10 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.popup.sendtoken.error.recipient.invalid`,
     defaultMessage: 'This recipient is invalid',
   },
+  MY_WALLET_POPUP_SEND_TOKEN_ERROR_PRIVACY_RECIPIENT_INVALID: {
+    id: `${myWalletPagePrefix}.popup.sendtoken.error.privacy.recipient.invalid`,
+    defaultMessage: 'This privacy recipient is invalid',
+  },
   MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED: {
     id: `${myWalletPagePrefix}.popup.sendtoken.error.amount.required`,
     defaultMessage: 'Please enter an amount of token',
@@ -780,6 +812,14 @@ export default defineMessages({
   MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_SENT: {
     id: `${myWalletPagePrefix}.popup.success.info.amountsent`,
     defaultMessage: 'You have sent',
+  },
+  MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_DEPOSIT: {
+    id: `${myWalletPagePrefix}.popup.success.info.amount.deposit`,
+    defaultMessage: 'You have deposit',
+  },
+  MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_WITHDRAW: {
+    id: `${myWalletPagePrefix}.popup.success.info.amount.withdraw`,
+    defaultMessage: 'You have withdrawn',
   },
   MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH: {
     id: `${myWalletPagePrefix}.popup.success.info.transactionhash`,
@@ -812,6 +852,10 @@ export default defineMessages({
   MY_WALLET_POPUP_RECEIVE_TOKEN_ERROR_AMOUNT_INVALID: {
     id: `${myWalletPagePrefix}.popup.receivetoken.error.amount.invalid`,
     defaultMessage: 'Given amount is invalid.',
+  },
+  MY_WALLET_TABLE_PORTFOLIO_HEADER_PRIVACY_BALANCE: {
+    id: `${myWalletPagePrefix}.table.portfolio.header.privacy.balance`,
+    defaultMessage: 'Privacy Balance',
   },
 });
 // ====================

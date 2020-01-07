@@ -16,7 +16,7 @@ import QRCode from 'qrcode.react';
 import { BoxImages, TextBlue } from '../../../../../../styles';
 // Utilities & Constants
 import { withIntl } from '../../../../../../components/IntlProvider';
-import { selectWallet } from '../../../../../Global/selectors';
+import { selectWallet, selectPrivacyMode } from '../../../../../Global/selectors';
 import { MSG } from '../../../../../../constants';
 // ===================
 
@@ -26,7 +26,10 @@ class ReceiveContent extends PureComponent {
     const {
       intl: { formatMessage },
       wallet,
+      privacyMode
     } = this.props;
+    const address = _get(wallet, 'address', '')
+    const privacyAddress = _get(wallet, ['privacy', 'privacyAddress'], '')
     return (
       <Fragment>
         <div className='text-center'>
@@ -34,11 +37,11 @@ class ReceiveContent extends PureComponent {
         </div>
         <BoxImages className='mt-5 mb-4'>
           <div className='qrc_bd'>
-            <QRCode value={_get(wallet, 'address', '')} />
+            <QRCode value={privacyMode ? privacyAddress.pubAddr : address} />
           </div>
         </BoxImages>
         <div className='text-center text-break'>
-          <TextBlue>{_get(wallet, 'address', '')}</TextBlue>
+          <TextBlue>{privacyMode ? privacyAddress.pubAddr : address}</TextBlue>
         </div>
       </Fragment>
     );
@@ -64,6 +67,7 @@ ReceiveContent.defaultProps = {
 const mapStateToProps = () =>
   createStructuredSelector({
     wallet: selectWallet,
+    privacyMode: selectPrivacyMode,
   });
 const withConnect = connect(mapStateToProps);
 // ======================

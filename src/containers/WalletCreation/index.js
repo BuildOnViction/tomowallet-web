@@ -52,6 +52,7 @@ import {
   injectReducer,
   createWeb3,
   getWalletInfo,
+  getPrivacyAddressInfo,
   setWeb3Info,
   withGlobal,
   isElectron,
@@ -109,6 +110,13 @@ class WalletCreationPage extends PureComponent {
       const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
       getWalletInfo(newWeb3)
         .then(walletInfo => {
+          // get privacy address
+          const privacyObject = getPrivacyAddressInfo(
+            walletInfo.address,
+            recoveryPhrase ? mnemonicToPrivateKey(recoveryPhrase, rpcServer)
+                  : formValues.privateKey, rpcServer);
+          walletInfo.privacy = privacyObject;
+
           this.setState({
             storeData: {
               walletInfo,
@@ -325,5 +333,5 @@ export default compose(
   withIntl,
   withWeb3,
   withRouter,
-  withGlobal,
+  withGlobal
 )(WalletCreationPage);

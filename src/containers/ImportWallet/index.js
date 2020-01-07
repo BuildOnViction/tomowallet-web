@@ -46,7 +46,7 @@ import {
   updateInput,
   loadWalletAddresses,
   toggleAddressPopup,
-  updateChosenWallet
+  updateChosenWallet,
 } from "./actions";
 import reducer from "./reducer";
 import { ROUTE, MSG, ENUM, RPC_SERVER } from "../../constants";
@@ -68,7 +68,8 @@ import {
   getWalletInfo,
   encryptKeystore,
   mnemonicToPrivateKey,
-  trimMnemonic
+  trimMnemonic,
+  getPrivacyAddressInfo
 } from "../../utils";
 import { withWeb3 } from "../../components/Web3";
 import { withIntl } from "../../components/IntlProvider";
@@ -141,7 +142,7 @@ class ImportWallet extends PureComponent {
       onStoreWallet,
       rpcServer,
       toggleLoading,
-      updateWeb3
+      updateWeb3,
     } = this.props;
     const formValues = _get(importWallet, "input", {});
     const keyInputType = _get(
@@ -191,9 +192,18 @@ class ImportWallet extends PureComponent {
           : rpcServer;
         const newWeb3 = createWeb3(accessKey, updatedRpcServer);
         updateWeb3(newWeb3);
+
         getWalletInfo(newWeb3)
           .then(walletInfo => {
+            // get privacy address
+            const privacyObject = getPrivacyAddressInfo(
+              walletInfo.address,
+              formValues.recoveryPhrase ? mnemonicToPrivateKey(formValues.recoveryPhrase, updatedRpcServer)
+                    : formValues.privateKey, updatedRpcServer);
+            walletInfo.privacy = privacyObject;
+
             onStoreWallet(walletInfo);
+
             setWeb3Info({
               loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
               recoveryPhrase: accessKey,
@@ -525,7 +535,7 @@ ImportWallet.propTypes = {
   /** Action to handle input change */
   onUpdateInput: PropTypes.func,
   /** Action to show/hide loading screen */
-  toggleLoading: PropTypes.func
+  toggleLoading: PropTypes.func,
 };
 
 ImportWallet.defaultProps = {
@@ -539,7 +549,7 @@ ImportWallet.defaultProps = {
   onUpdateErrors: () => {},
   onUpdateImportType: () => {},
   onUpdateInput: () => {},
-  toggleLoading: () => {}
+  toggleLoading: () => {},
 };
 // ======================
 
@@ -557,7 +567,7 @@ const mapDispatchToProps = dispatch => ({
   onUpdateChosenWallet: index => dispatch(updateChosenWallet(index)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onUpdateImportType: type => dispatch(updateImportType(type)),
-  onUpdateInput: (name, value) => dispatch(updateInput(name, value))
+  onUpdateInput: (name, value) => dispatch(updateInput(name, value)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

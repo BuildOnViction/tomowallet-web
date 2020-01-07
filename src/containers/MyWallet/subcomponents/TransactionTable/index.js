@@ -34,7 +34,7 @@ class TransactionTable extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (
-      !_isEqual(_get(prevProps, 'wallet'), _get(this.props, 'wallet')) ||
+      !_isEqual(_get(prevProps, ['wallet', 'address']), _get(this.props, ['wallet', 'address'])) ||
       (!_isEqual(_get(prevProps, 'tableType'), _get(this.props, 'tableType')) &&
         _isEqual(
           _get(this.props, 'tableType'),

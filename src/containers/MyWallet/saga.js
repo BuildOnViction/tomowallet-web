@@ -10,11 +10,12 @@ import _get from "lodash.get";
 import _isEmpty from "lodash.isempty";
 // Utilities & Constants
 import request from "../../utils/request";
-import { getNetwork } from "../../utils";
+import { getNetwork, setPrivacyInfo } from "../../utils";
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,
-  LOAD_COIN_DATA
+  LOAD_COIN_DATA,
+  SCAN_PRIVACY_DATA,
 } from "./constants";
 import { API } from "../../constants";
 import {
@@ -22,7 +23,9 @@ import {
   loadTransactionDataSuccess,
   updateSendTokenErrors,
   loadCoinDataSuccess,
-  loadCoinDataFailed
+  loadCoinDataFailed,
+  scanPrivacyDataSuccess,
+    scanPrivacyDataFailed,
 } from "./actions";
 import { toggleLoading } from "../Global/actions";
 // ===================
@@ -39,8 +42,8 @@ export function* loadTokens(actionData) {
     );
 
     if (response) {
-      yield put(toggleLoading(false));
       yield put(loadTokenOptionsSuccess(response));
+      yield put(toggleLoading(false));
     }
   } catch {
     yield put(toggleLoading(false));
@@ -112,10 +115,31 @@ export function* loadCoin() {
   }
 }
 
+export function* scanPrivacy(actionData) {
+  try {
+    yield put(toggleLoading(true));
+      const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {})
+      const address = _get(actionData, ['wallet', 'address'], '')
+      const response = yield call([wallet, wallet.scan]);
+
+      if (response) {
+          response.balance = wallet.balance.toString(10);
+          response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
+          yield put(scanPrivacyDataSuccess(response));
+          setPrivacyInfo({ address, ...wallet.state() });
+          yield put(toggleLoading(false));
+      }   
+  } catch (error) {
+    yield put(toggleLoading(false));
+      yield put(scanPrivacyDataFailed(error))
+  }
+}
+
 function* rootSaga() {
   yield takeLatest(LOAD_TOKEN_OPTIONS, loadTokens);
   yield takeLatest(LOAD_TRANSACTION_DATA, loadTransaction);
   yield takeLatest(LOAD_COIN_DATA, loadCoin);
+  yield takeLatest(SCAN_PRIVACY_DATA, scanPrivacy);
 }
 // ================
 

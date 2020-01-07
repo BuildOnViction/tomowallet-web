@@ -1,6 +1,6 @@
 /**
  *
- * TomoWallet - My Wallet Page - Send Token Popup
+ * TomoWallet - My Wallet Page - Deposit Privacy Popup
  *
  */
 // ===== IMPORTS =====
@@ -15,18 +15,18 @@ import _isEqual from 'lodash.isequal';
 // Custom Components
 import FormContent from './form';
 import ConfirmationContent from './confirmation';
-import { SendTokenPopupStyler } from './style';
+import { DepositprivacyPopupStyler } from './style';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
-import { SEND_TOKEN_STAGES } from '../../../constants';
+import { DEPOSIT_STAGES } from '../../../constants';
 import { selectWallet, selectPrivacyMode } from '../../../../Global/selectors';
 import { withGlobal } from '../../../../../utils';
 import { selectPrivacyData } from '../../../selectors';
 // ===================
 
 // ===== MAIN COMPONENT =====
-class SendTokenPopup extends PureComponent {
+class DepositPrivacyPopup extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -48,7 +48,7 @@ class SendTokenPopup extends PureComponent {
       ) &&
         _isEqual(
           _get(this.props, 'popupData.stage'),
-          SEND_TOKEN_STAGES.FORM,
+          DEPOSIT_STAGES.FORM,
         )) ||
       (_get(prevProps, 'loading') && !_get(this.props, 'loading'))
     ) {
@@ -63,39 +63,39 @@ class SendTokenPopup extends PureComponent {
 
   handleGetButtonConfig() {
     const {
-      confirmBeforeSend,
+      confirmBeforeDeposit,
       intl: { formatMessage },
       popupData,
-      submitSendToken,
-      updateSendTokenPopupStage,
+      submitDeposit,
+      updateDepositPrivacyPopupStage,
       privacyMode,
     } = this.props;
     const { isRequested } = this.state;
 
     return (
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
+      (_get(popupData, 'stage') === DEPOSIT_STAGES.FORM && {
         primary: {
-          action: confirmBeforeSend,
+          action: confirmBeforeDeposit,
           btnYellow: true,
-          label: formatMessage(MSG.COMMON_BUTTON_SEND),
+          label: formatMessage(MSG.COMMON_BUTTON_DEPOSIT),
         },
         secondary: {
           action: this.handleClosePopup,
           label: formatMessage(MSG.COMMON_BUTTON_BACK),
         },
       }) ||
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
+      (_get(popupData, 'stage') === DEPOSIT_STAGES.CONFIRMATION && {
         primary: {
           action: () => {
             this.handleSendRequest(true);
-            submitSendToken(privacyMode);
+            submitDeposit(privacyMode);
           },
           btnYellow: true,
           label: formatMessage(MSG.COMMON_BUTTON_CONFIRM),
           disabled: isRequested,
         },
         secondary: {
-          action: () => updateSendTokenPopupStage(SEND_TOKEN_STAGES.FORM),
+          action: () => updateDepositPrivacyPopupStage(DEPOSIT_STAGES.FORM),
           label: formatMessage(MSG.COMMON_BUTTON_BACK),
         },
       }) ||
@@ -116,7 +116,7 @@ class SendTokenPopup extends PureComponent {
       privacyData,
     } = this.props;
     return (
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
+      (_get(popupData, 'stage') === DEPOSIT_STAGES.FORM && {
         Content: FormContent,
         getContentProps: {
           addFullAmount,
@@ -126,10 +126,10 @@ class SendTokenPopup extends PureComponent {
           tokenOptions,
           updateInput,
           privacyMode,
-          privacyData
+          wallet,
         },
       }) ||
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
+      (_get(popupData, 'stage') === DEPOSIT_STAGES.CONFIRMATION && {
         Content: ConfirmationContent,
         getContentProps: {
           errors: _get(popupData, 'errors', {}),
@@ -154,11 +154,11 @@ class SendTokenPopup extends PureComponent {
     } = this.props;
 
     return (
-      <SendTokenPopupStyler
+      <DepositprivacyPopupStyler
         button={this.handleGetButtonConfig()}
         {...this.handleGetContentConfig()}
         isOpen={_get(popupData, 'isOpen', false)}
-        title={formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_TITLE)}
+        title={formatMessage(MSG.MY_WALLET_POPUP_DEPOSIT_PRIVACY_TITLE)}
         toggle={this.handleClosePopup}
       />
     );
@@ -167,13 +167,13 @@ class SendTokenPopup extends PureComponent {
 // ==========================
 
 // ===== PROP TYPES =====
-SendTokenPopup.propTypes = {
+DepositPrivacyPopup.propTypes = {
   /** Action to add full amount of token into form */
   addFullAmount: PropTypes.func,
   /** Action to hide popup */
   closePopup: PropTypes.func,
   /** Action to validate form before send */
-  confirmBeforeSend: PropTypes.func,
+  confirmBeforeDeposit: PropTypes.func,
   /** Send token form's values object */
   formValues: PropTypes.object,
   /** React Intl's instance object */
@@ -182,30 +182,30 @@ SendTokenPopup.propTypes = {
   loading: PropTypes.bool,
   /** Popup's object data */
   popupData: PropTypes.object,
-  /** Action to submit send token's form */
-  submitSendToken: PropTypes.func,
+  /** Action to submit deposit privacy form */
+  submitDeposit: PropTypes.func,
   /** List of token's data */
   tokenOptions: PropTypes.arrayOf(PropTypes.object),
   /** Action to handle input change in send token form */
   updateInput: PropTypes.func,
   /** Action to update send token popup's stage of content */
-  updateSendTokenPopupStage: PropTypes.func,
+  updateDepositPrivacyPopupStage: PropTypes.func,
   /** Wallet's information */
   wallet: PropTypes.object,
 };
 
-SendTokenPopup.defaultProps = {
+DepositPrivacyPopup.defaultProps = {
   addFullAmount: () => {},
   closePopup: () => {},
-  confirmBeforeSend: () => {},
+  confirmBeforeDeposit: () => {},
   formValues: {},
   intl: {},
   loading: false,
   popupData: {},
-  submitSendToken: () => {},
+  submitDeposit: () => {},
   tokenOptions: [],
   updateInput: () => {},
-  updateSendTokenPopupStage: () => {},
+  updateDepositPrivacyPopupStage: () => {},
   wallet: {},
 };
 // ======================
@@ -224,4 +224,4 @@ export default compose(
   withConnect,
   withGlobal,
   withIntl,
-)(SendTokenPopup);
+)(DepositPrivacyPopup);

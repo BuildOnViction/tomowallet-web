@@ -19,17 +19,21 @@ import _isEmpty from 'lodash.isempty';
 import CommonTable from '../../../../components/Table';
 import { BoxPortfolio } from './style';
 // Utilities, Constants & Style
-import { loadTokenOptions } from '../../actions';
+import { loadTokenOptions, scanPrivacyData, } from '../../actions';
 import {
   selectTokenOptions,
   selectSuccessPopup,
   selectTableType,
   selectCoinData,
+  selectPrivacyData,
+  selectSuccessDepositPopup,
+  selectSuccessWithdrawPopup,
 } from '../../selectors';
 import { withIntl } from '../../../../components/IntlProvider';
 import portfolioConfig from './configuration';
+import portfolioPrivacyConfig from './privacy-configuration';
 import { PORTFOLIO_COLUMNS } from '../../constants';
-import { selectWallet } from '../../../Global/selectors';
+import { selectWallet, selectPrivacyMode } from '../../../Global/selectors';
 import { LIST, ENUM } from '../../../../constants';
 import tomoIcon from '../../../../assets/images/logo-tomo.png';
 // ===================
@@ -52,14 +56,19 @@ class PortfolioTable extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      !_isEqual(_get(prevProps, 'wallet'), _get(this.props, 'wallet')) ||
+      !_isEqual(_get(prevProps, ['wallet', 'address']), _get(this.props, ['wallet', 'address'])) ||
       (!_get(prevProps, 'successPopup.isOpen') &&
         _get(this.props, 'successPopup.isOpen')) ||
       (!_isEqual(_get(prevProps, 'tableType'), _get(this.props, 'tableType')) &&
         _isEqual(
           _get(this.props, 'tableType'),
           _get(LIST, ['MY_WALLET_TABLE_TYPES', 0, 'value']),
-        ))
+        )) ||
+        !_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode')) ||
+        (!_get(prevProps, 'successDepositPopup.isOpen') &&
+        _get(this.props, 'successDepositPopup.isOpen')) ||
+        (!_get(prevProps, 'successWithdrawPopup.isOpen') &&
+        _get(this.props, 'successWithdrawPopup.isOpen'))
     ) {
       this.handleLoadTokenOptions();
     }
@@ -83,13 +92,17 @@ class PortfolioTable extends Component {
   }
 
   handleLoadTokenOptions() {
-    const { onLoadTokenOptions, wallet } = this.props;
-    onLoadTokenOptions(
-      {
-        address: _get(wallet, 'address', ''),
-      },
-      this.handleGetNativeCurrency(),
-    );
+    const { onLoadTokenOptions, wallet, privacyMode, onScanPrivacyData } = this.props;
+    if (privacyMode) {
+      onScanPrivacyData(wallet);
+    } else {
+      onLoadTokenOptions(
+        {
+          address: _get(wallet, 'address', ''),
+        },
+        this.handleGetNativeCurrency(),
+      );
+    }
   }
 
   render() {
@@ -97,16 +110,26 @@ class PortfolioTable extends Component {
       data,
       intl: { formatMessage },
       openSendTokenPopup,
+      privacyMode,
+      privacyData,
+      openDepositPrivacyPopup,
+      openWithdrawPrivacyPopup,
     } = this.props;
+
+    let dt = privacyMode ? privacyData : data
+    let cf = privacyMode ? portfolioPrivacyConfig : portfolioConfig
 
     return (
       <BoxPortfolio>
         <CommonTable
-          data={data}
-          setConfig={portfolioConfig}
+          data={dt}
+          setConfig={cf}
           getConfigProps={{
             formatMessage,
             openSendTokenPopup,
+            privacyMode,
+            openDepositPrivacyPopup,
+            openWithdrawPrivacyPopup
           }}
           getTableProps={{
             minRows: 3,
@@ -140,6 +163,16 @@ PortfolioTable.propTypes = {
   onLoadTokenOptions: PropTypes.func,
   /** Action to show send token popup */
   openSendTokenPopup: PropTypes.func,
+  /**Action to scan privacy data */
+  onScanPrivacyData: PropTypes.func,
+  /** Action to show deposit privacy popup */
+  openDepositPrivacyPopup: PropTypes.func,
+  /** Success Deposit popup's data */
+  successDepositPopup: PropTypes.object,
+  /** Action to open withdraw privacy popup */
+  openWithdrawPrivacyPopup: PropTypes.func,
+  /** Success Withdraw popup's data */
+  successWithdrawPopup: PropTypes.object,
 };
 
 PortfolioTable.defaultProps = {
@@ -151,6 +184,11 @@ PortfolioTable.defaultProps = {
   tableType: '1',
   onLoadTokenOptions: () => {},
   openSendTokenPopup: () => {},
+  onScanPrivacyData: () => {},
+  openDepositPrivacyPopup: () => {},
+  successDepositPopup: {},
+  openWithdrawPrivacyPopup: () => {},
+  successWithdrawPopup: {},
 };
 // ======================
 
@@ -162,10 +200,15 @@ const mapStateToProps = () =>
     successPopup: selectSuccessPopup,
     tableType: selectTableType,
     wallet: selectWallet,
+    privacyMode: selectPrivacyMode,
+    privacyData: selectPrivacyData,
+    successDepositPopup: selectSuccessDepositPopup,
+    successWithdrawPopup: selectSuccessWithdrawPopup
   });
 const mapDispatchToProps = dispatch => ({
   onLoadTokenOptions: (params, initialTokens) =>
     dispatch(loadTokenOptions(params, initialTokens)),
+  onScanPrivacyData: wallet => dispatch(scanPrivacyData(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,
