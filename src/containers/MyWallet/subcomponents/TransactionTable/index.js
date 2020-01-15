@@ -69,8 +69,6 @@ class TransactionTable extends PureComponent {
       privacyTransData,
       privacyMode,
     } = this.props;
-    console.log(!privacyMode)
-
     let dt = !privacyMode ? _get(privacyTransData, 'data', []) : _get(transData, 'data', [])
     let cf = !privacyMode ? privacyTransactionConfig : transactionConfig
 
@@ -83,8 +81,8 @@ class TransactionTable extends PureComponent {
             formatMessage,
           }}
           getTableProps={{
-            defaultPageSize: 5,
-            minRows: 5,
+            defaultPageSize: 20,
+            minRows: 10,
             getPaginationProps: () => ({
               changePage: this.handleLoadTransactionData,
               currentPage: _get(transData, 'page', 1),

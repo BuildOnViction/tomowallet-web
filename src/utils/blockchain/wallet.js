@@ -150,6 +150,10 @@ const getPrivacyAddressInfo = (address, accessKey, serverConfig) => {
       RPC_END_POINT: 'http://206.189.39.242:8545' //serverConfig.host
     });
 
+    privacyWallet.on('NEW_TRANSACTION', data => {
+      console.log(data)
+    })
+
     if (wallet && wallet.scannedTo) {
       privacyWallet.state(wallet);
     }
@@ -453,6 +457,18 @@ const withdrawPrivacy = (web3, wallet, amount) => {
  */
 const getLastUTXO = (wallet) => {
   return new UTXO(wallet.utxos[wallet.utxos.length - 1])
+};
+
+/**
+ * checkSpentUTXO
+ *
+ * Execute token transfer contract
+ * @param {Wallet} wallet A Web3 object with supported APIs
+ * @param {Array} utxos An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const checkSpentUTXO = (wallet, utxos) => {
+  return wallet.areSpent(utxos)
 };
 // ===================
 

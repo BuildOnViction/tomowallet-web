@@ -263,9 +263,6 @@ class MyWallet extends PureComponent {
     const {
       onUpdateDepositPrivacyErrors,
       toggleLoading,
-      web3,
-      wallet,
-      depositForm,
 		} = this.props;
     const errorList = this.handleValidationDepositPrivacyForm();
 
@@ -277,8 +274,11 @@ class MyWallet extends PureComponent {
     } else {
       toggleLoading(true);
       try {
+<<<<<<< HEAD
         console.log(11111)
         console.log(222222)
+=======
+>>>>>>> 28b0993b0bed6c1fa167ec01b201a11b1261a088
         const feeObj = {
 					type: 'TRC21',
 					amount: '0.0001',
@@ -493,7 +493,7 @@ class MyWallet extends PureComponent {
       toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
       this.handleCloseWithdrawPrivacyPopup();
-      onToggleSuccessWithdrawPopup(true, _get(data, 'transactionHash', ''));
+      onToggleSuccessWithdrawPopup(true, _get(data, '0', 'transactionHash', ''));
     }).catch(this.handleTransactionError);
   }
 
@@ -841,14 +841,9 @@ class MyWallet extends PureComponent {
       0
     );
     const balance =  decimalsToBN(
-      _get(
-        depositForm,
-        [DEPOSIT_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
-        0
-      ),
+      _get(wallet, 'balance', 0),
       decimals
     )
-    console.log('balance', balance, 'decimals', decimals)
 
     const remainBalance = subBN(
       web3.utils.toBN(balance),

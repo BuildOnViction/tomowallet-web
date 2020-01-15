@@ -138,9 +138,6 @@ export function* scanPrivacy(actionData) {
     yield put(scanPrivacyDataFailed(error))
   }
 }
-// txindex = 200 --> scan 150 ...200
-// checkOwner --> 20 txs --> state --> f5 --> reset privacy tx state
-// 5 perpage --> 4 pages
 
 export function* scanPrivacyTransaction(actionData) {
   try {
@@ -152,35 +149,29 @@ export function* scanPrivacyTransaction(actionData) {
     const lastUTXO = getLastUTXO(wallet).txID
 
     const last30Txs = []
-    for (let i = lastUTXO - 30; i <= lastUTXO; i++) {
+    for (let i = lastUTXO - 48; i <=lastUTXO; i++) {
       last30Txs.push(i)
     }
     const response = yield call([wallet, wallet.getTxs], last30Txs);
-    console.log(response)
 
     const result = []
-    // for (let i = 0; i < response.length; i++) {
-      console.log("response[30] ", response[29])
+    for (let i = 0; i < response.length; i++) {
 
-      const data = _map(response[29][1], byte => byte.substr(2, 2)).join('');
-    console.log("data ", Buffer.from(data, 'hex'))
-    console.log("data.length ", Buffer.from(data, 'hex').length)
-      const owner = yield call([wallet, wallet.checkTxOwnership], response[29][0], Buffer.from(data, 'hex'))
-      console.log("owner ", owner)
+      const data = _map(response[i][1], byte => byte.substr(2, 2)).join('');
+      const owner = yield call([wallet, wallet.checkTxOwnership], response[i][0], Buffer.from(data, 'hex'))
       
       if (owner) {
         result.push({
           createdTime: parseInt(owner.createdAt),
-          from: privacyAddress,
+          from: owner.receiver === privacyAddress ? address : privacyAddress,
           to: owner.receiver,
           amount: bnToDecimals(owner.amount, 9)
         })
       }
-    // }
-    console.log(result)
+    }
     yield put(scanPrivacyTransactionSuccess({
       items: result,
-      // currentPage: params.page,
+      currentPage: 1,
       total: 500,
       pages: 10,
       address: privacyAddress
