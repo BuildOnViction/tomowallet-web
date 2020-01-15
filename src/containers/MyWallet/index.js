@@ -232,7 +232,7 @@ class MyWallet extends PureComponent {
     } else {
       toggleLoading(true);
       try {
-        if (privacyMode) {
+        if (!privacyMode) {
           const fee = estimatePrivacyFee(web3,
             _get(wallet, ['privacy', 'privacyWallet'], {}),
             _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0))
@@ -263,9 +263,6 @@ class MyWallet extends PureComponent {
     const {
       onUpdateDepositPrivacyErrors,
       toggleLoading,
-      web3,
-      wallet,
-      depositForm,
 		} = this.props;
     const errorList = this.handleValidationDepositPrivacyForm();
 
@@ -276,13 +273,11 @@ class MyWallet extends PureComponent {
     } else {
       toggleLoading(true);
       try {
-        const fee = estimatePrivacyFee(web3,
-          _get(wallet, ['privacy', 'privacyWallet'], {}),
-          _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT], 0))
-				this.handleValidateDepositFee({
+        const feeObj = {
 					type: 'TRC21',
-					amount: bnToDecimals(fee, 18),
-        })
+					amount: '0.0001',
+        }
+				this.handleValidateDepositFee(feeObj)
       } catch (error) {
         this.handleConfirmationError(error.message);
       }
@@ -350,7 +345,7 @@ class MyWallet extends PureComponent {
     const loginType = _get(getWeb3Info(), "loginType");
     let sendAction = () => {};
 
-    if (privacyMode) {
+    if (!privacyMode) {
       sendAction = this.handleSendMoneyPrivacy
     } else {
       if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
@@ -377,7 +372,7 @@ class MyWallet extends PureComponent {
   handleGetDepositAction(privacyMode) {
     const loginType = _get(getWeb3Info(), "loginType");
     let depositAction = () => {};
-    if (privacyMode) {
+    if (!privacyMode) {
       if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
         depositAction = this.handleDepositPrivacyByPk;
       }
@@ -388,7 +383,7 @@ class MyWallet extends PureComponent {
   handleGetWithdrawAction(privacyMode) {
     const loginType = _get(getWeb3Info(), "loginType");
     let withDrawAction = () => {};
-    if (privacyMode) {
+    if (!privacyMode) {
       if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
         withDrawAction = this.handleWithdrawPrivacyByPk;
       }
@@ -491,7 +486,7 @@ class MyWallet extends PureComponent {
       toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
       this.handleCloseWithdrawPrivacyPopup();
-      onToggleSuccessWithdrawPopup(true, _get(data, 'transactionHash', ''));
+      onToggleSuccessWithdrawPopup(true, _get(data, '0', 'transactionHash', ''));
     }).catch(this.handleTransactionError);
   }
 
@@ -831,13 +826,17 @@ class MyWallet extends PureComponent {
       wallet,
       web3,
     } = this.props;
-    const balance = _get(wallet, 'balance', 0);
+    // const balance = _get(wallet, 'balance', 0);
 
     const decimals = _get(
       depositForm,
       [DEPOSIT_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
       0
     );
+    const balance =  decimalsToBN(
+      _get(wallet, 'balance', 0),
+      decimals
+    )
 
     const remainBalance = subBN(
       web3.utils.toBN(balance),
@@ -974,7 +973,7 @@ class MyWallet extends PureComponent {
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED)
       ),
-      privacyMode ?
+      !privacyMode ?
         isPrivacyWallet(
           {
             name: SEND_TOKEN_FIELDS.RECIPIENT,
@@ -1128,22 +1127,22 @@ class MyWallet extends PureComponent {
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED)
       ),
-      isMaxNumber(
-        {
-          name: DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
-          value: _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
-          max: parseFloat(
-              bnToDecimals(
-                _get(wallet, 'balance', 0),
-                _get(depositForm, [
-                  DEPOSIT_PRIVACY_FIELDS.TOKEN,
-                  PORTFOLIO_COLUMNS.DECIMALS
-                ])
-              )
-            )
-        },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
-      ),
+      // isMaxNumber(
+      //   {
+      //     name: DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+      //     value: _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+      //     max: parseFloat(
+      //         bnToDecimals(
+      //           _get(wallet, 'balance', 0),
+      //           _get(depositForm, [
+      //             DEPOSIT_PRIVACY_FIELDS.TOKEN,
+      //             PORTFOLIO_COLUMNS.DECIMALS
+      //           ])
+      //         )
+      //       )
+      //   },
+      //   formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
+      // ),
       isMinNumber(
         {
           name: DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,

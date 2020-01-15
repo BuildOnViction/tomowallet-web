@@ -16,7 +16,7 @@ import trc21Issuer from './abi/trc21Issuer.json';
 import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
-import { Address as AdUtil, Wallet } from '/home/pqv/Desktop/XXX/privacyjs';
+import { Address as AdUtil, Wallet, UTXO } from '/home/pqv/Desktop/XXX/privacyjs/dist';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
@@ -149,6 +149,11 @@ const getPrivacyAddressInfo = (address, accessKey, serverConfig) => {
       gasPrice: 2500000,
       RPC_END_POINT: 'http://206.189.39.242:8545' //serverConfig.host
     });
+
+    privacyWallet.on('NEW_TRANSACTION', data => {
+      console.log(data)
+    })
+
     if (wallet && wallet.scannedTo) {
       privacyWallet.state(wallet);
     }
@@ -441,6 +446,30 @@ const withdrawPrivacy = (web3, wallet, amount) => {
     );
   }
 };
+
+/**
+ * getLastUTXO
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Wallet} wallet An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const getLastUTXO = (wallet) => {
+  return new UTXO(wallet.utxos[wallet.utxos.length - 1])
+};
+
+/**
+ * checkSpentUTXO
+ *
+ * Execute token transfer contract
+ * @param {Wallet} wallet A Web3 object with supported APIs
+ * @param {Array} utxos An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const checkSpentUTXO = (wallet, utxos) => {
+  return wallet.areSpent(utxos)
+};
 // ===================
 
 export {
@@ -459,5 +488,6 @@ export {
   getPrivacyBalance,
   sendMoneyPrivacy,
   estimatePrivacyFee,
-  withdrawPrivacy
+  withdrawPrivacy,
+  getLastUTXO
 };

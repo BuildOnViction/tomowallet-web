@@ -50,6 +50,8 @@ import {
   UPDATE_WITHDRAW_PRIVACY_ERRORS,
   TOGGLE_WITHDRAW_SUCCESS_POPUP,
   UPDATE_WITHDRAW_PRIVACY_POPUP_STAGE,
+  SCAN_PRIVACY_TRANSACTION,
+  SCAN_PRIVACY_TRANSACTION_SUCCESS,
 } from './constants';
 import { LIST } from '../../constants';
 import tomoIcon from '../../assets/images/logo-tomo.png';
@@ -98,6 +100,12 @@ const initialState = fromJS({
   tableType: LIST.MY_WALLET_TABLE_TYPES[0].value,
   tokenOptions: [],
   transactionTable: {
+    data: [],
+    page: 1,
+    pages: 1,
+    total: 0,
+  },
+  privacyTransactionTable: {
     data: [],
     page: 1,
     pages: 1,
@@ -344,7 +352,26 @@ export default (state = initialState, action) => {
           );
         }
         return newState;
-    }
+      }
+      case SCAN_PRIVACY_TRANSACTION:
+      return state.setIn(['privacyTransactionTable', 'data'], []);
+      case SCAN_PRIVACY_TRANSACTION_SUCCESS:
+        return state.set('privacyTransactionTable', {
+          data: _get(action, 'tableData.items', []).map(trans => ({
+            [TRANSACTION_COLUMNS.TOKEN_TYPE]: 'TOMOP',
+            [TRANSACTION_COLUMNS.CREATE_TIME]: moment(
+              _isNumber(trans.createdTime)
+                ? Number(`${trans.createdTime}000`)
+                : trans.createdTime,
+            ),
+            [TRANSACTION_COLUMNS.FROM]: trans.from,
+            [TRANSACTION_COLUMNS.TO]: trans.to,
+            [TRANSACTION_COLUMNS.QUANTITY]: trans.amount,
+          })),
+          page: _get(action, 'tableData.currentPage', 1),
+          total: _get(action, 'tableData.total', 0),
+          pages: _get(action, 'tableData.pages', 1),
+        });
     default:
       return state;
   }
