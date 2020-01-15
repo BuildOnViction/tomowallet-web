@@ -18,10 +18,11 @@ import { BoxTransaction } from './style';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import transactionConfig from './configuration';
-import { selectTransactionData, selectTableType } from '../../selectors';
-import { loadTransactionData } from '../../actions';
+import privacyTransactionConfig from './privacy-config';
+import { selectTransactionData, selectTableType, selectPrivacyTransactionData } from '../../selectors';
+import { loadTransactionData, scanPrivacyTransaction } from '../../actions';
 import { LIST } from '../../../../constants';
-import { selectWallet } from '../../../Global/selectors';
+import { selectWallet, selectPrivacyMode } from '../../../Global/selectors';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -31,39 +32,53 @@ class TransactionTable extends PureComponent {
 
     this.handleLoadTransactionData = this.handleLoadTransactionData.bind(this);
   }
-
   componentDidUpdate(prevProps) {
     if (
-      !_isEqual(_get(prevProps, ['wallet', 'address']), _get(this.props, ['wallet', 'address'])) ||
       (!_isEqual(_get(prevProps, 'tableType'), _get(this.props, 'tableType')) &&
         _isEqual(
           _get(this.props, 'tableType'),
           _get(LIST, ['MY_WALLET_TABLE_TYPES', 1, 'value']),
-        ))
+        )) ||
+        !_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode'))
     ) {
       this.handleLoadTransactionData();
     }
   }
 
   handleLoadTransactionData(newPage) {
-    const { onLoadTransactionData, wallet } = this.props;
-    onLoadTransactionData({
-      page: newPage || 1,
-      address: _get(wallet, 'address', ''),
-    });
+    const {
+      onLoadTransactionData,
+      wallet,
+      privacyMode,
+      onLoadPrivacyTransaction
+    } = this.props;
+    if (!privacyMode) {
+      onLoadPrivacyTransaction(wallet);
+    } else {
+      onLoadTransactionData({
+        page: newPage || 1,
+        address: _get(wallet, 'address', ''),
+      });
+    }
   }
 
   render() {
     const {
       intl: { formatMessage },
       transData,
+      privacyTransData,
+      privacyMode,
     } = this.props;
+    console.log(!privacyMode)
+
+    let dt = !privacyMode ? _get(privacyTransData, 'data', []) : _get(transData, 'data', [])
+    let cf = !privacyMode ? privacyTransactionConfig : transactionConfig
 
     return (
       <BoxTransaction>
         <CommonTable
-          data={_get(transData, 'data', [])}
-          setConfig={transactionConfig}
+          data={dt}
+          setConfig={cf}
           getConfigProps={{
             formatMessage,
           }}
@@ -93,6 +108,8 @@ TransactionTable.propTypes = {
   transData: PropTypes.object,
   /** Current wallet's data */
   wallet: PropTypes.object,
+  /** Transaction table's privacy data */
+  privacyTransData: PropTypes.object,
 };
 
 TransactionTable.defaultProps = {
@@ -109,9 +126,12 @@ const mapStateToProps = () =>
     transData: selectTransactionData,
     tableType: selectTableType,
     wallet: selectWallet,
+    privacyMode: selectPrivacyMode,
+    privacyTransData: selectPrivacyTransactionData,
   });
 const mapDispatchToProps = dispatch => ({
   onLoadTransactionData: params => dispatch(loadTransactionData(params)),
+  onLoadPrivacyTransaction: wallet => dispatch(scanPrivacyTransaction(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,

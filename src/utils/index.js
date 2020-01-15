@@ -48,6 +48,7 @@ import {
   isPrivacyAddress,
   estimatePrivacyFee,
   withdrawPrivacy,
+  getLastUTXO
 } from './blockchain';
 import validations, { mergeErrors } from './validations';
 import { withGlobal } from './injectGlobal';
@@ -150,4 +151,5 @@ export {
   isPrivacyAddress,
   estimatePrivacyFee,
   withdrawPrivacy,
+  getLastUTXO
 };
