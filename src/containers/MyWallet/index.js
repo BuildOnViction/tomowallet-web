@@ -267,25 +267,18 @@ class MyWallet extends PureComponent {
     const errorList = this.handleValidationDepositPrivacyForm();
 
     const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
-    console.log(errorList)
 
     if (!_isEmpty(errorList)) {
       onUpdateDepositPrivacyErrors(errorList);
     } else {
       toggleLoading(true);
       try {
-<<<<<<< HEAD
-        console.log(11111)
-        console.log(222222)
-=======
->>>>>>> 28b0993b0bed6c1fa167ec01b201a11b1261a088
         const feeObj = {
 					type: 'TRC21',
 					amount: '0.0001',
         }
 				this.handleValidateDepositFee(feeObj)
       } catch (error) {
-        console.log(33333,error)
         this.handleConfirmationError(error.message);
       }
     }
