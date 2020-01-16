@@ -11,6 +11,16 @@ import CryptoJS from 'crypto-js';
 // ===================
 
 // ===== METHODS =====
+const setLocalStorage = (key, object) => {
+  localStorage.setItem(
+    'global',
+    JSON.stringify({
+      ...JSON.parse(localStorage.getItem('global')),
+      [key]: object,
+    }),
+  );
+};
+
 const setStorage = (key, object) => {
   sessionStorage.setItem(
     'global',
@@ -30,6 +40,10 @@ const removeStorage = key => {
   );
 };
 
+const getLocalStorage = key => {
+  return _get(JSON.parse(localStorage.getItem('global')), [key]);
+};
+
 export const setWeb3Info = web3Info => {
   let infoToStore = {
     ...web3Info,
@@ -44,6 +58,16 @@ export const setWeb3Info = web3Info => {
 
   setStorage('web3Info', infoToStore);
 };
+
+// store privacy infor to localstorage (uxto, balance, scannedTo)
+export const setPrivacyInfo = (privacyInfo) => {
+  let infoToStore = {
+    ...privacyInfo
+  };
+
+  setLocalStorage(privacyInfo.address.toString(), infoToStore);
+};
+
 export const getWeb3Info = () => {
   const web3Info = getStorage('web3Info');
   const recoveryPhrase = _get(web3Info, 'recoveryPhrase');
@@ -61,6 +85,13 @@ export const getWeb3Info = () => {
 
   return web3Info;
 };
+
+export const getPrivacyWalletInfo = (address) => {
+  const PrivacyWalletInfo = getLocalStorage(address) || null;
+
+  return PrivacyWalletInfo;
+};
+
 export const removeWeb3Info = () => removeStorage('web3Info');
 
 export const setLocale = locale => setStorage('locale', locale);
@@ -74,4 +105,8 @@ export const removeNetwork = () => removeStorage('network');
 export const setLedger = ledger => setStorage('ledger', ledger);
 export const getLedger = () => getStorage('ledger');
 export const removeLedger = () => removeStorage('ledger');
+
+export const setPrivacy = privacy => setLocalStorage('privacy', privacy);
+export const getPrivacy = () => getLocaleStorage('privacy');
+export const removePrivacy = () => removeStorage('privacy');
 // ===================

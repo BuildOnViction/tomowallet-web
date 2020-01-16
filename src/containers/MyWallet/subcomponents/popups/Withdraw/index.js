@@ -15,18 +15,18 @@ import _isEqual from 'lodash.isequal';
 // Custom Components
 import FormContent from './form';
 import ConfirmationContent from './confirmation';
-import { SendTokenPopupStyler } from './style';
+import { WithdrawPrivacyPopupStyler } from './style';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
-import { SEND_TOKEN_STAGES } from '../../../constants';
+import { WITHDRAW_STAGES } from '../../../constants';
 import { selectWallet, selectPrivacyMode } from '../../../../Global/selectors';
 import { withGlobal } from '../../../../../utils';
 import { selectPrivacyData } from '../../../selectors';
 // ===================
 
 // ===== MAIN COMPONENT =====
-class SendTokenPopup extends PureComponent {
+class WithdrawPopup extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -48,7 +48,7 @@ class SendTokenPopup extends PureComponent {
       ) &&
         _isEqual(
           _get(this.props, 'popupData.stage'),
-          SEND_TOKEN_STAGES.FORM,
+          WITHDRAW_STAGES.FORM,
         )) ||
       (_get(prevProps, 'loading') && !_get(this.props, 'loading'))
     ) {
@@ -66,36 +66,36 @@ class SendTokenPopup extends PureComponent {
       confirmBeforeSend,
       intl: { formatMessage },
       popupData,
-      submitSendToken,
-      updateSendTokenPopupStage,
+      submitWithdraw,
+      updateWithdrawPrivacyPopupStage,
       privacyMode,
     } = this.props;
     const { isRequested } = this.state;
 
     return (
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
+      (_get(popupData, 'stage') === WITHDRAW_STAGES.FORM && {
         primary: {
           action: confirmBeforeSend,
           btnYellow: true,
-          label: formatMessage(MSG.COMMON_BUTTON_SEND),
+          label: formatMessage(MSG.COMMON_BUTTON_WITHDRAW),
         },
         secondary: {
           action: this.handleClosePopup,
           label: formatMessage(MSG.COMMON_BUTTON_BACK),
         },
       }) ||
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
+      (_get(popupData, 'stage') === WITHDRAW_STAGES.CONFIRMATION && {
         primary: {
           action: () => {
             this.handleSendRequest(true);
-            submitSendToken(privacyMode);
+            submitWithdraw(privacyMode);
           },
           btnYellow: true,
           label: formatMessage(MSG.COMMON_BUTTON_CONFIRM),
           disabled: isRequested,
         },
         secondary: {
-          action: () => updateSendTokenPopupStage(SEND_TOKEN_STAGES.FORM),
+          action: () => updateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.FORM),
           label: formatMessage(MSG.COMMON_BUTTON_BACK),
         },
       }) ||
@@ -116,7 +116,7 @@ class SendTokenPopup extends PureComponent {
       privacyData,
     } = this.props;
     return (
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
+      (_get(popupData, 'stage') === WITHDRAW_STAGES.FORM && {
         Content: FormContent,
         getContentProps: {
           addFullAmount,
@@ -129,7 +129,7 @@ class SendTokenPopup extends PureComponent {
           privacyData
         },
       }) ||
-      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
+      (_get(popupData, 'stage') === WITHDRAW_STAGES.CONFIRMATION && {
         Content: ConfirmationContent,
         getContentProps: {
           errors: _get(popupData, 'errors', {}),
@@ -154,11 +154,11 @@ class SendTokenPopup extends PureComponent {
     } = this.props;
 
     return (
-      <SendTokenPopupStyler
+      <WithdrawPrivacyPopupStyler
         button={this.handleGetButtonConfig()}
         {...this.handleGetContentConfig()}
         isOpen={_get(popupData, 'isOpen', false)}
-        title={formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_TITLE)}
+        title={formatMessage(MSG.MY_WALLET_POPUP_WITHDRAW_PRIVACY_TITLE)}
         toggle={this.handleClosePopup}
       />
     );
@@ -167,7 +167,7 @@ class SendTokenPopup extends PureComponent {
 // ==========================
 
 // ===== PROP TYPES =====
-SendTokenPopup.propTypes = {
+WithdrawPopup.propTypes = {
   /** Action to add full amount of token into form */
   addFullAmount: PropTypes.func,
   /** Action to hide popup */
@@ -183,18 +183,18 @@ SendTokenPopup.propTypes = {
   /** Popup's object data */
   popupData: PropTypes.object,
   /** Action to submit send token's form */
-  submitSendToken: PropTypes.func,
+  submitWithdraw: PropTypes.func,
   /** List of token's data */
   tokenOptions: PropTypes.arrayOf(PropTypes.object),
   /** Action to handle input change in send token form */
   updateInput: PropTypes.func,
   /** Action to update send token popup's stage of content */
-  updateSendTokenPopupStage: PropTypes.func,
+  updateWithdrawPrivacyPopupStage: PropTypes.func,
   /** Wallet's information */
   wallet: PropTypes.object,
 };
 
-SendTokenPopup.defaultProps = {
+WithdrawPopup.defaultProps = {
   addFullAmount: () => {},
   closePopup: () => {},
   confirmBeforeSend: () => {},
@@ -202,10 +202,10 @@ SendTokenPopup.defaultProps = {
   intl: {},
   loading: false,
   popupData: {},
-  submitSendToken: () => {},
+  submitWithdraw: () => {},
   tokenOptions: [],
   updateInput: () => {},
-  updateSendTokenPopupStage: () => {},
+  updateWithdrawPrivacyPopupStage: () => {},
   wallet: {},
 };
 // ======================
@@ -224,4 +224,4 @@ export default compose(
   withConnect,
   withGlobal,
   withIntl,
-)(SendTokenPopup);
+)(WithdrawPopup);

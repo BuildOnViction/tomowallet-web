@@ -39,6 +39,7 @@ import {
   toggleWalletPopup,
   setNetwork,
   toggleNetworkConfirmationPopup,
+  togglePrivacyMode,
 } from '../../containers/Global/actions';
 import { ROUTE, LIST, MSG } from '../../constants';
 import {
@@ -54,9 +55,12 @@ import {
 import {
   selectNetworkData,
   selectNetworkConfirmationPopup,
+  selectPrivacyMode,
 } from '../../containers/Global/selectors';
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
 import { removeRPFile } from '../../utils/electron';
+import { MediumButtonStyler } from '../../styles';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // ===== MAIN COMPONENT =====
 class NavigationBar extends PureComponent {
@@ -144,11 +148,17 @@ class NavigationBar extends PureComponent {
       network,
       onToggleNetworkConfirmationPopup,
       onToggleWalletPopup,
+      onTogglePrivacyMode,
+      privacyMode,
     } = this.props;
     const hasPrivateKey = _get(getWeb3Info(), 'recoveryPhrase', false);
 
     return (
       <Fragment>
+        <MediumButtonStyler onClick={() => onTogglePrivacyMode()}>
+            {formatMessage(privacyMode ? MSG.HEADER_NAVBAR_NORMAL_MOD : MSG.HEADER_NAVBAR_PRIVACY_MOD)}
+            {/* <FontAwesomeIcon icon='share' className='ml-2' /> */}
+          </MediumButtonStyler>
         <UncontrolledDropdown nav inNavbar>
           <DropdownToggleHeader nav className='onl'>
             {_get(network, 'data.label')}
@@ -269,10 +279,12 @@ NavigationBar.propTypes = {
   switchRPCServer: PropTypes.func,
   /** Action to show/hide loading screen */
   toggleLoading: PropTypes.func,
+  /** Action to switch normal and incognito screen */
+  onTogglePrivacyMode: PropTypes.func,
 };
 
 NavigationBar.defaultProps = {
-  changeLocaleL: () => {},
+  changeLocale: () => {},
   history: {},
   intl: {},
   isLoggedIn: false,
@@ -287,6 +299,7 @@ NavigationBar.defaultProps = {
   removeMetaMaskProvider: () => {},
   switchRPCServer: () => {},
   toggleLoading: () => {},
+  onTogglePrivacyMode: () => {},
 };
 // ======================
 
@@ -295,6 +308,7 @@ const mapStateToProps = () =>
   createStructuredSelector({
     network: selectNetworkData,
     networkConfirmationPopup: selectNetworkConfirmationPopup,
+    privacyMode: selectPrivacyMode,
   });
 const mapDispatchToProps = dispatch => ({
   onReleaseWallet: () => dispatch(releaseWallet()),
@@ -302,6 +316,7 @@ const mapDispatchToProps = dispatch => ({
   onToggleNetworkConfirmationPopup: (bool, networkOpt) =>
     dispatch(toggleNetworkConfirmationPopup(bool, networkOpt)),
   onToggleWalletPopup: bool => dispatch(toggleWalletPopup(bool)),
+  onTogglePrivacyMode: bool => dispatch(togglePrivacyMode(bool)),
 });
 const withConnect = connect(
   mapStateToProps,

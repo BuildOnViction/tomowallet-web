@@ -30,7 +30,7 @@ import AppStyler from './style';
 import { TextLinkBlue } from '../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../components/Web3';
-import { selectWallet, selectClipboardPopup } from '../Global/selectors';
+import { selectWallet, selectClipboardPopup, selectPrivacyMode } from '../Global/selectors';
 import { storeWallet } from '../Global/actions';
 import { ROUTE, RPC_SERVER, ENUM, MSG } from '../../constants';
 import './app.scss';
@@ -39,6 +39,8 @@ import {
   getBalance,
   getNetwork,
   getWalletInfo,
+  getPrivacyAddressInfo,
+  mnemonicToPrivateKey,
   getWeb3Info,
   withGlobal,
 } from '../../utils';
@@ -67,6 +69,11 @@ class App extends PureComponent {
     if (recoveryPhrase) {
       const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
       getWalletInfo(newWeb3).then(wallet => {
+        const privacyObject = getPrivacyAddressInfo(
+          wallet.address,
+          recoveryPhrase ? mnemonicToPrivateKey(recoveryPhrase, serverConfig)
+                : formValues.privateKey, serverConfig);
+        wallet.privacy = privacyObject
         onStoreWallet(wallet);
       });
     } else if (address) {
@@ -89,12 +96,13 @@ class App extends PureComponent {
     const {
       clipboardData,
       intl: { formatMessage },
+      privacyMode,
     } = this.props;
     const isLoggedIn = this.handleCheckLoggedIn();
 
     return (
       <Router>
-        <AppStyler>
+        <AppStyler style={{ backgroundColor: privacyMode === true ? 'black': undefined}}>
           <LoadingComponent />
           <NavigationBar isLoggedIn={isLoggedIn} />
           <div className='maincontent d-flex d-md-none align-items-center'>
@@ -193,6 +201,7 @@ const mapStateToProps = () =>
   createStructuredSelector({
     clipboardData: selectClipboardPopup,
     wallet: selectWallet,
+    privacyMode: selectPrivacyMode,
   });
 const mapDispatchToProps = dispatch => ({
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),

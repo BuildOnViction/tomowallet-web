@@ -7,6 +7,7 @@
 // Modules
 import Web3 from 'web3';
 import _isEmpty from 'lodash.isempty';
+import { Address as AdUtil } from 'tomoprivacyjs';
 // Utilities
 import { trimMnemonic } from '../miscellaneous';
 // ===================
@@ -311,6 +312,14 @@ const toBN = decimalAmount => web3Utils.toBN(decimalAmount);
 const weiToDecimals = amount => {
   return web3Utils.fromWei(amount);
 };
+
+/**
+ * isPrivacyAddress
+ *
+ * Check if the input string is a valid private key
+ * @param {String} rawData address input's value
+ */
+const isPrivacyAddress = rawData => !!rawData && AdUtil.validate(rawData);
 // ===================
 
 export {
@@ -330,4 +339,5 @@ export {
   subBN,
   toBN,
   weiToDecimals,
+  isPrivacyAddress,
 };

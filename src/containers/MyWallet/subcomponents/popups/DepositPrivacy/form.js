@@ -1,6 +1,6 @@
 /**
  *
- * TomoWallet - My Wallet Page - Send Token Popup - Form
+ * TomoWallet - My Wallet Page - Deposit Privacy Popup - Form
  *
  */
 // ===== IMPORTS =====
@@ -28,16 +28,18 @@ import Select, { components } from 'react-select';
 import Image from '../../../../../components/Image';
 // Utilities & Constants
 import { convertLocaleNumber } from '../../../../../utils';
-import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
+import { PORTFOLIO_COLUMNS, DEPOSIT_PRIVACY_FIELDS } from '../../../constants';
 import { MSG } from '../../../../../constants';
 import { bnToDecimals } from '../../../../../utils';
 // ===================
 
 // ===== SUB-COMPONENTS =====
 const TokenOption = props => {
-  const { innerProps, data } = props;
+  const { innerProps, data, wallet } = props;
   const rawBalance = _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0);
+  // const rawBalance = _get(wallet, 'balance', 0);
   const decimals = _get(data, [PORTFOLIO_COLUMNS.DECIMALS], 0);
+  // const decimals = '18';
   const normalBalance = parseFloat(bnToDecimals(rawBalance, decimals));
 
   return (
@@ -46,9 +48,11 @@ const TokenOption = props => {
         <Col xs={6} className='d-flex align-items-center text-ellipsis'>
           <Image
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
-            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
+            // alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
+            alt='TOMO'
           />
-          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          {/* <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get( */}
+            <span>{`TOMO (${_get(
             data,
             [PORTFOLIO_COLUMNS.PUBLISHER],
             '',
@@ -66,10 +70,12 @@ const TokenOption = props => {
   );
 };
 
-const TokenInputValue = props => {
-  const { data } = props;
-  const rawBalance = _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0);
-  const decimals = _get(data, [PORTFOLIO_COLUMNS.DECIMALS], 0);
+const TokenInputValue = (props) => {
+  const { data, wallet } = props;
+  // const rawBalance = _get(data, [PORTFOLIO_COLUMNS.BALANCE], 0);
+  const rawBalance = _get(wallet, 'balance', 0);
+  // const decimals = _get(data, [PORTFOLIO_COLUMNS.DECIMALS], 0);
+  const decimals = '18';
   const normalBalance = parseFloat(bnToDecimals(rawBalance, decimals));
 
   return (
@@ -78,20 +84,23 @@ const TokenInputValue = props => {
         <Col xs={6} className='d-flex align-items-center text-ellipsis'>
           <Image
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
-            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
+            // alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
+            alt='TOMO'
           />
-          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          {/* <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get( */}
+            <span>{`TOMO (${_get(
             data,
             [PORTFOLIO_COLUMNS.PUBLISHER],
             '',
           )})`}</span>
         </Col>
         <Col xs={6} className='text-right text-ellipsis'>
-          {`${convertLocaleNumber(normalBalance)} ${_get(
+        {`${convertLocaleNumber(normalBalance)} TOMO`}
+          {/* {`${convertLocaleNumber(normalBalance)} ${_get(
             data,
             [PORTFOLIO_COLUMNS.SYMBOL],
             '',
-          )}`}
+          )}`} */}
         </Col>
       </Row>
     </div>
@@ -133,16 +142,14 @@ class FormContent extends PureComponent {
 
   render() {
     const {
-      addFullAmount,
       formatMessage,
       formValues,
       submitForm,
       tokenOptions,
       updateInput,
       privacyMode,
-      privacyData,
+      wallet
     } = this.props;
-
 
     return (
       <Form onSubmit={submitForm} className='cm_form'>
@@ -152,13 +159,13 @@ class FormContent extends PureComponent {
           </Label>
           <Select
             className='box_select'
-            name={SEND_TOKEN_FIELDS.TOKEN}
-            value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
-            options={privacyMode ? privacyData : tokenOptions}
-            onChange={value => updateInput(SEND_TOKEN_FIELDS.TOKEN, value)}
+            name={DEPOSIT_PRIVACY_FIELDS.TOKEN}
+            value={_get(formValues, [DEPOSIT_PRIVACY_FIELDS.TOKEN], '')}
+            options={tokenOptions}
+            onChange={value => updateInput(DEPOSIT_PRIVACY_FIELDS.TOKEN, value)}
             components={{
               Option: TokenOption,
-              SingleValue: TokenInputValue,
+              SingleValue: props => <TokenInputValue {...props} wallet={wallet} />,
               Placeholder: () => (
                 <div className='text-placeholder'>
                   {' '}
@@ -176,26 +183,7 @@ class FormContent extends PureComponent {
             menuIsOpens
             classNamePrefix='my-select'
           />
-          {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TOKEN)}
-        </FormGroup>
-        <FormGroup>
-          <Label>
-            {formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_LABEL,
-            )}
-          </Label>
-          <Input
-            name={SEND_TOKEN_FIELDS.RECIPIENT}
-            value={_get(formValues, [SEND_TOKEN_FIELDS.RECIPIENT], '')}
-            placeholder={formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_PLACEHOLDER,
-            )}
-            onChange={e =>
-              updateInput(SEND_TOKEN_FIELDS.RECIPIENT, e.target.value)
-            }
-            invalid={this.handleMarkFieldInvalid(SEND_TOKEN_FIELDS.RECIPIENT)}
-          />
-          {this.handleRenderErrorList(SEND_TOKEN_FIELDS.RECIPIENT)}
+          {this.handleRenderErrorList(DEPOSIT_PRIVACY_FIELDS.TOKEN)}
         </FormGroup>
         <FormGroup>
           <Label>
@@ -206,29 +194,29 @@ class FormContent extends PureComponent {
           <InputGroup>
             <Input
               type='number'
-              name={SEND_TOKEN_FIELDS.TRANSFER_AMOUNT}
-              value={_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], '')}
+              name={DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT}
+              value={_get(formValues, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT], '')}
               max={_get(
                 formValues,
-                [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
+                [DEPOSIT_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
                 0,
               )}
               placeholder={formatMessage(
                 MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_PLACEHOLDER,
               )}
               onChange={e =>
-                updateInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, e.target.value)
+                updateInput(DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT, e.target.value)
               }
               invalid={this.handleMarkFieldInvalid(
-                SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+                DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
               )}
             />
             <InputGroupAddon addonType='append'>
-              <Button onClick={addFullAmount}>
+              {/* <Button onClick={addFullAmount}>
                 {formatMessage(MSG.COMMON_BUTTON_MAXIMUM)}
-              </Button>
+              </Button> */}
             </InputGroupAddon>
-            {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT)}
+            {this.handleRenderErrorList(DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT)}
           </InputGroup>
         </FormGroup>
         {/* <FormGroup>
@@ -282,8 +270,6 @@ FormContent.propTypes = {
   updateInput: PropTypes.func,
   /** Privacy mode */
   privacyMode: PropTypes.bool,
-  /** List of privacy token options */
-  privacyData: PropTypes.arrayOf(PropTypes.object),
 };
 
 FormContent.defaultProps = {
@@ -294,7 +280,6 @@ FormContent.defaultProps = {
   tokenOptions: [],
   updateInput: () => {},
   privacyMode: false,
-  privacyData: [],
 };
 // ======================
 
