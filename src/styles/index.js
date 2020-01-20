@@ -33,7 +33,11 @@ import {
   TextGray,
 } from './StyleTypo';
 
+import theme from './StyleTheme'
+
 export {
+  // Config theme
+  theme,
   //StyleButtons
   BigButtonStyler,
   MediumButtonStyler,

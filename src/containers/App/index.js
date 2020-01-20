@@ -14,6 +14,7 @@ import { createStructuredSelector } from 'reselect';
 import _isEmpty from 'lodash.isempty';
 import _get from 'lodash.get';
 import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
 // Custom Components
 import LoadingComponent from '../../components/Loading';
 import NavigationBar from '../../components/NavigationBar';
@@ -27,7 +28,7 @@ import {
 } from './components/LoadableComponents';
 import PrivateRoute from './components/PrivateRoute';
 import AppStyler from './style';
-import { TextLinkBlue } from '../../styles';
+import { TextLinkBlue, theme } from '../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet, selectClipboardPopup, selectPrivacyMode } from '../Global/selectors';
@@ -100,74 +101,78 @@ class App extends PureComponent {
     } = this.props;
     const isLoggedIn = this.handleCheckLoggedIn();
 
+    const mode = privacyMode ? 'incognito' : 'main';
+
     return (
       <Router>
-        <AppStyler style={{ backgroundColor: privacyMode === true ? 'black': undefined}}>
-          <LoadingComponent />
-          <NavigationBar isLoggedIn={isLoggedIn} />
-          <div className='maincontent d-flex d-md-none align-items-center'>
-            <div className='text-center'>
-              <p>
-                {formatMessage(
-                  MSG.WELCOME_NOTIFICATION_MOBILE_BROWSER_NOT_SUPPORTED,
-                )}
-              </p>
-              <p>
-                {formatMessage(MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_1)}
-                <br />
-                <TextLinkBlue href='http://l.ead.me/bb0oA6'>
+        <ThemeProvider theme={theme[mode]}>
+          <AppStyler>
+            <LoadingComponent />
+            <NavigationBar isLoggedIn={isLoggedIn} />
+            <div className='maincontent d-flex d-md-none align-items-center'>
+              <div className='text-center'>
+                <p>
                   {formatMessage(
-                    MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_2,
+                    MSG.WELCOME_NOTIFICATION_MOBILE_BROWSER_NOT_SUPPORTED,
                   )}
-                </TextLinkBlue>
-              </p>
+                </p>
+                <p>
+                  {formatMessage(MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_1)}
+                  <br />
+                  <TextLinkBlue href='http://l.ead.me/bb0oA6'>
+                    {formatMessage(
+                      MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_2,
+                    )}
+                  </TextLinkBlue>
+                </p>
+              </div>
             </div>
-          </div>
-          <div className='maincontent pt-3 pb-3 d-none d-md-block'>
-            <Route
-              path={ROUTE.LOGIN}
-              render={() =>
-                isLoggedIn ? (
-                  <Redirect strict to={ROUTE.MY_WALLET} />
-                ) : (
-                  <WelcomePage />
-                )
-              }
-            />
-            <Route
-              path={ROUTE.CREATE_WALLET}
-              render={() =>
-                isLoggedIn ? (
-                  <Redirect strict to={ROUTE.MY_WALLET} />
-                ) : (
-                  <CreateWalletPage />
-                )
-              }
-            />
-            <Route
-              path={ROUTE.IMPORT_WALLET}
-              render={() =>
-                isLoggedIn ? (
-                  <Redirect strict to={ROUTE.MY_WALLET} />
-                ) : (
-                  <ImportWallet />
-                )
-              }
-            />
-            <PrivateRoute
-              isLoggedIn={isLoggedIn}
-              path={ROUTE.MY_WALLET}
-              component={MyWallet}
-            />
-            <Route
-              strict
-              path={ROUTE.DEFAULT}
-              render={() => <Redirect to={ROUTE.LOGIN} />}
-            />
-          </div>
-          <Footer className='mt-5' isLoggedIn={isLoggedIn} />
-          <ClipboardPopup data={clipboardData} />
-        </AppStyler>
+            <div className='maincontent pt-3 pb-3 d-none d-md-block'>
+              <Route
+                path={ROUTE.LOGIN}
+                render={() =>
+                  isLoggedIn ? (
+                    <Redirect strict to={ROUTE.MY_WALLET} />
+                  ) : (
+                    <WelcomePage />
+                  )
+                }
+              />
+              <Route
+                path={ROUTE.CREATE_WALLET}
+                render={() =>
+                  isLoggedIn ? (
+                    <Redirect strict to={ROUTE.MY_WALLET} />
+                  ) : (
+                    <CreateWalletPage />
+                  )
+                }
+              />
+              <Route
+                path={ROUTE.IMPORT_WALLET}
+                render={() =>
+                  isLoggedIn ? (
+                    <Redirect strict to={ROUTE.MY_WALLET} />
+                  ) : (
+                    <ImportWallet />
+                  )
+                }
+              />
+              <PrivateRoute
+                isLoggedIn={isLoggedIn}
+                path={ROUTE.MY_WALLET}
+                component={MyWallet}
+              />
+              <Route
+                strict
+                path={ROUTE.DEFAULT}
+                render={() => <Redirect to={ROUTE.LOGIN} />}
+              />
+            </div>
+            <Footer className='mt-5' isLoggedIn={isLoggedIn} />
+            <ClipboardPopup data={clipboardData} />
+          </AppStyler>
+        </ThemeProvider>
       </Router>
     );
   }
