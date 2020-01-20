@@ -14,7 +14,7 @@ import { Pagination } from 'reactstrap';
 const CommonTableStyler = styled(ReactTable)`
   .rt-table {
     border-radius: 8px;
-    background-color: #272d40;
+    background-color: ${props => props.theme.boxBackground};
     padding: 1em;
     .rt-th {
       display: inline-block;

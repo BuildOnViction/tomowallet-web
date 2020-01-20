@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import ExchangeInfo from './ExchangeInfo';
 import Ellipsis from '../../../components/Ellipsis';
-import { MediumButtonStyler, HeadingSmall } from '../../../styles';
+import { MediumButtonStyler, HeadingSmall, BoxWrapper } from '../../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
@@ -52,12 +52,12 @@ class AddressInfo extends PureComponent {
               lg={{ size: 5, order: 12 }}
               className='mb-sm-3 mb-lg-0'
             >
-              <div className='bg_gray'>
+              <BoxWrapper>
                 <ExchangeInfo />
-              </div>
+              </BoxWrapper>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
-              <div className='d-flex align-items-center bg_gray'>
+              <BoxWrapper className='d-flex align-items-center'>
                 <Row className='fullwidth align-items-center'>
                   { privacyMode ?
                   // Privacy address
@@ -130,7 +130,7 @@ class AddressInfo extends PureComponent {
                     </div>
                   </Col>
                 </Row>
-              </div>
+              </BoxWrapper>
             </Col>
           </Row>
         </div>

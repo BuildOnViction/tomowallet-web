@@ -297,9 +297,7 @@ a {
 //MODAL
 .modal-content {
   border-radius: 8px;
-  background-color: #272d40;
   .modal-title {
-    color: #ffffff;
     font-size: 18px;
     font-weight: 600;
     text-transform: uppercase;
@@ -314,15 +312,6 @@ a {
   width: 80px;
 }
 
-//box-address
-.box-address {
-  .bg_gray {
-    border-radius: 8px;
-    background-color: #272d40;
-    padding: 1em 1.5em;
-    height: 100%;
-  }
-}
 .fullwidth {
   width: 100%;
 }

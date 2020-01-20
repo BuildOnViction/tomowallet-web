@@ -7,6 +7,7 @@ import {
 } from './StyleButtons';
 import { FormTextStyled } from './StyleForm';
 import {
+  BoxWrapper,
   BoxBtnStyler,
   ContainerMin,
   CustomContainer,
@@ -72,4 +73,5 @@ export {
   TextYellowPointer,
   BoxText,
   TextGray,
+  BoxWrapper,
 };

@@ -13,6 +13,10 @@ import { Modal } from 'reactstrap';
 const ModalStyles = styled(Modal)`
   .modal-content {
     padding: 2em;
+    background-color: ${props => props.theme.boxBackground};
+    .modal-title {
+      color: ${props => props.theme.modalColor};
+    }
   }
   .modal-header {
     justify-content: center;

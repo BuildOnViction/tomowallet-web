@@ -80,7 +80,15 @@ const DropdownToggleMainStyle = styled(DropdownToggle)`
   }
 `;
 
+const BoxWrapper = styled.div`
+  border-radius: 8px;
+  background-color: ${props => props.theme.boxBackground};
+  padding: 1em 1.5em;
+  height: 100%;
+`
+
 export {
+  BoxWrapper,
   BoxBtnStyler,
   ContainerMin,
   CustomContainer,
