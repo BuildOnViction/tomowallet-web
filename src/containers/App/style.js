@@ -6,11 +6,10 @@
 // ===== IMPORTS =====
 // Modules
 import styled from 'styled-components';
-import { Container } from 'reactstrap';
 // ===================
 
 // ===== STYLE =====
-const AppStyler = styled(Container)`
+const AppStyler = styled.div`
     background: ${props => props.theme.background};
 `;
 // =================

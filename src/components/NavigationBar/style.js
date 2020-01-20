@@ -129,9 +129,14 @@ const DropdownItemStyler = styled(DropdownItem)`
     outline: 0 auto -webkit-focus-ring-color;
   }
 `;
+const NavWrapper = styled.div`
+  background: ${props => props.theme.navBackground};
+  height: 80px;
+` 
 // =================
 
 export {
+  NavWrapper,
   NavBarStyler,
   LinkHeader,
   DropdownToggleHeader,

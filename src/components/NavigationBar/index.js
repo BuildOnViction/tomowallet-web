@@ -21,11 +21,13 @@ import {
   Nav,
   UncontrolledDropdown,
   CardImg,
+  Container,
 } from 'reactstrap';
 // Custom Components
 import WalletPopup from './subcomponents/WalletPopup';
 import NetworkConfirmationPopup from './subcomponents/NetworkConfirmationPopup';
 import {
+  NavWrapper,
   NavBarStyler,
   DropdownToggleHeader,
   DropdownMenuStyler,
@@ -218,28 +220,30 @@ class NavigationBar extends PureComponent {
     } = this.props;
 
     return (
-      <Fragment>
-        <NavBarStyler light expand='md'>
-          <NavbarBrand onClick={this.handleRedirectToHomepage}>
-            <CardImg
-              src={logo_tomochain}
-              alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
-            />
-          </NavbarBrand>
-          <Collapse navbar>
-            <Nav className='ml-auto' navbar>
-              {isLoggedIn && this.handleRenderPrivateBar()}
-              {this.handleRenderPublicBar()}
-            </Nav>
-          </Collapse>
-        </NavBarStyler>
-        <WalletPopup />
-        <NetworkConfirmationPopup
-          popupData={networkConfirmationPopup}
-          togglePopup={onToggleNetworkConfirmationPopup}
-          changeNetwork={this.handleChangeNetwork}
-        />
-      </Fragment>
+      <NavWrapper>
+        <Container>
+          <NavBarStyler light expand='md'>
+            <NavbarBrand onClick={this.handleRedirectToHomepage}>
+              <CardImg
+                src={logo_tomochain}
+                alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
+              />
+            </NavbarBrand>
+            <Collapse navbar>
+              <Nav className='ml-auto' navbar>
+                {isLoggedIn && this.handleRenderPrivateBar()}
+                {this.handleRenderPublicBar()}
+              </Nav>
+            </Collapse>
+          </NavBarStyler>
+          <WalletPopup />
+          <NetworkConfirmationPopup
+            popupData={networkConfirmationPopup}
+            togglePopup={onToggleNetworkConfirmationPopup}
+            changeNetwork={this.handleChangeNetwork}
+          />
+        </Container>
+      </NavWrapper>
     );
   }
 }

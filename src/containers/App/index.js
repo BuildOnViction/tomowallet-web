@@ -46,6 +46,7 @@ import {
   withGlobal,
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
+import { Container } from 'reactstrap';
 
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
@@ -109,67 +110,71 @@ class App extends PureComponent {
           <AppStyler>
             <LoadingComponent />
             <NavigationBar isLoggedIn={isLoggedIn} />
-            <div className='maincontent d-flex d-md-none align-items-center'>
-              <div className='text-center'>
-                <p>
-                  {formatMessage(
-                    MSG.WELCOME_NOTIFICATION_MOBILE_BROWSER_NOT_SUPPORTED,
-                  )}
-                </p>
-                <p>
-                  {formatMessage(MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_1)}
-                  <br />
-                  <TextLinkBlue href='http://l.ead.me/bb0oA6'>
+            
+            <Container>
+              <div className='maincontent d-flex d-md-none align-items-center'>
+                <div className='text-center'>
+                  <p>
                     {formatMessage(
-                      MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_2,
+                      MSG.WELCOME_NOTIFICATION_MOBILE_BROWSER_NOT_SUPPORTED,
                     )}
-                  </TextLinkBlue>
-                </p>
+                  </p>
+                  <p>
+                    {formatMessage(MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_1)}
+                    <br />
+                    <TextLinkBlue href='http://l.ead.me/bb0oA6'>
+                      {formatMessage(
+                        MSG.WELCOME_NOTIFICATION_MOBILE_DOWNLOAD_PART_2,
+                      )}
+                    </TextLinkBlue>
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className='maincontent pt-3 pb-3 d-none d-md-block'>
-              <Route
-                path={ROUTE.LOGIN}
-                render={() =>
-                  isLoggedIn ? (
-                    <Redirect strict to={ROUTE.MY_WALLET} />
-                  ) : (
-                    <WelcomePage />
-                  )
-                }
-              />
-              <Route
-                path={ROUTE.CREATE_WALLET}
-                render={() =>
-                  isLoggedIn ? (
-                    <Redirect strict to={ROUTE.MY_WALLET} />
-                  ) : (
-                    <CreateWalletPage />
-                  )
-                }
-              />
-              <Route
-                path={ROUTE.IMPORT_WALLET}
-                render={() =>
-                  isLoggedIn ? (
-                    <Redirect strict to={ROUTE.MY_WALLET} />
-                  ) : (
-                    <ImportWallet />
-                  )
-                }
-              />
-              <PrivateRoute
-                isLoggedIn={isLoggedIn}
-                path={ROUTE.MY_WALLET}
-                component={MyWallet}
-              />
-              <Route
-                strict
-                path={ROUTE.DEFAULT}
-                render={() => <Redirect to={ROUTE.LOGIN} />}
-              />
-            </div>
-            <Footer className='mt-5' isLoggedIn={isLoggedIn} />
+              <div className='maincontent pt-3 pb-3 d-none d-md-block'>
+                <Route
+                  path={ROUTE.LOGIN}
+                  render={() =>
+                    isLoggedIn ? (
+                      <Redirect strict to={ROUTE.MY_WALLET} />
+                    ) : (
+                      <WelcomePage />
+                    )
+                  }
+                />
+                <Route
+                  path={ROUTE.CREATE_WALLET}
+                  render={() =>
+                    isLoggedIn ? (
+                      <Redirect strict to={ROUTE.MY_WALLET} />
+                    ) : (
+                      <CreateWalletPage />
+                    )
+                  }
+                />
+                <Route
+                  path={ROUTE.IMPORT_WALLET}
+                  render={() =>
+                    isLoggedIn ? (
+                      <Redirect strict to={ROUTE.MY_WALLET} />
+                    ) : (
+                      <ImportWallet />
+                    )
+                  }
+                />
+                <PrivateRoute
+                  isLoggedIn={isLoggedIn}
+                  path={ROUTE.MY_WALLET}
+                  component={MyWallet}
+                />
+                <Route
+                  strict
+                  path={ROUTE.DEFAULT}
+                  render={() => <Redirect to={ROUTE.LOGIN} />}
+                />
+              </div>
+            
+              <Footer className='mt-5' isLoggedIn={isLoggedIn} />
+            </Container>
             <ClipboardPopup data={clipboardData} />
           </AppStyler>
         </ThemeProvider>
