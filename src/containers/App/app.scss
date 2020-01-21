@@ -165,7 +165,7 @@ a {
   margin-bottom: 0;
   label {
     display: block;
-    color: #5e677f;
+    // color: #5e677f;
     svg {
       width: 12px;
       margin-left: 5px;
@@ -180,11 +180,11 @@ a {
       width: 0;
       overflow: hidden;
     }
-    .my-select__indicator {
-      color: #3a8ecc;
-    }
+    // .my-select__indicator {
+    //   color: #3a8ecc;
+    // }
     > div {
-      background-color: #2d344a !important;
+      // background-color: #2d344a !important;
       border-radius: 8px;
       border: 0;
       min-height: 44px;
@@ -198,11 +198,11 @@ a {
       }
     }
     .select_option {
-      padding: 1em;
+      // padding: 1em;
       transition: all 0.3s;
-      &:hover {
-        background: #272d40;
-      }
+      // &:hover {
+      //   background: #272d40;
+      // }
     }
     .select_option,
     .select_option_active {
@@ -213,20 +213,20 @@ a {
       }
     }
   }
-  .text-placeholder {
-    color: #444b64;
-  }
+  // .text-placeholder {
+  //   color: #444b64;
+  // }
   .input-group-append button,
   .input-group-append .input-group-text {
-    background-color: #2d344a !important;
+    // background-color: #2d344a !important;
     border-radius: 0 8px 8px 0 !important;
     border: 0;
-    color: #9eaacc;
+    // color: #9eaacc;
     font-size: 14px;
     text-transform: uppercase;
     position: relative;
     &::before {
-      background-color: #272d40;
+      // background-color: #272d40;
       content: '';
       border-radius: 8px;
       width: 1px;
@@ -249,21 +249,21 @@ a {
   input,
   textarea {
     border-radius: 8px;
-    background-color: #2d344a;
+    // background-color: #2d344a;
     border: 0;
-    color: #9eaacc;
+    // color: #9eaacc;
     font-size: 14px;
     height: 44px;
     &::placeholder {
-      color: #444b64;
+      // color: #444b64;
       font-size: 13px;
       font-family: 'Nunito Sans', sans-serif;
     }
     &:focus,
     &:active &:active:focus {
-      box-shadow: 0 0 0 1px #5692cd;
+      // box-shadow: 0 0 0 1px #5692cd;
       background-color: transparent;
-      color: #9eaacc;
+      // color: #9eaacc;
     }
   }
   textarea {

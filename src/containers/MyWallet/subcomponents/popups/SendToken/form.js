@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import {
   Form,
-  FormGroup,
   Input,
   Label,
   InputGroup,
@@ -26,6 +25,7 @@ import {
 import Select, { components } from 'react-select';
 // Custom Components
 import Image from '../../../../../components/Image';
+import { StyledFormGroup } from './style';
 // Utilities & Constants
 import { convertLocaleNumber } from '../../../../../utils';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
@@ -146,7 +146,7 @@ class FormContent extends PureComponent {
 
     return (
       <Form onSubmit={submitForm} className='cm_form'>
-        <FormGroup>
+        <StyledFormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
@@ -173,12 +173,11 @@ class FormContent extends PureComponent {
                 components.DropdownIndicator,
             }}
             isDisabled={_get(formValues, 'isTokenSpecific')}
-            menuIsOpens
             classNamePrefix='my-select'
           />
           {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TOKEN)}
-        </FormGroup>
-        <FormGroup>
+        </StyledFormGroup>
+        <StyledFormGroup>
           <Label>
             {formatMessage(
               MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_LABEL,
@@ -196,8 +195,8 @@ class FormContent extends PureComponent {
             invalid={this.handleMarkFieldInvalid(SEND_TOKEN_FIELDS.RECIPIENT)}
           />
           {this.handleRenderErrorList(SEND_TOKEN_FIELDS.RECIPIENT)}
-        </FormGroup>
-        <FormGroup>
+        </StyledFormGroup>
+        <StyledFormGroup>
           <Label>
             {formatMessage(
               MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL,
@@ -230,7 +229,7 @@ class FormContent extends PureComponent {
             </InputGroupAddon>
             {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT)}
           </InputGroup>
-        </FormGroup>
+        </StyledFormGroup>
         {/* <FormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL)}
