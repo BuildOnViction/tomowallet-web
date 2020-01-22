@@ -7,6 +7,9 @@ const theme = {
 
         highlightColor: '#4B96CD',
         highlightHoverColor: '#3074a7',
+        highlightColor1: '#A5A8AD',
+        highlightColor2: '#e4ae63',
+        highlightHoverColor2: '#c59148',
 
         footerColor: '#A5A8AD',
         footerSocialBackground: '#fff',
@@ -44,6 +47,9 @@ const theme = {
 
         highlightColor: '#4B96CD',
         highlightHoverColor: '#3074a7',
+        highlightColor1: '#757575',
+        highlightColor2: '#e4ae63',
+        highlightHoverColor2: '#c59148',
 
         footerColor: '#757575',
         footerSocialBackground: '#1C1C1C',

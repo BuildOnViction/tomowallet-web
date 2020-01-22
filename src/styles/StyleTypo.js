@@ -38,23 +38,23 @@ const TextBlue = styled.span`
   }
 `;
 const TextYellow = styled.span`
-  color: #e4ae63;
+  color: ${props => props.theme.highlightColor2};
 `;
 const TextLinkYellow = styled.a`
-  color: #e4ae63 !important;
+  color: ${props => props.theme.highlightColor2} !important;
   cursor: pointer;
 `;
 const TextYellowPointer = styled.span`
-  color: #e4ae63;
+  color: ${props => props.theme.highlightColor2};
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
-    color: #c59148;
+    color: ${props => props.theme.highlightHoverColor2};
   }
 `;
 const TextGray = styled.div`
-  color: #5e677f;
+  color: ${props => props.theme.highlightColor1};
 `;
 const BoxText = styled.div``;
 export {

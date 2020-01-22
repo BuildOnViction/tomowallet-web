@@ -12,7 +12,7 @@ import _get from 'lodash.get';
 import { withIntl } from '../../../../../components/IntlProvider';
 import { removeTrailingZero } from '../../../../../utils';
 import { MSG } from '../../../../../constants';
-import { BoxText, TextYellow, TextGray } from '../../../../../styles';
+import { BoxText, TextYellow, TextGray, TextBlue } from '../../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -35,14 +35,16 @@ class SuccessContent extends PureComponent {
           </TextYellow>
         </div>
         <div className='my-4'>
-          {`${formatMessage(
+          {formatMessage(
             MSG.MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_WITHDRAW,
-          )} ${removeTrailingZero(amount)} ${symbol}`}
+          )}
+
+          <TextYellow>{` ${removeTrailingZero(amount)} ${symbol}`}</TextYellow>
         </div>
         <TextGray className='mb-3 '>
           {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
         </TextGray>
-        <div>{_get(txHash, 'transactionHash', txHash)}</div>
+        <div><TextBlue>{_get(txHash, 'transactionHash', txHash)}</TextBlue></div>
       </BoxText>
     );
   }
