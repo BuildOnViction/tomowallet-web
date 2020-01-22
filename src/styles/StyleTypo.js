@@ -2,20 +2,20 @@ import styled from 'styled-components';
 // Style Component//
 
 const HeadingBig = styled.h1`
-  color: #ffffff;
+  color: ${props => props.theme.headingColor};
   font-size: 50px;
   font-weight: 600;
   font-family: 'Bai Jamjuree', sans-serif;
 `;
 const HeadingLarge = styled.h2`
-  color: #ffffff;
+  color: ${props => props.theme.headingColor};
   font-size: 18px;
   font-weight: 600;
   text-transform: uppercase;
   font-family: 'Bai Jamjuree', sans-serif;
 `;
 const HeadingMedium = styled.h3`
-  color: #ffffff;
+  color: ${props => props.theme.headingColor};
   font-size: 16px;
 `;
 const HeadingSmall = styled.h2`

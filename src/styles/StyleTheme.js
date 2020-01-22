@@ -1,5 +1,8 @@
 const theme = {
     main: {
+        headingColor: '#202533',
+
+        color: '#4D515C',
         background: '#F1F5FF',
         navBackground: '#272D40',
         boxBackground: '#fff',
@@ -41,6 +44,9 @@ const theme = {
         selectIndicatorDisabledColor: '#858b90',
     },
     incognito: {
+        headingColor: '#f5f5f5',
+
+        color: '#757575',
         background: '#151515',
         navBackground: '#1C1C1C',
         boxBackground: '#1C1C1C',
