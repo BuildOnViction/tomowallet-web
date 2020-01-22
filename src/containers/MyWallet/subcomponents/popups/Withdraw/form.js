@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import {
   Form,
-  FormGroup,
   Input,
   Label,
   InputGroup,
@@ -31,6 +30,7 @@ import { convertLocaleNumber } from '../../../../../utils';
 import { WITHDRAW_PRIVACY_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
 import { bnToDecimals } from '../../../../../utils';
+import { StyledFormGroup } from '../../../../../styles';
 // ===================
 
 // ===== SUB-COMPONENTS =====
@@ -145,7 +145,7 @@ class FormContent extends PureComponent {
 
     return (
       <Form onSubmit={submitForm} className='cm_form'>
-        <FormGroup>
+        <StyledFormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
@@ -176,8 +176,8 @@ class FormContent extends PureComponent {
             classNamePrefix='my-select'
           />
           {this.handleRenderErrorList(WITHDRAW_PRIVACY_FIELDS.TOKEN)}
-        </FormGroup>
-        <FormGroup>
+        </StyledFormGroup>
+        <StyledFormGroup>
           <Label>
             {formatMessage(
               MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL,
@@ -210,7 +210,7 @@ class FormContent extends PureComponent {
             </InputGroupAddon>
             {this.handleRenderErrorList(WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT)}
           </InputGroup>
-        </FormGroup>
+        </StyledFormGroup>
         {/* <FormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL)}
