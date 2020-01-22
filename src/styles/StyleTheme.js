@@ -5,6 +5,9 @@ const theme = {
         boxBackground: '#fff',
         modalColor: '#202533',
 
+        highlightColor: '#4B96CD',
+        highlightHoverColor: '#3074a7',
+
         footerColor: '#A5A8AD',
         footerSocialBackground: '#fff',
         footerSocialHoverColor: '#202533',
@@ -38,6 +41,9 @@ const theme = {
         navBackground: '#1C1C1C',
         boxBackground: '#1C1C1C',
         modalColor: '#f5f5f5',
+
+        highlightColor: '#4B96CD',
+        highlightHoverColor: '#3074a7',
 
         footerColor: '#757575',
         footerSocialBackground: '#1C1C1C',

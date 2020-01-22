@@ -27,14 +27,14 @@ const NoticeTextRed = styled.span`
   color: #be445e;
 `;
 const TextLinkBlue = styled.a`
-  color: #5692cd;
+  color: ${props => props.theme.highlightColor};
 `;
 const TextBlue = styled.span`
-  color: #5692cd;
+  color: ${props => props.theme.highlightColor};
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
-    color: #0056b3;
+    color: ${props => props.theme.highlightHoverColor};
   }
 `;
 const TextYellow = styled.span`

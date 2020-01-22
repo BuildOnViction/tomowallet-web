@@ -6,7 +6,6 @@
 // ===== IMPORTS =====
 // Modules
 import styled from 'styled-components';
-import { FormGroup } from 'reactstrap';
 // Custom Component
 import Popup from '../../../../../components/Popup';
 // ===================

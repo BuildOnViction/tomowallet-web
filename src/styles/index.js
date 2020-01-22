@@ -5,7 +5,7 @@ import {
   ButtonLineStyler,
   ButtonLinkStyler,
 } from './StyleButtons';
-import { FormTextStyled } from './StyleForm';
+import { StyledFormGroup, FormTextStyled } from './StyleForm';
 import {
   BoxWrapper,
   BoxBtnStyler,
@@ -46,6 +46,7 @@ export {
   ButtonLineStyler,
   ButtonLinkStyler,
   //StyleForm
+  StyledFormGroup,
   FormTextStyled,
   DropdownMenuMainStyler,
   DropdownToggleMainStyle,

@@ -13,6 +13,7 @@ import { Modal } from 'reactstrap';
 const ModalStyles = styled(Modal)`
   .modal-content {
     padding: 2em;
+    color: ${props => props.theme.modalColor};
     background-color: ${props => props.theme.boxBackground};
     .modal-title {
       color: ${props => props.theme.modalColor};
