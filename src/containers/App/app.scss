@@ -184,14 +184,6 @@ a {
       border: 0;
       min-height: 44px;
     }
-    // &.my-select--is-disabled {
-    //   > div {
-    //     background-color: #212531 !important;
-    //   }
-    //   .my-select__indicator {
-    //     color: #444b64;
-    //   }
-    // }
     .select_option {
       transition: all 0.3s;
     }
@@ -224,11 +216,7 @@ a {
     &:focus,
     &:active,
     &:active:focus {
-      // box-shadow: 0 0 0 0px #5692cd !important;
       background-color: transparent;
-    }
-    &:hover {
-      // background-color: #2d344a;
     }
   }
   input,
@@ -238,7 +226,7 @@ a {
     font-size: 14px;
     height: 44px;
     &::placeholder {
-      font-size: 13px;
+      font-size: 14px;
       font-family: 'Nunito Sans', sans-serif;
     }
     &:focus,
