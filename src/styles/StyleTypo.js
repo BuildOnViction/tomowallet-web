@@ -31,7 +31,7 @@ const TextLinkBlue = styled.a`
 `;
 const TextBlue = styled.span`
   color: ${props => props.theme.highlightColor};
-  cursor: pointer;
+  cursor: ${props => props.cursor || 'auto'};
   transition: all 0.3s;
   &:hover {
     color: ${props => props.theme.highlightHoverColor};
