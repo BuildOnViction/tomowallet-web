@@ -142,8 +142,7 @@ class FormContent extends PureComponent {
       privacyMode,
       privacyData,
     } = this.props;
-
-
+    
     return (
       <Form onSubmit={submitForm} className='cm_form'>
         <StyledFormGroup>
@@ -151,7 +150,7 @@ class FormContent extends PureComponent {
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
           <Select
-            className='box_select'
+            className={this.handleMarkFieldInvalid(SEND_TOKEN_FIELDS.TOKEN) ? 'box_select box_select--is-invalid' : 'box_select'}
             name={SEND_TOKEN_FIELDS.TOKEN}
             value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
             options={privacyMode ? privacyData : tokenOptions}

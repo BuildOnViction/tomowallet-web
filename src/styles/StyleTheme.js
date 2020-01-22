@@ -20,6 +20,7 @@ const theme = {
         inputSecondColor: '#C5CBD7',
         inputDividerBackground: 'rgba(28, 28, 28, .2)',
         inputFocusBorder: '#5692cd',
+        inputInvalidBorder: '#BE445E',
 
         normalButtonBg: '#F1F5FF',
         normalButtonColor: '#848D9A',
@@ -60,6 +61,7 @@ const theme = {
         inputSecondColor: '#555555',
         inputDividerBackground: 'rgba(28, 28, 28, 1)',
         inputFocusBorder: '#5692cd',
+        inputInvalidBorder: '#BE445E',
 
         normalButtonBg: '#252525',
         normalButtonColor: '#757575',

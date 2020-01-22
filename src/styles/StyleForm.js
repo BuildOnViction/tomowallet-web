@@ -12,7 +12,15 @@ const FormTextStyled = styled(FormText)`
   margin-top: 30px;
 `;
 
-const StyledFormGroup = styled(FormGroup)`    
+const StyledFormGroup = styled(FormGroup)`  
+    .is-invalid,
+    .is-invalid:focus,
+    .is-invalid:active {
+        z-index: 10;
+        box-shadow: 0 0 0 1px ${props => props.theme.inputInvalidBorder};
+        background-image: none !important;
+    }
+
     .form-control {
         color: ${props => props.theme.inputColor};
         padding: 12px 20px;
@@ -57,6 +65,11 @@ const StyledFormGroup = styled(FormGroup)`
             box-shadow: 0 0 0 1px ${props => props.theme.inputFocusBorder};
         }
 
+        &.box_select--is-invalid .my-select__control,
+        &.box_select--is-invalid .my-select__control--is-focused {
+            box-shadow: 0 0 0 1px ${props => props.theme.inputInvalidBorder};
+        }
+
         .my-select__indicator {
             padding-right: 20px;
             padding-left: 20px;
@@ -93,7 +106,7 @@ const StyledFormGroup = styled(FormGroup)`
         color: ${props => props.theme.inputSecondColor};
     }
 
-    .input-group-append {
+    .input-group-append {        
         button {
             padding-right: 20px;
             padding-left: 18px;
@@ -106,6 +119,12 @@ const StyledFormGroup = styled(FormGroup)`
 
             &::before {
                 background-color: ${props => props.theme.inputDividerBackground} !important;
+            }
+
+            &:active,
+            &:focus {
+                color: ${props => props.theme.inputColor} !important;
+                box-shadow: none !important;
             }
         }
     }
