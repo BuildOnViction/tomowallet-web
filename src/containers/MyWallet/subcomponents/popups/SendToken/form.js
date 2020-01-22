@@ -25,7 +25,7 @@ import {
 import Select, { components } from 'react-select';
 // Custom Components
 import Image from '../../../../../components/Image';
-import { StyledFormGroup } from './style';
+import { StyledFormGroup } from '../../../../../styles/StyleForm';
 // Utilities & Constants
 import { convertLocaleNumber } from '../../../../../utils';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';

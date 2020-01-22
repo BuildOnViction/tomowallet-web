@@ -30,6 +30,8 @@ const theme = {
         selectIndicatorColor: '#3A8ECC',
         selectOptionBgHover : '#DAE5FA',
         selectMenuBorder: 'rgba(218, 229, 250, .7)',
+        selectDisabledBg: '#f3f3f3',
+        selectIndicatorDisabledColor: '#858b90',
     },
     incognito: {
         background: '#151515',
@@ -62,6 +64,8 @@ const theme = {
         selectIndicatorColor: '#F5F5F5',
         selectOptionBgHover : '#1C1C1C',
         selectMenuBorder: 'rgba(28, 28, 28, .7)',
+        selectDisabledBg: '#353535',
+        selectIndicatorDisabledColor: '#777777',
     }
 };
 
