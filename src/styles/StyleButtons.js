@@ -75,7 +75,7 @@ const ButtonStyler = styled(
   align-items: center;
   font-family: 'Nunito Sans', sans-serif;
   transition: background-color 0.3s;
-  width: 100%;
+  width: ${props => props.width ? props.width : '100%'};
   &:hover {
     ${({ btnYellow, btnBlue, theme }) => {
       if (btnYellow) {
@@ -96,7 +96,7 @@ const ButtonStyler = styled(
 
 const ButtonLineStyler = styled.button`
   background: transparent;
-  border: 1px solid #444b64;
+  border: 1px solid ${props => props.theme.buttonLineBorder};
   border-radius: 8px;
   display: flex;
   height: 44px;
@@ -106,12 +106,13 @@ const ButtonLineStyler = styled.button`
   font-family: 'Nunito Sans', sans-serif;
   transition: all 0.3s;
   width: 100%;
-  color: #9eaacc;
+  color: ${props => props.theme.buttonLineColor};
   &:focus {
     outline: none;
   }
   &:disabled {
-    opacity: 0.5;
+    border: none;
+    background: ${props => props.theme.buttonLineDisabled}
   }
 `;
 

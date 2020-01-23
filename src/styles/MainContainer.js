@@ -8,16 +8,16 @@ const BoxBtnStyler = styled.div`
   text-align: center;
 `;
 const ContainerMin = styled.div`
-  background-color: #272d40;
+  background-color: ${props => props.theme.cardBackground};
   border-radius: 8px;
   padding: 3em 2em;
-  max-width: 600px;
+  max-width: ${props => props.size ? props.size : '570px'};
   margin: 0 auto;
 `;
 const CustomContainer = styled(({ size, children, ...remains }) => (
   <div {...remains}>{children}</div>
 ))`
-  background-color: #272d40;
+  background-color: ${props => props.theme.cardBackground};
   border-radius: 8px;
   padding: 3em 2em;
   max-width: ${({ size }) => (size === 'large' ? '800px' : '600px')};

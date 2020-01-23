@@ -23,7 +23,7 @@ import Verification from './subcomponents/Verification';
 import SuccessNotification from './subcomponents/Success';
 import ConfirmationPopup from './subcomponents/popups/ConfirmationPopup';
 import KeyViewPopup from './subcomponents/popups/KeyViewPopup';
-import { WalletCreationStyler } from './style';
+import { Wrapper, WalletCreationStyler } from './style';
 // Utilities
 import {
   selectConfirmationState,
@@ -170,20 +170,27 @@ class WalletCreationPage extends PureComponent {
     } = this.props;
 
     return (
-      <Fragment>
+      <Wrapper>
         <Helmet>
           <title>{formatMessage(MSG.CREATE_WALLET_TITLE)}</title>
         </Helmet>
-        <WalletCreationStyler>
-          {(formState === FORM_STATES.WARNING && (
+        
+        {(formState === FORM_STATES.WARNING && (
+          <WalletCreationStyler>
             <Warning
               setFormState={onSetFormState}
               setPrivateKey={onSetPrivateKey}
               storeMnemonic={onStoreMnemonic}
             />
+          </WalletCreationStyler>
+        )) ||
+          (formState === FORM_STATES.RECOVERY_PHRASE && (
+            <WalletCreationStyler>
+              <RecoveryPhrase />
+            </WalletCreationStyler>
           )) ||
-            (formState === FORM_STATES.RECOVERY_PHRASE && <RecoveryPhrase />) ||
-            (formState === FORM_STATES.VERIFICATION && (
+          (formState === FORM_STATES.VERIFICATION && (
+            <WalletCreationStyler>
               <Verification
                 addWord={onAddWord}
                 clearComparison={onClearComparison}
@@ -194,12 +201,15 @@ class WalletCreationPage extends PureComponent {
                 updateErrors={onUpdateErrors}
                 verifyMnemonic={this.handleVerifyMnemonic}
               />
-            )) ||
-            (formState === FORM_STATES.SUCCESS && (
+            </WalletCreationStyler>
+          )) ||
+          (formState === FORM_STATES.SUCCESS && (
+            <WalletCreationStyler size="430px">
               <SuccessNotification
                 confirmSuccess={this.handleStoreWalletData}
               />
-            ))}
+            </WalletCreationStyler>
+          ))}
           <ConfirmationPopup
             confirmation={confirmation}
             setFormState={onSetFormState}
@@ -210,8 +220,7 @@ class WalletCreationPage extends PureComponent {
             toggleKeyVisibile={onToggleKeyVisible}
             togglePopup={onToggleKeyViewPopup}
           />
-        </WalletCreationStyler>
-      </Fragment>
+      </Wrapper>
     );
   }
 }

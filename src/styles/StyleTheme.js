@@ -42,6 +42,14 @@ const theme = {
         selectMenuBorder: 'rgba(218, 229, 250, .7)',
         selectDisabledBg: '#f3f3f3',
         selectIndicatorDisabledColor: '#858b90',
+
+        cardBackground: '#fff',
+
+        mnemonicBackground: '#F1F5FF',
+        mnemonicBorder: '#F1F5FF',
+        buttonLineBorder: '#C5CBD7',
+        buttonLineColor: '#202533',
+        buttonLineDisabled: '#F1F5FF',
     },
     incognito: {
         headingColor: '#f5f5f5',
@@ -86,6 +94,14 @@ const theme = {
         selectMenuBorder: 'rgba(28, 28, 28, .7)',
         selectDisabledBg: '#353535',
         selectIndicatorDisabledColor: '#777777',
+
+        cardBackground: '#1C1C1C',
+
+        mnemonicBackground: 'tranparent',
+        mnemonicBorder: '#444b64',
+        buttonLineBorder: '#444b64',
+        buttonLineColor: '#757575',
+        buttonLineDisabled: '#4c4c4c',
     }
 };
 
