@@ -13,10 +13,13 @@ const ImporWalletStyler = styled.div`
   position: relative;
   transition: 0.3s;
   text-align: center;
-  ${({ isActive }) =>
+  ${({ isActive, theme }) =>
     isActive
-      ? 'background-color: #2d344a;border: solid 1px #2d344a;border-top: 5px solid #e4ae63;'
-      : 'border: solid 1px #444b64;border-top: solid 5px #444b64;'}
+      ? `background-color: ${theme.importItemActiveBackground};
+        border: solid 2px ${theme.importItemActiveBorder};
+        box-shadow: 0 -5px 0 0 ${theme.importItemActiveBorderTop};`
+      : `border: solid 2px ${theme.importItemBorder};`
+  }
   .text-end {
     margin-top: auto !important;
   }

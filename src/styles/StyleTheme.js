@@ -43,6 +43,7 @@ const theme = {
         selectDisabledBg: '#f3f3f3',
         selectIndicatorDisabledColor: '#858b90',
 
+        cardColor: '#202533',
         cardBackground: '#fff',
 
         mnemonicBackground: '#F1F5FF',
@@ -50,6 +51,15 @@ const theme = {
         buttonLineBorder: '#C5CBD7',
         buttonLineColor: '#202533',
         buttonLineDisabled: '#F1F5FF',
+
+        importItemActiveBackground: '#F1F5FF',
+        importItemActiveBorder: '#F1F5FF',
+        importItemActiveBorderTop: '#E4AE63',
+        importItemBorder: '#F1F5FF',
+
+        tabColor: '#A5A8AD',
+        tabActiveColor: '#202533',
+        tabBackground: '#202533',
     },
     incognito: {
         headingColor: '#f5f5f5',
@@ -95,6 +105,7 @@ const theme = {
         selectDisabledBg: '#353535',
         selectIndicatorDisabledColor: '#777777',
 
+        cardColor: '#9eaacc',
         cardBackground: '#1C1C1C',
 
         mnemonicBackground: 'tranparent',
@@ -102,6 +113,15 @@ const theme = {
         buttonLineBorder: '#444b64',
         buttonLineColor: '#757575',
         buttonLineDisabled: '#4c4c4c',
+
+        importItemActiveBackground: '#2d344a',
+        importItemActiveBorder: '#2d344a',
+        importItemActiveBorderTop: '#e4ae63',
+        importItemBorder: '#444b64',
+
+        tabColor: '#A5A8AD',
+        tabActiveColor: '#202533',
+        tabBackground: '#202533',
     }
 };
 

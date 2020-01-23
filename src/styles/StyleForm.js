@@ -7,7 +7,7 @@ import {
 
 const FormTextStyled = styled(FormText)`
   font-size: 14px;
-  color: #9eaacc !important;
+  color: ${props => props.theme.inputColor} !important;
   line-height: 1.7;
   margin-top: 30px;
 `;

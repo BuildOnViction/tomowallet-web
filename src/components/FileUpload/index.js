@@ -97,7 +97,12 @@ class FileUploadInput extends PureComponent {
               <div className='file-name'>{fileName}</div>
             </Fragment>
           ) : (
-            <FontAwesomeIcon icon='upload' />
+            <Fragment>
+              <FontAwesomeIcon icon="cloud-upload-alt" />
+              <div className='upload-text'>
+                <span>{getMessage(MSG.INPUT_FILE_UPLOAD_PLACEHOLDER)}</span>
+              </div>
+            </Fragment>
           )}
           <input
             type='file'
@@ -106,9 +111,6 @@ class FileUploadInput extends PureComponent {
             onChange={this.handleChangeFile}
           />
         </label>
-        <div className='upload-text'>
-          <span>{getMessage(MSG.INPUT_FILE_UPLOAD_PLACEHOLDER)}</span>
-        </div>
       </FileUploadInputStyler>
     );
   }

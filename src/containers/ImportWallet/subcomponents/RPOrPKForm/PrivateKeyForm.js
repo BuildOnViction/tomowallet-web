@@ -9,13 +9,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
-import { FormFeedback, FormGroup, Input, Label } from 'reactstrap';
+import { FormFeedback, Input, Label } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Utilities & Constants
 import { KEY_INPUT_TYPE } from '../../constants';
 import { withIntl } from '../../../../components/IntlProvider';
 import { changeInputWithSubmit, detectSubmit } from '../../../../utils';
 import { MSG } from '../../../../constants';
+import { StyledFormGroup } from '../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -56,7 +57,7 @@ class PrivateKeyForm extends PureComponent {
     } = this.props;
 
     return (
-      <FormGroup>
+      <StyledFormGroup>
         <Label for='privateKey'>
           {formatMessage(
             MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_PRIVATE_KEY_INPUT_PRIVATE_KEY_LABEL,
@@ -80,7 +81,7 @@ class PrivateKeyForm extends PureComponent {
             <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
           ))}
         </FormFeedback>
-      </FormGroup>
+      </StyledFormGroup>
     );
   }
 }

@@ -16,21 +16,21 @@ const RPOrPKFormStyler = styled(({ errors, children, ...remains }) => (
 ))`
   ul.nav-tabs {
     border: 0;
-    border-bottom: 1px dashed #444b63;
+    border-bottom: 1px dashed ${props => props.theme.importItemBorder};
     font-size: 16px;
     .nav-link {
       background: transparent !important;
       border: 0;
-      color: #5e677f;
+      color: ${props => props.theme.tabColor};
       margin-right: 50px;
       padding: 0 0 5px;
       cursor: pointer;
       position: relative;
       &.active {
-        color: #9eaacc;
+        color: ${props => props.theme.tabActiveColor};
         &::before {
           content: '';
-          background-color: #5692cd;
+          background-color: ${props => props.theme.tabBackground};
           border-radius: 25px;
           width: 100%;
           height: 2px;

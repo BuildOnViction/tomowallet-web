@@ -8,6 +8,7 @@ const BoxBtnStyler = styled.div`
   text-align: center;
 `;
 const ContainerMin = styled.div`
+  color: ${props => props.theme.cardColor};
   background-color: ${props => props.theme.cardBackground};
   border-radius: 8px;
   padding: 3em 2em;
@@ -17,6 +18,7 @@ const ContainerMin = styled.div`
 const CustomContainer = styled(({ size, children, ...remains }) => (
   <div {...remains}>{children}</div>
 ))`
+  color: ${props => props.theme.cardColor};
   background-color: ${props => props.theme.cardBackground};
   border-radius: 8px;
   padding: 3em 2em;
