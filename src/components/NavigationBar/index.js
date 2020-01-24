@@ -20,7 +20,6 @@ import {
   Collapse,
   Nav,
   UncontrolledDropdown,
-  CardImg,
   Container,
 } from 'reactstrap';
 // Custom Components
@@ -33,6 +32,8 @@ import {
   DropdownMenuStyler,
   DropdownItemStyler,
   ButtonSwitchMode,
+  LogoBox,
+  TomoText,
 } from './style';
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
@@ -63,7 +64,7 @@ import {
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
 import { removeRPFile } from '../../utils/electron';
 // import { MediumButtonStyler } from '../../styles';
-import { ArrowRight } from '../../components/Icons';
+import { ArrowRight, LogoTomo } from '../../components/Icons';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // ===== MAIN COMPONENT =====
@@ -226,10 +227,10 @@ class NavigationBar extends PureComponent {
         <Container>
           <NavBarStyler light expand='md'>
             <NavbarBrand onClick={this.handleRedirectToHomepage}>
-              <CardImg
-                src={logo_tomochain}
-                alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
-              />
+              <LogoBox>
+                <LogoTomo />
+                <TomoText>TomoChain</TomoText>
+              </LogoBox>
             </NavbarBrand>
             <Collapse navbar>
               <Nav className='ml-auto' navbar>

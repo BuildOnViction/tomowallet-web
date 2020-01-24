@@ -25,7 +25,7 @@ const LinkHeader = styled(NavLink)`
   cursor: pointer;
 `;
 const DropdownToggleHeader = styled(DropdownToggle)`
-  color: #9eaacc !important;
+  color: ${props => props.theme.menuColor} !important;
   font-weight: normal;
   display: flex;
   align-items: center;
@@ -96,6 +96,7 @@ const NavBarStyler = styled(Navbar)`
   }
   .nav-item {
     font-weight: bold;
+
     @media (min-width: 992px) {
       &:not(:first-child) {
         margin-left: 20px;
@@ -104,10 +105,14 @@ const NavBarStyler = styled(Navbar)`
         margin-right: 20px;
       }
     }
+
+    i {
+      color: ${props => props.theme.menuIconColor};
+    }
   }
 `;
 const DropdownMenuStyler = styled(DropdownMenu)`
-  background-color: #272d40;
+  background-color: ${props => props.theme.menuBackground};
   border-radius: 8px;
   border: 0;
   top: 39px;
@@ -115,7 +120,7 @@ const DropdownMenuStyler = styled(DropdownMenu)`
   padding: 0.5em 1em;
   min-width: 125px;
   .dropdown-item {
-    color: #9eaacc;
+    color: ${props => props.theme.menuColor};
   }
 `;
 const DropdownItemStyler = styled(DropdownItem)`
@@ -140,6 +145,7 @@ const ButtonSwitchMode = styled(MediumButtonStyler)`
   color: ${props => props.theme.switchModeColor};
   background: ${props => props.theme.switchModeBackground};
   white-space: nowrap;
+  margin-right: 40px;
 
   &:hover {
     background: ${props => props.theme.switchModeBackgroundHover};
@@ -149,9 +155,29 @@ const ButtonSwitchMode = styled(MediumButtonStyler)`
     margin-left: 16px;
 
     path {
-      fill: ${props => props.theme.switchModeIconColor};
+      fill: ${props => props.theme.menuIconColor};
     }
   }
+`
+
+const LogoBox = styled.div`
+  display: flex;
+  align-items: center;
+  transition: all 0.5s ease-out 0s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateX(10%);
+  }
+`
+
+const TomoText = styled.span.attrs({
+  className: 'd-md-none d-lg-inline-block',
+})`
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff !important;
+  margin-left: 8px;
 `
 // =================
 
@@ -163,4 +189,6 @@ export {
   DropdownMenuStyler,
   DropdownItemStyler,
   ButtonSwitchMode,
+  LogoBox,
+  TomoText,
 };
