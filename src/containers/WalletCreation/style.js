@@ -12,7 +12,7 @@ import { ContainerMin } from '../../styles';
 
 // ===== STYLE =====
 const Wrapper = styled.div`
-  padding-top: 64px;
+  padding: 34px 0;
 `
 
 const WalletCreationStyler = styled(ContainerMin)`

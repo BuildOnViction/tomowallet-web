@@ -15,6 +15,8 @@ import {
 } from 'reactstrap';
 // ===================
 
+import { MediumButtonStyler } from '../../styles';
+
 // ===== STYLE =====
 
 const LinkHeader = styled(NavLink)`
@@ -133,6 +135,24 @@ const NavWrapper = styled.div`
   background: ${props => props.theme.navBackground};
   height: 80px;
 ` 
+
+const ButtonSwitchMode = styled(MediumButtonStyler)`
+  color: ${props => props.theme.switchModeColor};
+  background: ${props => props.theme.switchModeBackground};
+  white-space: nowrap;
+
+  &:hover {
+    background: ${props => props.theme.switchModeBackgroundHover};
+  }
+
+  svg {
+    margin-left: 16px;
+
+    path {
+      fill: ${props => props.theme.switchModeIconColor};
+    }
+  }
+`
 // =================
 
 export {
@@ -142,4 +162,5 @@ export {
   DropdownToggleHeader,
   DropdownMenuStyler,
   DropdownItemStyler,
+  ButtonSwitchMode,
 };

@@ -60,6 +60,11 @@ const theme = {
         tabColor: '#A5A8AD',
         tabActiveColor: '#202533',
         tabBackground: '#202533',
+
+        switchModeIconColor: '#3A8ECC',
+        switchModeColor: '#F5F5F5',
+        switchModeBackground: '#333B54',
+        switchModeBackgroundHover: '#2e3752',
     },
     incognito: {
         headingColor: '#f5f5f5',
@@ -122,6 +127,11 @@ const theme = {
         tabColor: '#A5A8AD',
         tabActiveColor: '#202533',
         tabBackground: '#202533',
+
+        switchModeIconColor: '#F5F5F5',
+        switchModeColor: '#F5F5F5',
+        switchModeBackground: '#252525',
+        switchModeBackgroundHover: '#333',
     }
 };
 

@@ -32,6 +32,7 @@ import {
   DropdownToggleHeader,
   DropdownMenuStyler,
   DropdownItemStyler,
+  ButtonSwitchMode,
 } from './style';
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
@@ -61,7 +62,8 @@ import {
 } from '../../containers/Global/selectors';
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
 import { removeRPFile } from '../../utils/electron';
-import { MediumButtonStyler } from '../../styles';
+// import { MediumButtonStyler } from '../../styles';
+import { ArrowRight } from '../../components/Icons';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // ===== MAIN COMPONENT =====
@@ -157,10 +159,10 @@ class NavigationBar extends PureComponent {
 
     return (
       <Fragment>
-        <MediumButtonStyler onClick={() => onTogglePrivacyMode()}>
-            {formatMessage(privacyMode ? MSG.HEADER_NAVBAR_NORMAL_MOD : MSG.HEADER_NAVBAR_PRIVACY_MOD)}
-            {/* <FontAwesomeIcon icon='share' className='ml-2' /> */}
-          </MediumButtonStyler>
+        <ButtonSwitchMode onClick={() => onTogglePrivacyMode()}>
+          {formatMessage(privacyMode ? MSG.HEADER_NAVBAR_NORMAL_MOD : MSG.HEADER_NAVBAR_PRIVACY_MOD)}
+          <ArrowRight />
+        </ButtonSwitchMode>
         <UncontrolledDropdown nav inNavbar>
           <DropdownToggleHeader nav className='onl'>
             {_get(network, 'data.label')}
