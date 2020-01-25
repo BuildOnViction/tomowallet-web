@@ -5,6 +5,10 @@ const theme = {
         color: '#4D515C',
         background: '#F1F5FF',
         navBackground: '#272D40',
+
+        boxTitleColor: '#A5A8AD',
+        boxValueColor: '#31384E',
+        boxAddressValueColor: '#4B96CD',
         boxBackground: '#fff',
         modalColor: '#202533',
 
@@ -80,6 +84,10 @@ const theme = {
         color: '#757575',
         background: '#151515',
         navBackground: '#1C1C1C',
+
+        boxTitleColor: '#757575',
+        boxValueColor: '#F5F5F5',
+        boxAddressValueColor: '#F5F5F5',
         boxBackground: '#1C1C1C',
         modalColor: '#f5f5f5',
 

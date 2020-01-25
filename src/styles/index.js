@@ -33,6 +33,8 @@ import {
   TextYellowPointer,
   BoxText,
   TextGray,
+  TextValue,
+  TextAddressValue,
 } from './StyleTypo';
 
 import theme from './StyleTheme'
@@ -77,4 +79,6 @@ export {
   BoxText,
   TextGray,
   BoxWrapper,
+  TextValue,
+  TextAddressValue,
 };

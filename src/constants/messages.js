@@ -615,11 +615,11 @@ export default defineMessages({
   },
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
-    defaultMessage: 'Address',
+    defaultMessage: 'Main Address',
   },
   MY_WALLET_SECTION_PRIVACY_ADDRESS_TITLE: {
-    id: `${myWalletPagePrefix}.section.address.title`,
-    defaultMessage: 'Privacy Address',
+    id: `${myWalletPagePrefix}.section.address.incognito.title`,
+    defaultMessage: 'Incognito Address',
   },
   MY_WALLET_SECTION_EXCHANGE_CHART_RANK: {
     id: `${myWalletPagePrefix}.section.exchange.chart.rank`,

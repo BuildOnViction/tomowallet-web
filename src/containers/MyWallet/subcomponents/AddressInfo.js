@@ -23,7 +23,7 @@ import { MediumButtonStyler, HeadingSmall, BoxWrapper } from '../../../styles';
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
-import { TextBlue } from '../../../styles';
+import { TextAddressValue } from '../../../styles';
 import { withGlobal } from '../../../utils';
 import { createStructuredSelector } from 'reselect';
 import { selectPrivacyMode } from '../../Global/selectors';
@@ -66,13 +66,13 @@ class AddressInfo extends PureComponent {
                       <FontAwesomeIcon icon='wallet' className='mr-2' />
                       {formatMessage(MSG.MY_WALLET_SECTION_PRIVACY_ADDRESS_TITLE)}
                     </HeadingSmall>
-                    <TextBlue
+                    <TextAddressValue
                       role='presentation'
                       onClick={() => handleCopyToClipboard(privacyAddress)}
                       className='text-break'
                     >
                       <Ellipsis middle>{privacyAddress}</Ellipsis>
-                    </TextBlue>
+                    </TextAddressValue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
                         <MediumButtonStyler onClick={openSendTokenPopup}>
@@ -98,13 +98,13 @@ class AddressInfo extends PureComponent {
                       <FontAwesomeIcon icon='wallet' className='mr-2' />
                       {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
                     </HeadingSmall>
-                    <TextBlue
+                    <TextAddressValue
                       role='presentation'
                       onClick={() => handleCopyToClipboard(walletAddress)}
                       className='text-break'
                     >
                       <Ellipsis middle>{walletAddress}</Ellipsis>
-                    </TextBlue>
+                    </TextAddressValue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
                         <MediumButtonStyler onClick={openSendTokenPopup}>

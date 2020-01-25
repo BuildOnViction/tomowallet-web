@@ -19,10 +19,19 @@ const HeadingMedium = styled.h3`
   font-size: 16px;
 `;
 const HeadingSmall = styled.h2`
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-bottom: 15px;
+  color: ${props => props.theme.boxTitleColor};
+  font-size: 16px;
+  margin-bottom: 10px;
 `;
+const TextValue = styled.div`
+  font-family: 'Bai Jamjuree', sans-serif;
+  font-size: 18px;
+  color: ${props => props.theme.boxValueColor};
+`
+const TextAddressValue = styled(TextValue)`
+  cursor: pointer;
+  color: ${props => props.theme.boxAddressValueColor};
+`
 const NoticeTextRed = styled.span`
   color: #be445e;
 `;
@@ -70,4 +79,6 @@ export {
   TextYellowPointer,
   BoxText,
   TextGray,
+  TextValue,
+  TextAddressValue,
 };
