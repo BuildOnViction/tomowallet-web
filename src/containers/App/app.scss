@@ -283,30 +283,30 @@ a {
   display: flex;
 }
 //main_tab
-.main_tab {
-  ul.nav-tabs {
-    border: 0;
-    .nav-link {
-      background: transparent !important;
-      border: 0;
-      margin-right: 50px;
-      padding: 0 0 5px;
-      cursor: pointer;
-      position: relative;
-      &.active {
-        &::before {
-          content: '';
-          border-radius: 25px;
-          width: 30px;
-          height: 2px;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-        }
-      }
-    }
-  }
-}
+// .main_tab {
+//   ul.nav-tabs {
+//     border: 0;
+//     .nav-link {
+//       background: transparent !important;
+//       border: 0;
+//       margin-right: 50px;
+//       padding: 0 0 5px;
+//       cursor: pointer;
+//       position: relative;
+//       &.active {
+//         &::before {
+//           content: '';
+//           border-radius: 25px;
+//           width: 30px;
+//           height: 2px;
+//           position: absolute;
+//           bottom: 0;
+//           left: 0;
+//         }
+//       }
+//     }
+//   }
+// }
 
 // Footer
 .mb-text-center {

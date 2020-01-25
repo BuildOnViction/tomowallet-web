@@ -16,6 +16,7 @@ import {
   BoxFlexBetween,
   DropdownMenuMainStyler,
   DropdownToggleMainStyle,
+  MainTabWrapper,
 } from './MainContainer';
 import { ImporWalletStyler } from './ImportWallet';
 import { WarningImages } from './CreateNewWallet';
@@ -57,6 +58,7 @@ export {
   BoxCardStyled,
   BoxImages,
   BoxFlexBetween,
+  MainTabWrapper,
   //ImportWallet
   ImporWalletStyler,
   //CreateNewWallet

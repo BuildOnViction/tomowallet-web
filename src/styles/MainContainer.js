@@ -89,6 +89,39 @@ const BoxWrapper = styled.div`
   height: 100%;
 `
 
+const MainTabWrapper = styled.div.attrs({
+  className: 'main_tab',
+})`
+  ul.nav-tabs {
+    border: 0;
+    
+    .nav-link {
+      background: transparent !important;
+      border: 0;
+      margin-right: 50px;
+      padding: 0 0 5px;
+      cursor: pointer;
+      position: relative;
+      color: ${props => props.theme.tabColor};
+
+      &.active {
+        color: ${props => props.theme.tabActiveColor};
+
+        &::before {
+          background-color: ${props => props.theme.tabBackground};
+          content: '';
+          border-radius: 25px;
+          width: 30px;
+          height: 2px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+`
+
 export {
   BoxWrapper,
   BoxBtnStyler,
@@ -99,4 +132,5 @@ export {
   BoxFlexBetween,
   DropdownMenuMainStyler,
   DropdownToggleMainStyle,
+  MainTabWrapper,
 };

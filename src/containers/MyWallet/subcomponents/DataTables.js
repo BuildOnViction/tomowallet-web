@@ -15,6 +15,7 @@ import PortfolioTable from './PortfolioTable';
 import TransactionTable from './TransactionTable';
 // Constants
 import { LIST } from '../../../constants';
+import { MainTabWrapper } from '../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -28,7 +29,7 @@ class DataTables extends PureComponent {
       openWithdrawPrivacyPopup
     } = this.props;
     return (
-      <div className='main_tab'>
+      <MainTabWrapper>
         <Nav tabs className='mt-5 mb-4'>
           {LIST.MY_WALLET_TABLE_TYPES.map((tab, tabIdx) => (
             <NavItem key={`table_tab_${tabIdx + 1}`}>
@@ -56,7 +57,7 @@ class DataTables extends PureComponent {
             />
           </TabPane>
         </TabContent>
-      </div>
+      </MainTabWrapper>
     );
   }
 }

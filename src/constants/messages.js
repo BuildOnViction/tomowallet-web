@@ -643,7 +643,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_TITLE: {
     id: `${myWalletPagePrefix}.table.tab.portfolio.title`,
-    defaultMessage: 'PORTFOLIO',
+    defaultMessage: 'Portfolio',
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME: {
     id: `${myWalletPagePrefix}.table.portfolio.header.tokenname`,
@@ -691,7 +691,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_TRANSACTION_TITLE: {
     id: `${myWalletPagePrefix}.table.tab.transaction.title`,
-    defaultMessage: 'TRANSACTIONS',
+    defaultMessage: 'Transactions',
   },
   MY_WALLET_TABLE_TRANSACTIONS_HEADER_TX_HASH: {
     id: `${myWalletPagePrefix}.table.transactions.header.txhash`,

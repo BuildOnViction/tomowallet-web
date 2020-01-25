@@ -32,12 +32,11 @@ const RPOrPKFormStyler = styled(({ errors, children, ...remains }) => (
           content: '';
           background-color: ${props => props.theme.tabBackground};
           border-radius: 25px;
-          width: 100%;
+          width: 30px;
           height: 2px;
           position: absolute;
           bottom: 0;
           left: 0;
-          animation: slideRight 0.3s ease-out 1;
         }
       }
     }
