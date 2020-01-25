@@ -20,7 +20,7 @@ const CommonTableStyler = styled(ReactTable)`
       display: inline-block;
       padding: 1em;
       width: auto !important;
-      color: #5e677f;
+      color: ${props => props.theme.tableHeaderCellColor};
       &.box_search {
         width: 100% !important;
       }
@@ -29,6 +29,7 @@ const CommonTableStyler = styled(ReactTable)`
       display: inline-block;
       padding: 1.5em 1em;
       width: auto !important;
+      color: ${props => props.theme.tableBodyCellColor};
     }
   }
 `;
@@ -37,8 +38,13 @@ const PaginationStyler = styled(Pagination)`
   display: flex;
   justify-content: center;
   margin-top: 30px;
+
+  .page-item.active .page-link {
+    color: ${props => props.theme.paginationActiveColor};
+  }
+
   .page-link {
-    color: #5e677f;
+    color: ${props => props.theme.paginationColor};
     &:focus {
       box-shadow: 0 0 0;
     }

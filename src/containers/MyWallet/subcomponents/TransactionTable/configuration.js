@@ -29,15 +29,13 @@ export default ({ formatMessage }) => [
     ),
     accessor: TRANSACTION_COLUMNS.TX_HASH,
     Cell: ({ value }) => (
-      <TextBlue>
-        <a
-          href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
-          rel='noopener noreferrer'
-          target='_blank'
-        >
-          <Ellipsis middle>{value}</Ellipsis>
-        </a>
-      </TextBlue>
+      <a
+        href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${value}`}
+        rel='noopener noreferrer'
+        target='_blank'
+      >
+        <TextBlue><Ellipsis middle>{value}</Ellipsis></TextBlue>
+      </a>
     ),
   },
   {
@@ -62,15 +60,13 @@ export default ({ formatMessage }) => [
     ),
     accessor: TRANSACTION_COLUMNS.FROM,
     Cell: ({ value }) => (
-      <TextBlue>
-        <a
-          href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
-          rel='noopener noreferrer'
-          target='_blank'
-        >
-          <Ellipsis middle>{value}</Ellipsis>
-        </a>
-      </TextBlue>
+      <a
+        href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
+        rel='noopener noreferrer'
+        target='_blank'
+      >
+        <TextBlue><Ellipsis middle>{value}</Ellipsis></TextBlue>
+      </a>
     ),
   },
   {
@@ -93,16 +89,14 @@ export default ({ formatMessage }) => [
       </Fragment>
     ),
     accessor: TRANSACTION_COLUMNS.TO,
-    Cell: ({ value }) => (
-      <TextBlue>
-        <a
-          href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
-          rel='noopener noreferrer'
-          target='_blank'
-        >
-          <Ellipsis middle>{value}</Ellipsis>
-        </a>
-      </TextBlue>
+    Cell: ({ value }) => (    
+      <a
+        href={`${_get(API, [getNetwork(), 'VIEW_ADDRESS'])}/${value}`}
+        rel='noopener noreferrer'
+        target='_blank'
+      >
+        <TextBlue><Ellipsis middle>{value}</Ellipsis></TextBlue>
+      </a>
     ),
   },
   {

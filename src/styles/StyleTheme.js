@@ -68,6 +68,11 @@ const theme = {
         menuColor: '#F5F5F5',
         menuIconColor: '#3A8ECC',
         menuBackground: '#333B54',
+
+        tableHeaderCellColor: '#A5A8AD',
+        tableBodyCellColor: '#202533',
+        paginationColor: '#A5A8AD',
+        paginationActiveColor: '#202533',
     },
     incognito: {
         headingColor: '#f5f5f5',
@@ -127,9 +132,9 @@ const theme = {
         importItemActiveBorderTop: '#e4ae63',
         importItemBorder: '#444b64',
 
-        tabColor: '#A5A8AD',
-        tabActiveColor: '#202533',
-        tabBackground: '#202533',
+        tabColor: '#757575',
+        tabActiveColor: '#F5F5F5',
+        tabBackground: '#F5F5F5',
        
         switchModeColor: '#F5F5F5',
         switchModeBackground: '#252525',
@@ -138,6 +143,11 @@ const theme = {
         menuColor: '#F5F5F5',
         menuIconColor: '#F5F5F5',
         menuBackground: '#252525',
+
+        tableHeaderCellColor: '#757575',
+        tableBodyCellColor: '#F5F5F5',
+        paginationColor: '#757575',
+        paginationActiveColor: '#F5F5F5',
     }
 };
 
