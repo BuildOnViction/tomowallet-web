@@ -613,6 +613,22 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.title`,
     defaultMessage: 'My TomoWallet',
   },
+  MY_WALLET_MAIN_MODE: {
+    id: `${myWalletPagePrefix}.mode.main`,
+    defaultMessage: 'Main Mode',
+  },
+  MY_WALLET_MAIN_MODE_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.mode.main.description`,
+    defaultMessage: 'Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable',
+  },
+  MY_WALLET_INCOGNITO_MODE: {
+    id: `${myWalletPagePrefix}.mode.incognito`,
+    defaultMessage: 'Incognito Mode',
+  },
+  MY_WALLET_INCOGNITO_MODE_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.mode.incognito.description`,
+    defaultMessage: 'Incognito mode allows you to make the transactions which are ingconitive and  couldn’t be traceable',
+  },
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
     defaultMessage: 'Main Address',
