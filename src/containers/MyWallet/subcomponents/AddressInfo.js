@@ -53,12 +53,12 @@ class AddressInfo extends PureComponent {
               className='mb-sm-3 mb-lg-0'
             >
               <BoxWrapper>
-                <BalanceInfo />
+                <BalanceInfo formatMessage={formatMessage} />
               </BoxWrapper>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
-              <BoxWrapper className='d-flex align-items-center'>
-                <Row className='fullwidth align-items-center'>
+              <BoxWrapper>
+                <Row className='align-items-center'>
                   { privacyMode ?
                   // Privacy address
                   <Col md={8}>

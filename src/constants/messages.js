@@ -645,6 +645,22 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.section.address.incognito.title`,
     defaultMessage: 'Incognito Address',
   },
+  MY_WALLET_SECTION_BALANCE_BALANCE: {
+    id: `${myWalletPagePrefix}.section.balance.balance`,
+    defaultMessage: 'Balance',
+  },
+  MY_WALLET_SECTION_BALANCE_ESTIMATED: {
+    id: `${myWalletPagePrefix}.section.balance.estimated`,
+    defaultMessage: 'Estimated value',
+  },
+  MY_WALLET_SECTION_BALANCE_INCOGNITO: {
+    id: `${myWalletPagePrefix}.section.balance.incognito`,
+    defaultMessage: 'Incognito Balance',
+  },
+  MY_WALLET_SECTION_BALANCE_MAIN: {
+    id: `${myWalletPagePrefix}.section.balance.main`,
+    defaultMessage: 'Main Balance',
+  },
   MY_WALLET_SECTION_EXCHANGE_CHART_RANK: {
     id: `${myWalletPagePrefix}.section.exchange.chart.rank`,
     defaultMessage: 'Rank',

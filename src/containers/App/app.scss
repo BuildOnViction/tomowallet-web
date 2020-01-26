@@ -277,10 +277,8 @@ a {
 .fullwidth {
   width: 100%;
 }
-.qrc_bd {
-  border: 7px solid #fff;
-  border-radius: 3px;
-  display: flex;
+.qrc_bd canvas {
+  display: block;
 }
 
 // Footer
