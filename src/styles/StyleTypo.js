@@ -20,12 +20,12 @@ const HeadingMedium = styled.h3`
 `;
 const HeadingSmall = styled.h2`
   color: ${props => props.theme.boxTitleColor};
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 10px;
 `;
 const TextValue = styled.div`
   font-family: 'Bai Jamjuree', sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   color: ${props => props.theme.boxValueColor};
 `
 const TextAddressValue = styled(TextValue)`

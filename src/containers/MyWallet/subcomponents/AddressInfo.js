@@ -16,8 +16,8 @@ import { Row, Col } from 'reactstrap';
 import QRCode from 'qrcode.react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
-import ExchangeInfo from './ExchangeInfo';
 import Ellipsis from '../../../components/Ellipsis';
+import BalanceInfo from './BalanceInfo';
 import { MediumButtonStyler, HeadingSmall, BoxWrapper } from '../../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
@@ -53,7 +53,7 @@ class AddressInfo extends PureComponent {
               className='mb-sm-3 mb-lg-0'
             >
               <BoxWrapper>
-                <ExchangeInfo />
+                <BalanceInfo />
               </BoxWrapper>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
