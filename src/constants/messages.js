@@ -83,11 +83,11 @@ export default defineMessages({
   // Common - Lists
   COMMON_LIST_LANGUAGE_ENGLISH: {
     id: `${listPrefix}.language.english`,
-    defaultMessage: 'EN',
+    defaultMessage: 'English',
   },
   COMMON_LIST_LANGUAGE_FRENCH: {
     id: `${listPrefix}.language.french`,
-    defaultMessage: 'FR',
+    defaultMessage: 'Français',
   },
   COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET: {
     id: `${listPrefix}.network.tomochain.testnet`,
@@ -98,6 +98,14 @@ export default defineMessages({
     defaultMessage: 'TomoChain MainNet',
   },
   // Component - Header Navigation Bar
+  HEADER_NAVBAR_MENU_SWITCH_NETWORK: {
+    id: `${navbarPrefix}.menu.switch.network`,
+    defaultMessage: 'Switch netwok',
+  },
+  HEADER_NAVBAR_MENU_LANGUAGE: {
+    id: `${navbarPrefix}.menu.language`,
+    defaultMessage: 'Language',
+  },
   HEADER_NAVBAR_LOGO_ALT: {
     id: `${navbarPrefix}.logo.alt`,
     defaultMessage: 'TOMOCHAIN LOGO',
@@ -111,12 +119,12 @@ export default defineMessages({
     defaultMessage: 'FAQ',
   },
   HEADER_NAVBAR_PRIVACY_MOD: {
-    id: `${navbarPrefix}.privacy.mode`,
+    id: `${navbarPrefix}.switch.mode.incognito`,
     defaultMessage: 'Switch to Incognito mode',
   },
   HEADER_NAVBAR_NORMAL_MOD: {
-    id: `${navbarPrefix}.privacy.mode`,
-    defaultMessage: 'Switch to normal mode',
+    id: `${navbarPrefix}.switch.mode.main`,
+    defaultMessage: 'Switch to main mode',
   },
   HEADER_NAVBAR_OPTION_MY_WALLET: {
     id: `${navbarPrefix}.option.mywallet`,

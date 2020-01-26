@@ -77,6 +77,8 @@ import electron, {
   writeKeystore,
 } from './electron';
 
+import { truncateMiddle } from './helper'
+
 export {
   addBN,
   bnToDecimals,
@@ -150,4 +152,5 @@ export {
   isPrivacyAddress,
   estimatePrivacyFee,
   withdrawPrivacy,
+  truncateMiddle,
 };

@@ -7,6 +7,7 @@
 // Modules
 import styled from 'styled-components';
 import {
+  Nav,
   Navbar,
   NavLink,
   DropdownToggle,
@@ -23,9 +24,10 @@ const LinkHeader = styled(NavLink)`
   color: #9eaacc !important;
   font-weight: normal;
   cursor: pointer;
+  user-select: none;
 `;
 const DropdownToggleHeader = styled(DropdownToggle)`
-  color: ${props => props.theme.menuColor} !important;
+  color: ${props => props.theme.menuHeaderColor} !important;
   font-weight: normal;
   display: flex;
   align-items: center;
@@ -45,8 +47,9 @@ const DropdownToggleHeader = styled(DropdownToggle)`
   }
 `;
 const NavBarStyler = styled(Navbar)`
-  padding: 15px 0;
+  height: 80px;
   width: 100%;
+  display: flex;
   text-align: center;
   .navbar-brand {
     svg.fa-shield-alt {
@@ -111,24 +114,29 @@ const NavBarStyler = styled(Navbar)`
     }
   }
 `;
+
+const NavRight = styled(Nav)`
+  align-items: center;
+`
+
 const DropdownMenuStyler = styled(DropdownMenu)`
   background-color: ${props => props.theme.menuBackground};
   border-radius: 8px;
   border: 0;
   top: 39px;
   margin: 0;
-  padding: 0.5em 1em;
-  min-width: 125px;
-  .dropdown-item {
-    color: ${props => props.theme.menuColor};
-  }
+  padding: 20px 30px;
+  min-width: 210px;
 `;
 const DropdownItemStyler = styled(DropdownItem)`
+  color: ${props => props.theme.menuColor};
   font-size: 14px;
   transition: all 0.5s ease;
   position: relative;
   padding: 0.5rem 0;
   background: transparent !important;
+  user-select: none;
+
   &:focus,
   &:hover {
     background: transparent;
@@ -136,9 +144,54 @@ const DropdownItemStyler = styled(DropdownItem)`
     outline: 0 auto -webkit-focus-ring-color;
   }
 `;
+
+const SubDropdownItem = styled(DropdownItemStyler)`
+  color: ${props => props.theme.menuSubColor};
+  padding-left: 16px;
+  position: relative;
+
+  &.disabled,
+  &:disabled {
+    color: ${props => props.theme.menuSubColor};
+  }
+
+  &.active::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background: #4B96CD;
+  }
+`
+
+const CustomDropdownItem = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  line-height: 23px;
+  padding: 8px 0;
+  user-select: none;
+
+  i.font-chevron-down {
+    color: ${props => props.theme.menuColor};
+  }
+
+  &:hover {
+    color: #5692cd;
+
+    i.font-chevron-down {
+      color: #5692cd;
+    }
+  }
+`
 const NavWrapper = styled.div`
   background: ${props => props.theme.navBackground};
-  height: 80px;
 ` 
 
 const ButtonSwitchMode = styled(MediumButtonStyler)`
@@ -171,9 +224,7 @@ const LogoBox = styled.div`
   }
 `
 
-const TomoText = styled.span.attrs({
-  className: 'd-md-none d-lg-inline-block',
-})`
+const TomoText = styled.span`
   font-size: 20px;
   font-weight: 500;
   color: #fff !important;
@@ -184,10 +235,13 @@ const TomoText = styled.span.attrs({
 export {
   NavWrapper,
   NavBarStyler,
+  NavRight,
   LinkHeader,
   DropdownToggleHeader,
   DropdownMenuStyler,
-  DropdownItemStyler,
+  DropdownItemStyler, 
+  SubDropdownItem, 
+  CustomDropdownItem,
   ButtonSwitchMode,
   LogoBox,
   TomoText,

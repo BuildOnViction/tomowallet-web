@@ -69,9 +69,11 @@ const theme = {
         switchModeBackground: '#333B54',
         switchModeBackgroundHover: '#2e3752',
 
-        menuColor: '#F5F5F5',
+        menuHeaderColor: '#F5F5F5',
+        menuColor: '#202533',
+        menuSubColor: '#A5A8AD',
         menuIconColor: '#3A8ECC',
-        menuBackground: '#333B54',
+        menuBackground: '#FFFFFF',
 
         tableHeaderCellColor: '#A5A8AD',
         tableBodyCellColor: '#202533',
@@ -148,9 +150,11 @@ const theme = {
         switchModeBackground: '#252525',
         switchModeBackgroundHover: '#333',
 
-        menuColor: '#F5F5F5',
+        menuHeaderColor: '#F5F5F5',
+        menuColor: '#202533',
+        menuSubColor: '#A5A8AD',
         menuIconColor: '#F5F5F5',
-        menuBackground: '#252525',
+        menuBackground: '#FFFFFF',
 
         tableHeaderCellColor: '#757575',
         tableBodyCellColor: '#F5F5F5',
