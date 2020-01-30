@@ -4,7 +4,8 @@ import  { PieChart, Pie, Cell } from 'recharts';
 const COLORS = ['#4B96CD', '#E4AE63'];
 
 const Chart = (props) => {
-    const data = [{name: 'Group A', value: 50}, {name: 'Group B', value: 300}];
+    // const data = [{value: 9580.362}, {value: 61.996}];
+    const data = props.data
 
   	return (
     	<PieChart width={140} height={140}>

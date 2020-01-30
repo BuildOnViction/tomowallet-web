@@ -42,19 +42,21 @@ class BalanceInfo extends PureComponent {
             _get(wallet, ['balance'], 0),
             18
         );
+        let totalBalance = parseFloat(balance) + parseFloat(privacyBalance)
         return (
             <Wrapper>
                 <Col>
                     <div>
                         <TextTitle>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_BALANCE)}</TextTitle>
-                        <TextValue>{convertLocaleNumber(parseFloat(balance))} TOMO</TextValue>
+                        <TextValue>{convertLocaleNumber(totalBalance)} TOMO</TextValue>
                     </div>
                     <div>
                         <TextTitle>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_ESTIMATED)}</TextTitle>
-                        <TextValue>$ {convertLocaleNumber(parseFloat(balance * _get(coinData, ['data', 'quotes', 'USD', 'price'], 0)))}</TextValue>
+                        <TextValue>$ {convertLocaleNumber(totalBalance * _get(coinData, ['data', 'quotes', 'USD', 'price'], 0))}</TextValue>
                     </div>
                 </Col>
-                <Col><Chart /></Col>
+                <Col><Chart data={[{ value: parseFloat(balance)},
+                    { value: parseFloat(privacyBalance) }]}/></Col>
                 <Col>
                     <BalanceIncognito>
                         <TextTitle>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}</TextTitle>

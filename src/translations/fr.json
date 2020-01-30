@@ -9,6 +9,8 @@
   "tomowallet.common.button.confirm": "Confirmer",
   "tomowallet.common.button.unlock": "Ouvrir",
   "tomowallet.common.button.close": "Fermer",
+  "tomowallet.common.button.deposit": "Dépôt",
+  "tomowallet.common.button.withdraw": "Retirer",
   "tomowallet.common.list.language.english": "English",
   "tomowallet.common.list.language.french": "Français",
   "tomowallet.common.list.network.tomochain.testnet": "Réseau de Test TomoChain",
@@ -138,7 +140,7 @@
   "tomowallet.container.mywallet.title": "Mon TomoWallet",
   "tomowallet.container.mywallet.section.address.title": "Adresse de navigation privée",
   "tomowallet.container.mywallet.section.address.incognito.title": "Adresse",
-  "tomowallet.container.mywallet.section.balance.balance": "Équilibre",
+  "tomowallet.container.mywallet.section.balance.balance": "Total balance",
   "tomowallet.container.mywallet.section.balance.estimated": "Valeur estimée",
   "tomowallet.container.mywallet.section.balance.incognito": "Équilibre incognito",
   "tomowallet.container.mywallet.section.balance.main": "Moyenne principale",
@@ -193,5 +195,8 @@
   "tomowallet.container.mywallet.popup.receivetoken.title": "Recevoir",
   "tomowallet.container.mywallet.popup.receivetoken.content.message": "Votre adresse prend en charge le transfert vers TOMO et son jeton.",
   "tomowallet.container.mywallet.popup.success.info.amountsent": "Vous avez envoyé",
-  "tomowallet.container.mywallet.popup.success.info.transactionhash": "Hachage de transaction"
+  "tomowallet.container.mywallet.popup.success.info.transactionhash": "Hachage de transaction",
+  "tomowallet.container.mywallet.popup.deposit.title": "Dépôt",
+  "tomowallet.container.mywallet.popup.withdraw.title": "Retirer",
+  "tomowallet.container.mywallet.table.portfolio.header.privacy.balance": "Vie privée Solde"
 }
