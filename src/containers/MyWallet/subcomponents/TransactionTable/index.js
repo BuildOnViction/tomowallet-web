@@ -39,7 +39,11 @@ class TransactionTable extends PureComponent {
           _get(this.props, 'tableType'),
           _get(LIST, ['MY_WALLET_TABLE_TYPES', 1, 'value']),
         )) ||
-        !_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode'))
+        (!_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode')) &&
+        _isEqual(
+          _get(this.props, 'tableType'),
+          _get(LIST, ['MY_WALLET_TABLE_TYPES', 1, 'value']),
+        ))
     ) {
       this.handleLoadTransactionData();
     }

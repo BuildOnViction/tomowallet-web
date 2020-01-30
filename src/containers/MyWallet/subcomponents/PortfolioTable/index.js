@@ -64,7 +64,11 @@ class PortfolioTable extends Component {
           _get(this.props, 'tableType'),
           _get(LIST, ['MY_WALLET_TABLE_TYPES', 0, 'value']),
         )) ||
-        !_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode')) ||
+        (!_isEqual(_get(prevProps, 'privacyMode'), _get(this.props, 'privacyMode')) &&
+        _isEqual(
+          _get(this.props, 'tableType'),
+          _get(LIST, ['MY_WALLET_TABLE_TYPES', 0, 'value']),
+        )) ||
         (!_get(prevProps, 'successDepositPopup.isOpen') &&
         _get(this.props, 'successDepositPopup.isOpen')) ||
         (!_get(prevProps, 'successWithdrawPopup.isOpen') &&

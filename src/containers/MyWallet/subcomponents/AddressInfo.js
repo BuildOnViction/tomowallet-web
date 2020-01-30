@@ -53,7 +53,7 @@ class AddressInfo extends PureComponent {
               className='mb-sm-3 mb-lg-0'
             >
               <BoxWrapper>
-                <BalanceInfo formatMessage={formatMessage} />
+                <BalanceInfo formatMessage={formatMessage} wallet={wallet} />
               </BoxWrapper>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
