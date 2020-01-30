@@ -681,6 +681,10 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.section.exchange.unit.btc`,
     defaultMessage: 'BTC',
   },
+  MY_WALLET_TABLE_NODATA: {
+    id: `${myWalletPagePrefix}.table.nodata`,
+    defaultMessage: 'You have no items',
+  },
   MY_WALLET_TABLE_PORTFOLIO_TITLE: {
     id: `${myWalletPagePrefix}.table.tab.portfolio.title`,
     defaultMessage: 'Portfolio',

@@ -151,6 +151,7 @@
   "tomowallet.container.mywallet.section.exchange.chart.volume": "Volume",
   "tomowallet.container.mywallet.section.exchange.unit.usd": "USD",
   "tomowallet.container.mywallet.section.exchange.unit.btc": "BTC",
+  "tomowallet.container.mywallet.table.nodata": "You have no items",
   "tomowallet.container.mywallet.table.tab.portfolio.title": "Portfolio",
   "tomowallet.container.mywallet.table.portfolio.header.tokenname": "Token name",
   "tomowallet.container.mywallet.table.portfolio.header.balance": "Balance",

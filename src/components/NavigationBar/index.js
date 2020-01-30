@@ -168,12 +168,14 @@ class NavigationBar extends PureComponent {
         </DropdownToggleHeader>
         <DropdownMenuStyler right className='shadow-lg'>
           {LIST.LANGUAGES.map((opt, optIdx) => (
-            <DropdownItemStyler
+            <SubDropdownItem
               key={`language_${optIdx + 1}`}
               onClick={() => this.handleChangeLocale(opt.value)}
+              active={opt.value === language}
+              disabled={opt.value === language}
             >
               {opt.label}
-            </DropdownItemStyler>
+            </SubDropdownItem>
           ))}
         </DropdownMenuStyler>
       </UncontrolledDropdown>

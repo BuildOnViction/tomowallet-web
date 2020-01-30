@@ -35,6 +35,9 @@ import {
   TextGray,
   TextValue,
   TextAddressValue,
+  TextSend,
+  TextDeposit,
+  TextWithdraw,
 } from './StyleTypo';
 
 import theme from './StyleTheme'
@@ -81,4 +84,7 @@ export {
   BoxWrapper,
   TextValue,
   TextAddressValue,
+  TextSend,
+  TextDeposit,
+  TextWithdraw,
 };

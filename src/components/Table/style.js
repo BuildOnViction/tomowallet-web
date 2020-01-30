@@ -12,6 +12,8 @@ import { Pagination } from 'reactstrap';
 
 // ===== STYLE =====
 const CommonTableStyler = styled(ReactTable)`
+  position: relative;
+
   .rt-table {
     border-radius: 8px;
     background-color: ${props => props.theme.boxBackground};
@@ -33,6 +35,13 @@ const CommonTableStyler = styled(ReactTable)`
     }
   }
 `;
+
+const NoData = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+`
 
 const PaginationStyler = styled(Pagination)`
   display: flex;
@@ -70,4 +79,4 @@ const EllipsisCellStyler = styled.div`
 `;
 // =================
 
-export { CommonTableStyler, PaginationStyler, EllipsisCellStyler };
+export { CommonTableStyler, PaginationStyler, NoData, EllipsisCellStyler };

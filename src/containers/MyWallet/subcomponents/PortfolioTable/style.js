@@ -21,7 +21,7 @@ const TokenCellStyler = styled.div`
     padding-left: 10px;
     line-height: 1;
     .block-token__name {
-      font-size: 16px;
+      font-size: 14px;
       color: ${props => props.theme.tableBodyCellColor};
     }
     .block-token__publisher {

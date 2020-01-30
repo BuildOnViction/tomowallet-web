@@ -62,9 +62,29 @@ const TextYellowPointer = styled.span`
     color: ${props => props.theme.highlightHoverColor2};
   }
 `;
+const TextSend = styled(TextYellowPointer)`
+  font-size: 14px;
+`
+const TextDeposit = styled(TextSend)`
+  color: ${props => props.theme.highlightColor3};
+
+  &:hover {
+    color: ${props => props.theme.highlightHoverColor3};
+  }
+`;
+
+const TextWithdraw = styled(TextSend)`
+  color: ${props => props.theme.highlightColor4};
+
+  &:hover {
+    color: ${props => props.theme.highlightHoverColor4};
+  }
+`;
+
 const TextGray = styled.div`
   color: ${props => props.theme.highlightColor1};
 `;
+
 const BoxText = styled.div``;
 export {
   HeadingBig,
@@ -81,4 +101,7 @@ export {
   TextGray,
   TextValue,
   TextAddressValue,
+  TextSend,
+  TextDeposit,
+  TextWithdraw,
 };
