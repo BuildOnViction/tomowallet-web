@@ -93,6 +93,7 @@ const StyledFormGroup = styled(FormGroup)`
 
         &.my-select--is-disabled {
             .my-select__control {
+                color: ${props => props.theme.inputSecondColor};
                 background-color: ${props => props.theme.selectDisabledBg} !important;
             }
 
