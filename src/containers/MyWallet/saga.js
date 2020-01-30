@@ -7,15 +7,17 @@
 // Modules
 import { call, put, takeLatest } from "redux-saga/effects";
 import _get from "lodash.get";
+import _map from "lodash.map";
 import _isEmpty from "lodash.isempty";
 // Utilities & Constants
 import request from "../../utils/request";
-import { getNetwork, setPrivacyInfo } from "../../utils";
+import { getNetwork, setPrivacyInfo, getLastUTXO, bnToDecimals } from "../../utils";
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,
   LOAD_COIN_DATA,
   SCAN_PRIVACY_DATA,
+  SCAN_PRIVACY_TRANSACTION
 } from "./constants";
 import { API } from "../../constants";
 import {
@@ -25,7 +27,9 @@ import {
   loadCoinDataSuccess,
   loadCoinDataFailed,
   scanPrivacyDataSuccess,
-    scanPrivacyDataFailed,
+  scanPrivacyDataFailed,
+  scanPrivacyTransactionSuccess,
+  scanPrivacyTransactionFailed,
 } from "./actions";
 import { toggleLoading } from "../Global/actions";
 // ===================
@@ -117,21 +121,72 @@ export function* loadCoin() {
 
 export function* scanPrivacy(actionData) {
   try {
+    const t0 = performance.now()
     yield put(toggleLoading(true));
       const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {})
       const address = _get(actionData, ['wallet', 'address'], '')
       const response = yield call([wallet, wallet.scan]);
 
       if (response) {
+        const t1 = performance.now()
+        console.log('adasdasdas', t1 - t0)
+        const t2 = performance.now()
           response.balance = wallet.balance.toString(10);
           response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
           yield put(scanPrivacyDataSuccess(response));
           setPrivacyInfo({ address, ...wallet.state() });
           yield put(toggleLoading(false));
-      }   
+        const t3 = performance.now()
+        console.log('qweqwe', t3-t2)
+      }
+  } catch (error) {
+    console.log('error',error)
+    yield put(toggleLoading(false));
+    yield put(scanPrivacyDataFailed(error))
+  }
+}
+
+export function* scanPrivacyTransaction(actionData) {
+  try {
+    yield put(toggleLoading(true));
+    const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
+    const privacyAddress = _get(actionData, ['wallet', 'privacy', 'privacyAddress', 'pubAddr'], '');
+    const address = _get(actionData, ['wallet', 'address'], '')
+    const lastUTXO = getLastUTXO(wallet).txID
+
+    let last30Txs = []
+    for (let i = lastUTXO - 48; i <=lastUTXO; i++) {
+      last30Txs.push(i)
+    }
+    last30Txs = last30Txs.sort((a, b) => b - a)
+    const response = yield call([wallet, wallet.getTxs], last30Txs);
+    const result = []
+    for (let i = 0; i < response.length; i++) {
+      const data = _map(response[i][1], byte => byte.substr(2, 2)).join('');
+      const owner = yield call([wallet, wallet.checkTxOwnership], response[i][0], Buffer.from(data, 'hex'))
+      
+      if (owner) {
+        result.push({
+          createdTime: parseInt(owner.createdAt),
+          from: owner.receiver === privacyAddress ? address : privacyAddress,
+          to: owner.receiver,
+          amount: bnToDecimals(owner.amount, 9)
+        })
+      }
+    }
+    yield put(scanPrivacyTransactionSuccess({
+      items: result,
+      currentPage: 1,
+      total: 500,
+      pages: 10,
+      address: privacyAddress
+    }))
+
+    /// store txindex
+    yield put(toggleLoading(false));
   } catch (error) {
     yield put(toggleLoading(false));
-      yield put(scanPrivacyDataFailed(error))
+    yield put(scanPrivacyTransactionFailed(error));
   }
 }
 
@@ -140,6 +195,7 @@ function* rootSaga() {
   yield takeLatest(LOAD_TRANSACTION_DATA, loadTransaction);
   yield takeLatest(LOAD_COIN_DATA, loadCoin);
   yield takeLatest(SCAN_PRIVACY_DATA, scanPrivacy);
+  yield takeLatest(SCAN_PRIVACY_TRANSACTION, scanPrivacyTransaction);
 }
 // ================
 
