@@ -452,7 +452,9 @@ const withdrawPrivacy = (web3, wallet, amount) => {
  * @param {Integer} amount Deposit amount
  */
 const getLastUTXO = (wallet) => {
-  return new UTXO(wallet.utxos[wallet.utxos.length - 1])
+  if (wallet.utxos.length > 0) {
+    return new UTXO(wallet.utxos[wallet.utxos.length - 1])
+  } else return {}
 };
 
 /**
