@@ -16,14 +16,14 @@ import { Row, Col } from 'reactstrap';
 import QRCode from 'qrcode.react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
-import ExchangeInfo from './ExchangeInfo';
 import Ellipsis from '../../../components/Ellipsis';
-import { MediumButtonStyler, HeadingSmall } from '../../../styles';
+import BalanceInfo from './BalanceInfo';
+import { MediumButtonStyler, HeadingSmall, BoxWrapper } from '../../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../../components/Web3';
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
-import { TextBlue } from '../../../styles';
+import { TextAddressValue } from '../../../styles';
 import { withGlobal } from '../../../utils';
 import { createStructuredSelector } from 'reselect';
 import { selectPrivacyMode } from '../../Global/selectors';
@@ -52,13 +52,13 @@ class AddressInfo extends PureComponent {
               lg={{ size: 5, order: 12 }}
               className='mb-sm-3 mb-lg-0'
             >
-              <div className='bg_gray'>
-                <ExchangeInfo />
-              </div>
+              <BoxWrapper>
+                <BalanceInfo formatMessage={formatMessage} />
+              </BoxWrapper>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
-              <div className='d-flex align-items-center bg_gray'>
-                <Row className='fullwidth align-items-center'>
+              <BoxWrapper>
+                <Row className='align-items-center'>
                   { privacyMode ?
                   // Privacy address
                   <Col md={8}>
@@ -66,13 +66,13 @@ class AddressInfo extends PureComponent {
                       <FontAwesomeIcon icon='wallet' className='mr-2' />
                       {formatMessage(MSG.MY_WALLET_SECTION_PRIVACY_ADDRESS_TITLE)}
                     </HeadingSmall>
-                    <TextBlue
+                    <TextAddressValue
                       role='presentation'
                       onClick={() => handleCopyToClipboard(privacyAddress)}
                       className='text-break'
                     >
                       <Ellipsis middle>{privacyAddress}</Ellipsis>
-                    </TextBlue>
+                    </TextAddressValue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
                         <MediumButtonStyler onClick={openSendTokenPopup}>
@@ -98,13 +98,13 @@ class AddressInfo extends PureComponent {
                       <FontAwesomeIcon icon='wallet' className='mr-2' />
                       {formatMessage(MSG.MY_WALLET_SECTION_ADDRESS_TITLE)}
                     </HeadingSmall>
-                    <TextBlue
+                    <TextAddressValue
                       role='presentation'
                       onClick={() => handleCopyToClipboard(walletAddress)}
                       className='text-break'
                     >
                       <Ellipsis middle>{walletAddress}</Ellipsis>
-                    </TextBlue>
+                    </TextAddressValue>
                     <Row className='mt-4'>
                       <Col md={6} className='pr-2'>
                         <MediumButtonStyler onClick={openSendTokenPopup}>
@@ -130,7 +130,7 @@ class AddressInfo extends PureComponent {
                     </div>
                   </Col>
                 </Row>
-              </div>
+              </BoxWrapper>
             </Col>
           </Row>
         </div>

@@ -22,6 +22,14 @@ const InputStylerRadio = styled(Input)`
   top: 4px;
 `;
 
+const Label = styled.label`
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+`
+
 // =================
 
-export { AddressPopupStyler, InputStylerRadio };
+export { AddressPopupStyler, InputStylerRadio, Label };

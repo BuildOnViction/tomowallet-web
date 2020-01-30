@@ -85,7 +85,6 @@
   box-sizing: border-box;
 }
 body {
-  background-color: #202533;
   font-size: 14px;
   color: #9eaacc;
   line-height: 1.7;
@@ -100,7 +99,6 @@ a {
 }
 .font-chevron-down {
   font-size: 18px;
-  color: #3a8ecc;
   margin-left: 5px;
 }
 
@@ -151,7 +149,6 @@ a {
     }
     .box-border {
       border-radius: 8px;
-      border: 1px solid #444b64;
     }
   }
 }
@@ -165,7 +162,6 @@ a {
   margin-bottom: 0;
   label {
     display: block;
-    color: #5e677f;
     svg {
       width: 12px;
       margin-left: 5px;
@@ -180,29 +176,13 @@ a {
       width: 0;
       overflow: hidden;
     }
-    .my-select__indicator {
-      color: #3a8ecc;
-    }
     > div {
-      background-color: #2d344a !important;
       border-radius: 8px;
       border: 0;
       min-height: 44px;
     }
-    &.my-select--is-disabled {
-      > div {
-        background-color: #212531 !important;
-      }
-      .my-select__indicator {
-        color: #444b64;
-      }
-    }
     .select_option {
-      padding: 1em;
       transition: all 0.3s;
-      &:hover {
-        background: #272d40;
-      }
     }
     .select_option,
     .select_option_active {
@@ -213,20 +193,14 @@ a {
       }
     }
   }
-  .text-placeholder {
-    color: #444b64;
-  }
   .input-group-append button,
   .input-group-append .input-group-text {
-    background-color: #2d344a !important;
     border-radius: 0 8px 8px 0 !important;
     border: 0;
-    color: #9eaacc;
     font-size: 14px;
     text-transform: uppercase;
     position: relative;
     &::before {
-      background-color: #272d40;
       content: '';
       border-radius: 8px;
       width: 1px;
@@ -239,31 +213,22 @@ a {
     &:focus,
     &:active,
     &:active:focus {
-      box-shadow: 0 0 0 0px #5692cd !important;
       background-color: transparent;
-    }
-    &:hover {
-      background-color: #2d344a;
     }
   }
   input,
   textarea {
     border-radius: 8px;
-    background-color: #2d344a;
     border: 0;
-    color: #9eaacc;
     font-size: 14px;
     height: 44px;
     &::placeholder {
-      color: #444b64;
-      font-size: 13px;
+      font-size: 14px;
       font-family: 'Nunito Sans', sans-serif;
     }
     &:focus,
     &:active &:active:focus {
-      box-shadow: 0 0 0 1px #5692cd;
       background-color: transparent;
-      color: #9eaacc;
     }
   }
   textarea {
@@ -281,9 +246,6 @@ a {
     padding: 1em 0;
     > div {
       list-style: 1.4;
-      &:first-child {
-        color: #5e677f;
-      }
     }
   }
 }
@@ -297,9 +259,7 @@ a {
 //MODAL
 .modal-content {
   border-radius: 8px;
-  background-color: #272d40;
   .modal-title {
-    color: #ffffff;
     font-size: 18px;
     font-weight: 600;
     text-transform: uppercase;
@@ -314,50 +274,11 @@ a {
   width: 80px;
 }
 
-//box-address
-.box-address {
-  .bg_gray {
-    border-radius: 8px;
-    background-color: #272d40;
-    padding: 1em 1.5em;
-    height: 100%;
-  }
-}
 .fullwidth {
   width: 100%;
 }
-.qrc_bd {
-  border: 7px solid #fff;
-  border-radius: 3px;
-  display: flex;
-}
-//main_tab
-.main_tab {
-  ul.nav-tabs {
-    border: 0;
-    .nav-link {
-      background: transparent !important;
-      border: 0;
-      color: #5e677f;
-      margin-right: 50px;
-      padding: 0 0 5px;
-      cursor: pointer;
-      position: relative;
-      &.active {
-        color: #9eaacc;
-        &::before {
-          content: '';
-          background-color: #5692cd;
-          border-radius: 25px;
-          width: 30px;
-          height: 2px;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-        }
-      }
-    }
-  }
+.qrc_bd canvas {
+  display: block;
 }
 
 // Footer
@@ -371,7 +292,6 @@ a {
     li {
       position: relative;
       &:before {
-        background-color: #5e677f;
         content: '';
         height: 20px;
         width: 1px;
@@ -405,9 +325,7 @@ a {
     display: inline-block;
     padding: 5px;
     a {
-      background: #272d40;
       border-radius: 8px;
-      color: #5e677f;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -415,11 +333,6 @@ a {
       height: 30px;
       i {
         transition: all 0.3s;
-      }
-      &:hover {
-        i {
-          color: #fff;
-        }
       }
     }
   }

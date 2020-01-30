@@ -19,7 +19,8 @@ import {
   CardHeader,
   CardImg,
   CardText,
-  CardFooter
+  CardFooter,
+  Card,
 } from "reactstrap";
 import { Helmet } from "react-helmet";
 // Custom Components
@@ -29,7 +30,6 @@ import {
   HeadingLarge,
   TextBlue,
   ImporWalletStyler,
-  BoxCardStyled
 } from "../../styles";
 import LedgerForm from "./subcomponents/LedgerForm";
 import MetaMaskForm from "./subcomponents/MetaMaskForm";
@@ -74,10 +74,11 @@ import {
 import { withWeb3 } from "../../components/Web3";
 import { withIntl } from "../../components/IntlProvider";
 import { storeWallet } from "../Global/actions";
-import LogoLedger from "../../assets/images/logo-ledger.png";
+import LogoLedger from "../../assets/images/logo-ledger.svg";
 import LogoMetaMask from "../../assets/images/logo-metamask.png";
 import LogoKey from "../../assets/images/logo-key.png";
 import { writeRPFile } from "../../utils/electron";
+import { Wrapper } from './style';
 
 // ===== MAIN COMPONENT =====
 class ImportWallet extends PureComponent {
@@ -335,12 +336,12 @@ class ImportWallet extends PureComponent {
     } = this.props;
 
     return (
-      <Fragment>
+      <Wrapper>
         <Helmet>
           <title>{formatMessage(MSG.IMPORT_WALLET_TITLE)}</title>
         </Helmet>
         <CustomContainer size="large">
-          <BoxCardStyled>
+          <Card>
             <CardHeader>
               <HeadingLarge>
                 {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
@@ -498,7 +499,7 @@ class ImportWallet extends PureComponent {
                 </Row>
               </CardFooter>
             )}
-          </BoxCardStyled>
+          </Card>
           <AddressPopup
             accessByLedger={this.handleAccessByLedger}
             data={addressPopup}
@@ -506,7 +507,7 @@ class ImportWallet extends PureComponent {
             updateChosenAddress={onUpdateChosenWallet}
           />
         </CustomContainer>
-      </Fragment>
+      </Wrapper>
     );
   }
 }

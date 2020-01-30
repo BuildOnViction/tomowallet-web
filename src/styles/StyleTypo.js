@@ -2,59 +2,68 @@ import styled from 'styled-components';
 // Style Component//
 
 const HeadingBig = styled.h1`
-  color: #ffffff;
+  color: ${props => props.theme.headingColor};
   font-size: 50px;
   font-weight: 600;
   font-family: 'Bai Jamjuree', sans-serif;
 `;
 const HeadingLarge = styled.h2`
-  color: #ffffff;
+  color: ${props => props.theme.headingColor};
   font-size: 18px;
   font-weight: 600;
   text-transform: uppercase;
   font-family: 'Bai Jamjuree', sans-serif;
 `;
 const HeadingMedium = styled.h3`
-  color: #ffffff;
+  color: ${props => props.theme.headingColor};
   font-size: 16px;
 `;
 const HeadingSmall = styled.h2`
+  color: ${props => props.theme.boxTitleColor};
   font-size: 14px;
-  text-transform: uppercase;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 `;
+const TextValue = styled.div`
+  font-family: 'Bai Jamjuree', sans-serif;
+  font-size: 14px;
+  color: ${props => props.theme.boxValueColor};
+`
+const TextAddressValue = styled(TextValue)`
+  cursor: pointer;
+  color: ${props => props.theme.boxAddressValueColor};
+`
 const NoticeTextRed = styled.span`
   color: #be445e;
 `;
 const TextLinkBlue = styled.a`
-  color: #5692cd;
+  color: ${props => props.theme.highlightColor};
 `;
 const TextBlue = styled.span`
-  color: #5692cd;
-  cursor: pointer;
+  color: ${props => props.theme.highlightColor};
+  cursor: ${props => props.cursor || 'auto'};
   transition: all 0.3s;
   &:hover {
-    color: #0056b3;
+    color: ${props => props.theme.highlightHoverColor};
   }
 `;
 const TextYellow = styled.span`
-  color: #e4ae63;
+  color: ${props => props.theme.highlightColor2};
 `;
 const TextLinkYellow = styled.a`
-  color: #e4ae63 !important;
+  color: ${props => props.theme.highlightColor2} !important;
   cursor: pointer;
 `;
 const TextYellowPointer = styled.span`
-  color: #e4ae63;
+  color: ${props => props.theme.highlightColor2};
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
-    color: #c59148;
+    color: ${props => props.theme.highlightHoverColor2};
   }
 `;
 const TextGray = styled.div`
-  color: #5e677f;
+  color: ${props => props.theme.highlightColor1};
 `;
 const BoxText = styled.div``;
 export {
@@ -70,4 +79,6 @@ export {
   TextYellowPointer,
   BoxText,
   TextGray,
+  TextValue,
+  TextAddressValue,
 };

@@ -15,6 +15,7 @@ import { withIntl } from '../../../../../components/IntlProvider';
 import { removeTrailingZero } from '../../../../../utils';
 import { MSG, ENUM } from '../../../../../constants';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
+import { TextGray } from '../../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -66,7 +67,7 @@ class ConfirmationContent extends PureComponent {
         )}
         <Row>
           <Col xs={4}>
-            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}
+            <TextGray>{formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_AMOUNT_LABEL)}</TextGray>
           </Col>
           <Col xs={8} className=''>
             {`${removeTrailingZero(
@@ -80,7 +81,7 @@ class ConfirmationContent extends PureComponent {
         </Row>
         <Row>
           <Col xs={4}>
-            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_FROM_LABEL)}
+            <TextGray>{formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_FROM_LABEL)}</TextGray>
           </Col>
           <Col xs={8}>
             <div className='text-truncate' title={_get(wallet, 'address', '')}>
@@ -90,7 +91,7 @@ class ConfirmationContent extends PureComponent {
         </Row>
         <Row>
           <Col xs={4}>
-            {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TO_LABEL)}
+            <TextGray>{formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TO_LABEL)}</TextGray>
           </Col>
           <Col xs={8}>
             <div className='text-truncate' title={_get(wallet, 'address', '')}>
@@ -100,9 +101,7 @@ class ConfirmationContent extends PureComponent {
         </Row>
         <Row>
           <Col xs={4}>
-            {formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL,
-            )}
+            <TextGray>{formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INFO_TRANSACTION_FEE_LABEL)}</TextGray>
           </Col>
           <Col xs={8}>
             {`${removeTrailingZero(

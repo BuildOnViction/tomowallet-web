@@ -14,13 +14,13 @@ import { Pagination } from 'reactstrap';
 const CommonTableStyler = styled(ReactTable)`
   .rt-table {
     border-radius: 8px;
-    background-color: #272d40;
+    background-color: ${props => props.theme.boxBackground};
     padding: 1em;
     .rt-th {
       display: inline-block;
       padding: 1em;
       width: auto !important;
-      color: #5e677f;
+      color: ${props => props.theme.tableHeaderCellColor};
       &.box_search {
         width: 100% !important;
       }
@@ -29,6 +29,7 @@ const CommonTableStyler = styled(ReactTable)`
       display: inline-block;
       padding: 1.5em 1em;
       width: auto !important;
+      color: ${props => props.theme.tableBodyCellColor};
     }
   }
 `;
@@ -37,8 +38,13 @@ const PaginationStyler = styled(Pagination)`
   display: flex;
   justify-content: center;
   margin-top: 30px;
+
+  .page-item.active .page-link {
+    color: ${props => props.theme.paginationActiveColor};
+  }
+
   .page-link {
-    color: #5e677f;
+    color: ${props => props.theme.paginationColor};
     &:focus {
       box-shadow: 0 0 0;
     }

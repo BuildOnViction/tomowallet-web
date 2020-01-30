@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import {
   FormFeedback,
-  FormGroup,
   Input,
   InputGroup,
   InputGroupAddon,
@@ -21,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { withIntl } from '../../../../components/IntlProvider';
 import { changeInputWithSubmit, detectSubmit } from '../../../../utils';
 import { MSG } from '../../../../constants';
+import { StyledFormGroup } from '../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -52,7 +52,7 @@ class PasswordContent extends PureComponent {
       value,
     } = this.props;
     return (
-      <FormGroup>
+      <StyledFormGroup>
         <InputGroup>
           <Input
             id='passwordInput'
@@ -78,7 +78,7 @@ class PasswordContent extends PureComponent {
           </InputGroupAddon>
           <FormFeedback>{_get(errors, 'password', '')}</FormFeedback>
         </InputGroup>
-      </FormGroup>
+      </StyledFormGroup>
     );
   }
 }

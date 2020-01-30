@@ -10,12 +10,10 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import {
   Form,
-  FormGroup,
   Input,
   Label,
-  InputGroup,
-  InputGroupAddon,
-  Button,
+  // InputGroup,
+  // InputGroupAddon,
   Container,
   Row,
   Col,
@@ -26,6 +24,7 @@ import {
 import Select, { components } from 'react-select';
 // Custom Components
 import Image from '../../../../../components/Image';
+import { StyledFormGroup } from '../../../../../styles/StyleForm';
 // Utilities & Constants
 import { convertLocaleNumber } from '../../../../../utils';
 import { PORTFOLIO_COLUMNS, DEPOSIT_PRIVACY_FIELDS } from '../../../constants';
@@ -147,13 +146,13 @@ class FormContent extends PureComponent {
       submitForm,
       tokenOptions,
       updateInput,
-      privacyMode,
+      // privacyMode,
       wallet
     } = this.props;
 
     return (
       <Form onSubmit={submitForm} className='cm_form'>
-        <FormGroup>
+        <StyledFormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
@@ -184,14 +183,14 @@ class FormContent extends PureComponent {
             classNamePrefix='my-select'
           />
           {this.handleRenderErrorList(DEPOSIT_PRIVACY_FIELDS.TOKEN)}
-        </FormGroup>
-        <FormGroup>
+        </StyledFormGroup>
+        <StyledFormGroup>
           <Label>
             {formatMessage(
               MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL,
             )}
           </Label>
-          <InputGroup>
+          {/* <InputGroup> */}
             <Input
               type='number'
               name={DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT}
@@ -211,14 +210,14 @@ class FormContent extends PureComponent {
                 DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
               )}
             />
-            <InputGroupAddon addonType='append'>
+            {/* <InputGroupAddon addonType='append'> */}
               {/* <Button onClick={addFullAmount}>
                 {formatMessage(MSG.COMMON_BUTTON_MAXIMUM)}
               </Button> */}
-            </InputGroupAddon>
+            {/* </InputGroupAddon> */}
             {this.handleRenderErrorList(DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT)}
-          </InputGroup>
-        </FormGroup>
+          {/* </InputGroup> */}
+        </StyledFormGroup>
         {/* <FormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_MESSAGE_LABEL)}

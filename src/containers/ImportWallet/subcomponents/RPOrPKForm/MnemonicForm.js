@@ -9,13 +9,14 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
-import { FormFeedback, FormGroup, Input, Label } from 'reactstrap';
+import { FormFeedback, Input, Label } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Utilities & Constants
 import { changeInputWithSubmit, detectSubmit } from '../../../../utils';
 import { MSG } from '../../../../constants';
 import { withIntl } from '../../../../components/IntlProvider';
 import { KEY_INPUT_TYPE } from '../../constants';
+import { StyledFormGroup } from '../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -61,7 +62,7 @@ class PrivateKeyForm extends PureComponent {
 
     return (
       <Fragment>
-        <FormGroup className='mb-2'>
+        <StyledFormGroup className='mb-2'>
           <Label for='recoveryPhrase'>
             {formatMessage(
               MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_MNEMONIC_LABEL,
@@ -85,8 +86,8 @@ class PrivateKeyForm extends PureComponent {
               <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
             ))}
           </FormFeedback>
-        </FormGroup>
-        <FormGroup>
+        </StyledFormGroup>
+        <StyledFormGroup>
           <Label for='hdPath'>
             {formatMessage(
               MSG.IMPORT_WALLET_TAB_RECOVERY_PHRASE_TYPE_MNEMONIC_INPUT_HD_PATH_LABEL,
@@ -107,7 +108,7 @@ class PrivateKeyForm extends PureComponent {
               <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
             ))}
           </FormFeedback>
-        </FormGroup>
+        </StyledFormGroup>
       </Fragment>
     );
   }

@@ -104,6 +104,7 @@ import { withWeb3 } from "../../components/Web3";
 import { selectWallet, selectPrivacyMode } from "../Global/selectors";
 import { storeWallet, updatePrivacyData } from "../Global/actions";
 import { MSG, LIST, ENUM, RPC_SERVER } from "../../constants";
+import { WelcomeSection } from './style';
 // ==================
 
 // ===== MAIN COMPONENT =====
@@ -1183,13 +1184,25 @@ class MyWallet extends PureComponent {
       onToggleSuccessWithdrawPopup,
       successWithdrawPopup,
       onUpdateWithdrawPrivacyPopupStage,
-    } = this.props;
+      privacyMode,
+    } = this.props;    
 
     return (
       <Fragment>
         <Helmet>
           <title>{formatMessage(MSG.MY_WALLET_TITLE)}</title>
         </Helmet>
+        {
+          privacyMode ? 
+            (<WelcomeSection>
+              <h1>{formatMessage(MSG.MY_WALLET_INCOGNITO_MODE)}</h1>
+              <p>{formatMessage(MSG.MY_WALLET_INCOGNITO_MODE_DESCRIPTION)}</p>
+            </WelcomeSection>)
+          : (<WelcomeSection>
+              <h1>{formatMessage(MSG.MY_WALLET_MAIN_MODE)}</h1>
+              <p>{formatMessage(MSG.MY_WALLET_MAIN_MODE_DESCRIPTION)}</p>
+            </WelcomeSection>)
+        }
         <AddressInfo
           openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
           openSendTokenPopup={this.handleOpenSendTokenPopup}

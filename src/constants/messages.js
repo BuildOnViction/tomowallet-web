@@ -83,11 +83,11 @@ export default defineMessages({
   // Common - Lists
   COMMON_LIST_LANGUAGE_ENGLISH: {
     id: `${listPrefix}.language.english`,
-    defaultMessage: 'EN',
+    defaultMessage: 'English',
   },
   COMMON_LIST_LANGUAGE_FRENCH: {
     id: `${listPrefix}.language.french`,
-    defaultMessage: 'FR',
+    defaultMessage: 'Français',
   },
   COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET: {
     id: `${listPrefix}.network.tomochain.testnet`,
@@ -98,6 +98,14 @@ export default defineMessages({
     defaultMessage: 'TomoChain MainNet',
   },
   // Component - Header Navigation Bar
+  HEADER_NAVBAR_MENU_SWITCH_NETWORK: {
+    id: `${navbarPrefix}.menu.switch.network`,
+    defaultMessage: 'Switch netwok',
+  },
+  HEADER_NAVBAR_MENU_LANGUAGE: {
+    id: `${navbarPrefix}.menu.language`,
+    defaultMessage: 'Language',
+  },
   HEADER_NAVBAR_LOGO_ALT: {
     id: `${navbarPrefix}.logo.alt`,
     defaultMessage: 'TOMOCHAIN LOGO',
@@ -111,12 +119,12 @@ export default defineMessages({
     defaultMessage: 'FAQ',
   },
   HEADER_NAVBAR_PRIVACY_MOD: {
-    id: `${navbarPrefix}.privacy.mode`,
+    id: `${navbarPrefix}.switch.mode.incognito`,
     defaultMessage: 'Switch to Incognito mode',
   },
   HEADER_NAVBAR_NORMAL_MOD: {
-    id: `${navbarPrefix}.privacy.mode`,
-    defaultMessage: 'Switch to normal mode',
+    id: `${navbarPrefix}.switch.mode.main`,
+    defaultMessage: 'Switch to main mode',
   },
   HEADER_NAVBAR_OPTION_MY_WALLET: {
     id: `${navbarPrefix}.option.mywallet`,
@@ -613,13 +621,45 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.title`,
     defaultMessage: 'My TomoWallet',
   },
+  MY_WALLET_MAIN_MODE: {
+    id: `${myWalletPagePrefix}.mode.main`,
+    defaultMessage: 'Main Mode',
+  },
+  MY_WALLET_MAIN_MODE_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.mode.main.description`,
+    defaultMessage: 'Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable',
+  },
+  MY_WALLET_INCOGNITO_MODE: {
+    id: `${myWalletPagePrefix}.mode.incognito`,
+    defaultMessage: 'Incognito Mode',
+  },
+  MY_WALLET_INCOGNITO_MODE_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.mode.incognito.description`,
+    defaultMessage: 'Incognito mode allows you to make the transactions which are ingconitive and  couldn’t be traceable',
+  },
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
-    defaultMessage: 'Address',
+    defaultMessage: 'Main Address',
   },
   MY_WALLET_SECTION_PRIVACY_ADDRESS_TITLE: {
-    id: `${myWalletPagePrefix}.section.address.title`,
-    defaultMessage: 'Privacy Address',
+    id: `${myWalletPagePrefix}.section.address.incognito.title`,
+    defaultMessage: 'Incognito Address',
+  },
+  MY_WALLET_SECTION_BALANCE_BALANCE: {
+    id: `${myWalletPagePrefix}.section.balance.balance`,
+    defaultMessage: 'Balance',
+  },
+  MY_WALLET_SECTION_BALANCE_ESTIMATED: {
+    id: `${myWalletPagePrefix}.section.balance.estimated`,
+    defaultMessage: 'Estimated value',
+  },
+  MY_WALLET_SECTION_BALANCE_INCOGNITO: {
+    id: `${myWalletPagePrefix}.section.balance.incognito`,
+    defaultMessage: 'Incognito Balance',
+  },
+  MY_WALLET_SECTION_BALANCE_MAIN: {
+    id: `${myWalletPagePrefix}.section.balance.main`,
+    defaultMessage: 'Main Balance',
   },
   MY_WALLET_SECTION_EXCHANGE_CHART_RANK: {
     id: `${myWalletPagePrefix}.section.exchange.chart.rank`,
@@ -643,7 +683,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_TITLE: {
     id: `${myWalletPagePrefix}.table.tab.portfolio.title`,
-    defaultMessage: 'PORTFOLIO',
+    defaultMessage: 'Portfolio',
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME: {
     id: `${myWalletPagePrefix}.table.portfolio.header.tokenname`,
@@ -691,7 +731,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_TRANSACTION_TITLE: {
     id: `${myWalletPagePrefix}.table.tab.transaction.title`,
-    defaultMessage: 'TRANSACTIONS',
+    defaultMessage: 'Transactions',
   },
   MY_WALLET_TABLE_TRANSACTIONS_HEADER_TX_HASH: {
     id: `${myWalletPagePrefix}.table.transactions.header.txhash`,
