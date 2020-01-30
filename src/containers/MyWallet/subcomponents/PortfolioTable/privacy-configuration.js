@@ -10,7 +10,7 @@ import _get from 'lodash.get';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Custom Components
 import TokenCell from './subcomponents/TokenCell';
-import { TextYellowPointer } from '../../../../styles';
+import { TextSend, TextDeposit, TextWithdraw } from '../../../../styles';
 // Utilities & Constants
 import {
   convertLocaleNumber,
@@ -79,7 +79,7 @@ export default ({
         accessor: PORTFOLIO_COLUMNS.SEND,
         Cell: ({ index, original }) => (
           <Fragment>
-            <TextYellowPointer
+            <TextSend
               id={`sendIcon_${index + 1}`}
               role='presentation'
               onClick={() =>
@@ -89,7 +89,7 @@ export default ({
                 })
               }
             >{formatMessage(MSG.COMMON_BUTTON_SEND)}
-            </TextYellowPointer>
+            </TextSend>
           </Fragment>
         ),
       },
@@ -105,7 +105,7 @@ export default ({
         Cell: ({ index, original }) => {
           return (
             <Fragment>
-              <TextYellowPointer
+              <TextDeposit
                 id={`sendIcon_${index + 1}`}
                 role='presentation'
                 onClick={() =>
@@ -115,7 +115,7 @@ export default ({
                   })
                 }
               >{formatMessage(MSG.COMMON_BUTTON_DEPOSIT)}
-              </TextYellowPointer>
+              </TextDeposit>
             </Fragment>
           )
         },
@@ -131,7 +131,7 @@ export default ({
         accessor: PORTFOLIO_COLUMNS.SEND,
         Cell: ({ index, original }) => (
           <Fragment>
-            <TextYellowPointer
+            <TextWithdraw
               id={`sendIcon_${index + 1}`}
               role='presentation'
               onClick={() =>
@@ -141,7 +141,7 @@ export default ({
                 })
               }
             >{formatMessage(MSG.COMMON_BUTTON_WITHDRAW)}
-            </TextYellowPointer>
+            </TextWithdraw>
           </Fragment>
         ),
       },

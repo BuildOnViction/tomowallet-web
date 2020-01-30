@@ -127,9 +127,9 @@ a {
 
 //maincontent
 .maincontent {
-  min-height: calc(100vh - 179px);
+  min-height: calc(100vh - 80px - 94px); // 80px, 94px are height of header and footer
   @media (max-width: 767px) {
-    min-height: calc(100vh - 134px - 85px);
+    min-height: calc(100vh - 134px - 80px);
   }
   .card {
     background: transparent;
@@ -279,6 +279,7 @@ a {
 }
 .qrc_bd canvas {
   display: block;
+  border: 3px solid #fff;
 }
 
 // Footer
