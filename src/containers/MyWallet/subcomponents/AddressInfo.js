@@ -59,7 +59,7 @@ class AddressInfo extends PureComponent {
             <Col xs={12} lg={{ size: 7, order: 1 }}>
               <div className='d-flex align-items-center bg_gray'>
                 <Row className='fullwidth align-items-center'>
-                  { privacyMode ?
+                  { !privacyMode ?
                   // Privacy address
                   <Col md={8}>
                     <HeadingSmall>

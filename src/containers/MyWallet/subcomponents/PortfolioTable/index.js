@@ -93,7 +93,7 @@ class PortfolioTable extends Component {
 
   handleLoadTokenOptions() {
     const { onLoadTokenOptions, wallet, privacyMode, onScanPrivacyData } = this.props;
-    if (privacyMode) {
+    if (!privacyMode) {
       onScanPrivacyData(wallet);
     } else {
       onLoadTokenOptions(
@@ -116,8 +116,8 @@ class PortfolioTable extends Component {
       openWithdrawPrivacyPopup,
     } = this.props;
 
-    let dt = privacyMode ? privacyData : data
-    let cf = privacyMode ? portfolioPrivacyConfig : portfolioConfig
+    let dt = !privacyMode ? privacyData : data
+    let cf = !privacyMode ? portfolioPrivacyConfig : portfolioConfig
 
     return (
       <BoxPortfolio>

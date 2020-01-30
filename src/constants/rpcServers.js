@@ -1,8 +1,8 @@
 export default {
   TOMOCHAIN_MAINNET: {
     type: 'http',
-    host: 'https://rpc.tomochain.com',
-    ws: 'wss://ws.tomochain.com',
+    host: 'http://206.189.39.242:8545',
+    ws: 'ws://206.189.39.242:8546',
     networkId: 88,
     hdPath: "m/44'/889'/0'/0/",
   },

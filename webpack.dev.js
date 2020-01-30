@@ -12,7 +12,7 @@ module.exports = common({
   devServer: {
     historyApiFallback: true,
     contentBase: 'dist',
-    https: true,
+    https: false,
   },
   optimization: {
     moduleIds: 'hashed',

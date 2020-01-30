@@ -154,7 +154,7 @@ class FormContent extends PureComponent {
             className='box_select'
             name={SEND_TOKEN_FIELDS.TOKEN}
             value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
-            options={privacyMode ? privacyData : tokenOptions}
+            options={!privacyMode ? privacyData : tokenOptions}
             onChange={value => updateInput(SEND_TOKEN_FIELDS.TOKEN, value)}
             components={{
               Option: TokenOption,

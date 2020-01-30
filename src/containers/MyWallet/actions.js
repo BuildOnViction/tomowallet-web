@@ -38,7 +38,10 @@ import {
   UPDATE_WITHDRAW_PRIVACY_INPUT,
   UPDATE_DEPOSIT_PRIVACY_ERRORS,
   UPDATE_WITHDRAW_PRIVACY_ERRORS,
-  TOGGLE_WITHDRAW_SUCCESS_POPUP
+  TOGGLE_WITHDRAW_SUCCESS_POPUP,
+  SCAN_PRIVACY_TRANSACTION,
+  SCAN_PRIVACY_TRANSACTION_SUCCESS,
+  SCAN_PRIVACY_TRANSACTION_FAILED,
 } from './constants';
 // ===================
 
@@ -206,5 +209,17 @@ export const toggleSuccessWithdrawPopup = (bool, hash) => ({
   type: TOGGLE_WITHDRAW_SUCCESS_POPUP,
   bool,
   hash,
+});
+export const scanPrivacyTransaction = wallet => ({
+  type: SCAN_PRIVACY_TRANSACTION,
+  wallet,
+});
+export const scanPrivacyTransactionSuccess = tableData => ({
+  type: SCAN_PRIVACY_TRANSACTION_SUCCESS,
+  tableData,
+});
+export const scanPrivacyTransactionFailed = wallet => ({
+  type: SCAN_PRIVACY_TRANSACTION_FAILED,
+  wallet,
 });
 // ===================

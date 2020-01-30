@@ -97,7 +97,9 @@ import {
   depositPrivacyMoney,
   getPrivacyAddressInfo,
   estimatePrivacyFee,
-  withdrawPrivacy
+  withdrawPrivacy,
+  setPrivacyInfo,
+  mnemonicToPrivateKey,
 } from "../../utils";
 import { withIntl } from "../../components/IntlProvider";
 import { withWeb3 } from "../../components/Web3";
@@ -146,8 +148,29 @@ class MyWallet extends PureComponent {
   }
 
   componentWillUnmount() {
-    const { onResetState } = this.props;
+    const { onResetState, wallet } = this.props;
+    const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'])
+    if (privacyWallet) {
+      privacyWallet.removeListener('NEW_TRANSACTION')
+    }
     onResetState();
+  }
+
+  componentDidMount() {
+    const { wallet } = this.props;
+    const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'])
+    console.log('privacyWallet', privacyWallet)
+    if (privacyWallet) {
+      const address = _get(wallet, ['address'], '')
+      privacyWallet.on('NEW_UTXO', data => {
+        console.log('NEW_UTXO', data)
+      })
+      privacyWallet.on('NEW_TRANSACTION', data => {
+        console.log('NEW_TRANSACTION', data)
+        // const state = privacyWallet.state();
+        // setPrivacyInfo({ address, ...state });
+      })
+    }
   }
 
   handleAddFullAmount() {
@@ -232,7 +255,7 @@ class MyWallet extends PureComponent {
     } else {
       toggleLoading(true);
       try {
-        if (privacyMode) {
+        if (!privacyMode) {
           const fee = estimatePrivacyFee(web3,
             _get(wallet, ['privacy', 'privacyWallet'], {}),
             _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0))
@@ -263,9 +286,6 @@ class MyWallet extends PureComponent {
     const {
       onUpdateDepositPrivacyErrors,
       toggleLoading,
-      web3,
-      wallet,
-      depositForm,
 		} = this.props;
     const errorList = this.handleValidationDepositPrivacyForm();
 
@@ -276,13 +296,11 @@ class MyWallet extends PureComponent {
     } else {
       toggleLoading(true);
       try {
-        const fee = estimatePrivacyFee(web3,
-          _get(wallet, ['privacy', 'privacyWallet'], {}),
-          _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT], 0))
-				this.handleValidateDepositFee({
+        const feeObj = {
 					type: 'TRC21',
-					amount: bnToDecimals(fee, 18),
-        })
+					amount: '0.0001',
+        }
+				this.handleValidateDepositFee(feeObj)
       } catch (error) {
         this.handleConfirmationError(error.message);
       }
@@ -350,7 +368,7 @@ class MyWallet extends PureComponent {
     const loginType = _get(getWeb3Info(), "loginType");
     let sendAction = () => {};
 
-    if (privacyMode) {
+    if (!privacyMode) {
       sendAction = this.handleSendMoneyPrivacy
     } else {
       if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
@@ -377,7 +395,7 @@ class MyWallet extends PureComponent {
   handleGetDepositAction(privacyMode) {
     const loginType = _get(getWeb3Info(), "loginType");
     let depositAction = () => {};
-    if (privacyMode) {
+    if (!privacyMode) {
       if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
         depositAction = this.handleDepositPrivacyByPk;
       }
@@ -388,7 +406,7 @@ class MyWallet extends PureComponent {
   handleGetWithdrawAction(privacyMode) {
     const loginType = _get(getWeb3Info(), "loginType");
     let withDrawAction = () => {};
-    if (privacyMode) {
+    if (!privacyMode) {
       if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
         withDrawAction = this.handleWithdrawPrivacyByPk;
       }
@@ -491,7 +509,7 @@ class MyWallet extends PureComponent {
       toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
       this.handleCloseWithdrawPrivacyPopup();
-      onToggleSuccessWithdrawPopup(true, _get(data, 'transactionHash', ''));
+      onToggleSuccessWithdrawPopup(true, _get(data, '0', 'transactionHash', ''));
     }).catch(this.handleTransactionError);
   }
 
@@ -508,16 +526,22 @@ class MyWallet extends PureComponent {
     sendMoney(web3, contractData)
       .then(hash => {
         getWalletInfo(web3).then(walletInfo => {
+          const { address, hdPath, recoveryPhrase } = getWeb3Info() || {};
+          const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+          const serverConfig = hdPath
+            ? {
+                ..._get(RPC_SERVER, [networkKey], {}),
+                hdPath,
+              }
+            : _get(RPC_SERVER, [networkKey], {});
           const loginType = _get(getWeb3Info(), "loginType");
           if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
               // get privacy address
             const privacyObject = getPrivacyAddressInfo(
               walletInfo.address,
-              formValues.recoveryPhrase ? mnemonicToPrivateKey(formValues.recoveryPhrase, updatedRpcServer)
-                    : formValues.privateKey, updatedRpcServer);
+              mnemonicToPrivateKey(recoveryPhrase, serverConfig));
             walletInfo.privacy = privacyObject;
           }
-          
           onStoreWallet(walletInfo);
         });
         return hash;
@@ -831,13 +855,17 @@ class MyWallet extends PureComponent {
       wallet,
       web3,
     } = this.props;
-    const balance = _get(wallet, 'balance', 0);
+    // const balance = _get(wallet, 'balance', 0);
 
     const decimals = _get(
       depositForm,
       [DEPOSIT_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
       0
     );
+    const balance =  decimalsToBN(
+      _get(wallet, 'balance', 0),
+      decimals
+    )
 
     const remainBalance = subBN(
       web3.utils.toBN(balance),
@@ -974,7 +1002,7 @@ class MyWallet extends PureComponent {
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED)
       ),
-      privacyMode ?
+      !privacyMode ?
         isPrivacyWallet(
           {
             name: SEND_TOKEN_FIELDS.RECIPIENT,
