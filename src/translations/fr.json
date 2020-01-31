@@ -9,6 +9,7 @@
   "tomowallet.common.button.confirm": "Confirmer",
   "tomowallet.common.button.unlock": "Ouvrir",
   "tomowallet.common.button.close": "Fermer",
+  "tomowallet.common.button.Copy": "Copie",
   "tomowallet.common.list.language.english": "English",
   "tomowallet.common.list.language.french": "Français",
   "tomowallet.common.list.network.tomochain.testnet": "Réseau de Test TomoChain",
