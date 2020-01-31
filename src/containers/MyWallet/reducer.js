@@ -270,8 +270,8 @@ export default (state = initialState, action) => {
     case SCAN_PRIVACY_DATA_SUCCESS:
         return state
           .set('privacyData', [{
-            [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO Privacy',
-            [PORTFOLIO_COLUMNS.SYMBOL]: 'TOMOP',
+            [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
+            [PORTFOLIO_COLUMNS.SYMBOL]: 'TOMO',
             [PORTFOLIO_COLUMNS.ICON]: tomoIcon,
             [PORTFOLIO_COLUMNS.BALANCE]: action.data.balance || 0,
             [PORTFOLIO_COLUMNS.DECIMALS]: 9,
@@ -358,7 +358,7 @@ export default (state = initialState, action) => {
       case SCAN_PRIVACY_TRANSACTION_SUCCESS:
         return state.set('privacyTransactionTable', {
           data: _get(action, 'tableData.items', []).map(trans => ({
-            [TRANSACTION_COLUMNS.TOKEN_TYPE]: 'TOMOP',
+            [TRANSACTION_COLUMNS.TOKEN_TYPE]: 'TOMO',
             [TRANSACTION_COLUMNS.CREATE_TIME]: moment(
               _isNumber(trans.createdTime)
                 ? Number(`${trans.createdTime}000`)

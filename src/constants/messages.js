@@ -903,7 +903,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_PRIVACY_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.privacy.balance`,
-    defaultMessage: 'Privacy Balance',
+    defaultMessage: 'Incognito Balance',
   },
 });
 // ====================
