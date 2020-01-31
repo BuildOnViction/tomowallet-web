@@ -23,6 +23,7 @@ class SuccessContent extends PureComponent {
       intl: { formatMessage },
       symbol,
       txHash,
+      privacyMode
     } = this.props;
     return (
       <BoxText className='text-center word-break'>
@@ -41,9 +42,14 @@ class SuccessContent extends PureComponent {
 
           <TextYellow>{` ${removeTrailingZero(amount)} ${symbol}`}</TextYellow>
         </div>
+        {privacyMode
+        ?
+          ''
+        :
         <TextGray className='mb-3 '>
           {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
         </TextGray>
+        }
         <div><TextBlue>{_get(txHash, 'transactionHash', txHash)}</TextBlue></div>
       </BoxText>
     );
@@ -61,6 +67,8 @@ SuccessContent.propTypes = {
   symbol: PropTypes.string,
   /** Successful transaction's hash data */
   txHash: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  /** Privacy mode */
+  privacyMode: PropTypes.bool,
 };
 
 SuccessContent.defaultProps = {
@@ -68,6 +76,7 @@ SuccessContent.defaultProps = {
   intl: {},
   symbol: '',
   txHash: '',
+  privacyMode: false
 };
 // ======================
 

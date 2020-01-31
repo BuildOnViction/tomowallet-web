@@ -17,7 +17,7 @@ import { SuccessPopupStyler } from './style';
 // ===== MAIN COMPONENT =====
 class SuccessPopup extends PureComponent {
   render() {
-    const { amount, togglePopup, successPopup, symbol } = this.props;
+    const { amount, togglePopup, successPopup, symbol, privacyMode } = this.props;
     return (
       <SuccessPopupStyler
         backdrop
@@ -28,6 +28,7 @@ class SuccessPopup extends PureComponent {
           amount,
           symbol,
           txHash: _get(successPopup, 'txHash', ''),
+          privacyMode
         }}
         button={{}}
       />
@@ -46,6 +47,8 @@ SuccessPopup.propTypes = {
   successPopup: PropTypes.object,
   /** Token symbol */
   symbol: PropTypes.string,
+  /** Privacy mode */
+  privacyMode: PropTypes.bool,
 };
 
 SuccessPopup.defaultProps = {
@@ -53,6 +56,7 @@ SuccessPopup.defaultProps = {
   togglePopup: () => {},
   successPopup: {},
   symbol: '',
+  privacyMode: false
 };
 // ======================
 
