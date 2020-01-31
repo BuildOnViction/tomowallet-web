@@ -651,7 +651,7 @@ export default defineMessages({
   },
   MY_WALLET_SECTION_BALANCE_BALANCE: {
     id: `${myWalletPagePrefix}.section.balance.balance`,
-    defaultMessage: 'Balance',
+    defaultMessage: 'Total balance',
   },
   MY_WALLET_SECTION_BALANCE_ESTIMATED: {
     id: `${myWalletPagePrefix}.section.balance.estimated`,

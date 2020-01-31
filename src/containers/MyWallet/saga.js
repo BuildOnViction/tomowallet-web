@@ -121,26 +121,19 @@ export function* loadCoin() {
 
 export function* scanPrivacy(actionData) {
   try {
-    const t0 = performance.now()
     yield put(toggleLoading(true));
       const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {})
       const address = _get(actionData, ['wallet', 'address'], '')
       const response = yield call([wallet, wallet.scan]);
 
       if (response) {
-        const t1 = performance.now()
-        console.log('adasdasdas', t1 - t0)
-        const t2 = performance.now()
           response.balance = wallet.balance.toString(10);
           response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
           yield put(scanPrivacyDataSuccess(response));
           setPrivacyInfo({ address, ...wallet.state() });
           yield put(toggleLoading(false));
-        const t3 = performance.now()
-        console.log('qweqwe', t3-t2)
       }
   } catch (error) {
-    console.log('error',error)
     yield put(toggleLoading(false));
     yield put(scanPrivacyDataFailed(error))
   }
@@ -178,7 +171,7 @@ export function* scanPrivacyTransaction(actionData) {
       items: result,
       currentPage: 1,
       total: 500,
-      pages: 10,
+      pages: 1,
       address: privacyAddress
     }))
 
