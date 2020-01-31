@@ -26,6 +26,22 @@ import {
   UPDATE_SEND_TOKEN_ERRORS,
   UPDATE_SEND_TOKEN_INPUT,
   UPDATE_SEND_TOKEN_POPUP_STAGE,
+  SCAN_PRIVACY_DATA,
+  SCAN_PRIVACY_DATA_FAILED,
+  SCAN_PRIVACY_DATA_SUCCESS,
+  TOGGLE_DEPOSIT_PRIVACY_POPUP,
+  UPDATE_DEPOSIT_PRIVACY_INPUT,
+  UPDATE_DEPOSIT_PRIVACY_POPUP_STAGE,
+  TOGGLE_DEPOSIT_SUCCESS_POPUP,
+  TOGGLE_WITHDRAW_PRIVACY_POPUP,
+  UPDATE_WITHDRAW_PRIVACY_POPUP_STAGE,
+  UPDATE_WITHDRAW_PRIVACY_INPUT,
+  UPDATE_DEPOSIT_PRIVACY_ERRORS,
+  UPDATE_WITHDRAW_PRIVACY_ERRORS,
+  TOGGLE_WITHDRAW_SUCCESS_POPUP,
+  SCAN_PRIVACY_TRANSACTION,
+  SCAN_PRIVACY_TRANSACTION_SUCCESS,
+  SCAN_PRIVACY_TRANSACTION_FAILED,
 } from './constants';
 // ===================
 
@@ -130,5 +146,80 @@ export const updateSendTokenInput = (name, value) => ({
 export const updateSendTokenPopupStage = stage => ({
   type: UPDATE_SEND_TOKEN_POPUP_STAGE,
   stage,
+});
+
+// PRIVACY
+export const scanPrivacyData = wallet => ({
+  type: SCAN_PRIVACY_DATA,
+  wallet,
+});
+
+export const scanPrivacyDataFailed = message => ({
+  type: SCAN_PRIVACY_DATA_FAILED,
+  message,
+});
+
+export const scanPrivacyDataSuccess = data => ({
+  type: SCAN_PRIVACY_DATA_SUCCESS,
+  data,
+});
+
+export const toggleDepositPrivacyPopup = (bool, initialValues) => ({
+  type: TOGGLE_DEPOSIT_PRIVACY_POPUP,
+  bool,
+  initialValues,
+});
+export const updateDepositPrivacyInput = (name, value) => ({
+  type: UPDATE_DEPOSIT_PRIVACY_INPUT,
+  name,
+  value,
+});
+export const updateDepositPrivacyPopupStage = stage => ({
+  type: UPDATE_DEPOSIT_PRIVACY_POPUP_STAGE,
+  stage,
+});
+export const toggleSuccessDepositPopup = (bool, hash) => ({
+  type: TOGGLE_DEPOSIT_SUCCESS_POPUP,
+  bool,
+  hash,
+});
+export const toggleWithdrawPrivacyPopup = (bool, initialValues) => ({
+  type: TOGGLE_WITHDRAW_PRIVACY_POPUP,
+  bool,
+  initialValues,
+});
+export const updateWithdrawPrivacyPopupStage = stage => ({
+  type: UPDATE_WITHDRAW_PRIVACY_POPUP_STAGE,
+  stage,
+});
+export const updateWithdrawPrivacyInput = (name, value) => ({
+  type: UPDATE_WITHDRAW_PRIVACY_INPUT,
+  name,
+  value,
+});
+export const updateDepositPrivacyErrors = errors => ({
+  type: UPDATE_DEPOSIT_PRIVACY_ERRORS,
+  errors,
+});
+export const updateWithdrawPrivacyErrors = errors => ({
+  type: UPDATE_WITHDRAW_PRIVACY_ERRORS,
+  errors,
+});
+export const toggleSuccessWithdrawPopup = (bool, hash) => ({
+  type: TOGGLE_WITHDRAW_SUCCESS_POPUP,
+  bool,
+  hash,
+});
+export const scanPrivacyTransaction = wallet => ({
+  type: SCAN_PRIVACY_TRANSACTION,
+  wallet,
+});
+export const scanPrivacyTransactionSuccess = tableData => ({
+  type: SCAN_PRIVACY_TRANSACTION_SUCCESS,
+  tableData,
+});
+export const scanPrivacyTransactionFailed = wallet => ({
+  type: SCAN_PRIVACY_TRANSACTION_FAILED,
+  wallet,
 });
 // ===================

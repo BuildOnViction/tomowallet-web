@@ -47,6 +47,38 @@ const selectTransactionData = createDeepEqualSelector(
   selectMyWalletDomain,
   obj => obj.toJS().transactionTable,
 );
+const selectPrivacyData = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().privacyData,
+);
+const selectDepositPrivacyPopup = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().depositPrivacyPopup,
+);
+const selectDepositPrivacyForm = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().depositForm,
+);
+const selectSuccessDepositPopup = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().successDepositPopup,
+);
+const selectWithdrawPrivacyPopup = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().withdrawPrivacyPopup,
+);
+const selectWithdrawPrivacyForm = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().withdrawForm,
+);
+const selectSuccessWithdrawPopup = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().successWithdrawPopup,
+);
+const selectPrivacyTransactionData = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().privacyTransactionTable,
+);
 // =====================
 
 export {
@@ -58,4 +90,12 @@ export {
   selectTableType,
   selectTokenOptions,
   selectTransactionData,
+  selectPrivacyData,
+  selectDepositPrivacyPopup,
+  selectDepositPrivacyForm,
+  selectSuccessDepositPopup,
+  selectWithdrawPrivacyPopup,
+  selectWithdrawPrivacyForm,
+  selectSuccessWithdrawPopup,
+  selectPrivacyTransactionData
 };

@@ -8,16 +8,18 @@ const BoxBtnStyler = styled.div`
   text-align: center;
 `;
 const ContainerMin = styled.div`
-  background-color: #272d40;
+  color: ${props => props.theme.cardColor};
+  background-color: ${props => props.theme.cardBackground};
   border-radius: 8px;
   padding: 3em 2em;
-  max-width: 600px;
+  max-width: ${props => props.size ? props.size : '570px'};
   margin: 0 auto;
 `;
 const CustomContainer = styled(({ size, children, ...remains }) => (
   <div {...remains}>{children}</div>
 ))`
-  background-color: #272d40;
+  color: ${props => props.theme.cardColor};
+  background-color: ${props => props.theme.cardBackground};
   border-radius: 8px;
   padding: 3em 2em;
   max-width: ${({ size }) => (size === 'large' ? '800px' : '600px')};
@@ -80,7 +82,48 @@ const DropdownToggleMainStyle = styled(DropdownToggle)`
   }
 `;
 
+const BoxWrapper = styled.div`
+  border-radius: 8px;
+  background-color: ${props => props.theme.boxBackground};
+  padding: 35px 30px 30px 30px;
+  height: 100%;
+`
+
+const MainTabWrapper = styled.div.attrs({
+  className: 'main_tab',
+})`
+  ul.nav-tabs {
+    border: 0;
+    
+    .nav-link {
+      background: transparent !important;
+      border: 0;
+      margin-right: 50px;
+      padding: 0 0 5px;
+      cursor: pointer;
+      position: relative;
+      color: ${props => props.theme.tabColor};
+
+      &.active {
+        color: ${props => props.theme.tabActiveColor};
+
+        &::before {
+          background-color: ${props => props.theme.tabBackground};
+          content: '';
+          border-radius: 25px;
+          width: 30px;
+          height: 2px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+`
+
 export {
+  BoxWrapper,
   BoxBtnStyler,
   ContainerMin,
   CustomContainer,
@@ -89,4 +132,5 @@ export {
   BoxFlexBetween,
   DropdownMenuMainStyler,
   DropdownToggleMainStyle,
+  MainTabWrapper,
 };

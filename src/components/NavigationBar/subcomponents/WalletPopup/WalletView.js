@@ -24,6 +24,7 @@ import { withWeb3 } from '../../../Web3';
 import { WALLET_POPUP_CONTENT_TAB } from '../../../../containers/Global/constants';
 import { MSG } from '../../../../constants';
 import { TextBlue } from '../../../../styles';
+import { StyledMainTabWrapper } from './style';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -67,7 +68,7 @@ class WalletViewContent extends PureComponent {
     const isLoggedInByPK = this.handleCheckPrivateKey();
 
     return (
-      <div className='main_tab content-wallet-view'>
+      <StyledMainTabWrapper>
         <Nav tabs className='mb-4'>
           <NavItem>
             {!isLoggedInByPK && (
@@ -118,7 +119,7 @@ class WalletViewContent extends PureComponent {
             </div>
           </TabPane>
         </TabContent>
-      </div>
+      </StyledMainTabWrapper>
     );
   }
 }

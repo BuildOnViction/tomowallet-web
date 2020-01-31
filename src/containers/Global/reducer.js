@@ -22,8 +22,11 @@ import {
   UPDATE_WALLET_POPUP_STAGE,
   WALLET_POPUP_STAGE,
   WALLET_POPUP_CONTENT_TAB,
+  TOGGLE_PRIVACY_MODE,
+  UPDATE_PRIVACY_INFO,
 } from './constants';
 import { LIST } from '../../constants';
+import { setPrivacyInfo } from '../../utils'
 // ===================
 
 // ===== INITIAL VARIABLES =====
@@ -47,6 +50,7 @@ const initialState = fromJS({
   },
   wallet: null,
   walletPopup: initialWalletPopupState,
+  privacyMode: false
 });
 // =============================
 
@@ -54,6 +58,7 @@ const initialState = fromJS({
 export default (state = initialState, action) => {
   switch (action.type) {
     case RELEASE_WALLET_INFO:
+      state.set('privacyMode', false)
       return state.set('wallet', null);
     case RESET_WALLET_POPUP:
       return state.set('walletPopup', initialWalletPopupState);
@@ -96,6 +101,14 @@ export default (state = initialState, action) => {
       return state.setIn(['walletPopup', 'tabType'], action.tabType);
     case UPDATE_WALLET_POPUP_STAGE:
       return state.setIn(['walletPopup', 'stage'], action.stage);
+    case TOGGLE_PRIVACY_MODE:
+      const privacy = state.get('privacyMode') === true ? false : true;
+      return state.set('privacyMode', privacy)
+    case UPDATE_PRIVACY_INFO:
+      const wallet = action.data.privacyWallet;
+      const address = action.data.address;
+
+      setPrivacyInfo({ address, ...wallet.state() })
     default:
       return state;
   }

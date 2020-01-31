@@ -54,17 +54,17 @@ const MediumButtonStyler = styled.button`
 `;
 
 const ButtonStyler = styled(
-  ({ action, btnBlue, btnYellow, children, ...remain }) => (
+  ({ action, btnBlue, btnYellow, children, theme, ...remain }) => (
     <button {...remain}>{children}</button>
   ),
 )`
-  ${({ btnYellow, btnBlue }) => {
+  ${({ btnYellow, btnBlue, theme }) => {
     if (btnYellow) {
-      return 'background-color:#e4ae63;color:#444b64';
+      return `background-color:${theme.primaryButtonBg};color:${theme.primaryButtonColor};`;
     } else if (btnBlue) {
-      return 'background-color:#5692cd;color:#ffffff;';
+      return `background-color:${theme.secondButtonBg};color:${theme.primaryButtonColor};`;
     }
-    return 'background-color:#2d344a;color:#9eaacc;';
+    return `background-color:${theme.normalButtonBg};color:${theme.normalButtonColor};`;
   }}
   border: 0px;
   border-radius: 8px;
@@ -75,15 +75,15 @@ const ButtonStyler = styled(
   align-items: center;
   font-family: 'Nunito Sans', sans-serif;
   transition: background-color 0.3s;
-  width: 100%;
+  width: ${props => props.width ? props.width : '100%'};
   &:hover {
-    ${({ btnYellow, btnBlue }) => {
+    ${({ btnYellow, btnBlue, theme }) => {
       if (btnYellow) {
-        return 'background-color:#C59148;color:#444b64';
+        return `background-color:${theme.primaryButtonBgHover};color:${theme.primaryButtonColorHover}`;
       } else if (btnBlue) {
-        return 'background-color:#4076AC;color:#ffffff;';
+        return `background-color:${theme.secondButtonBgHover};color:${theme.primaryButtonColorHover}`;
       }
-      return 'background-color:#3D496E;color:#9eaacc;';
+      return `background-color:${theme.normalButtonBgHover};color:${theme.normalButtonColorHover}`;
     }}
   }
   &:focus {
@@ -96,7 +96,7 @@ const ButtonStyler = styled(
 
 const ButtonLineStyler = styled.button`
   background: transparent;
-  border: 1px solid #444b64;
+  border: 1px solid ${props => props.theme.buttonLineBorder};
   border-radius: 8px;
   display: flex;
   height: 44px;
@@ -106,12 +106,13 @@ const ButtonLineStyler = styled.button`
   font-family: 'Nunito Sans', sans-serif;
   transition: all 0.3s;
   width: 100%;
-  color: #9eaacc;
+  color: ${props => props.theme.buttonLineColor};
   &:focus {
     outline: none;
   }
   &:disabled {
-    opacity: 0.5;
+    border: none;
+    background: ${props => props.theme.buttonLineDisabled}
   }
 `;
 

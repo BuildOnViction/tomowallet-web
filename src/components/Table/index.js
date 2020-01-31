@@ -11,9 +11,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
+import { injectIntl } from 'react-intl';
 // Custom Components
 import CustomPagination from './subcomponents/Pagination';
-import { CommonTableStyler } from './style';
+import { CommonTableStyler, NoData } from './style';
+import { MSG } from '../../constants';
 
 // ===================
 
@@ -61,10 +63,17 @@ class CommonTable extends PureComponent {
         loading={false}
         loadingText={null}
         PaginationComponent={CustomPagination}
+        NoDataComponent={injectIntl(CustomNoDataComponent)}
         {...getTableProps}
       />
     );
   }
+}
+
+const CustomNoDataComponent = (props) => {
+  const { intl: { formatMessage }} = props;
+
+  return (<NoData>{formatMessage(MSG.MY_WALLET_TABLE_NODATA)}</NoData>);
 }
 // ==========================
 

@@ -7,10 +7,15 @@
 // Modules
 import styled from 'styled-components';
 // Custom Component
+import { MainTabWrapper } from '../../../../styles';
 import Popup from '../../../Popup';
 // ===================
 
 // ===== STYLE =====
+const StyledMainTabWrapper = styled(MainTabWrapper).attrs({
+  className: 'main_tab content-wallet-view',
+})``
+
 const WalletPopupStyler = styled(Popup)`
   max-width: 570px;
   .modal-content {
@@ -40,4 +45,4 @@ const WalletPopupStyler = styled(Popup)`
 `;
 // =================
 
-export { WalletPopupStyler };
+export { StyledMainTabWrapper, WalletPopupStyler };

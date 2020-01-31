@@ -15,14 +15,21 @@ import PortfolioTable from './PortfolioTable';
 import TransactionTable from './TransactionTable';
 // Constants
 import { LIST } from '../../../constants';
+import { MainTabWrapper } from '../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
 class DataTables extends PureComponent {
   render() {
-    const { setTableType, tableType, openSendTokenPopup } = this.props;
+    const {
+      setTableType,
+      tableType,
+      openSendTokenPopup,
+      openDepositPrivacyPopup,
+      openWithdrawPrivacyPopup
+    } = this.props;
     return (
-      <div className='main_tab'>
+      <MainTabWrapper>
         <Nav tabs className='mt-5 mb-4'>
           {LIST.MY_WALLET_TABLE_TYPES.map((tab, tabIdx) => (
             <NavItem key={`table_tab_${tabIdx + 1}`}>
@@ -40,6 +47,8 @@ class DataTables extends PureComponent {
             <PortfolioTable
               isActive={tableType === LIST.MY_WALLET_TABLE_TYPES[0].value}
               openSendTokenPopup={openSendTokenPopup}
+              openDepositPrivacyPopup={openDepositPrivacyPopup}
+              openWithdrawPrivacyPopup={openWithdrawPrivacyPopup}
             />
           </TabPane>
           <TabPane tabId={LIST.MY_WALLET_TABLE_TYPES[1].value}>
@@ -48,7 +57,7 @@ class DataTables extends PureComponent {
             />
           </TabPane>
         </TabContent>
-      </div>
+      </MainTabWrapper>
     );
   }
 }
@@ -64,6 +73,10 @@ DataTables.propTypes = {
   setTableType: PropTypes.func,
   /** Value to determine highlighted table tab */
   tableType: PropTypes.string,
+  /** Action to open deposit privacy popup */
+  openDepositPrivacyPopup: PropTypes.func,
+  /** Action to open withdraw privacy popup */
+  openWithdrawPrivacyPopup: PropTypes.func,
 };
 
 DataTables.defaultProps = {
@@ -71,6 +84,8 @@ DataTables.defaultProps = {
   openSendTokenPopup: () => {},
   setTableType: () => {},
   tableType: 0,
+  openDepositPrivacyPopup: () => {},
+  openWithdrawPrivacyPopup: () => {},
 };
 // ======================
 

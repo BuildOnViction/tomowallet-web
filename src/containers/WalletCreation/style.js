@@ -11,6 +11,10 @@ import { ContainerMin } from '../../styles';
 // ==================
 
 // ===== STYLE =====
+const Wrapper = styled.div`
+  padding: 34px 0;
+`
+
 const WalletCreationStyler = styled(ContainerMin)`
   .btn-reload {
     font-size: 15px;
@@ -21,6 +25,11 @@ const WalletCreationStyler = styled(ContainerMin)`
     }
   }
 `;
+
+const RowCentered = styled.div`
+  display: flex;
+  justify-content: center;
+`
 // =================
 
-export { WalletCreationStyler };
+export { Wrapper, WalletCreationStyler, RowCentered };

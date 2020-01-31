@@ -8,7 +8,7 @@
 import _isEmpty from 'lodash.isempty';
 import _isNumber from 'lodash.isnumber';
 // Utilities
-import { isHex, isAddress } from './blockchain/utilities';
+import { isHex, isAddress, isPrivacyAddress } from './blockchain/utilities';
 // ===================
 
 // ===== VALIDATIONS =====
@@ -96,6 +96,15 @@ const isMinLength = ({ name, value, min }, message) => {
   }
   return {};
 };
+
+const isPrivacyWallet = ({ name, value }, message) => {
+  if (!_isEmpty(value) && !isPrivacyAddress(value)) {
+    return {
+      [name]: [message],
+    };
+  }
+  return {};
+};
 // =======================
 
 export default {
@@ -106,4 +115,5 @@ export default {
   isMinLength,
   isMinNumber,
   isRequired,
+  isPrivacyWallet,
 };

@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 // Custom Componentsimport {
 import { Row, Col } from 'reactstrap';
 import { BoxText, TextYellow, ButtonStyler } from '../../../styles';
+import { RowCentered } from '../style'
 // Utilities
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG, ROUTE } from '../../../constants';
@@ -50,15 +51,11 @@ class SuccessNotification extends PureComponent {
         <div className='my-4'>
           {formatMessage(MSG.SUCCESS_NOTIFICATION_CONTENT_DESCRIPTION)}
         </div>
-        <Row>
-          <Col xs={3} />
-          <Col xs={6}>
-            <ButtonStyler btnYellow onClick={this.handleConfirmSuccess}>
+        <RowCentered>
+            <ButtonStyler width='auto' btnYellow onClick={this.handleConfirmSuccess}>
               {formatMessage(MSG.SUCCESS_NOTIFICATION_BUTTON_ACCESS_WALLET)}
             </ButtonStyler>
-          </Col>
-          <Col xs={3} />
-        </Row>
+        </RowCentered>
       </BoxText>
     );
   }

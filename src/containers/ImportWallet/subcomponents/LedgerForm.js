@@ -7,11 +7,11 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import { Label, Input, FormFeedback } from 'reactstrap';
 import _get from 'lodash.get';
 import { FormattedMessage } from 'react-intl';
 // Custom Component
-import { ButtonLinkStyler, FormTextStyled } from '../../../styles';
+import { StyledFormGroup, ButtonLinkStyler, FormTextStyled, TextBlue } from '../../../styles';
 // Utilities
 import { withIntl } from '../../../components/IntlProvider';
 import { MSG } from '../../../constants';
@@ -31,7 +31,7 @@ class LedgerForm extends PureComponent {
       updateInput,
     } = this.props;
     return (
-      <FormGroup>
+      <StyledFormGroup>
         <Label>{formatMessage(MSG.IMPORT_WALLET_TAB_LEDGER_INPUT_LABEL)}</Label>
         <Input
           id='hdPathInput'
@@ -53,33 +53,36 @@ class LedgerForm extends PureComponent {
             {...MSG.IMPORT_WALLET_TAB_LEDGER_INPUT_DESCRIPTION}
             values={{
               path1: (
-                <ButtonLinkStyler
+                <TextBlue
+                  cursor="pointer"
                   btnRed
                   onClick={() => updateInput('hdPath', "m/44'/60'/0'")}
                 >
                   {"m/44'/60'/0'"}
-                </ButtonLinkStyler>
+                </TextBlue>
               ),
               path2: (
-                <ButtonLinkStyler
+                <TextBlue
+                  cursor="pointer"
                   btnRed
                   onClick={() => updateInput('hdPath', "m/44'/60'/0'/0")}
                 >
                   {"m/44'/60'/0'/0"}
-                </ButtonLinkStyler>
+                </TextBlue>
               ),
               path3: (
-                <ButtonLinkStyler
+                <TextBlue
+                  cursor="pointer"
                   btnRed
                   onClick={() => updateInput('hdPath', "m/44'/889'/0'/0")}
                 >
                   {"m/44'/889'/0'/0"}
-                </ButtonLinkStyler>
+                </TextBlue>
               ),
             }}
           />
         </FormTextStyled>
-      </FormGroup>
+      </StyledFormGroup>
     );
   }
 }

@@ -22,6 +22,10 @@ import DataTables from "./subcomponents/DataTables";
 import SendTokenPopup from "./subcomponents/popups/SendToken";
 import ReceiveTokenPopup from "./subcomponents/popups/ReceiveToken";
 import SuccessPopup from "./subcomponents/popups/Success";
+import SuccessDepositPopup from "./subcomponents/popups/SuccessDeposit";
+import DepositPrivacyPopup from "./subcomponents/popups/DepositPrivacy";
+import WithdrawPopup from "./subcomponents/popups/Withdraw";
+import SuccessWithdrawPopup from "./subcomponents/popups/SuccessWithdraw";
 // Utilities & Constants
 import {
   resetSendTokenForm,
@@ -32,7 +36,17 @@ import {
   toggleSuccessPopup,
   updateSendTokenInput,
   updateSendTokenErrors,
-  updateSendTokenPopupStage
+	updateSendTokenPopupStage,
+  toggleDepositPrivacyPopup,
+  updateDepositPrivacyInput,
+  updateDepositPrivacyPopupStage,
+  toggleSuccessDepositPopup,
+  toggleWithdrawPrivacyPopup,
+  updateWithdrawPrivacyInput,
+  updateWithdrawPrivacyErrors,
+  updateDepositPrivacyErrors,
+  toggleSuccessWithdrawPopup,
+  updateWithdrawPrivacyPopupStage
 } from "./actions";
 import {
   selectReceiveToKenPopup,
@@ -40,7 +54,13 @@ import {
   selectSendTokenPopup,
   selectSuccessPopup,
   selectTableType,
-  selectTokenOptions
+	selectTokenOptions,
+  selectDepositPrivacyForm,
+  selectDepositPrivacyPopup,
+  selectSuccessDepositPopup,
+  selectWithdrawPrivacyPopup,
+  selectWithdrawPrivacyForm,
+  selectSuccessWithdrawPopup,
 } from "./selectors";
 import reducer from "./reducer";
 import saga from "./saga";
@@ -48,7 +68,11 @@ import {
   DOMAIN_KEY,
   SEND_TOKEN_FIELDS,
   SEND_TOKEN_STAGES,
-  PORTFOLIO_COLUMNS
+  PORTFOLIO_COLUMNS,
+  DEPOSIT_STAGES,
+  DEPOSIT_PRIVACY_FIELDS,
+  WITHDRAW_PRIVACY_FIELDS,
+  WITHDRAW_STAGES,
 } from "./constants";
 import {
   addBN,
@@ -68,13 +92,21 @@ import {
   sendToken,
   subBN,
   validations,
-  withGlobal
+  withGlobal,
+  sendMoneyPrivacy,
+  depositPrivacyMoney,
+  getPrivacyAddressInfo,
+  estimatePrivacyFee,
+  withdrawPrivacy,
+  setPrivacyInfo,
+  mnemonicToPrivateKey,
 } from "../../utils";
 import { withIntl } from "../../components/IntlProvider";
 import { withWeb3 } from "../../components/Web3";
-import { selectWallet } from "../Global/selectors";
-import { storeWallet } from "../Global/actions";
+import { selectWallet, selectPrivacyMode } from "../Global/selectors";
+import { storeWallet, updatePrivacyData } from "../Global/actions";
 import { MSG, LIST, ENUM, RPC_SERVER } from "../../constants";
+import { WelcomeSection } from './style';
 // ==================
 
 // ===== MAIN COMPONENT =====
@@ -97,11 +129,49 @@ class MyWallet extends PureComponent {
     this.handleValidateTrc20Fee = this.handleValidateTrc20Fee.bind(this);
     this.handleValidateTrc21Fee = this.handleValidateTrc21Fee.bind(this);
     this.handleValidationSendForm = this.handleValidationSendForm.bind(this);
+    this.handleSendMoneyPrivacy = this.handleSendMoneyPrivacy.bind(this);
+		this.handleValidatePrivacyFee = this.handleValidatePrivacyFee.bind(this);
+		this.handleOpenDepositPrivacyPopup = this.handleOpenDepositPrivacyPopup.bind(this);
+		this.handleCloseDepositPrivacyPopup = this.handleCloseDepositPrivacyPopup.bind(this);
+		this.handleConfirmBeforeDeposit = this.handleConfirmBeforeDeposit.bind(this);
+    this.handleValidateDepositFee = this.handleValidateDepositFee.bind(this);
+    this.handleGetDepositAction = this.handleGetDepositAction.bind(this);
+    this.handleDepositPrivacyByPk = this.handleDepositPrivacyByPk.bind(this);
+    this.handleOpenWithdrawPrivacyPopup = this.handleOpenWithdrawPrivacyPopup.bind(this);
+    this.handleCloseWithdrawPrivacyPopup = this.handleCloseWithdrawPrivacyPopup.bind(this);
+    this.handleWithdrawFullAmount = this.handleWithdrawFullAmount.bind(this);
+    this.handleConfirmBeforeWithdraw = this.handleConfirmBeforeWithdraw.bind(this);
+    this.handleValidationWithdrawPrivacyForm = this.handleValidationWithdrawPrivacyForm.bind(this);
+    this.handleValidationDepositPrivacyForm = this.handleValidationDepositPrivacyForm.bind(this);
+    this.handleGetWithdrawAction = this.handleGetWithdrawAction.bind(this);
+    this.handleWithdrawPrivacyByPk = this.handleWithdrawPrivacyByPk.bind(this);
+    this.handleValidateWithdrawFee = this.handleValidateWithdrawFee.bind(this);
   }
 
   componentWillUnmount() {
-    const { onResetState } = this.props;
+    const { onResetState, wallet } = this.props;
+    const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'])
+    if (privacyWallet) {
+      privacyWallet.removeListener('NEW_TRANSACTION')
+    }
     onResetState();
+  }
+
+  componentDidMount() {
+    const { wallet } = this.props;
+    const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'])
+    console.log('privacyWallet', privacyWallet)
+    if (privacyWallet) {
+      const address = _get(wallet, ['address'], '')
+      privacyWallet.on('NEW_UTXO', data => {
+        console.log('NEW_UTXO', data)
+      })
+      privacyWallet.on('NEW_TRANSACTION', data => {
+        console.log('NEW_TRANSACTION', data)
+        // const state = privacyWallet.state();
+        // setPrivacyInfo({ address, ...state });
+      })
+    }
   }
 
   handleAddFullAmount() {
@@ -123,9 +193,36 @@ class MyWallet extends PureComponent {
     onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, normalBalance);
   }
 
+  handleWithdrawFullAmount() {
+    const { onUpdateWithdrawPrivacyInput, withdrawForm } = this.props;
+    const rawBalance = _get(
+      withdrawForm,
+      [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
+      0
+    );
+    const decimals = _get(
+      withdrawForm,
+      [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0
+    );
+    const normalBalance = removeTrailingZero(
+      bnToDecimals(rawBalance, decimals)
+    );
+
+    onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT, normalBalance);
+  }
+
   handleCloseSendTokenPopup() {
     const { onToggleSendTokenPopup } = this.props;
     onToggleSendTokenPopup(false);
+	}
+	handleCloseDepositPrivacyPopup() {
+    const { onToggleDepositPrivacyPopup } = this.props;
+    onToggleDepositPrivacyPopup(false);
+  }
+  handleCloseWithdrawPrivacyPopup() {
+    const { onToggleWithdrawPrivacyPopup } = this.props;
+    onToggleWithdrawPrivacyPopup(false);
   }
 
   handleConfirmationError(message) {
@@ -141,7 +238,9 @@ class MyWallet extends PureComponent {
       onUpdateSendTokenErrors,
       sendTokenForm,
       toggleLoading,
-      web3
+      web3,
+      privacyMode,
+      wallet,
     } = this.props;
     const contractData = this.handleGetContractData();
     const errorList = this.handleValidationSendForm();
@@ -157,16 +256,83 @@ class MyWallet extends PureComponent {
     } else {
       toggleLoading(true);
       try {
-        estimateFee(web3, tokenType, contractData, isTestnet).then(feeObj => {
-          const type = feeObj.type;
-          if (type === ENUM.TOKEN_TYPE.TRC20) {
-            this.handleValidateTrc20Fee(feeObj);
-          } else if (type === ENUM.TOKEN_TYPE.TRC21) {
-            this.handleValidateTrc21Fee(feeObj);
-          } else if (type === ENUM.TOKEN_TYPE.CURRENCY) {
-            this.handleValidateCurrencyFee(feeObj);
-          }
-        });
+        if (privacyMode) {
+          const fee = estimatePrivacyFee(web3,
+            _get(wallet, ['privacy', 'privacyWallet'], {}),
+            _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0))
+
+            this.handleValidatePrivacyFee({
+              type: 'TRC21',
+              amount: bnToDecimals(fee.toString(10), 18)
+            })
+        } else {
+          estimateFee(web3, tokenType, contractData, isTestnet).then(feeObj => {
+            const type = feeObj.type;
+            if (type === ENUM.TOKEN_TYPE.TRC20) {
+              this.handleValidateTrc20Fee(feeObj);
+            } else if (type === ENUM.TOKEN_TYPE.TRC21) {
+              this.handleValidateTrc21Fee(feeObj);
+            } else if (type === ENUM.TOKEN_TYPE.CURRENCY) {
+              this.handleValidateCurrencyFee(feeObj);
+            }
+          });
+        }
+      } catch (error) {
+        this.handleConfirmationError(error.message);
+      }
+    }
+	}
+	
+	handleConfirmBeforeDeposit() {
+    const {
+      onUpdateDepositPrivacyErrors,
+      toggleLoading,
+		} = this.props;
+    const errorList = this.handleValidationDepositPrivacyForm();
+
+    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+
+    if (!_isEmpty(errorList)) {
+      onUpdateDepositPrivacyErrors(errorList);
+    } else {
+      toggleLoading(true);
+      try {
+        const feeObj = {
+					type: 'TRC21',
+					amount: '0.0001',
+        }
+				this.handleValidateDepositFee(feeObj)
+      } catch (error) {
+        this.handleConfirmationError(error.message);
+      }
+    }
+  }
+
+  handleConfirmBeforeWithdraw() {
+    const {
+      onUpdateWithdrawPrivacyErrors,
+      toggleLoading,
+      web3,
+      wallet,
+      withdrawForm
+    } = this.props;
+    const errorList = this.handleValidationWithdrawPrivacyForm();
+
+    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+
+    if (!_isEmpty(errorList)) {
+      onUpdateWithdrawPrivacyErrors(errorList);
+    } else {
+      toggleLoading(true);
+      try {
+        const fee = estimatePrivacyFee(web3,
+          _get(wallet, ['privacy', 'privacyWallet'], {}),
+          _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT], 0))
+
+				this.handleValidateWithdrawFee({
+					type: 'TRC21',
+					amount: bnToDecimals(fee, 18),
+        })
       } catch (error) {
         this.handleConfirmationError(error.message);
       }
@@ -198,34 +364,154 @@ class MyWallet extends PureComponent {
     };
   }
 
-  handleGetSendAction() {
+  handleGetSendAction(privacyMode) {
     const { sendTokenForm } = this.props;
     const loginType = _get(getWeb3Info(), "loginType");
     let sendAction = () => {};
 
-    if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
-      sendAction = this.handleSendMoneyByLedger;
-    } else if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
-      if (
-        _get(sendTokenForm, [
-          SEND_TOKEN_FIELDS.TOKEN,
-          PORTFOLIO_COLUMNS.TYPE
-        ]) === ENUM.TOKEN_TYPE.CURRENCY
-      ) {
-        sendAction = this.handleSendMoneyByPK;
-      } else {
-        sendAction = this.handleSendTokenByPK;
-      }
+    if (privacyMode) {
+      sendAction = this.handleSendMoneyPrivacy
     } else {
-      sendAction = this.handleSendMoneyByPK;
+      if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
+        sendAction = this.handleSendMoneyByLedger;
+      } else if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+        if (
+          _get(sendTokenForm, [
+            SEND_TOKEN_FIELDS.TOKEN,
+            PORTFOLIO_COLUMNS.TYPE
+          ]) === ENUM.TOKEN_TYPE.CURRENCY
+        ) {
+          sendAction = this.handleSendMoneyByPK;
+        } else {
+          sendAction = this.handleSendTokenByPK;
+        }
+      } else {
+        sendAction = this.handleSendMoneyByPK;
+      }
     }
 
     return sendAction();
   }
 
+  handleGetDepositAction(privacyMode) {
+    const loginType = _get(getWeb3Info(), "loginType");
+    let depositAction = () => {};
+    if (privacyMode) {
+      if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+        depositAction = this.handleDepositPrivacyByPk;
+      }
+    }
+
+    return depositAction()
+  }
+  handleGetWithdrawAction(privacyMode) {
+    const loginType = _get(getWeb3Info(), "loginType");
+    let withDrawAction = () => {};
+    if (privacyMode) {
+      if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+        withDrawAction = this.handleWithdrawPrivacyByPk;
+      }
+    }
+
+    return withDrawAction()
+  }
+
   handleOpenSendTokenPopup(initialValues) {
-    const { onToggleSendTokenPopup } = this.props;
+		const { onToggleSendTokenPopup } = this.props;
     onToggleSendTokenPopup(true, initialValues);
+	}
+	
+	handleOpenDepositPrivacyPopup(initialValues) {
+		const { onToggleDepositPrivacyPopup } = this.props;
+		onToggleDepositPrivacyPopup(true, initialValues);
+  }
+  
+  handleOpenWithdrawPrivacyPopup(initialValues) {
+    const { onToggleWithdrawPrivacyPopup } = this.props;
+    onToggleWithdrawPrivacyPopup(true, initialValues);
+  }
+
+  handleSendMoneyPrivacy() {
+    const {
+      web3,
+      toggleLoading,
+      onToggleSuccessPopup,
+      wallet,
+			sendTokenForm,
+			onUpdatePrivacyData,
+    } = this.props;
+    toggleLoading(true);
+		const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
+    const address = _get(wallet, 'address')
+    sendMoneyPrivacy(
+      web3,
+      privacyWallet,
+      _get(sendTokenForm, [
+        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT
+      ], 0),
+      _get(sendTokenForm, [
+        SEND_TOKEN_FIELDS.RECIPIENT
+      ], '')
+    ).then(utxo => {
+			toggleLoading(false);
+			onUpdatePrivacyData({ address, privacyWallet })
+			this.handleCloseSendTokenPopup();
+			onToggleSuccessPopup(true, '');
+    }).catch(error => {
+      this.handleTransactionError
+    });
+  }
+
+  handleDepositPrivacyByPk() {
+    const {
+      web3,
+      toggleLoading,
+      wallet,
+			depositForm,
+      onUpdatePrivacyData,
+      onToggleSuccessDepositPopup,
+    } = this.props;
+    toggleLoading(true);
+		const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
+		const address = _get(wallet, 'address')
+    depositPrivacyMoney(
+      web3,
+      privacyWallet,
+      _get(depositForm, [
+        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT
+      ], 0)
+    ).then(({utxo, proof, tx}) => {
+			toggleLoading(false);
+			onUpdatePrivacyData({ address, privacyWallet })
+      this.handleCloseDepositPrivacyPopup();
+			onToggleSuccessDepositPopup(true, tx.transactionHash || '');
+    }).catch(this.handleTransactionError);
+  }
+
+  handleWithdrawPrivacyByPk() {
+    const {
+      web3,
+      toggleLoading,
+      wallet,
+      withdrawForm,
+      onUpdatePrivacyData,
+      onToggleSuccessWithdrawPopup,
+    } = this.props;
+    toggleLoading(true);
+    const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
+		const address = _get(wallet, 'address')
+    withdrawPrivacy(
+      web3,
+      wallet,
+      _get(withdrawForm, [
+        WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT
+      ], 0)
+    ).then((data) => {
+      toggleLoading(false);
+			onUpdatePrivacyData({ address, privacyWallet })
+      this.handleCloseWithdrawPrivacyPopup();
+      onToggleSuccessWithdrawPopup(true, _get(data, '0', 'transactionHash', ''));
+    }).catch(this.handleTransactionError);
   }
 
   handleSendMoneyByPK() {
@@ -241,6 +527,22 @@ class MyWallet extends PureComponent {
     sendMoney(web3, contractData)
       .then(hash => {
         getWalletInfo(web3).then(walletInfo => {
+          const { address, hdPath, recoveryPhrase } = getWeb3Info() || {};
+          const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+          const serverConfig = hdPath
+            ? {
+                ..._get(RPC_SERVER, [networkKey], {}),
+                hdPath,
+              }
+            : _get(RPC_SERVER, [networkKey], {});
+          const loginType = _get(getWeb3Info(), "loginType");
+          if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+              // get privacy address
+            const privacyObject = getPrivacyAddressInfo(
+              walletInfo.address,
+              mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+            walletInfo.privacy = privacyObject;
+          }
           onStoreWallet(walletInfo);
         });
         return hash;
@@ -310,9 +612,13 @@ class MyWallet extends PureComponent {
   }
 
   handleTransactionError(error) {
-    const { onUpdateSendTokenErrors, toggleLoading } = this.props;
+    const { onUpdateSendTokenErrors, toggleLoading, onUpdateWithdrawPrivacyErrors,
+      onUpdateDepositPrivacyErrors,
+    } = this.props;
     toggleLoading(false);
     onUpdateSendTokenErrors({ error: [error.message] });
+    onUpdateWithdrawPrivacyErrors({ error: [error.message] });
+    onUpdateDepositPrivacyErrors({ error: [error.message] });
   }
 
   handleValidateCurrencyFee(feeObj) {
@@ -436,6 +742,7 @@ class MyWallet extends PureComponent {
       SEND_TOKEN_FIELDS.TOKEN,
       PORTFOLIO_COLUMNS.BALANCE
     ]);
+
     const remainBalance = subBN(
       web3.utils.toBN(balance),
       addBN(
@@ -478,17 +785,207 @@ class MyWallet extends PureComponent {
     }
   }
 
+  handleValidatePrivacyFee(feeObj) {
+    const {
+      intl: { formatMessage },
+      onUpdateSendTokenInput,
+      onUpdateSendTokenPopupStage,
+      sendTokenForm,
+      toggleLoading,
+      web3,
+    } = this.props;
+    const balance = _get(sendTokenForm, [
+      SEND_TOKEN_FIELDS.TOKEN,
+      PORTFOLIO_COLUMNS.BALANCE
+    ]);
+
+    const decimals = _get(
+      sendTokenForm,
+      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0
+    );
+
+    const remainBalance = subBN(
+      web3.utils.toBN(balance),
+      addBN(
+        _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
+        feeObj.amount.toString(),
+        decimals
+      ),
+      decimals
+    );
+
+    if (
+      balance === decimalsToBN(
+        _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+        decimals
+      )
+    ) {
+      toggleLoading(false);
+      const remainAmount = subBN(
+        web3.utils.toBN(balance),
+        feeObj.amount,
+        decimals
+      );
+      onUpdateSendTokenInput(
+        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+        removeTrailingZero(remainAmount)
+      );
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+      this.handleConfirmationError(
+        formatMessage(
+          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+        )
+      );
+    } else {
+      toggleLoading(false);
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    }
+	}
+	
+	handleValidateDepositFee(feeObj) {
+    const {
+      intl: { formatMessage },
+			onUpdateDepositPrivacyInput,
+		  onUpdateDepositPrivacyPopupStage,
+      depositForm,
+      toggleLoading,
+      wallet,
+      web3,
+    } = this.props;
+    // const balance = _get(wallet, 'balance', 0);
+
+    const decimals = _get(
+      depositForm,
+      [DEPOSIT_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0
+    );
+    const balance =  decimalsToBN(
+      _get(wallet, 'balance', 0),
+      decimals
+    )
+
+    const remainBalance = subBN(
+      web3.utils.toBN(balance),
+      addBN(
+        _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+        feeObj.amount,
+        decimals
+      ),
+      decimals
+    );
+
+    if (
+      balance === decimalsToBN(
+        _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+        decimals
+      )
+    ) {
+      toggleLoading(false);
+      const remainAmount = subBN(
+        web3.utils.toBN(balance),
+        feeObj.amount,
+        decimals
+      );
+      onUpdateDepositPrivacyInput(
+        DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+        removeTrailingZero(remainAmount)
+      );
+      onUpdateDepositPrivacyInput(DEPOSIT_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateDepositPrivacyPopupStage(DEPOSIT_STAGES.CONFIRMATION);
+    } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+      this.handleConfirmationError(
+        formatMessage(
+          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+        )
+      );
+    } else {
+      toggleLoading(false);
+      onUpdateDepositPrivacyInput(DEPOSIT_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateDepositPrivacyPopupStage(DEPOSIT_STAGES.CONFIRMATION);
+    }
+  }
+
+	handleValidateWithdrawFee(feeObj) {
+    const {
+      intl: { formatMessage },
+      onUpdateWithdrawPrivacyInput,
+      onUpdateWithdrawPrivacyPopupStage,
+      withdrawForm,
+      depositForm,
+      toggleLoading,
+      wallet,
+      web3,
+    } = this.props;
+
+    const balance = _get(withdrawForm, [
+      WITHDRAW_PRIVACY_FIELDS.TOKEN,
+      PORTFOLIO_COLUMNS.BALANCE
+    ]);
+
+    const decimals = _get(
+      withdrawForm,
+      [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+      0
+    );
+
+    const remainBalance = subBN(
+      web3.utils.toBN(balance),
+      addBN(
+        _get(depositForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+        feeObj.amount,
+        decimals
+      ),
+      decimals
+    );
+
+    if (
+      balance === decimalsToBN(
+        _get(depositForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+        decimals
+      )
+    ) {
+      toggleLoading(false);
+      const remainAmount = subBN(
+        web3.utils.toBN(balance),
+        feeObj.amount,
+        decimals
+      );
+      onUpdateWithdrawPrivacyInput(
+        WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+        removeTrailingZero(remainAmount)
+      );
+      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.CONFIRMATION);
+    } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+      this.handleConfirmationError(
+        formatMessage(
+          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+        )
+      );
+    } else {
+      toggleLoading(false);
+      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.CONFIRMATION);
+    }
+  }
+
   handleValidationSendForm() {
     const {
       intl: { formatMessage },
-      sendTokenForm
+      sendTokenForm,
+      privacyMode,
     } = this.props;
     const {
       isWalletAddress,
       isMaxLength,
       isMaxNumber,
       isMinNumber,
-      isRequired
+      isRequired,
+      isPrivacyWallet,
     } = validations;
 
     const errorList = mergeErrors([
@@ -506,12 +1003,21 @@ class MyWallet extends PureComponent {
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_REQUIRED)
       ),
-      isWalletAddress(
-        {
-          name: SEND_TOKEN_FIELDS.RECIPIENT,
-          value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT])
-        },
-        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_INVALID)
+      privacyMode ?
+        isPrivacyWallet(
+          {
+            name: SEND_TOKEN_FIELDS.RECIPIENT,
+            value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT])
+          },
+          formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_PRIVACY_RECIPIENT_INVALID)
+        )
+        :
+        isWalletAddress(
+          {
+            name: SEND_TOKEN_FIELDS.RECIPIENT,
+            value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.RECIPIENT])
+          },
+          formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_INVALID)
       ),
       isRequired(
         {
@@ -525,17 +1031,23 @@ class MyWallet extends PureComponent {
           name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
           value: _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
           max: parseFloat(
-            bnToDecimals(
+            privacyMode ? 
               _get(sendTokenForm, [
                 SEND_TOKEN_FIELDS.TOKEN,
                 PORTFOLIO_COLUMNS.BALANCE
-              ]),
-              _get(sendTokenForm, [
-                SEND_TOKEN_FIELDS.TOKEN,
-                PORTFOLIO_COLUMNS.DECIMALS
               ])
+              :
+              bnToDecimals(
+                _get(sendTokenForm, [
+                  SEND_TOKEN_FIELDS.TOKEN,
+                  PORTFOLIO_COLUMNS.BALANCE
+                ]),
+                _get(sendTokenForm, [
+                  SEND_TOKEN_FIELDS.TOKEN,
+                  PORTFOLIO_COLUMNS.DECIMALS
+                ])
+              )
             )
-          )
         },
         formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
       ),
@@ -560,6 +1072,120 @@ class MyWallet extends PureComponent {
     return errorList;
   }
 
+  handleValidationWithdrawPrivacyForm() {
+    const {
+      intl: { formatMessage },
+      withdrawForm,
+    } = this.props;
+    const {
+      isMaxNumber,
+      isMinNumber,
+      isRequired,
+    } = validations;
+
+    const errorList = mergeErrors([
+      isRequired(
+        {
+          name: WITHDRAW_PRIVACY_FIELDS.TOKEN,
+          value: _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TOKEN])
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_TOKEN_REQUIRED)
+      ),
+      isRequired(
+        {
+          name: WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+          value: _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT])
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED)
+      ),
+      isMaxNumber(
+        {
+          name: WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+          value: _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+          max: parseFloat(
+              bnToDecimals(
+                _get(withdrawForm, [
+                  WITHDRAW_PRIVACY_FIELDS.TOKEN,
+                  PORTFOLIO_COLUMNS.BALANCE
+                ]),
+                _get(withdrawForm, [
+                  WITHDRAW_PRIVACY_FIELDS.TOKEN,
+                  PORTFOLIO_COLUMNS.DECIMALS
+                ])
+              )
+            )
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
+      ),
+      isMinNumber(
+        {
+          name: WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+          value: _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+          min: 0
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
+      )
+    ]);
+
+    return errorList;
+  }
+
+  handleValidationDepositPrivacyForm() {
+    const {
+      intl: { formatMessage },
+      wallet,
+      depositForm,
+    } = this.props;
+    const {
+      isMaxNumber,
+      isMinNumber,
+      isRequired,
+    } = validations;
+
+    const errorList = mergeErrors([
+      isRequired(
+        {
+          name: DEPOSIT_PRIVACY_FIELDS.TOKEN,
+          value: _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TOKEN])
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_TOKEN_REQUIRED)
+      ),
+      isRequired(
+        {
+          name: DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+          value: _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT])
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED)
+      ),
+      isMaxNumber(
+        {
+          name: DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+          value: _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+          max: parseFloat(
+              bnToDecimals(
+                _get(wallet, 'balance', 0),
+                _get(depositForm, [
+                  DEPOSIT_PRIVACY_FIELDS.TOKEN,
+                  PORTFOLIO_COLUMNS.DECIMALS
+                ])
+              )
+            )
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
+      ),
+      isMinNumber(
+        {
+          name: DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+          value: _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+          min: 0
+        },
+        formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_INVALID)
+      )
+    ]);
+
+    return errorList;
+  }
+
   render() {
     const {
       intl: { formatMessage },
@@ -573,14 +1199,38 @@ class MyWallet extends PureComponent {
       successPopup,
       tableType,
       tokenOptions,
-      wallet
-    } = this.props;
+			wallet,
+      depositPrivacyPopup,
+      onUpdateDepositPrivacyInput,
+      depositForm,
+      onUpdateDepositPrivacyPopupStage,
+      onToggleSuccessDepositPopup,
+      successDepositPopup,
+      withdrawPrivacyPopup,
+      withdrawForm,
+      onUpdateWithdrawPrivacyInput,
+      onToggleSuccessWithdrawPopup,
+      successWithdrawPopup,
+      onUpdateWithdrawPrivacyPopupStage,
+      privacyMode,
+    } = this.props;    
 
     return (
       <Fragment>
         <Helmet>
           <title>{formatMessage(MSG.MY_WALLET_TITLE)}</title>
         </Helmet>
+        {
+          privacyMode ? 
+            (<WelcomeSection>
+              <h1>{formatMessage(MSG.MY_WALLET_INCOGNITO_MODE)}</h1>
+              <p>{formatMessage(MSG.MY_WALLET_INCOGNITO_MODE_DESCRIPTION)}</p>
+            </WelcomeSection>)
+          : (<WelcomeSection>
+              <h1>{formatMessage(MSG.MY_WALLET_MAIN_MODE)}</h1>
+              <p>{formatMessage(MSG.MY_WALLET_MAIN_MODE_DESCRIPTION)}</p>
+            </WelcomeSection>)
+        }
         <AddressInfo
           openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
           openSendTokenPopup={this.handleOpenSendTokenPopup}
@@ -588,7 +1238,9 @@ class MyWallet extends PureComponent {
         />
         <DataTables
           openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
-          openSendTokenPopup={this.handleOpenSendTokenPopup}
+					openSendTokenPopup={this.handleOpenSendTokenPopup}
+          openDepositPrivacyPopup={this.handleOpenDepositPrivacyPopup}
+          openWithdrawPrivacyPopup={this.handleOpenWithdrawPrivacyPopup}
           setTableType={onSetTableType}
           tableType={tableType}
         />
@@ -601,7 +1253,7 @@ class MyWallet extends PureComponent {
           submitSendToken={this.handleGetSendAction}
           tokenOptions={tokenOptions}
           updateInput={onUpdateSendTokenInput}
-          updateSendTokenPopupStage={onUpdateSendTokenPopupStage}
+					updateSendTokenPopupStage={onUpdateSendTokenPopupStage}
         />
         <SuccessPopup
           amount={_get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT])}
@@ -614,6 +1266,48 @@ class MyWallet extends PureComponent {
           )}
         />
         <ReceiveTokenPopup />
+				<DepositPrivacyPopup
+          addFullAmount={this.handleAddFullAmount}
+          closePopup={this.handleCloseDepositPrivacyPopup}
+          confirmBeforeDeposit={this.handleConfirmBeforeDeposit}
+          formValues={depositForm}
+          popupData={depositPrivacyPopup}
+          submitDeposit={this.handleGetDepositAction}
+          tokenOptions={tokenOptions}
+          updateInput={onUpdateDepositPrivacyInput}
+					updateDepositPrivacyPopupStage={onUpdateDepositPrivacyPopupStage}
+        />
+        <SuccessDepositPopup
+        amount={_get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT])}
+        togglePopup={onToggleSuccessDepositPopup}
+        successDepositPopup={successDepositPopup}
+        symbol={_get(
+          depositForm,
+          [DEPOSIT_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
+          ""
+        )}
+        />
+        <WithdrawPopup
+          addFullAmount={this.handleWithdrawFullAmount}
+          closePopup={this.handleCloseWithdrawPrivacyPopup}
+          confirmBeforeSend={this.handleConfirmBeforeWithdraw}
+          formValues={withdrawForm}
+          popupData={withdrawPrivacyPopup}
+          submitWithdraw={this.handleGetWithdrawAction}
+          tokenOptions={tokenOptions}
+          updateInput={onUpdateWithdrawPrivacyInput}
+					updateWithdrawPrivacyPopupStage={onUpdateWithdrawPrivacyPopupStage}
+        />
+        <SuccessWithdrawPopup
+        amount={_get(depositForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT])}
+        togglePopup={onToggleSuccessWithdrawPopup}
+        successWithdrawPopup={successWithdrawPopup}
+        symbol={_get(
+          depositForm,
+          [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
+          ""
+        )}
+        />
       </Fragment>
     );
   }
@@ -659,7 +1353,31 @@ MyWallet.propTypes = {
   /** List of token's data */
   tokenOptions: PropTypes.arrayOf(PropTypes.object),
   /** Current wallet's data */
-  wallet: PropTypes.object
+	wallet: PropTypes.object,
+	/** Action to show/hide deposit privacy popup */
+  onToggleDepositPrivacyPopup: PropTypes.func,
+  /** Action to handle input change in deposit privacy form */
+  onUpdateDepositPrivacyInput: PropTypes.func,
+  /** Deposit privacy popup's form values */
+  depositForm: PropTypes.object,
+  /** Action to show/hide deposit success popup */
+  onToggleSuccessDepositPopup: PropTypes.func,
+  /** Deposit success popup's data */
+  successDepositPopup: PropTypes.object,
+  /** Action to show/hide withdraw privacy popup */
+  onToggleWithdrawPrivacyPopup: PropTypes.func,
+  /** Withdraw privacy popup's data */
+  withdrawPrivacyPopup: PropTypes.object,
+  /** Action to handle input change in withdraw form */
+  onUpdateWithdrawPrivacyInput: PropTypes.func,
+  /** Action to store withdraw privacy form errors */
+  onUpdateWithdrawPrivacyErrors: PropTypes.func,
+    /** Action to store deposit privacy form errors */
+    onUpdateDepositPrivacyErrors: PropTypes.func,
+  /** Action to show/hide withdraw success popup */
+  onToggleSuccessWithdrawPopup: PropTypes.func,
+  /** Withdraw success popup's data */
+  successWithdrawPopup: PropTypes.object,
 };
 
 MyWallet.defaultProps = {
@@ -679,7 +1397,20 @@ MyWallet.defaultProps = {
   tableType: LIST.MY_WALLET_TABLE_TYPES[0].value,
   toggleLoading: () => {},
   tokenOptions: [],
-  wallet: {}
+	wallet: {},
+	onToggleDepositPrivacyPopup: () => {},
+  depositPrivacyPopup: {},
+  onUpdateDepositPrivacyInput: () => {},
+  depositForm: {},
+  onToggleSuccessDepositPopup: () => {},
+  successDepositPopup: {},
+  onToggleWithdrawPrivacyPopup: () => {},
+  withdrawPrivacyPopup: {},
+  onUpdateWithdrawPrivacyInput: () => {},
+  onUpdateWithdrawPrivacyErrors: () => {},
+  onUpdateDepositPrivacyErrors: () => {},
+  onToggleWithdrawPrivacyPopup: () => {},
+  successWithdrawPopup: {},
 };
 // ======================
 
@@ -691,7 +1422,14 @@ const mapStateToProps = () =>
     successPopup: selectSuccessPopup,
     tableType: selectTableType,
     tokenOptions: selectTokenOptions,
-    wallet: selectWallet
+		wallet: selectWallet,
+    depositPrivacyPopup: selectDepositPrivacyPopup,
+    depositForm: selectDepositPrivacyForm,
+    successDepositPopup: selectSuccessDepositPopup,
+    privacyMode: selectPrivacyMode,
+    withdrawPrivacyPopup: selectWithdrawPrivacyPopup,
+    withdrawForm: selectWithdrawPrivacyForm,
+    successWithdrawPopup: selectSuccessWithdrawPopup,
   });
 const mapDispatchToProps = dispatch => ({
   onResetSendTokenForm: () => dispatch(resetSendTokenForm()),
@@ -707,7 +1445,18 @@ const mapDispatchToProps = dispatch => ({
   onUpdateSendTokenInput: (name, value) =>
     dispatch(updateSendTokenInput(name, value)),
   onUpdateSendTokenPopupStage: stage =>
-    dispatch(updateSendTokenPopupStage(stage))
+		dispatch(updateSendTokenPopupStage(stage)),
+	onUpdatePrivacyData: wallet => dispatch(updatePrivacyData(wallet)),
+  onToggleDepositPrivacyPopup: (bool, initialValues) => dispatch(toggleDepositPrivacyPopup(bool, initialValues)),
+  onUpdateDepositPrivacyInput: (name, value) => dispatch(updateDepositPrivacyInput(name, value)),
+  onUpdateDepositPrivacyPopupStage: stage => dispatch(updateDepositPrivacyPopupStage(stage)),
+  onToggleSuccessDepositPopup: (bool, hash) => dispatch(toggleSuccessDepositPopup(bool, hash)),
+  onToggleWithdrawPrivacyPopup: (bool, initialValues) => dispatch(toggleWithdrawPrivacyPopup(bool, initialValues)),
+  onUpdateWithdrawPrivacyInput: (name, value) => dispatch(updateWithdrawPrivacyInput(name, value)),
+  onUpdateWithdrawPrivacyErrors: errors => dispatch(updateWithdrawPrivacyErrors(errors)),
+  onUpdateDepositPrivacyErrors: errors => dispatch(updateDepositPrivacyErrors(errors)),
+  onToggleSuccessWithdrawPopup: (bool, hash) => dispatch(toggleSuccessWithdrawPopup(bool, hash)),
+  onUpdateWithdrawPrivacyPopupStage: stage => dispatch(updateWithdrawPrivacyPopupStage(stage)),
 });
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 

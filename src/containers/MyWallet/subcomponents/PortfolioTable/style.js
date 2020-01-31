@@ -21,12 +21,12 @@ const TokenCellStyler = styled.div`
     padding-left: 10px;
     line-height: 1;
     .block-token__name {
-      font-size: 16px;
-      color: #9eaacc;
+      font-size: 14px;
+      color: ${props => props.theme.tableBodyCellColor};
     }
     .block-token__publisher {
       font-size: 14px;
-      color: #5e677f;
+      color: ${props => props.theme.tableHeaderCellColor};
       margin-top: 5px;
     }
   }
@@ -45,8 +45,8 @@ const BoxPortfolio = styled.div`
         left: 2%;
         width: 20px;
         height: 0;
-        border-left: 10px solid #5e677f;
-        border-bottom: 3px solid #5e677f;
+        border-left: 10px solid ${props => props.theme.tableHeaderCellColor};
+        border-bottom: 3px solid ${props => props.theme.tableHeaderCellColor};
         border-top: 3px solid transparent;
         border-right: 10px solid transparent;
       }
@@ -57,7 +57,7 @@ const BoxPortfolio = styled.div`
         left: 2%;
         width: 96%;
         height: 1px;
-        background-color: #5e677f;
+        background-color: ${props => props.theme.tableHeaderCellColor};
       }
     }
   }

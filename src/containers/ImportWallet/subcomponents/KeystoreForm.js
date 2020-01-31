@@ -88,7 +88,7 @@ class KeystoreForm extends PureComponent {
 
   render() {
     return (
-      <div className='d-flex flex-row justify-content-center text-center'>
+      <div className='justify-content-center text-center'>
         <FileUploadInput onLoaded={this.handleLoadKeystore} />
         <PasswordPopup decryptData={this.handleDecryptFileData} />
       </div>

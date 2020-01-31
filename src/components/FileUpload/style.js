@@ -18,14 +18,16 @@ const FileUploadInputStyler = styled(({ active, children, ...remains }) => (
   align-items: center;
   justify-content: center;
   .upload-area {
-    width: 250px;
+    width: 100%;
     height: 250px;
+    cursor: pointer;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 10px;
-    border: 2px dashed #3f3e4e;
+    border: 2px dashed ${props => props.theme.importItemBorder};
     color: ${({ uploaded }) => (uploaded ? '#9aa3b3' : 'inherit')};
     ${({ active }) => active && 'filter: brightness(120%);'}
     &:hover {
