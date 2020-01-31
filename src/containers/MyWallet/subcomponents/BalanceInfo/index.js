@@ -4,7 +4,7 @@ import { MSG } from '../../../../constants';
 
 import Chart from './Chart';
 import PropTypes from 'prop-types';
-import { Wrapper, Col, BalanceIncognito, BalanceMain, TextTitle, TextValue } from './style';
+import { Wrapper, Col, BalanceIncognito, BalanceMain, TextTitle, TextValue, Ellipsis } from './style';
 import { bnToDecimals,
     convertLocaleNumber } from '../../../../utils'
 import _get from "lodash.get";
@@ -43,28 +43,45 @@ class BalanceInfo extends PureComponent {
             18
         );
         let totalBalance = parseFloat(balance) + parseFloat(privacyBalance)
+        const data = [{ value: parseFloat(balance)}, { value: parseFloat(privacyBalance) }]
+
         return (
             <Wrapper>
                 <Col>
                     <div>
-                        <TextTitle>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_BALANCE)}</TextTitle>
-                        <TextValue>{convertLocaleNumber(totalBalance)} TOMO</TextValue>
+                        <TextTitle>
+                            <Ellipsis title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_BALANCE)}>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_BALANCE)}</Ellipsis>
+                        </TextTitle>
+                        <TextValue title={`${convertLocaleNumber(totalBalance)} TOMO`}>
+                            {convertLocaleNumber(totalBalance)} TOMO
+                        </TextValue>
                     </div>
                     <div>
-                        <TextTitle>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_ESTIMATED)}</TextTitle>
-                        <TextValue>$ {convertLocaleNumber(totalBalance * _get(coinData, ['data', 'quotes', 'USD', 'price'], 0))}</TextValue>
+                        <TextTitle>
+                            <Ellipsis title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_ESTIMATED)}>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_ESTIMATED)}</Ellipsis>
+                        </TextTitle>
+                        <TextValue title={`$ ${convertLocaleNumber(totalBalance * _get(coinData, ['data', 'quotes', 'USD', 'price'], 0))}`}>
+                            $ {convertLocaleNumber(totalBalance * _get(coinData, ['data', 'quotes', 'USD', 'price'], 0))}
+                        </TextValue>
                     </div>
                 </Col>
-                <Col><Chart data={[{ value: parseFloat(balance)},
-                    { value: parseFloat(privacyBalance) }]}/></Col>
+                <Col>
+                    <Chart data={data}/>
+                </Col>
                 <Col>
                     <BalanceIncognito>
-                        <TextTitle>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}</TextTitle>
-                        <TextValue>{privacyBalance} TOMO</TextValue>
+                        <TextTitle>
+                            <Ellipsis title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}</Ellipsis>
+                        </TextTitle>
+                        <TextValue title={`${privacyBalance} TOMO`}>{privacyBalance} TOMO</TextValue>
                     </BalanceIncognito>
                     <BalanceMain>
-                        <TextTitle>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_MAIN)}</TextTitle>
-                        <TextValue>{convertLocaleNumber(parseFloat(balance))} TOMO</TextValue>
+                        <TextTitle title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_MAIN)}>
+                            <Ellipsis>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_MAIN)}</Ellipsis>
+                        </TextTitle>
+                        <TextValue title={`${convertLocaleNumber(parseFloat(balance))} TOMO`}>
+                            {convertLocaleNumber(parseFloat(balance))} TOMO
+                        </TextValue>
                     </BalanceMain>
                 </Col>
             </Wrapper>

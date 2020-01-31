@@ -11,7 +11,7 @@ const Col = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-width: 33.33%;
+  width: 33.33%;
 `
 
 const BalanceMode = styled.div`
@@ -46,7 +46,7 @@ const BalanceIncognito = styled(BalanceMode)`
 `
 
 const TextTitle = styled.div.attrs({
-    className: 'title',
+  className: 'title',
 })`
   color: ${props => props.theme.boxTitleColor};
   font-size: 14px;
@@ -54,11 +54,18 @@ const TextTitle = styled.div.attrs({
 `
 
 const TextValue = styled.div.attrs({
-    className: 'value text-truncate',
+  className: 'value text-truncate',
 })`
   font-family: 'Bai Jamjuree', sans-serif;
   font-size: 14px;
   color: ${props => props.theme.boxValueColor};
 `
 
-export { Wrapper, Col, BalanceMain, BalanceIncognito, TextTitle, TextValue };
+const Ellipsis = styled.span.attrs({
+  className: 'text-truncate',
+})`
+  display: block;
+  width: 100%;
+`
+
+export { Wrapper, Col, BalanceMain, BalanceIncognito, TextTitle, TextValue, Ellipsis };
