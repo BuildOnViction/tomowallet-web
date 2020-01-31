@@ -36,6 +36,7 @@ import {
   ButtonSwitchMode,
   LogoBox,
   TomoText,
+  ExternalLink,
 } from './style';
 
 // Utilities & Constants
@@ -265,7 +266,9 @@ class NavigationBar extends PureComponent {
             {/* Switch language - End */}
 
             <DropdownItemStyler>
-              {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
+              <ExternalLink target="_blank" href="https://docs.tomochain.com/products/tomowallet/features/">
+                {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
+              </ExternalLink>
             </DropdownItemStyler>
 
             <DropdownItemStyler onClick={this.handleLogout}>

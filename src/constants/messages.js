@@ -80,6 +80,10 @@ export default defineMessages({
     id: `${buttonPrefix}.withdraw`,
     defaultMessage: 'Withdraw',
   },
+  COMMON_BUTTON_COPY: {
+    id: `${buttonPrefix}.copy`,
+    defaultMessage: 'Copy',
+  },
   // Common - Lists
   COMMON_LIST_LANGUAGE_ENGLISH: {
     id: `${listPrefix}.language.english`,
