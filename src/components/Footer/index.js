@@ -12,7 +12,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Nav, NavItem } from 'reactstrap';
 // Custom Component
-import { LinkFooter, TextGray } from './style';
+import { LinkNavItem, SocialNavItem, LinkFooter, TextGray } from './style';
 // Utilities & Constants
 import { withIntl } from '../IntlProvider';
 import { MSG } from '../../constants';
@@ -85,7 +85,7 @@ class Footer extends PureComponent {
           <Row className='footer-menu'>
             <Nav>
               {this.WEBSITE_SUPPORTED_LINKS.map((link, linkIdx) => (
-                <NavItem key={`website_link_${linkIdx + 1}`}>
+                <LinkNavItem key={`website_link_${linkIdx + 1}`}>
                   <LinkFooter
                     href={link.url}
                     rel='noopener noreferrer'
@@ -93,7 +93,7 @@ class Footer extends PureComponent {
                   >
                     {link.content}
                   </LinkFooter>
-                </NavItem>
+                </LinkNavItem>
               ))}
             </Nav>
           </Row>
@@ -101,7 +101,7 @@ class Footer extends PureComponent {
         <Col xs={12} md={5}>
           <Nav className='footer-buttons'>
             {this.SOCIAL_NETWORKS.map((item, itemIdx) => (
-              <NavItem key={`footer_button_${itemIdx + 1}`}>
+              <SocialNavItem key={`footer_button_${itemIdx + 1}`}>
                 <LinkFooter
                   href={item.url}
                   rel='noopener noreferrer'
@@ -109,7 +109,7 @@ class Footer extends PureComponent {
                 >
                   {<i className={item.className} />}
                 </LinkFooter>
-              </NavItem>
+              </SocialNavItem>
             ))}
           </Nav>
         </Col>

@@ -19,7 +19,8 @@ import {
   CardHeader,
   CardImg,
   CardText,
-  CardFooter
+  CardFooter,
+  Card,
 } from "reactstrap";
 import { Helmet } from "react-helmet";
 // Custom Components
@@ -29,7 +30,6 @@ import {
   HeadingLarge,
   TextBlue,
   ImporWalletStyler,
-  BoxCardStyled
 } from "../../styles";
 import LedgerForm from "./subcomponents/LedgerForm";
 import MetaMaskForm from "./subcomponents/MetaMaskForm";
@@ -46,7 +46,7 @@ import {
   updateInput,
   loadWalletAddresses,
   toggleAddressPopup,
-  updateChosenWallet
+  updateChosenWallet,
 } from "./actions";
 import reducer from "./reducer";
 import { ROUTE, MSG, ENUM, RPC_SERVER } from "../../constants";
@@ -68,15 +68,17 @@ import {
   getWalletInfo,
   encryptKeystore,
   mnemonicToPrivateKey,
-  trimMnemonic
+  trimMnemonic,
+  getPrivacyAddressInfo
 } from "../../utils";
 import { withWeb3 } from "../../components/Web3";
 import { withIntl } from "../../components/IntlProvider";
 import { storeWallet } from "../Global/actions";
-import LogoLedger from "../../assets/images/logo-ledger.png";
+import LogoLedger from "../../assets/images/logo-ledger.svg";
 import LogoMetaMask from "../../assets/images/logo-metamask.png";
 import LogoKey from "../../assets/images/logo-key.png";
 import { writeRPFile } from "../../utils/electron";
+import { Wrapper } from './style';
 
 // ===== MAIN COMPONENT =====
 class ImportWallet extends PureComponent {
@@ -141,7 +143,7 @@ class ImportWallet extends PureComponent {
       onStoreWallet,
       rpcServer,
       toggleLoading,
-      updateWeb3
+      updateWeb3,
     } = this.props;
     const formValues = _get(importWallet, "input", {});
     const keyInputType = _get(
@@ -191,9 +193,18 @@ class ImportWallet extends PureComponent {
           : rpcServer;
         const newWeb3 = createWeb3(accessKey, updatedRpcServer);
         updateWeb3(newWeb3);
+
         getWalletInfo(newWeb3)
           .then(walletInfo => {
+            // get privacy address
+            const privacyObject = getPrivacyAddressInfo(
+              walletInfo.address,
+              formValues.recoveryPhrase ? mnemonicToPrivateKey(formValues.recoveryPhrase, updatedRpcServer)
+                    : formValues.privateKey, updatedRpcServer);
+            walletInfo.privacy = privacyObject;
+
             onStoreWallet(walletInfo);
+
             setWeb3Info({
               loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
               recoveryPhrase: accessKey,
@@ -325,12 +336,12 @@ class ImportWallet extends PureComponent {
     } = this.props;
 
     return (
-      <Fragment>
+      <Wrapper>
         <Helmet>
           <title>{formatMessage(MSG.IMPORT_WALLET_TITLE)}</title>
         </Helmet>
         <CustomContainer size="large">
-          <BoxCardStyled>
+          <Card>
             <CardHeader>
               <HeadingLarge>
                 {formatMessage(MSG.IMPORT_WALLET_HEADER_TITLE)}
@@ -488,7 +499,7 @@ class ImportWallet extends PureComponent {
                 </Row>
               </CardFooter>
             )}
-          </BoxCardStyled>
+          </Card>
           <AddressPopup
             accessByLedger={this.handleAccessByLedger}
             data={addressPopup}
@@ -496,7 +507,7 @@ class ImportWallet extends PureComponent {
             updateChosenAddress={onUpdateChosenWallet}
           />
         </CustomContainer>
-      </Fragment>
+      </Wrapper>
     );
   }
 }
@@ -525,7 +536,7 @@ ImportWallet.propTypes = {
   /** Action to handle input change */
   onUpdateInput: PropTypes.func,
   /** Action to show/hide loading screen */
-  toggleLoading: PropTypes.func
+  toggleLoading: PropTypes.func,
 };
 
 ImportWallet.defaultProps = {
@@ -539,7 +550,7 @@ ImportWallet.defaultProps = {
   onUpdateErrors: () => {},
   onUpdateImportType: () => {},
   onUpdateInput: () => {},
-  toggleLoading: () => {}
+  toggleLoading: () => {},
 };
 // ======================
 
@@ -557,7 +568,7 @@ const mapDispatchToProps = dispatch => ({
   onUpdateChosenWallet: index => dispatch(updateChosenWallet(index)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onUpdateImportType: type => dispatch(updateImportType(type)),
-  onUpdateInput: (name, value) => dispatch(updateInput(name, value))
+  onUpdateInput: (name, value) => dispatch(updateInput(name, value)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

@@ -18,19 +18,26 @@ import _isEqual from 'lodash.isequal';
 import {
   NavbarBrand,
   Collapse,
-  Nav,
   UncontrolledDropdown,
-  CardImg,
+  Container,
 } from 'reactstrap';
 // Custom Components
 import WalletPopup from './subcomponents/WalletPopup';
 import NetworkConfirmationPopup from './subcomponents/NetworkConfirmationPopup';
 import {
+  NavRight,
+  NavWrapper,
   NavBarStyler,
   DropdownToggleHeader,
   DropdownMenuStyler,
   DropdownItemStyler,
+  SubDropdownItem,
+  CustomDropdownItem,
+  ButtonSwitchMode,
+  LogoBox,
+  TomoText,
 } from './style';
+
 // Utilities & Constants
 import { withWeb3 } from '../Web3';
 import { withIntl } from '../IntlProvider';
@@ -39,6 +46,7 @@ import {
   toggleWalletPopup,
   setNetwork,
   toggleNetworkConfirmationPopup,
+  togglePrivacyMode,
 } from '../../containers/Global/actions';
 import { ROUTE, LIST, MSG } from '../../constants';
 import {
@@ -50,13 +58,21 @@ import {
   getWeb3Info,
   isElectron,
   withGlobal,
+  truncateMiddle,
 } from '../../utils';
+
 import {
   selectNetworkData,
   selectNetworkConfirmationPopup,
+  selectPrivacyMode,
+  selectWallet,
 } from '../../containers/Global/selectors';
+
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
 import { removeRPFile } from '../../utils/electron';
+// import { MediumButtonStyler } from '../../styles';
+import { ArrowRight, LogoTomo } from '../../components/Icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // ===== MAIN COMPONENT =====
 class NavigationBar extends PureComponent {
@@ -72,6 +88,12 @@ class NavigationBar extends PureComponent {
     this.isActiveNetwork = this.isActiveNetwork.bind(this);
   }
 
+  state = {
+    isOpenMainMenu: false,
+    isOpenSwitchNetworkMenu: false,
+    isOpenLanguageMenu: false,
+  };
+
   componentDidMount() {
     const { changeLocale, onSetNetwork } = this.props;
     const storedNetwork = LIST.NETWORKS.find(opt => opt.value === getNetwork());
@@ -83,6 +105,26 @@ class NavigationBar extends PureComponent {
     if (!_isEmpty(storedLocale)) {
       changeLocale(storedLocale);
     }
+  }
+
+  toggleSwitchNetworkMenu = _ => {
+    this.setState({
+      isOpenSwitchNetworkMenu: !this.state.isOpenSwitchNetworkMenu,
+    })
+  }
+
+  toggleLanguageMenu = _ => {
+    this.setState({
+      isOpenLanguageMenu: !this.state.isOpenLanguageMenu,
+    })
+  }
+
+  toggleMainMenu = _ => {
+    this.setState({
+      isOpenMainMenu: !this.state.isOpenMainMenu,
+      isOpenSwitchNetworkMenu: false,
+      isOpenLanguageMenu: false,
+    })
   }
 
   handleChangeLocale(locale) {
@@ -126,12 +168,14 @@ class NavigationBar extends PureComponent {
         </DropdownToggleHeader>
         <DropdownMenuStyler right className='shadow-lg'>
           {LIST.LANGUAGES.map((opt, optIdx) => (
-            <DropdownItemStyler
+            <SubDropdownItem
               key={`language_${optIdx + 1}`}
               onClick={() => this.handleChangeLocale(opt.value)}
+              active={opt.value === language}
+              disabled={opt.value === language}
             >
               {opt.label}
-            </DropdownItemStyler>
+            </SubDropdownItem>
           ))}
         </DropdownMenuStyler>
       </UncontrolledDropdown>
@@ -141,37 +185,36 @@ class NavigationBar extends PureComponent {
   handleRenderPrivateBar() {
     const {
       intl: { formatMessage },
-      network,
       onToggleNetworkConfirmationPopup,
       onToggleWalletPopup,
-    } = this.props;
+      onTogglePrivacyMode,
+      privacyMode,
+      language,
+      wallet,
+    } = this.props;    
+
+    const { isOpenMainMenu, isOpenSwitchNetworkMenu, isOpenLanguageMenu } = this.state
     const hasPrivateKey = _get(getWeb3Info(), 'recoveryPhrase', false);
+    const walletAddress = _get(wallet, 'address', '');
+    const privacyAddress = _get(wallet, ['privacy', 'privacyAddress', 'pubAddr'], '');
 
     return (
       <Fragment>
-        <UncontrolledDropdown nav inNavbar>
-          <DropdownToggleHeader nav className='onl'>
-            {_get(network, 'data.label')}
-            <i className='font-chevron-down' />
-          </DropdownToggleHeader>
-          <DropdownMenuStyler right className='box_onl shadow'>
-            {LIST.NETWORKS.map((opt, optIdx) => (
-              <DropdownItemStyler
-                key={`network_${optIdx + 1}`}
-                onClick={() => onToggleNetworkConfirmationPopup(true, opt)}
-                active={this.isActiveNetwork(opt)}
-                disabled={this.isActiveNetwork(opt)}
-              >
-                {opt.label}
-              </DropdownItemStyler>
-            ))}
-          </DropdownMenuStyler>
-        </UncontrolledDropdown>
-        <UncontrolledDropdown nav inNavbar>
+        <ButtonSwitchMode onClick={() => onTogglePrivacyMode()}>
+          {formatMessage(privacyMode ? MSG.HEADER_NAVBAR_NORMAL_MOD : MSG.HEADER_NAVBAR_PRIVACY_MOD)}
+          <ArrowRight />
+        </ButtonSwitchMode>
+
+        <UncontrolledDropdown nav inNavbar isOpen={isOpenMainMenu} toggle={this.toggleMainMenu}>
           <DropdownToggleHeader nav>
-            {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
+            {/* {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)} */}
+            {privacyMode ? 
+              truncateMiddle(privacyAddress)
+              : truncateMiddle(walletAddress)
+            }
             <i className='font-chevron-down' />
           </DropdownToggleHeader>
+
           <DropdownMenuStyler right className='shadow-lg'>
             {hasPrivateKey && (
               <DropdownItemStyler onClick={() => onToggleWalletPopup(true)}>
@@ -180,9 +223,51 @@ class NavigationBar extends PureComponent {
                 )}
               </DropdownItemStyler>
             )}
+
+            {/* Switch network - Begin */}
+            <CustomDropdownItem className='onl' onClick={this.toggleSwitchNetworkMenu}>
+              {formatMessage(MSG.HEADER_NAVBAR_MENU_SWITCH_NETWORK)}
+              <i className='font-chevron-down' />
+            </CustomDropdownItem>
+
+            <Collapse isOpen={isOpenSwitchNetworkMenu}>
+              {LIST.NETWORKS.map((opt, optIdx) => (
+                <SubDropdownItem
+                  key={`network_${optIdx + 1}`}
+                  onClick={() => onToggleNetworkConfirmationPopup(true, opt)}
+                  active={this.isActiveNetwork(opt)}
+                  disabled={this.isActiveNetwork(opt)}
+                >
+                  {opt.label}
+                </SubDropdownItem>
+              ))}
+            </Collapse>
+            {/* Switch network - End */}
+
+            {/* Switch language - Begin */}
+            <CustomDropdownItem onClick={this.toggleLanguageMenu}>
+              {formatMessage(MSG.HEADER_NAVBAR_MENU_LANGUAGE)}
+              <i className='font-chevron-down' />
+            </CustomDropdownItem>
+
+            <Collapse isOpen={isOpenLanguageMenu}>
+              {LIST.LANGUAGES.map((opt, optIdx) => (
+                <SubDropdownItem
+                  key={`language_${optIdx + 1}`}
+                  onClick={() => this.handleChangeLocale(opt.value)}
+                  active={opt.value === language}
+                  disabled={opt.value === language}
+                >
+                  {opt.label}
+                </SubDropdownItem>
+              ))}
+            </Collapse>
+            {/* Switch language - End */}
+
             <DropdownItemStyler>
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
             </DropdownItemStyler>
+
             <DropdownItemStyler onClick={this.handleLogout}>
               {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_LOG_OUT)}
             </DropdownItemStyler>
@@ -208,28 +293,34 @@ class NavigationBar extends PureComponent {
     } = this.props;
 
     return (
-      <Fragment>
-        <NavBarStyler light expand='md'>
-          <NavbarBrand onClick={this.handleRedirectToHomepage}>
-            <CardImg
-              src={logo_tomochain}
-              alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
-            />
-          </NavbarBrand>
-          <Collapse navbar>
-            <Nav className='ml-auto' navbar>
-              {isLoggedIn && this.handleRenderPrivateBar()}
-              {this.handleRenderPublicBar()}
-            </Nav>
-          </Collapse>
-        </NavBarStyler>
+      <NavWrapper>
+        <Container>
+          <div className="row">
+            <NavBarStyler light expand='md'>
+              <NavbarBrand onClick={this.handleRedirectToHomepage}>
+                <LogoBox>
+                  <LogoTomo />
+                  <TomoText>TomoChain</TomoText>
+                </LogoBox>
+              </NavbarBrand>
+              <Collapse navbar>
+                <NavRight className='ml-auto' navbar>
+                  {isLoggedIn && this.handleRenderPrivateBar()}
+                  {!isLoggedIn && this.handleRenderPublicBar()}
+                </NavRight>
+              </Collapse>
+            </NavBarStyler>
+          </div>
+        </Container>
+
         <WalletPopup />
+
         <NetworkConfirmationPopup
           popupData={networkConfirmationPopup}
           togglePopup={onToggleNetworkConfirmationPopup}
           changeNetwork={this.handleChangeNetwork}
         />
-      </Fragment>
+      </NavWrapper>
     );
   }
 }
@@ -269,10 +360,12 @@ NavigationBar.propTypes = {
   switchRPCServer: PropTypes.func,
   /** Action to show/hide loading screen */
   toggleLoading: PropTypes.func,
+  /** Action to switch normal and incognito screen */
+  onTogglePrivacyMode: PropTypes.func,
 };
 
 NavigationBar.defaultProps = {
-  changeLocaleL: () => {},
+  changeLocale: () => {},
   history: {},
   intl: {},
   isLoggedIn: false,
@@ -287,6 +380,7 @@ NavigationBar.defaultProps = {
   removeMetaMaskProvider: () => {},
   switchRPCServer: () => {},
   toggleLoading: () => {},
+  onTogglePrivacyMode: () => {},
 };
 // ======================
 
@@ -295,6 +389,8 @@ const mapStateToProps = () =>
   createStructuredSelector({
     network: selectNetworkData,
     networkConfirmationPopup: selectNetworkConfirmationPopup,
+    privacyMode: selectPrivacyMode,
+    wallet: selectWallet,
   });
 const mapDispatchToProps = dispatch => ({
   onReleaseWallet: () => dispatch(releaseWallet()),
@@ -302,6 +398,7 @@ const mapDispatchToProps = dispatch => ({
   onToggleNetworkConfirmationPopup: (bool, networkOpt) =>
     dispatch(toggleNetworkConfirmationPopup(bool, networkOpt)),
   onToggleWalletPopup: bool => dispatch(toggleWalletPopup(bool)),
+  onTogglePrivacyMode: bool => dispatch(togglePrivacyMode(bool)),
 });
 const withConnect = connect(
   mapStateToProps,

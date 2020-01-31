@@ -6,17 +6,31 @@
 // ===== IMPORTS =====
 // Modules
 import styled from 'styled-components';
-import { NavLink } from 'reactstrap';
+import { NavLink, NavItem } from 'reactstrap';
 // ===================
 
 // ===== STYLE =====
+const LinkNavItem = styled(NavItem)`
+  &:before {
+    background-color: ${props => props.theme.footerColor};
+  }
+`
+const SocialNavItem = styled(NavItem)`
+  a {
+    background: ${props => props.theme.footerSocialBackground};
+
+    &:hover i {
+      color: ${props => props.theme.footerSocialHoverColor};
+    }
+  }
+`
 const LinkFooter = styled(NavLink)`
-  color: #5e677f !important;
+  color: ${props => props.theme.footerColor} !important;
   font-weight: normal;
 `;
 const TextGray = styled.div`
-  color: #5e677f;
+  color: ${props => props.theme.footerColor};
 `;
 // =================
 
-export { LinkFooter, TextGray };
+export { LinkNavItem, SocialNavItem, LinkFooter, TextGray };

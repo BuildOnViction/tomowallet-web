@@ -6,15 +6,18 @@
 // ===== IMPORTS =====
 // Modules
 import Web3 from 'web3';
-import HDWalletProvider from 'truffle-hdwallet-provider';
+import HDWalletProvider from '@truffle/hdwallet-provider';
 import _isEmpty from 'lodash.isempty';
 import _isEqual from 'lodash.isequal';
 // Utilities
 import trc20 from './abi/trc20.json';
 import trc21 from './abi/trc21.json';
 import trc21Issuer from './abi/trc21Issuer.json';
+import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
+import { Address as AdUtil, Wallet, UTXO } from '/home/pqv/Desktop/XXX/privacyjs/dist';
+import { setPrivacyInfo } from '../index';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
@@ -33,6 +36,8 @@ const TOKEN_TYPE = {
 };
 const defaultCallback = error => console.error('[ERROR]: ', error);
 const defaultReject = message => new Promise((_, rj) => rj(new Error(message)));
+
+import { getPrivacyWalletInfo } from '../storage';
 // ===============================
 
 // ===== METHODS =====
@@ -119,6 +124,37 @@ const getWalletInfo = web3 => {
         balance,
       }));
     }
+  }
+  return defaultReject(
+    'Cannot find wallet information. Please check your web3 provider.',
+  );
+};
+
+/**
+ * PUBLIC - getPrivacyAddressInfo
+ *
+ * Retrieve privacy wallet's address from access key
+ * @param {String} accessKey private key or mnemonic
+ * @param {Object} serverConfig (optional) Custom RPC server configuration
+ */
+const getPrivacyAddressInfo = (address, accessKey, serverConfig) => {
+  if (accessKey !== '') {
+    const privacyAddress = {...AdUtil.generateKeys(accessKey)};
+    const wallet = getPrivacyWalletInfo(address);
+    // Set peivacy configuration
+    const privacyWallet = new Wallet(accessKey.toLowerCase(), {
+      ABI: privacy.abi,
+      ADDRESS: privacy.contractAddress,
+      SOCKET_END_POINT: 'ws://206.189.39.242:8546', // serverConfig.ws,
+      gas: 20000000,
+      gasPrice: 2500000,
+      RPC_END_POINT: 'http://206.189.39.242:8545' //serverConfig.host
+    });
+    if (wallet && wallet.scannedTo) {
+      privacyWallet.state(wallet);
+    }
+
+    return { privacyAddress, privacyWallet }
   }
   return defaultReject(
     'Cannot find wallet information. Please check your web3 provider.',
@@ -333,6 +369,105 @@ const sendMoney = (web3, txData) => {
     value: weiAmount,
   });
 };
+
+/**
+ * depositPrivacyMoney
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Wallet} wallet An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const depositPrivacyMoney = (web3, wallet, amount) => {
+  return wallet.deposit(
+    web3.utils.toWei(amount + '', 'ether'),
+  )
+};
+
+/**
+ * getPrivacyBalance
+ *
+ * Execute token transfer contract
+ * @param {Object} privacy An object which contains privacy data
+ */
+const getPrivacyBalance = (privacy) => {
+  const { privacyWallet } = privacy;
+  return privacyWallet.decimalBalance();
+}
+
+/**
+ * sendMoneyPrivacy
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Wallet} wallet An Wallet object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ * @param {String} toAddress receiver address
+ */
+const sendMoneyPrivacy = (web3, wallet, amount, toAddress) => {
+  return wallet.send(
+    toAddress,
+    web3.utils.toWei(amount + '', 'ether'),
+  )
+};
+
+/**
+ * estimatePrivacyFee
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Wallet} wallet An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const estimatePrivacyFee = (web3, wallet, amount) => {
+  return wallet.estimateFee(
+    web3.utils.toWei(amount + '', 'ether'),
+  )
+};
+
+/**
+ * withdrawPrivacy
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Wallet} wallet An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const withdrawPrivacy = (web3, wallet, amount) => {
+  const { address, privacy } = wallet;
+  if (privacy && privacy.privacyWallet) {
+    return privacy.privacyWallet.withdraw(
+      address.toString(),
+      web3.utils.toWei(amount + '', 'ether'),
+    );
+  }
+};
+
+/**
+ * getLastUTXO
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Wallet} wallet An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const getLastUTXO = (wallet) => {
+  if (wallet.utxos.length > 0) {
+    return new UTXO(wallet.utxos[wallet.utxos.length - 1])
+  } else return {}
+};
+
+/**
+ * checkSpentUTXO
+ *
+ * Execute token transfer contract
+ * @param {Wallet} wallet A Web3 object with supported APIs
+ * @param {Array} utxos An object which contains privacy data
+ * @param {Integer} amount Deposit amount
+ */
+const checkSpentUTXO = (wallet, utxos) => {
+  return wallet.areSpent(utxos)
+};
 // ===================
 
 export {
@@ -346,4 +481,11 @@ export {
   mnemonicToPrivateKey,
   sendMoney,
   sendToken,
+  getPrivacyAddressInfo,
+  depositPrivacyMoney,
+  getPrivacyBalance,
+  sendMoneyPrivacy,
+  estimatePrivacyFee,
+  withdrawPrivacy,
+  getLastUTXO
 };

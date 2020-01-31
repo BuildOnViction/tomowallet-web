@@ -13,7 +13,6 @@ import _get from 'lodash.get';
 import {
   Form,
   FormFeedback,
-  FormGroup,
   Input,
   Label,
   Nav,
@@ -29,6 +28,7 @@ import {
   updateReceiveTokenErrors,
   resetReceiveToKenForm,
 } from '../../../../actions';
+import { StyledFormGroup } from '../../../../../styles';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -55,7 +55,7 @@ class DepositForm extends PureComponent {
 
     return (
       <Form className='cm-form'>
-        <FormGroup>
+        <StyledFormGroup>
           <Label for='amountInput'>
             {formatMessage(
               MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_INPUT_AMOUNT_LABEL,
@@ -84,7 +84,7 @@ class DepositForm extends PureComponent {
               ))}
             </Nav>
           </FormFeedback>
-        </FormGroup>
+        </StyledFormGroup>
       </Form>
     );
   }

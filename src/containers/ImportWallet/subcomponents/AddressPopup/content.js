@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 import { Row, Col } from 'reactstrap';
 // Custom Components
-import { InputStylerRadio } from './style';
+import { InputStylerRadio, Label } from './style';
 import { TextBlue, BoxText } from '../../../../styles';
 // ===================
 
@@ -23,7 +23,7 @@ class AddressContent extends PureComponent {
         {_get(data, 'wallets', []).map((wallet, walletIdx) => (
           <Row key={`address_row_${walletIdx + 1}`} className='py-3'>
             <Col xs={8} className='text-truncate'>
-              <label
+              <Label
                 className='pl-5 m-0 position-relative'
                 title={wallet.address}
               >
@@ -34,7 +34,7 @@ class AddressContent extends PureComponent {
                   onChange={() => updateChosenAddress(walletIdx)}
                 />
                 <TextBlue>{wallet.address}</TextBlue>
-              </label>
+              </Label>
             </Col>
             <Col xs={4} className='text-right'>
               {`${wallet.balance.toLocaleString(undefined, {

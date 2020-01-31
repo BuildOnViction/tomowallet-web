@@ -5,8 +5,9 @@ import {
   ButtonLineStyler,
   ButtonLinkStyler,
 } from './StyleButtons';
-import { FormTextStyled } from './StyleForm';
+import { StyledFormGroup, FormTextStyled } from './StyleForm';
 import {
+  BoxWrapper,
   BoxBtnStyler,
   ContainerMin,
   CustomContainer,
@@ -15,6 +16,7 @@ import {
   BoxFlexBetween,
   DropdownMenuMainStyler,
   DropdownToggleMainStyle,
+  MainTabWrapper,
 } from './MainContainer';
 import { ImporWalletStyler } from './ImportWallet';
 import { WarningImages } from './CreateNewWallet';
@@ -31,9 +33,18 @@ import {
   TextYellowPointer,
   BoxText,
   TextGray,
+  TextValue,
+  TextAddressValue,
+  TextSend,
+  TextDeposit,
+  TextWithdraw,
 } from './StyleTypo';
 
+import theme from './StyleTheme'
+
 export {
+  // Config theme
+  theme,
   //StyleButtons
   BigButtonStyler,
   MediumButtonStyler,
@@ -41,6 +52,7 @@ export {
   ButtonLineStyler,
   ButtonLinkStyler,
   //StyleForm
+  StyledFormGroup,
   FormTextStyled,
   DropdownMenuMainStyler,
   DropdownToggleMainStyle,
@@ -51,6 +63,7 @@ export {
   BoxCardStyled,
   BoxImages,
   BoxFlexBetween,
+  MainTabWrapper,
   //ImportWallet
   ImporWalletStyler,
   //CreateNewWallet
@@ -68,4 +81,10 @@ export {
   TextYellowPointer,
   BoxText,
   TextGray,
+  BoxWrapper,
+  TextValue,
+  TextAddressValue,
+  TextSend,
+  TextDeposit,
+  TextWithdraw,
 };

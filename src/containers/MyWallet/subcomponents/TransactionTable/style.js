@@ -14,8 +14,8 @@ const BoxTransaction = styled.div`
         left: 2%;
         width: 20px;
         height: 0;
-        border-left: 10px solid #5e677f;
-        border-bottom: 3px solid #5e677f;
+        border-left: 10px solid ${props => props.theme.tableHeaderCellColor};
+        border-bottom: 3px solid ${props => props.theme.tableHeaderCellColor};
         border-top: 3px solid transparent;
         border-right: 10px solid transparent;
       }
@@ -26,7 +26,7 @@ const BoxTransaction = styled.div`
         left: 2%;
         width: 96%;
         height: 1px;
-        background-color: #5e677f;
+        background-color: ${props => props.theme.tableHeaderCellColor};
       }
     }
     @media (max-width: 991px) {

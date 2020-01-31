@@ -41,22 +41,34 @@ import {
   subBN,
   toBN,
   weiToDecimals,
+  getPrivacyAddressInfo,
+  depositPrivacyMoney,
+  getPrivacyBalance,
+  sendMoneyPrivacy,
+  isPrivacyAddress,
+  estimatePrivacyFee,
+  withdrawPrivacy,
+  getLastUTXO
 } from './blockchain';
 import validations, { mergeErrors } from './validations';
 import { withGlobal } from './injectGlobal';
 import {
   getLedger,
   getLocale,
+  getPrivacy,
   getNetwork,
   getWeb3Info,
   removeLedger,
   removeLocale,
   removeNetwork,
+  removePrivacy,
   removeWeb3Info,
   setLedger,
   setNetwork,
   setLocale,
   setWeb3Info,
+  setPrivacy,
+  setPrivacyInfo,
 } from './storage';
 import electron, {
   detectKeystore,
@@ -65,6 +77,8 @@ import electron, {
   removeKeystore,
   writeKeystore,
 } from './electron';
+
+import { truncateMiddle } from './helper'
 
 export {
   addBN,
@@ -89,6 +103,7 @@ export {
   getBalance,
   getLedger,
   getLocale,
+  getPrivacy,
   getNetwork,
   getWalletInfo,
   getWeb3Info,
@@ -108,6 +123,7 @@ export {
   removeKeystore,
   removeLedger,
   removeLocale,
+  removePrivacy,
   removeNetwork,
   removeTrailingZero,
   removeWeb3Info,
@@ -118,6 +134,7 @@ export {
   sendToken,
   setLedger,
   setLocale,
+  setPrivacy,
   setNetwork,
   setWeb3Info,
   shuffleArray,
@@ -128,4 +145,14 @@ export {
   weiToDecimals,
   withGlobal,
   writeKeystore,
+  getPrivacyAddressInfo,
+  depositPrivacyMoney,
+  getPrivacyBalance,
+  sendMoneyPrivacy,
+  setPrivacyInfo,
+  isPrivacyAddress,
+  estimatePrivacyFee,
+  withdrawPrivacy,
+  truncateMiddle,
+  getLastUTXO,
 };

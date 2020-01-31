@@ -20,8 +20,9 @@ import { SendTokenPopupStyler } from './style';
 import { withIntl } from '../../../../../components/IntlProvider';
 import { MSG } from '../../../../../constants';
 import { SEND_TOKEN_STAGES } from '../../../constants';
-import { selectWallet } from '../../../../Global/selectors';
+import { selectWallet, selectPrivacyMode } from '../../../../Global/selectors';
 import { withGlobal } from '../../../../../utils';
+import { selectPrivacyData } from '../../../selectors';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -67,6 +68,7 @@ class SendTokenPopup extends PureComponent {
       popupData,
       submitSendToken,
       updateSendTokenPopupStage,
+      privacyMode,
     } = this.props;
     const { isRequested } = this.state;
 
@@ -86,7 +88,7 @@ class SendTokenPopup extends PureComponent {
         primary: {
           action: () => {
             this.handleSendRequest(true);
-            submitSendToken();
+            submitSendToken(privacyMode);
           },
           btnYellow: true,
           label: formatMessage(MSG.COMMON_BUTTON_CONFIRM),
@@ -110,6 +112,8 @@ class SendTokenPopup extends PureComponent {
       tokenOptions,
       updateInput,
       wallet,
+      privacyMode,
+      privacyData,
     } = this.props;
     return (
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
@@ -121,6 +125,8 @@ class SendTokenPopup extends PureComponent {
           formValues,
           tokenOptions,
           updateInput,
+          privacyMode,
+          privacyData
         },
       }) ||
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
@@ -129,6 +135,7 @@ class SendTokenPopup extends PureComponent {
           errors: _get(popupData, 'errors', {}),
           formValues,
           wallet,
+          privacyData,
         },
       })
     );
@@ -207,6 +214,8 @@ SendTokenPopup.defaultProps = {
 const mapStateToProps = () =>
   createStructuredSelector({
     wallet: selectWallet,
+    privacyMode: selectPrivacyMode,
+    privacyData: selectPrivacyData,
   });
 const withConnect = connect(mapStateToProps);
 // ======================

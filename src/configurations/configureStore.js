@@ -14,6 +14,14 @@ import logger from 'redux-logger';
 import createReducer from './rootReducer';
 // ==================
 
+
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+    }) : compose;    
+
 // ===== CONFIGURATION =====
 export default history => {
   const sagaMiddleware = createSagaMiddleWare({});
@@ -24,7 +32,7 @@ export default history => {
     thunkMiddleware,
   ];
   const enhancers = [applyMiddleware(...middlewares)];
-  const store = createStore(createReducer(), undefined, compose(...enhancers));
+  const store = createStore(createReducer(), undefined, composeEnhancers(...enhancers));
 
   store.runSaga = sagaMiddleware.run;
   store.injectedReducers = {};
