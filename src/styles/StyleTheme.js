@@ -23,6 +23,7 @@ const theme = {
         highlightHoverColor4: '#5353ad',
 
         footerColor: '#A5A8AD',
+        footerHoverColor: '#202533',
         footerSocialBackground: '#fff',
         footerSocialHoverColor: '#202533',
 
@@ -108,6 +109,7 @@ const theme = {
         highlightHoverColor4: '#5353ad',
 
         footerColor: '#757575',
+        footerHoverColor: '#fff',
         footerSocialBackground: '#1C1C1C',
         footerSocialHoverColor: '#fff',
 

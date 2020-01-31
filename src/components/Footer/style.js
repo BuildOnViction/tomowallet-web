@@ -27,6 +27,10 @@ const SocialNavItem = styled(NavItem)`
 const LinkFooter = styled(NavLink)`
   color: ${props => props.theme.footerColor} !important;
   font-weight: normal;
+
+  &:hover {
+    color: ${props => props.theme.footerHoverColor} !important;
+  }
 `;
 const TextGray = styled.div`
   color: ${props => props.theme.footerColor};
