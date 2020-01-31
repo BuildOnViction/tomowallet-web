@@ -42,7 +42,7 @@ class ReceiveContent extends PureComponent {
         <div className='text-center'>
           {formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE)}
         </div>
-        <BoxImages className='mt-5 mb-4'>
+        <BoxImages className='mt-5 mb-5'>
           <div className='qrc_bd'>
             <QRCode value={privacyMode ? privacyAddress.pubAddr : address} />
           </div>
