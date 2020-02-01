@@ -6,6 +6,9 @@ const theme = {
         background: '#F1F5FF',
         navBackground: '#272D40',
 
+        notificationBackground: '#4B96CD',
+        notificationColor: '#fff',
+
         boxTitleColor: '#A5A8AD',
         boxValueColor: '#31384E',
         boxAddressValueColor: '#4B96CD',
@@ -91,6 +94,9 @@ const theme = {
         color: '#757575',
         background: '#151515',
         navBackground: '#1C1C1C',
+
+        notificationBackground: '#4B96CD',
+        notificationColor: '#fff',
 
         boxTitleColor: '#757575',
         boxValueColor: '#F5F5F5',
