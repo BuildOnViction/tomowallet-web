@@ -94,16 +94,18 @@ export const getPrivacyWalletInfo = (address) => {
 
 // store privacy mode to localstorage (uxto, balance, scannedTo)
 export const setPrivacyMode = (privacyMode = false) => {
-
-  setLocalStorage('privacyMode', privacyMode);
+  localStorage.setItem(
+    'privacyMode',
+    privacyMode,
+  );
 };
 
-const removeLocalStorage = (key) => {
-  localStorage.setItem(
-    'global',
-    JSON.stringify(_omit(JSON.parse(localStorage.getItem('global')), key)),
-  );
-}
+const getPrivacyModeStorage = () => {
+  const privacy = localStorage.getItem('privacyMode')
+  if (privacy === 'true') {
+    return true
+  } else return false
+};
 
 export const removeWeb3Info = () => removeStorage('web3Info');
 
@@ -119,6 +121,6 @@ export const setLedger = ledger => setStorage('ledger', ledger);
 export const getLedger = () => getStorage('ledger');
 export const removeLedger = () => removeStorage('ledger');
 
-export const getPrivacyMode = () => getLocalStorage('privacyMode');
-export const removePrivacyMode = () => removeLocalStorage('privacyMode');
+export const getPrivacyMode = () => getPrivacyModeStorage();
+export const removePrivacyMode = () => setPrivacyMode();
 // ===================

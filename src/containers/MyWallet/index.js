@@ -480,6 +480,7 @@ class MyWallet extends PureComponent {
           const privacyObject = getPrivacyAddressInfo(
             walletInfo.address,
             mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+          privacyObject.privacyWallet = privacyWallet
           walletInfo.privacy = privacyObject;
         }
         onStoreWallet(walletInfo);
@@ -526,6 +527,7 @@ class MyWallet extends PureComponent {
           const privacyObject = getPrivacyAddressInfo(
             walletInfo.address,
             mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+          privacyObject.privacyWallet = privacyWallet
           walletInfo.privacy = privacyObject;
         }
         onStoreWallet(walletInfo);

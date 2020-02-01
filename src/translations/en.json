@@ -141,7 +141,7 @@
   "tomowallet.container.mywallet.title": "My TomoWallet",
   "tomowallet.container.mywallet.section.address.title": "Main Address",
   "tomowallet.container.mywallet.section.address.incognito.title": "Incognito Address",
-  "tomowallet.container.mywallet.section.balance.balance": "Total balance",
+  "tomowallet.container.mywallet.section.balance.balance": "Total Balance",
   "tomowallet.container.mywallet.section.balance.estimated": "Estimated value",
   "tomowallet.container.mywallet.section.balance.incognito": "Incognito Balance",
   "tomowallet.container.mywallet.section.balance.main": "Main Balance",

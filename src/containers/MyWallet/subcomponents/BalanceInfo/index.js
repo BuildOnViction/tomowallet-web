@@ -16,6 +16,28 @@ import { connect } from 'react-redux';
 import { withIntl } from '../../../../components/IntlProvider';
 
 class BalanceInfo extends PureComponent {
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+          isRequested: false,
+        };
+    
+        this.handleGetPrivacyBalance = this.handleGetPrivacyBalance.bind(this);
+    }
+
+    handleGetPrivacyBalance () {
+        const { wallet } = this.props;
+        let privacyBalance = 0;
+        const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {});
+        if (privacyWallet && privacyWallet.balance) {
+            privacyBalance = bnToDecimals(
+                privacyWallet.balance.toString(10),
+                9
+            );
+        }
+        return privacyBalance;
+    }
     componentDidMount() {
         const { onLoadCoinData } = this.props;
         onLoadCoinData();
@@ -30,20 +52,12 @@ class BalanceInfo extends PureComponent {
 
     render() {
         const { formatMessage, wallet,coinData } = this.props;
-        let privacyBalance = 0;
-        const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {});
-        if (privacyWallet && privacyWallet.balance) {
-            privacyBalance = bnToDecimals(
-                privacyWallet.balance.toString(10),
-                9
-            );
-        }
         const balance = bnToDecimals(
             _get(wallet, ['balance'], 0),
             18
         );
-        let totalBalance = parseFloat(balance) + parseFloat(privacyBalance)
-        const data = [{ value: parseFloat(balance)}, { value: parseFloat(privacyBalance) }]
+        let totalBalance = parseFloat(balance) + parseFloat(this.handleGetPrivacyBalance())
+        const data = [{ value: parseFloat(balance)}, { value: parseFloat(this.handleGetPrivacyBalance()) }]
 
         return (
             <Wrapper>
@@ -73,7 +87,7 @@ class BalanceInfo extends PureComponent {
                         <TextTitle>
                             <Ellipsis title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}</Ellipsis>
                         </TextTitle>
-                        <TextValue title={`${privacyBalance} TOMO`}>{privacyBalance} TOMO</TextValue>
+                        <TextValue title={`${this.handleGetPrivacyBalance()} TOMO`}>{this.handleGetPrivacyBalance()} TOMO</TextValue>
                     </BalanceIncognito>
                     <BalanceMain>
                         <TextTitle title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_MAIN)}>
