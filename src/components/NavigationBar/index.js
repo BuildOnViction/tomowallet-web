@@ -36,6 +36,7 @@ import {
   ButtonSwitchMode,
   LogoBox,
   TomoText,
+  ExternalLink,
 } from './style';
 
 // Utilities & Constants
@@ -43,6 +44,7 @@ import { withWeb3 } from '../Web3';
 import { withIntl } from '../IntlProvider';
 import {
   releaseWallet,
+  releasePrivacyMode,
   toggleWalletPopup,
   setNetwork,
   toggleNetworkConfirmationPopup,
@@ -56,6 +58,7 @@ import {
   getNetwork,
   removeLedger,
   getWeb3Info,
+  getPrivacyMode,
   isElectron,
   withGlobal,
   truncateMiddle,
@@ -95,15 +98,19 @@ class NavigationBar extends PureComponent {
   };
 
   componentDidMount() {
-    const { changeLocale, onSetNetwork } = this.props;
+    const { changeLocale, onSetNetwork, onTogglePrivacyMode } = this.props;
     const storedNetwork = LIST.NETWORKS.find(opt => opt.value === getNetwork());
     const storedLocale = getLocale();
+    const privacy = getPrivacyMode()
 
     if (!_isEmpty(storedNetwork)) {
       onSetNetwork(storedNetwork);
     }
     if (!_isEmpty(storedLocale)) {
       changeLocale(storedLocale);
+    }
+    if (privacy !== undefined) {
+      onTogglePrivacyMode(privacy)
     }
   }
 
@@ -141,10 +148,11 @@ class NavigationBar extends PureComponent {
   }
 
   handleLogout() {
-    const { onReleaseWallet, removeMetaMaskProvider } = this.props;
+    const { onReleaseWallet, removeMetaMaskProvider, onReleasePrivacyMode } = this.props;
 
     Promise.all([
       onReleaseWallet(),
+      onReleasePrivacyMode(),
       removeWeb3Info(),
       removeLedger(),
       removeMetaMaskProvider(),
@@ -265,7 +273,9 @@ class NavigationBar extends PureComponent {
             {/* Switch language - End */}
 
             <DropdownItemStyler>
-              {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
+              <ExternalLink target="_blank" href="https://docs.tomochain.com/products/tomowallet/features/">
+                {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_HELP)}
+              </ExternalLink>
             </DropdownItemStyler>
 
             <DropdownItemStyler onClick={this.handleLogout}>
@@ -346,6 +356,8 @@ NavigationBar.propTypes = {
   networkConfirmationPopup: PropTypes.object,
   /** Action to remove current wallet's data */
   onReleaseWallet: PropTypes.func,
+  /** Action to remove current privacy mode */
+    onReleasePrivacyMode: PropTypes.func,
   /** Action to update network options */
   onSetNetwork: PropTypes.func,
   /** Action to show/hide navigation bar options */
@@ -381,6 +393,7 @@ NavigationBar.defaultProps = {
   switchRPCServer: () => {},
   toggleLoading: () => {},
   onTogglePrivacyMode: () => {},
+  onReleasePrivacyMode: () => {},
 };
 // ======================
 
@@ -394,6 +407,7 @@ const mapStateToProps = () =>
   });
 const mapDispatchToProps = dispatch => ({
   onReleaseWallet: () => dispatch(releaseWallet()),
+  onReleasePrivacyMode: () => dispatch(releasePrivacyMode()),
   onSetNetwork: network => dispatch(setNetwork(network)),
   onToggleNetworkConfirmationPopup: (bool, networkOpt) =>
     dispatch(toggleNetworkConfirmationPopup(bool, networkOpt)),

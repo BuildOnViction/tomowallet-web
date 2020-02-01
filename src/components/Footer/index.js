@@ -10,7 +10,7 @@
 // Modules
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Nav, NavItem } from 'reactstrap';
+import { Row, Col, Nav } from 'reactstrap';
 // Custom Component
 import { LinkNavItem, SocialNavItem, LinkFooter, TextGray } from './style';
 // Utilities & Constants

@@ -97,6 +97,7 @@ class RecoveryPhrase extends PureComponent {
                 role='presentation'
                 onClick={this.handleReloadNewMnemonic}
                 className='btn-reload'
+                cursor="pointer"
               >
                 <FontAwesomeIcon icon='sync-alt' className='mr-2' />
                 {formatMessage(MSG.RECOVERY_PHRASE_BUTTON_RELOAD)}
@@ -115,6 +116,7 @@ class RecoveryPhrase extends PureComponent {
               </Col>
               <Col className='text-right'>
                 <TextBlue
+                  cursor="pointer"
                   role='presentation'
                   onClick={() => onToggleKeyViewPopup(true)}
                 >

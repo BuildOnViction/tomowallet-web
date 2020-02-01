@@ -157,23 +157,6 @@ class MyWallet extends PureComponent {
     onResetState();
   }
 
-  componentDidMount() {
-    const { wallet } = this.props;
-    const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'])
-    console.log('privacyWallet', privacyWallet)
-    if (privacyWallet) {
-      const address = _get(wallet, ['address'], '')
-      privacyWallet.on('NEW_UTXO', data => {
-        console.log('NEW_UTXO', data)
-      })
-      privacyWallet.on('NEW_TRANSACTION', data => {
-        console.log('NEW_TRANSACTION', data)
-        // const state = privacyWallet.state();
-        // setPrivacyInfo({ address, ...state });
-      })
-    }
-  }
-
   handleAddFullAmount() {
     const { onUpdateSendTokenInput, sendTokenForm } = this.props;
     const rawBalance = _get(
@@ -470,6 +453,7 @@ class MyWallet extends PureComponent {
 			depositForm,
       onUpdatePrivacyData,
       onToggleSuccessDepositPopup,
+      onStoreWallet,
     } = this.props;
     toggleLoading(true);
 		const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
@@ -481,6 +465,26 @@ class MyWallet extends PureComponent {
         SEND_TOKEN_FIELDS.TRANSFER_AMOUNT
       ], 0)
     ).then(({utxo, proof, tx}) => {
+      getWalletInfo(web3).then(walletInfo => {
+        const { hdPath, recoveryPhrase } = getWeb3Info() || {};
+        const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+        const serverConfig = hdPath
+          ? {
+              ..._get(RPC_SERVER, [networkKey], {}),
+              hdPath,
+            }
+          : _get(RPC_SERVER, [networkKey], {});
+        const loginType = _get(getWeb3Info(), "loginType");
+        if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+            // get privacy address
+          const privacyObject = getPrivacyAddressInfo(
+            walletInfo.address,
+            mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+          privacyObject.privacyWallet = privacyWallet
+          walletInfo.privacy = privacyObject;
+        }
+        onStoreWallet(walletInfo);
+      });
 			toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
       this.handleCloseDepositPrivacyPopup();
@@ -496,6 +500,7 @@ class MyWallet extends PureComponent {
       withdrawForm,
       onUpdatePrivacyData,
       onToggleSuccessWithdrawPopup,
+      onStoreWallet
     } = this.props;
     toggleLoading(true);
     const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
@@ -507,6 +512,26 @@ class MyWallet extends PureComponent {
         WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT
       ], 0)
     ).then((data) => {
+      getWalletInfo(web3).then(walletInfo => {
+        const { address, hdPath, recoveryPhrase } = getWeb3Info() || {};
+        const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+        const serverConfig = hdPath
+          ? {
+              ..._get(RPC_SERVER, [networkKey], {}),
+              hdPath,
+            }
+          : _get(RPC_SERVER, [networkKey], {});
+        const loginType = _get(getWeb3Info(), "loginType");
+        if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+            // get privacy address
+          const privacyObject = getPrivacyAddressInfo(
+            walletInfo.address,
+            mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+          privacyObject.privacyWallet = privacyWallet
+          walletInfo.privacy = privacyObject;
+        }
+        onStoreWallet(walletInfo);
+      });
       toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
       this.handleCloseWithdrawPrivacyPopup();
@@ -1264,6 +1289,7 @@ class MyWallet extends PureComponent {
             [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
             ""
           )}
+          privacyMode={privacyMode}
         />
         <ReceiveTokenPopup />
 				<DepositPrivacyPopup

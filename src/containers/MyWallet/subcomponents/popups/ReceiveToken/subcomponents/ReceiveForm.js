@@ -13,8 +13,11 @@ import { createStructuredSelector } from 'reselect';
 import _get from 'lodash.get';
 import QRCode from 'qrcode.react';
 // Custom Components
-import { BoxImages, TextBlue } from '../../../../../../styles';
+import { AddressBox, AddressText } from '../style';
+import { BoxImages, TextLinkYellow } from '../../../../../../styles';
+import { Copy } from '../../../../../../components/Icons';
 // Utilities & Constants
+import { withGlobal } from '../../../../../../utils';
 import { withIntl } from '../../../../../../components/IntlProvider';
 import { selectWallet, selectPrivacyMode } from '../../../../../Global/selectors';
 import { MSG } from '../../../../../../constants';
@@ -26,23 +29,30 @@ class ReceiveContent extends PureComponent {
     const {
       intl: { formatMessage },
       wallet,
-      privacyMode
+      privacyMode,
+      handleCopyToClipboard,
     } = this.props;
-    const address = _get(wallet, 'address', '')
-    const privacyAddress = _get(wallet, ['privacy', 'privacyAddress'], '')
+
+    const address = _get(wallet, 'address', '');
+    const privacyAddress = _get(wallet, ['privacy', 'privacyAddress'], '');
+    const currentAddress = privacyMode ? privacyAddress.pubAddr : address;
+
     return (
       <Fragment>
         <div className='text-center'>
           {formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE)}
         </div>
-        <BoxImages className='mt-5 mb-4'>
+        <BoxImages className='mt-5 mb-5'>
           <div className='qrc_bd'>
             <QRCode value={privacyMode ? privacyAddress.pubAddr : address} />
           </div>
         </BoxImages>
-        <div className='text-center text-break'>
-          <TextBlue>{privacyMode ? privacyAddress.pubAddr : address}</TextBlue>
-        </div>
+        <AddressBox>
+          <AddressText>{currentAddress}</AddressText>
+          <TextLinkYellow onClick={() => handleCopyToClipboard(currentAddress)}>
+            <Copy /> {formatMessage(MSG.COMMON_BUTTON_COPY)}
+          </TextLinkYellow>
+        </AddressBox>
       </Fragment>
     );
   }
@@ -73,6 +83,7 @@ const withConnect = connect(mapStateToProps);
 // ======================
 
 export default compose(
+  withGlobal,
   withConnect,
   withIntl,
 )(ReceiveContent);

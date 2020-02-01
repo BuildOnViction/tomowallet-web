@@ -9,6 +9,7 @@
   "tomowallet.common.button.confirm": "Confirm",
   "tomowallet.common.button.unlock": "Unlock",
   "tomowallet.common.button.close": "Close",
+  "tomowallet.common.button.Copy": "Copy",
   "tomowallet.common.button.deposit": "Deposit",
   "tomowallet.common.button.withdraw": "Withdraw",
   "tomowallet.common.list.language.english": "English",
@@ -140,7 +141,7 @@
   "tomowallet.container.mywallet.title": "My TomoWallet",
   "tomowallet.container.mywallet.section.address.title": "Main Address",
   "tomowallet.container.mywallet.section.address.incognito.title": "Incognito Address",
-  "tomowallet.container.mywallet.section.balance.balance": "Total balance",
+  "tomowallet.container.mywallet.section.balance.balance": "Total Balance",
   "tomowallet.container.mywallet.section.balance.estimated": "Estimated value",
   "tomowallet.container.mywallet.section.balance.incognito": "Incognito Balance",
   "tomowallet.container.mywallet.section.balance.main": "Main Balance",
@@ -198,5 +199,5 @@
   "tomowallet.container.mywallet.popup.receivetoken.content.message": "Your address supports transferring to TOMO and its token",
   "tomowallet.container.mywallet.popup.deposit.title": "Deposit",
   "tomowallet.container.mywallet.popup.withdraw.title": "Withdraw",
-  "tomowallet.container.mywallet.table.portfolio.header.privacy.balance": "Privacy Balance"
+  "tomowallet.container.mywallet.table.portfolio.header.privacy.balance": "Incognito Balance"
 }

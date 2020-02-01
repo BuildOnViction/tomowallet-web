@@ -405,10 +405,17 @@ const getPrivacyBalance = (privacy) => {
  * @param {String} toAddress receiver address
  */
 const sendMoneyPrivacy = (web3, wallet, amount, toAddress) => {
-  return wallet.send(
-    toAddress,
-    web3.utils.toWei(amount + '', 'ether'),
-  )
+  const balance = bnToDecimals(wallet.balance, 9);
+  if (balance === amount) {
+    return wallet.send(
+      toAddress
+    )
+  } else {
+    return wallet.send(
+      toAddress,
+      web3.utils.toWei(amount + '', 'ether'),
+    )
+  }
 };
 
 /**
@@ -420,9 +427,14 @@ const sendMoneyPrivacy = (web3, wallet, amount, toAddress) => {
  * @param {Integer} amount Deposit amount
  */
 const estimatePrivacyFee = (web3, wallet, amount) => {
-  return wallet.estimateFee(
-    web3.utils.toWei(amount + '', 'ether'),
-  )
+  const balance = bnToDecimals(wallet.balance, 9);
+  if (balance === amount) {
+    return wallet.estimateFee()
+  } else {
+    return wallet.estimateFee(
+      web3.utils.toWei(amount + '', 'ether'),
+    )
+  }
 };
 
 /**
@@ -436,10 +448,17 @@ const estimatePrivacyFee = (web3, wallet, amount) => {
 const withdrawPrivacy = (web3, wallet, amount) => {
   const { address, privacy } = wallet;
   if (privacy && privacy.privacyWallet) {
-    return privacy.privacyWallet.withdraw(
-      address.toString(),
-      web3.utils.toWei(amount + '', 'ether'),
-    );
+    const balance = bnToDecimals(privacy.privacyWallet.balance, 9);
+    if (balance === amount) {
+      return privacy.privacyWallet.withdraw(
+        address.toString()
+      );
+    } else {
+      return privacy.privacyWallet.withdraw(
+        address.toString(),
+        web3.utils.toWei(amount + '', 'ether'),
+      ); 
+    }
   }
 };
 

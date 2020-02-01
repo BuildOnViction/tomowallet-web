@@ -230,6 +230,11 @@ const TomoText = styled.span`
   color: #fff !important;
   margin-left: 8px;
 `
+
+const ExternalLink = styled.a`
+  color: inherit !important;
+  transition: none !important;
+`
 // =================
 
 export {
@@ -245,4 +250,5 @@ export {
   ButtonSwitchMode,
   LogoBox,
   TomoText,
+  ExternalLink,
 };

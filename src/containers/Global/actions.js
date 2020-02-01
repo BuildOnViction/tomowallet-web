@@ -18,7 +18,8 @@ import {
   UPDATE_WALLET_POPUP_CONTENT_TAB,
   UPDATE_WALLET_POPUP_STAGE,
   TOGGLE_PRIVACY_MODE,
-  UPDATE_PRIVACY_INFO
+  UPDATE_PRIVACY_INFO,
+  RELEASE_PRIVACY_MODE
 } from './constants';
 // ===================
 
@@ -77,12 +78,17 @@ export const updateWalletPopupStage = stage => ({
   stage,
 });
 
-export const togglePrivacyMode = () => ({
-  type: TOGGLE_PRIVACY_MODE
+export const togglePrivacyMode = (mode) => ({
+  type: TOGGLE_PRIVACY_MODE,
+  mode
 });
 
 export const updatePrivacyData = data => ({
   type: UPDATE_PRIVACY_INFO,
   data,
+});
+
+export const releasePrivacyMode = () => ({
+  type: RELEASE_PRIVACY_MODE,
 });
 // ===================

@@ -6,6 +6,9 @@ const theme = {
         background: '#F1F5FF',
         navBackground: '#272D40',
 
+        notificationBackground: '#4B96CD',
+        notificationColor: '#fff',
+
         boxTitleColor: '#A5A8AD',
         boxValueColor: '#31384E',
         boxAddressValueColor: '#4B96CD',
@@ -23,6 +26,7 @@ const theme = {
         highlightHoverColor4: '#5353ad',
 
         footerColor: '#A5A8AD',
+        footerHoverColor: '#202533',
         footerSocialBackground: '#fff',
         footerSocialHoverColor: '#202533',
 
@@ -91,6 +95,9 @@ const theme = {
         background: '#151515',
         navBackground: '#1C1C1C',
 
+        notificationBackground: '#4B96CD',
+        notificationColor: '#fff',
+
         boxTitleColor: '#757575',
         boxValueColor: '#F5F5F5',
         boxAddressValueColor: '#F5F5F5',
@@ -108,6 +115,7 @@ const theme = {
         highlightHoverColor4: '#5353ad',
 
         footerColor: '#757575',
+        footerHoverColor: '#fff',
         footerSocialBackground: '#1C1C1C',
         footerSocialHoverColor: '#fff',
 
