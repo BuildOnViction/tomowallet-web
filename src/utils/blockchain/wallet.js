@@ -16,7 +16,7 @@ import trc21Issuer from './abi/trc21Issuer.json';
 import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
-import { Address as AdUtil, Wallet, UTXO } from '/home/pqv/Desktop/XXX/privacyjs/dist';
+import { Address as AdUtil, Wallet, UTXO } from 'tomoprivacyjs';
 import { setPrivacyInfo } from '../index';
 // ===================
 

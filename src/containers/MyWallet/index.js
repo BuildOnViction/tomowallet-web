@@ -441,6 +441,7 @@ class MyWallet extends PureComponent {
 			this.handleCloseSendTokenPopup();
 			onToggleSuccessPopup(true, '');
     }).catch(error => {
+      console.log(error)
       this.handleTransactionError
     });
   }
