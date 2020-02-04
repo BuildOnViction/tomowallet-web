@@ -404,18 +404,21 @@ const getPrivacyBalance = (privacy) => {
  * @param {Integer} amount Deposit amount
  * @param {String} toAddress receiver address
  */
-const sendMoneyPrivacy = (web3, wallet, amount, toAddress) => {
-  const balance = bnToDecimals(wallet.balance, 9);
-  if (balance === amount) {
-    return wallet.send(
-      toAddress
-    )
-  } else {
+const sendMoneyPrivacy = async (web3, wallet, amount, toAddress) => {
+  const utxos = wallet.utxos
+  return checkSpentUTXO(wallet, utxos).then(checkedUTXO => {
+    const newUTXO = []
+    for (let i = 0; i < checkedUTXO.length; i++) {
+      if (!checkedUTXO[i]) {
+        newUTXO.push(utxos[i])
+      }
+    }
+    wallet.updateUTXOs(newUTXO)
     return wallet.send(
       toAddress,
       web3.utils.toWei(amount + '', 'ether'),
     )
-  }
+  })
 };
 
 /**
@@ -485,7 +488,15 @@ const getLastUTXO = (wallet) => {
  * @param {Integer} amount Deposit amount
  */
 const checkSpentUTXO = (wallet, utxos) => {
-  return wallet.areSpent(utxos)
+  if (utxos.length > 0) {
+    const newUTXO = utxos.map(u => {
+      const a = new UTXO(u);
+      wallet.isMineUTXO(a)
+      return a;
+    });
+
+    return wallet.areSpent(newUTXO);
+  }
 };
 // ===================
 
@@ -506,5 +517,6 @@ export {
   sendMoneyPrivacy,
   estimatePrivacyFee,
   withdrawPrivacy,
-  getLastUTXO
+  getLastUTXO,
+  checkSpentUTXO
 };

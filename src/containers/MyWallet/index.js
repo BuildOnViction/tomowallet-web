@@ -442,6 +442,7 @@ class MyWallet extends PureComponent {
 			onToggleSuccessPopup(true, '');
     }).catch(error => {
       console.log(error)
+			toggleLoading(false);
       this.handleTransactionError
     });
   }

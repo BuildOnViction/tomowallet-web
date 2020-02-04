@@ -11,7 +11,7 @@ import _map from "lodash.map";
 import _isEmpty from "lodash.isempty";
 // Utilities & Constants
 import request from "../../utils/request";
-import { getNetwork, setPrivacyInfo, getLastUTXO, bnToDecimals } from "../../utils";
+import { getNetwork, setPrivacyInfo, getLastUTXO, bnToDecimals, checkSpentUTXO } from "../../utils";
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,
@@ -127,6 +127,15 @@ export function* scanPrivacy(actionData) {
       const response = yield call([wallet, wallet.scan]);
 
       if (response) {
+          const utxos = wallet.utxos
+          const checkedUTXO = yield checkSpentUTXO(wallet, utxos)
+          const newUTXO = []
+          for (let i = 0; i < checkedUTXO.length; i++) {
+            if (!checkedUTXO[i]) {
+              newUTXO.push(utxos[i])
+            }
+          }
+          wallet.updateUTXOs(newUTXO)
           response.balance = wallet.balance.toString(10);
           response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
           yield put(scanPrivacyDataSuccess(response));
