@@ -221,6 +221,8 @@ PasswordPopup.propTypes = {
   onUpdateState: PropTypes.func,
   /** Popup's data */
   popupData: PropTypes.object,
+  /** Current RPC server configuration */
+  rpcServer: PropTypes.object,
 };
 
 PasswordPopup.defaultProps = {
@@ -231,6 +233,7 @@ PasswordPopup.defaultProps = {
   onUpdateInput: () => {},
   onUpdateState: () => {},
   popupData: {},
+  rpcServer: {},
 };
 // ======================
 
