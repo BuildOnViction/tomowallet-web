@@ -16,7 +16,7 @@ import trc21Issuer from './abi/trc21Issuer.json';
 import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
-import { Address as AdUtil, Wallet, UTXO } from '/home/pqv/Desktop/XXX/privacyjs/dist';
+import { Address as AdUtil, Wallet, UTXO } from 'tomoprivacyjs';
 import { setPrivacyInfo } from '../index';
 // ===================
 
@@ -404,18 +404,21 @@ const getPrivacyBalance = (privacy) => {
  * @param {Integer} amount Deposit amount
  * @param {String} toAddress receiver address
  */
-const sendMoneyPrivacy = (web3, wallet, amount, toAddress) => {
-  const balance = bnToDecimals(wallet.balance, 9);
-  if (balance === amount) {
-    return wallet.send(
-      toAddress
-    )
-  } else {
+const sendMoneyPrivacy = async (web3, wallet, amount, toAddress) => {
+  const utxos = wallet.utxos
+  return checkSpentUTXO(wallet, utxos).then(checkedUTXO => {
+    const newUTXO = []
+    for (let i = 0; i < checkedUTXO.length; i++) {
+      if (!checkedUTXO[i]) {
+        newUTXO.push(utxos[i])
+      }
+    }
+    wallet.updateUTXOs(newUTXO)
     return wallet.send(
       toAddress,
       web3.utils.toWei(amount + '', 'ether'),
     )
-  }
+  })
 };
 
 /**
@@ -485,7 +488,15 @@ const getLastUTXO = (wallet) => {
  * @param {Integer} amount Deposit amount
  */
 const checkSpentUTXO = (wallet, utxos) => {
-  return wallet.areSpent(utxos)
+  if (utxos.length > 0) {
+    const newUTXO = utxos.map(u => {
+      const a = new UTXO(u);
+      wallet.isMineUTXO(a)
+      return a;
+    });
+
+    return wallet.areSpent(newUTXO);
+  }
 };
 // ===================
 
@@ -506,5 +517,6 @@ export {
   sendMoneyPrivacy,
   estimatePrivacyFee,
   withdrawPrivacy,
-  getLastUTXO
+  getLastUTXO,
+  checkSpentUTXO
 };

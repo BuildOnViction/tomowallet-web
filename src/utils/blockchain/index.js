@@ -35,7 +35,8 @@ import {
   sendMoneyPrivacy,
   estimatePrivacyFee,
   withdrawPrivacy,
-  getLastUTXO
+  getLastUTXO,
+  checkSpentUTXO
 } from './wallet';
 
 export {
@@ -74,5 +75,6 @@ export {
   isPrivacyAddress,
   estimatePrivacyFee,
   withdrawPrivacy,
-  getLastUTXO
+  getLastUTXO,
+  checkSpentUTXO,
 };

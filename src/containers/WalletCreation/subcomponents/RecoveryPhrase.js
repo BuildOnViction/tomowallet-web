@@ -74,6 +74,7 @@ class RecoveryPhrase extends PureComponent {
       onTogglePasswordPopup,
       onToggleConfirmationPopup,
       onToggleKeyViewPopup,
+      rpcServer,
     } = this.props;
     const convertedMnemonic = this.handleConvertMnemonic();
 
@@ -146,7 +147,7 @@ class RecoveryPhrase extends PureComponent {
             </Row>
           </CardFooter>
         </Card>
-        <PasswordPopup />
+        <PasswordPopup rpcServer={rpcServer} />
       </Fragment>
     );
   }
@@ -171,6 +172,8 @@ RecoveryPhrase.propTypes = {
   onTogglePasswordPopup: PropTypes.func,
   /** Current Web3 provider */
   web3: PropTypes.object,
+  /** Current RPC server configuration */
+  rpcServer: PropTypes.object,
 };
 
 RecoveryPhrase.defaultProps = {
@@ -182,6 +185,7 @@ RecoveryPhrase.defaultProps = {
   onToggleKeyViewPopup: () => {},
   onTogglePasswordPopup: () => {},
   web3: {},
+  rpcServer: {},
 };
 // ======================
 
