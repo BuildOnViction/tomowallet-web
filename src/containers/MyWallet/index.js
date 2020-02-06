@@ -26,6 +26,7 @@ import SuccessDepositPopup from "./subcomponents/popups/SuccessDeposit";
 import DepositPrivacyPopup from "./subcomponents/popups/DepositPrivacy";
 import WithdrawPopup from "./subcomponents/popups/Withdraw";
 import SuccessWithdrawPopup from "./subcomponents/popups/SuccessWithdraw";
+import ProcessingPopup from "./subcomponents/popups/Processing";
 // Utilities & Constants
 import {
   resetSendTokenForm,
@@ -1336,6 +1337,7 @@ class MyWallet extends PureComponent {
           ""
         )}
         />
+        <ProcessingPopup />
       </Fragment>
     );
   }

@@ -905,5 +905,9 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.portfolio.header.privacy.balance`,
     defaultMessage: 'Incognito Balance',
   },
+  MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE: {
+    id: `${myWalletPagePrefix}.popup.processing.send.token.title`,
+    defaultMessage: 'Your privacy mode is being set up',
+  },
 });
 // ====================
