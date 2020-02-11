@@ -79,6 +79,11 @@ const selectPrivacyTransactionData = createDeepEqualSelector(
   selectMyWalletDomain,
   obj => obj.toJS().privacyTransactionTable,
 );
+
+const selectProcessing = createDeepEqualSelector(
+  selectMyWalletDomain,
+  obj => obj.toJS().prepareTxProof,
+);
 // =====================
 
 export {
@@ -97,5 +102,6 @@ export {
   selectWithdrawPrivacyPopup,
   selectWithdrawPrivacyForm,
   selectSuccessWithdrawPopup,
-  selectPrivacyTransactionData
+  selectPrivacyTransactionData,
+  selectProcessing,
 };

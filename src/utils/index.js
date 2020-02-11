@@ -49,7 +49,10 @@ import {
   estimatePrivacyFee,
   withdrawPrivacy,
   getLastUTXO,
-  checkSpentUTXO
+  checkSpentUTXO,
+  prepareSendingTxs,
+  prepareWithdrawingTxs,
+  executeTransaction,
 } from './blockchain';
 import validations, { mergeErrors } from './validations';
 import { withGlobal } from './injectGlobal';
@@ -79,7 +82,10 @@ import electron, {
   writeKeystore,
 } from './electron';
 
-import { truncateMiddle } from './helper'
+import {
+  truncateMiddle,
+  calculatePercentage,
+} from './helper'
 
 export {
   addBN,
@@ -156,5 +162,9 @@ export {
   getLastUTXO,
   setPrivacyMode,
   getPrivacyMode,
-  checkSpentUTXO
+  checkSpentUTXO,
+  prepareSendingTxs,
+  prepareWithdrawingTxs,
+  executeTransaction,
+  calculatePercentage,
 };

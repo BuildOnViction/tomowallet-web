@@ -36,7 +36,10 @@ import {
   estimatePrivacyFee,
   withdrawPrivacy,
   getLastUTXO,
-  checkSpentUTXO
+  checkSpentUTXO,
+  prepareSendingTxs,
+  prepareWithdrawingTxs,
+  executeTransaction,
 } from './wallet';
 
 export {
@@ -77,4 +80,7 @@ export {
   withdrawPrivacy,
   getLastUTXO,
   checkSpentUTXO,
+  prepareSendingTxs,
+  prepareWithdrawingTxs,
+  executeTransaction,
 };

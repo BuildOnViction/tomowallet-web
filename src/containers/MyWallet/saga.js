@@ -30,6 +30,7 @@ import {
   scanPrivacyDataFailed,
   scanPrivacyTransactionSuccess,
   scanPrivacyTransactionFailed,
+  updateProcessing,
 } from "./actions";
 import { toggleLoading } from "../Global/actions";
 // ===================
@@ -121,14 +122,29 @@ export function* loadCoin() {
 
 export function* scanPrivacy(actionData) {
   try {
-    yield put(toggleLoading(true));
-      const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {})
-      const address = _get(actionData, ['wallet', 'address'], '')
-      const response = yield call([wallet, wallet.scan]);
+	  yield put(toggleLoading(true));
+    const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {})
+    const address = _get(actionData, ['wallet', 'address'], '')
+    const scannedTo = wallet.scannedTo || 0
 
-      if (response) {
-          const utxos = wallet.utxos
-          const checkedUTXO = yield checkSpentUTXO(wallet, utxos)
+    const totalUTXOs = yield call([wallet, wallet.totalUTXO]);
+
+    const check = totalUTXOs - wallet.scannedTo;
+    if (check > 100) {
+      yield put(toggleLoading(false));
+      yield put(updateProcessing({
+        screen: 'scanning',
+        total: totalUTXOs - wallet.scannedTo,
+        percent: 0,
+        status: true,
+      }))
+	  }
+    const response = yield call([wallet, wallet.scan]);
+
+    if (response) {
+        const utxos = wallet.utxos
+        const checkedUTXO = yield checkSpentUTXO(wallet, utxos)
+        if (checkedUTXO && checkedUTXO.length > 0) {
           const newUTXO = []
           for (let i = 0; i < checkedUTXO.length; i++) {
             if (!checkedUTXO[i]) {
@@ -136,14 +152,32 @@ export function* scanPrivacy(actionData) {
             }
           }
           wallet.updateUTXOs(newUTXO)
-          response.balance = wallet.balance.toString(10);
-          response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
-          yield put(scanPrivacyDataSuccess(response));
-          setPrivacyInfo({ address, ...wallet.state() });
-          yield put(toggleLoading(false));
-      }
+        }
+        response.balance = wallet.balance.toString(10);
+        response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
+        yield put(scanPrivacyDataSuccess(response));
+        setPrivacyInfo({ address, ...wallet.state() });
+        
+        if (check > 100) {
+          yield put(updateProcessing({
+            screen: '',
+            total: 0,
+            percent: 0,
+            status: false,
+          }))
+        } else { yield put(toggleLoading(false)); }
+    }
   } catch (error) {
-    yield put(toggleLoading(false));
+    if (check > 100) {
+      yield put(updateProcessing({
+        screen: '',
+        total: 0,
+        percent: 0,
+        status: false,
+      }))
+    } else { yield put(toggleLoading(false)); }
+    
+    // yield put(toggleLoading(false));
     yield put(scanPrivacyDataFailed(error))
   }
 }

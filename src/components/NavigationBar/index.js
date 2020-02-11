@@ -50,7 +50,7 @@ import {
   toggleNetworkConfirmationPopup,
   togglePrivacyMode,
 } from '../../containers/Global/actions';
-import { ROUTE, LIST, MSG } from '../../constants';
+import { ROUTE, LIST, MSG, ENUM } from '../../constants';
 import {
   removeWeb3Info,
   setLocale,
@@ -81,6 +81,10 @@ import { ArrowRight, LogoTomo } from '../../components/Icons';
 class NavigationBar extends PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      showPrivacy: false
+    }
 
     this.handleChangeLocale = this.handleChangeLocale.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
@@ -199,7 +203,12 @@ class NavigationBar extends PureComponent {
       privacyMode,
       language,
       wallet,
-    } = this.props;    
+    } = this.props;
+    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+    console.log('isTestnet', isTestnet)
+    this.setState({
+      showPrivacy: isTestnet
+    })
 
     const { isOpenMainMenu, isOpenSwitchNetworkMenu, isOpenLanguageMenu } = this.state
     const hasPrivateKey = _get(getWeb3Info(), 'recoveryPhrase', false);
@@ -208,10 +217,14 @@ class NavigationBar extends PureComponent {
 
     return (
       <Fragment>
-        <ButtonSwitchMode onClick={() => onTogglePrivacyMode()}>
-          {formatMessage(privacyMode ? MSG.HEADER_NAVBAR_NORMAL_MOD : MSG.HEADER_NAVBAR_PRIVACY_MOD)}
-          <ArrowRight />
-        </ButtonSwitchMode>
+        {this.state.showPrivacy ? 
+          <ButtonSwitchMode onClick={() => onTogglePrivacyMode()}>
+            {formatMessage(privacyMode ? MSG.HEADER_NAVBAR_NORMAL_MOD : MSG.HEADER_NAVBAR_PRIVACY_MOD)}
+            <ArrowRight />
+          </ButtonSwitchMode>
+          :
+          ''
+        }
 
         <UncontrolledDropdown nav inNavbar isOpen={isOpenMainMenu} toggle={this.toggleMainMenu}>
           <DropdownToggleHeader nav>

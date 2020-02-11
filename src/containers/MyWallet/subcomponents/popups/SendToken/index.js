@@ -15,6 +15,7 @@ import _isEqual from 'lodash.isequal';
 // Custom Components
 import FormContent from './form';
 import ConfirmationContent from './confirmation';
+import ProcessContent from './processing';
 import { SendTokenPopupStyler } from './style';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
@@ -114,6 +115,8 @@ class SendTokenPopup extends PureComponent {
       wallet,
       privacyMode,
       privacyData,
+      process,
+      updateProcess
     } = this.props;
     return (
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.FORM && {
@@ -127,6 +130,17 @@ class SendTokenPopup extends PureComponent {
           updateInput,
           privacyMode,
           privacyData
+        },
+      }) ||
+      (_get(popupData, 'stage') === SEND_TOKEN_STAGES.PROCESSING && {
+        Content: ProcessContent,
+        getContentProps: {
+          errors: _get(popupData, 'errors', {}),
+          formValues,
+          wallet,
+          privacyData,
+          process,
+          updateProcess,
         },
       }) ||
       (_get(popupData, 'stage') === SEND_TOKEN_STAGES.CONFIRMATION && {
@@ -151,6 +165,7 @@ class SendTokenPopup extends PureComponent {
     const {
       intl: { formatMessage },
       popupData,
+      process
     } = this.props;
 
     return (
@@ -158,7 +173,7 @@ class SendTokenPopup extends PureComponent {
         button={this.handleGetButtonConfig()}
         {...this.handleGetContentConfig()}
         isOpen={_get(popupData, 'isOpen', false)}
-        title={formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_TITLE)}
+        title={process.status ?  '' : formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_TITLE)}
         toggle={this.handleClosePopup}
       />
     );
@@ -192,6 +207,8 @@ SendTokenPopup.propTypes = {
   updateSendTokenPopupStage: PropTypes.func,
   /** Wallet's information */
   wallet: PropTypes.object,
+  /** Action to update processing step in send token form */
+  updateProcess: PropTypes.func,
 };
 
 SendTokenPopup.defaultProps = {
@@ -207,6 +224,7 @@ SendTokenPopup.defaultProps = {
   updateInput: () => {},
   updateSendTokenPopupStage: () => {},
   wallet: {},
+  updateProcess: () => {},
 };
 // ======================
 

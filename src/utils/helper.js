@@ -7,4 +7,8 @@ const truncateMiddle = (str, start = 7, end = 7, ellipsis = '...') => {
     return `${startStr}${ellipsis}${endStr}`
 }
 
-export { truncateMiddle }
+const calculatePercentage = (total, current) => {
+    return Math.floor((current * 100) / total)
+}
+
+export { truncateMiddle, calculatePercentage }

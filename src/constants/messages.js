@@ -907,7 +907,11 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE: {
     id: `${myWalletPagePrefix}.popup.processing.send.token.title`,
-    defaultMessage: 'Your privacy mode is being set up',
+    defaultMessage: 'ANONYMIZING YOUR TRANSACTION INFORMATION',
+  },
+  IMPORT_WALLET_ERROR_SPENT_UTXO: {
+    id: `${myWalletPagePrefix}.error.spent.utxo`,
+    defaultMessage: 'Privacy data is not synched. Need to re-synch',
   },
 });
 // ====================
