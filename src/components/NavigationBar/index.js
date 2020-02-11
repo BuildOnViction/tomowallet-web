@@ -204,11 +204,6 @@ class NavigationBar extends PureComponent {
       language,
       wallet,
     } = this.props;
-    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
-    console.log('isTestnet', isTestnet)
-    this.setState({
-      showPrivacy: isTestnet
-    })
 
     const { isOpenMainMenu, isOpenSwitchNetworkMenu, isOpenLanguageMenu } = this.state
     const hasPrivateKey = _get(getWeb3Info(), 'recoveryPhrase', false);
@@ -314,6 +309,14 @@ class NavigationBar extends PureComponent {
       networkConfirmationPopup,
       onToggleNetworkConfirmationPopup,
     } = this.props;
+
+    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+    if (!isTestnet) {
+      onTogglePrivacyMode(false);
+    }
+    this.setState({
+      showPrivacy: isTestnet
+    })
 
     return (
       <NavWrapper>

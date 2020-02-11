@@ -121,15 +121,16 @@ export function* loadCoin() {
 }
 
 export function* scanPrivacy(actionData) {
+  let check = 0;
   try {
 	  yield put(toggleLoading(true));
-    const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {})
-    const address = _get(actionData, ['wallet', 'address'], '')
-    const scannedTo = wallet.scannedTo || 0
+    const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
+    const address = _get(actionData, ['wallet', 'address'], '');
+    const scannedTo = wallet.scannedTo || 0;
 
     const totalUTXOs = yield call([wallet, wallet.totalUTXO]);
 
-    const check = totalUTXOs - wallet.scannedTo;
+    check = totalUTXOs - wallet.scannedTo;
     if (check > 100) {
       yield put(toggleLoading(false));
       yield put(updateProcessing({

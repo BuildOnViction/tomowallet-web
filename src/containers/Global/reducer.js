@@ -104,13 +104,12 @@ export default (state = initialState, action) => {
       return state.setIn(['walletPopup', 'stage'], action.stage);
     case TOGGLE_PRIVACY_MODE:
       if (action.mode !== undefined) {
-        const privacy = getPrivacyMode()
-        return state.set('privacyMode', privacy)
+        return state.set('privacyMode', action.mode);
       } else {
         const privacy = getPrivacyMode() === true ? false : true;
         // store privacy mode
-        setPrivacyMode(privacy)
-        return state.set('privacyMode', privacy)
+        setPrivacyMode(privacy);
+        return state.set('privacyMode', privacy);
     }
     case RELEASE_PRIVACY_MODE: {
       removePrivacyMode()

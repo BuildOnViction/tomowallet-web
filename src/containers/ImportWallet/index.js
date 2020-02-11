@@ -185,6 +185,7 @@ class ImportWallet extends PureComponent {
           formValues.recoveryPhrase || formValues.privateKey
         );
         const hdPath = _get(importWallet, "input.hdPath", "");
+        const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
         const updatedRpcServer = hdPath
           ? {
               ...rpcServer,
@@ -200,7 +201,9 @@ class ImportWallet extends PureComponent {
             const privacyObject = getPrivacyAddressInfo(
               walletInfo.address,
               formValues.recoveryPhrase ? mnemonicToPrivateKey(formValues.recoveryPhrase, updatedRpcServer)
-                    : formValues.privateKey, updatedRpcServer);
+                    : formValues.privateKey, updatedRpcServer,
+              isTestnet
+            );
             walletInfo.privacy = privacyObject;
 
             onStoreWallet(walletInfo);
