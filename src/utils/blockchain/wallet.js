@@ -17,7 +17,6 @@ import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
 import { Address as AdUtil, Wallet, UTXO } from 'tomoprivacyjs';
-import { setPrivacyInfo } from '../index';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
@@ -451,17 +450,23 @@ const estimatePrivacyFee = (web3, wallet, amount) => {
 const withdrawPrivacy = (web3, wallet, amount) => {
   const { address, privacy } = wallet;
   if (privacy && privacy.privacyWallet) {
-    const balance = bnToDecimals(privacy.privacyWallet.balance, 9);
-    if (balance === amount) {
-      return privacy.privacyWallet.withdraw(
-        address.toString()
-      );
-    } else {
-      return privacy.privacyWallet.withdraw(
+    const instanceWallet = privacy.privacyWallet
+    const utxos = instanceWallet.utxos
+    return checkSpentUTXO(instanceWallet, utxos).then(checkedUTXO => {
+      if (checkedUTXO.length > 0) {
+        const newUTXO = []
+        for (let i = 0; i < checkedUTXO.length; i++) {
+          if (!checkedUTXO[i]) {
+            newUTXO.push(utxos[i])
+          }
+        }
+        instanceWallet.updateUTXOs(newUTXO)
+      }
+      return instanceWallet.withdraw(
         address.toString(),
         web3.utils.toWei(amount + '', 'ether'),
-      ); 
-    }
+      )
+    })
   }
 };
 
@@ -483,9 +488,8 @@ const getLastUTXO = (wallet) => {
  * checkSpentUTXO
  *
  * Execute token transfer contract
- * @param {Wallet} wallet A Web3 object with supported APIs
+ * @param {Wallet} wallet An object which contains privacy data
  * @param {Array} utxos An object which contains privacy data
- * @param {Integer} amount Deposit amount
  */
 const checkSpentUTXO = (wallet, utxos) => {
   if (utxos.length > 0) {
@@ -497,6 +501,71 @@ const checkSpentUTXO = (wallet, utxos) => {
 
     return wallet.areSpent(newUTXO);
   }
+};
+
+/**
+ * prepareSendingTxs
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Object} wallet A privacy Wallet object
+ * @param {Integer} amount Deposit amount
+ * @param {String} toAddress Receiver address
+ */
+const prepareSendingTxs = (web3, wallet, amount, toAddress, spendingUTXO) => {
+  return checkSpentUTXO(wallet, spendingUTXO).then(checkedUTXO => {
+    if (checkedUTXO.length > 0) {
+      for (let i = 0; i < checkedUTXO.length; i++) {
+        if (checkedUTXO[i]) {
+          throw new Error(
+            formatMessage(MSG.IMPORT_WALLET_ERROR_TRANSPORT_NODE_NOT_SUPPORTED),
+          ); 
+        }
+      }
+    }
+    return wallet.makeSendProof(
+      toAddress,
+      web3.utils.toWei(amount + '', 'ether'),
+    )
+  })
+};
+
+/**
+ * prepareWithdrawingTxs
+ *
+ * Execute token transfer contract
+ * @param {Web3} web3 A Web3 object with supported APIs
+ * @param {Object} wallet A privacy Wallet object
+ * @param {Integer} amount Deposit amount
+ * @param {String} toAddress Receiver address
+ */
+const prepareWithdrawingTxs = (web3, wallet, amount, toAddress) => {
+  const utxos = wallet.utxos
+  return checkSpentUTXO(wallet, utxos).then(checkedUTXO => {
+    if (checkedUTXO.length > 0) {
+      const newUTXO = []
+      for (let i = 0; i < checkedUTXO.length; i++) {
+        if (!checkedUTXO[i]) {
+          newUTXO.push(utxos[i])
+        }
+      }
+      wallet.updateUTXOs(newUTXO)
+    }
+    return wallet.makeWithdrawProof(
+      toAddress,
+      web3.utils.toWei(amount + '', 'ether'),
+    )
+  })
+};
+
+/**
+ * executeTransaction
+ *
+ * Execute privacy transaction
+ * @param {Object} wallet A privacy Wallet object
+ */
+const executeTransaction = (wallet) => {
+  return wallet.doTx()
 };
 // ===================
 
@@ -518,5 +587,8 @@ export {
   estimatePrivacyFee,
   withdrawPrivacy,
   getLastUTXO,
-  checkSpentUTXO
+  checkSpentUTXO,
+  prepareSendingTxs,
+  prepareWithdrawingTxs,
+  executeTransaction
 };

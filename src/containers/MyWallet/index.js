@@ -26,6 +26,7 @@ import SuccessDepositPopup from "./subcomponents/popups/SuccessDeposit";
 import DepositPrivacyPopup from "./subcomponents/popups/DepositPrivacy";
 import WithdrawPopup from "./subcomponents/popups/Withdraw";
 import SuccessWithdrawPopup from "./subcomponents/popups/SuccessWithdraw";
+import ProcessingPopup from "./subcomponents/popups/Processing";
 // Utilities & Constants
 import {
   resetSendTokenForm,
@@ -46,7 +47,8 @@ import {
   updateWithdrawPrivacyErrors,
   updateDepositPrivacyErrors,
   toggleSuccessWithdrawPopup,
-  updateWithdrawPrivacyPopupStage
+  updateWithdrawPrivacyPopupStage,
+  updateProcessing,
 } from "./actions";
 import {
   selectReceiveToKenPopup,
@@ -61,6 +63,7 @@ import {
   selectWithdrawPrivacyPopup,
   selectWithdrawPrivacyForm,
   selectSuccessWithdrawPopup,
+  selectProcessing,
 } from "./selectors";
 import reducer from "./reducer";
 import saga from "./saga";
@@ -98,8 +101,11 @@ import {
   getPrivacyAddressInfo,
   estimatePrivacyFee,
   withdrawPrivacy,
-  setPrivacyInfo,
   mnemonicToPrivateKey,
+  prepareSendingTxs,
+  setPrivacyInfo,
+  calculatePercentage,
+  executeTransaction,
 } from "../../utils";
 import { withIntl } from "../../components/IntlProvider";
 import { withWeb3 } from "../../components/Web3";
@@ -146,6 +152,7 @@ class MyWallet extends PureComponent {
     this.handleGetWithdrawAction = this.handleGetWithdrawAction.bind(this);
     this.handleWithdrawPrivacyByPk = this.handleWithdrawPrivacyByPk.bind(this);
     this.handleValidateWithdrawFee = this.handleValidateWithdrawFee.bind(this);
+    this.handleProcessing = this.handleProcessing.bind(this);
   }
 
   componentWillUnmount() {
@@ -240,14 +247,12 @@ class MyWallet extends PureComponent {
       toggleLoading(true);
       try {
         if (privacyMode) {
-          const fee = estimatePrivacyFee(web3,
+          toggleLoading(false);
+          const feeObj = estimatePrivacyFee(web3,
             _get(wallet, ['privacy', 'privacyWallet'], {}),
             _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0))
 
-            this.handleValidatePrivacyFee({
-              type: 'TRC21',
-              amount: bnToDecimals(fee.toString(10), 18)
-            })
+            this.handleValidatePrivacyFee(feeObj)
         } else {
           estimateFee(web3, tokenType, contractData, isTestnet).then(feeObj => {
             const type = feeObj.type;
@@ -423,19 +428,14 @@ class MyWallet extends PureComponent {
 			sendTokenForm,
 			onUpdatePrivacyData,
     } = this.props;
+    const t2 = performance.now()
     toggleLoading(true);
 		const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
     const address = _get(wallet, 'address')
-    sendMoneyPrivacy(
-      web3,
-      privacyWallet,
-      _get(sendTokenForm, [
-        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT
-      ], 0),
-      _get(sendTokenForm, [
-        SEND_TOKEN_FIELDS.RECIPIENT
-      ], '')
+    executeTransaction(
+      privacyWallet
     ).then(utxo => {
+      const t3 = performance.now()
 			toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
 			this.handleCloseSendTokenPopup();
@@ -817,14 +817,36 @@ class MyWallet extends PureComponent {
       intl: { formatMessage },
       onUpdateSendTokenInput,
       onUpdateSendTokenPopupStage,
+      onToggleSendTokenPopup,
+      onUpdateProcessing,
       sendTokenForm,
-      toggleLoading,
       web3,
+      wallet,
     } = this.props;
+    
+    const { fee, utxos } = feeObj;
+
+    const feeAmount = bnToDecimals(fee.toString(10), 18)
+    const feeObject = {
+      type: 'TRC21',
+      amount: feeAmount,
+    }
+
+    const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {});
     const balance = _get(sendTokenForm, [
       SEND_TOKEN_FIELDS.TOKEN,
       PORTFOLIO_COLUMNS.BALANCE
     ]);
+
+    const total = feeAmount * 100 ;
+
+    onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.PROCESSING);
+    onUpdateProcessing({
+        screen: 'sending',
+        total: total,
+        current: 0,
+        status: true,
+      })
 
     const decimals = _get(
       sendTokenForm,
@@ -836,41 +858,70 @@ class MyWallet extends PureComponent {
       web3.utils.toBN(balance),
       addBN(
         _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
-        feeObj.amount.toString(),
+        feeAmount,
         decimals
       ),
       decimals
     );
 
-    if (
-      balance === decimalsToBN(
-        _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-        decimals
-      )
-    ) {
-      toggleLoading(false);
-      const remainAmount = subBN(
+    const transferAmountBN = decimalsToBN(
+      _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+      decimals
+    );
+    let transferAmount = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]);
+    if (balance === transferAmountBN) {
+      transferAmount = subBN(
         web3.utils.toBN(balance),
-        feeObj.amount,
+        feeAmount,
         decimals
       );
       onUpdateSendTokenInput(
         SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-        removeTrailingZero(remainAmount)
+        removeTrailingZero(transferAmount)
       );
-      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
-      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
     } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+        this.handleConfirmationError(
+          formatMessage(
+            MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+          )
+        );
+    }
+    prepareSendingTxs(
+      web3,
+      privacyWallet,
+      transferAmount,
+      _get(sendTokenForm, [
+        SEND_TOKEN_FIELDS.RECIPIENT
+      ], ''),
+      utxos
+    ).then(data => {
+      onUpdateSendTokenInput(
+        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+        removeTrailingZero(transferAmount)
+      );
+      onUpdateProcessing({
+        screen: 'sending',
+        total: total,
+        current: 100,
+        status: false,
+      })
+      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObject);
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+    }).catch(error => {
+      console.log(error);
+      onUpdateProcessing({
+        screen: '',
+        total: 0,
+        current: 0,
+        status: false,
+      })
       this.handleConfirmationError(
         formatMessage(
           MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
         )
       );
-    } else {
-      toggleLoading(false);
-      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObj);
-      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-    }
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.FORM);
+    })
 	}
 	
 	handleValidateDepositFee(feeObj) {
@@ -942,9 +993,7 @@ class MyWallet extends PureComponent {
       onUpdateWithdrawPrivacyInput,
       onUpdateWithdrawPrivacyPopupStage,
       withdrawForm,
-      depositForm,
       toggleLoading,
-      wallet,
       web3,
     } = this.props;
 
@@ -962,7 +1011,7 @@ class MyWallet extends PureComponent {
     const remainBalance = subBN(
       web3.utils.toBN(balance),
       addBN(
-        _get(depositForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+        _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
         feeObj.amount,
         decimals
       ),
@@ -971,7 +1020,7 @@ class MyWallet extends PureComponent {
 
     if (
       balance === decimalsToBN(
-        _get(depositForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+        _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
         decimals
       )
     ) {
@@ -1213,6 +1262,11 @@ class MyWallet extends PureComponent {
     return errorList;
   }
 
+  handleProcessing () {
+    const { process } = this.props;
+    return process;
+  }
+
   render() {
     const {
       intl: { formatMessage },
@@ -1240,6 +1294,8 @@ class MyWallet extends PureComponent {
       successWithdrawPopup,
       onUpdateWithdrawPrivacyPopupStage,
       privacyMode,
+      onUpdateProcessing,
+      handleProcessing,
     } = this.props;    
 
     return (
@@ -1280,7 +1336,9 @@ class MyWallet extends PureComponent {
           submitSendToken={this.handleGetSendAction}
           tokenOptions={tokenOptions}
           updateInput={onUpdateSendTokenInput}
-					updateSendTokenPopupStage={onUpdateSendTokenPopupStage}
+          updateSendTokenPopupStage={onUpdateSendTokenPopupStage}
+          process={this.handleProcessing()}
+          updateProcess={onUpdateProcessing}
         />
         <SuccessPopup
           amount={_get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT])}
@@ -1336,6 +1394,7 @@ class MyWallet extends PureComponent {
           ""
         )}
         />
+        <ProcessingPopup data={this.handleProcessing()}/>
       </Fragment>
     );
   }
@@ -1406,6 +1465,8 @@ MyWallet.propTypes = {
   onToggleSuccessWithdrawPopup: PropTypes.func,
   /** Withdraw success popup's data */
   successWithdrawPopup: PropTypes.object,
+  /** Processing */
+  process: PropTypes.object,
 };
 
 MyWallet.defaultProps = {
@@ -1439,6 +1500,7 @@ MyWallet.defaultProps = {
   onUpdateDepositPrivacyErrors: () => {},
   onToggleWithdrawPrivacyPopup: () => {},
   successWithdrawPopup: {},
+  process: {},
 };
 // ======================
 
@@ -1458,6 +1520,7 @@ const mapStateToProps = () =>
     withdrawPrivacyPopup: selectWithdrawPrivacyPopup,
     withdrawForm: selectWithdrawPrivacyForm,
     successWithdrawPopup: selectSuccessWithdrawPopup,
+    process: selectProcessing,
   });
 const mapDispatchToProps = dispatch => ({
   onResetSendTokenForm: () => dispatch(resetSendTokenForm()),
@@ -1485,6 +1548,7 @@ const mapDispatchToProps = dispatch => ({
   onUpdateDepositPrivacyErrors: errors => dispatch(updateDepositPrivacyErrors(errors)),
   onToggleSuccessWithdrawPopup: (bool, hash) => dispatch(toggleSuccessWithdrawPopup(bool, hash)),
   onUpdateWithdrawPrivacyPopupStage: stage => dispatch(updateWithdrawPrivacyPopupStage(stage)),
+  onUpdateProcessing: data => dispatch(updateProcessing(data)),
 });
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 

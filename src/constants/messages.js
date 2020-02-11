@@ -905,5 +905,13 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.table.portfolio.header.privacy.balance`,
     defaultMessage: 'Incognito Balance',
   },
+  MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE: {
+    id: `${myWalletPagePrefix}.popup.processing.send.token.title`,
+    defaultMessage: 'ANONYMIZING YOUR TRANSACTION INFORMATION',
+  },
+  IMPORT_WALLET_ERROR_SPENT_UTXO: {
+    id: `${myWalletPagePrefix}.error.spent.utxo`,
+    defaultMessage: 'Privacy data is not synched. Need to re-synch',
+  },
 });
 // ====================

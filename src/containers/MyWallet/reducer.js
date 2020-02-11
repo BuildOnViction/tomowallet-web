@@ -52,6 +52,7 @@ import {
   UPDATE_WITHDRAW_PRIVACY_POPUP_STAGE,
   SCAN_PRIVACY_TRANSACTION,
   SCAN_PRIVACY_TRANSACTION_SUCCESS,
+  UPDATE_PROCESS,
 } from './constants';
 import { LIST } from '../../constants';
 import tomoIcon from '../../assets/images/logo-tomo.png';
@@ -131,6 +132,12 @@ const initialState = fromJS({
   successWithdrawPopup: {
     isOpen: false,
     txHash: '',
+  },
+  prepareTxProof: {
+    screen: '',
+    total: '',
+    current: '',
+    status: false
   },
 });
 // ====================================
@@ -372,6 +379,13 @@ export default (state = initialState, action) => {
           total: _get(action, 'tableData.total', 0),
           pages: _get(action, 'tableData.pages', 1),
         });
+      case UPDATE_PROCESS:
+        return state.set('prepareTxProof', {
+          screen: _get(action, ['data', 'screen'], ''),
+          total: _get(action, ['data', 'total'], 0),
+          current: _get(action, ['data', 'current'], 0),
+          status: _get(action, ['data', 'status'], false)
+        })
     default:
       return state;
   }

@@ -42,6 +42,7 @@ import {
   SCAN_PRIVACY_TRANSACTION,
   SCAN_PRIVACY_TRANSACTION_SUCCESS,
   SCAN_PRIVACY_TRANSACTION_FAILED,
+  UPDATE_PROCESS,
 } from './constants';
 // ===================
 
@@ -221,5 +222,9 @@ export const scanPrivacyTransactionSuccess = tableData => ({
 export const scanPrivacyTransactionFailed = wallet => ({
   type: SCAN_PRIVACY_TRANSACTION_FAILED,
   wallet,
+});
+export const updateProcessing = (data) => ({
+  type: UPDATE_PROCESS,
+  data,
 });
 // ===================

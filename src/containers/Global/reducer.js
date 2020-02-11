@@ -121,6 +121,7 @@ export default (state = initialState, action) => {
       const address = action.data.address;
 
       setPrivacyInfo({ address, ...wallet.state() })
+      return state.setIn(['walletl', 'privacy', 'privacyWallet'], wallet);
     }
     default:
       return state;
