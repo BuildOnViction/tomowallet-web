@@ -16,13 +16,18 @@ import trc21Issuer from './abi/trc21Issuer.json';
 import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
-import { Address as AdUtil, Wallet, UTXO } from 'tomoprivacyjs';
+import { Address as AdUtil, Wallet, UTXO } from '/home/pqv/Desktop/XXX/privacyjs/dist';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
 const TOMO_Z_CONTRACT_ADDRESS = {
   TOMOCHAIN_MAINNET: '0x8c0faeb5c6bed2129b8674f262fd45c4e9468bee',
   TOMOCHAIN_TESTNET: '0x7081c72c9dc44686c7b7eab1d338ea137fa9f0d3',
+};
+
+const PRIVACY_CONTRACT_ADDRESS = {
+  TOMOCHAIN_MAINNET: '',
+  TOMOCHAIN_TESTNET: '0x8Bd1936717f1176539C6EfD8f7Ff1c831c271fF4'
 };
 const DEFAULT_GAS_PRICE = '250000000';
 const DEFAULT_GAS_TOKEN = '500000';
@@ -136,18 +141,19 @@ const getWalletInfo = web3 => {
  * @param {String} accessKey private key or mnemonic
  * @param {Object} serverConfig (optional) Custom RPC server configuration
  */
-const getPrivacyAddressInfo = (address, accessKey, serverConfig) => {
+const getPrivacyAddressInfo = (address, accessKey, serverConfig, isTestnet) => {
   if (accessKey !== '') {
     const privacyAddress = {...AdUtil.generateKeys(accessKey)};
     const wallet = getPrivacyWalletInfo(address);
+
     // Set peivacy configuration
     const privacyWallet = new Wallet(accessKey.toLowerCase(), {
       ABI: privacy.abi,
-      ADDRESS: privacy.contractAddress,
-      SOCKET_END_POINT: 'ws://206.189.39.242:8546', // serverConfig.ws,
+      ADDRESS: isTestnet ? PRIVACY_CONTRACT_ADDRESS.TOMOCHAIN_TESTNET : PRIVACY_CONTRACT_ADDRESS.TOMOCHAIN_MAINNET,
+      SOCKET_END_POINT: serverConfig.ws, // serverConfig.ws,
       gas: 20000000,
       gasPrice: 2500000,
-      RPC_END_POINT: 'http://206.189.39.242:8545' //serverConfig.host
+      RPC_END_POINT: serverConfig.host //serverConfig.host
     });
     if (wallet && wallet.scannedTo) {
       privacyWallet.state(wallet);

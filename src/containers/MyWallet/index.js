@@ -470,6 +470,7 @@ class MyWallet extends PureComponent {
       getWalletInfo(web3).then(walletInfo => {
         const { hdPath, recoveryPhrase } = getWeb3Info() || {};
         const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+        const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
         const serverConfig = hdPath
           ? {
               ..._get(RPC_SERVER, [networkKey], {}),
@@ -481,7 +482,9 @@ class MyWallet extends PureComponent {
             // get privacy address
           const privacyObject = getPrivacyAddressInfo(
             walletInfo.address,
-            mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+            mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+            isTestnet
+          );
           privacyObject.privacyWallet = privacyWallet
           walletInfo.privacy = privacyObject;
         }
@@ -517,6 +520,7 @@ class MyWallet extends PureComponent {
       getWalletInfo(web3).then(walletInfo => {
         const { address, hdPath, recoveryPhrase } = getWeb3Info() || {};
         const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+        const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
         const serverConfig = hdPath
           ? {
               ..._get(RPC_SERVER, [networkKey], {}),
@@ -528,7 +532,9 @@ class MyWallet extends PureComponent {
             // get privacy address
           const privacyObject = getPrivacyAddressInfo(
             walletInfo.address,
-            mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+            mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+            isTestnet
+          );
           privacyObject.privacyWallet = privacyWallet
           walletInfo.privacy = privacyObject;
         }
@@ -556,6 +562,7 @@ class MyWallet extends PureComponent {
         getWalletInfo(web3).then(walletInfo => {
           const { address, hdPath, recoveryPhrase } = getWeb3Info() || {};
           const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+          const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
           const serverConfig = hdPath
             ? {
                 ..._get(RPC_SERVER, [networkKey], {}),
@@ -567,7 +574,9 @@ class MyWallet extends PureComponent {
               // get privacy address
             const privacyObject = getPrivacyAddressInfo(
               walletInfo.address,
-              mnemonicToPrivateKey(recoveryPhrase, serverConfig));
+              mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+              isTestnet
+            );
             walletInfo.privacy = privacyObject;
           }
           onStoreWallet(walletInfo);

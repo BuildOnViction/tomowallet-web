@@ -1,5 +1,4 @@
 {
-  "contractAddress": "0x94B1A47BD06eF02881df98c70468dEdefA42f5eF",
   "abi": [
     {
       "constant": true,
@@ -814,6 +813,20 @@
           ],
           "name": "",
           "type": "tuple[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalUTXO",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
         }
       ],
       "payable": false,
