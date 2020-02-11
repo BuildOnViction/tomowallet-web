@@ -25,10 +25,6 @@ const TOMO_Z_CONTRACT_ADDRESS = {
   TOMOCHAIN_TESTNET: '0x7081c72c9dc44686c7b7eab1d338ea137fa9f0d3',
 };
 
-const PRIVACY_CONTRACT_ADDRESS = {
-  TOMOCHAIN_MAINNET: '',
-  TOMOCHAIN_TESTNET: '0x8Bd1936717f1176539C6EfD8f7Ff1c831c271fF4'
-};
 const DEFAULT_GAS_PRICE = '250000000';
 const DEFAULT_GAS_TOKEN = '500000';
 const DEFAULT_GAS_CURRENCY = '21000';
@@ -149,7 +145,7 @@ const getPrivacyAddressInfo = (address, accessKey, serverConfig, isTestnet) => {
     // Set peivacy configuration
     const privacyWallet = new Wallet(accessKey.toLowerCase(), {
       ABI: privacy.abi,
-      ADDRESS: isTestnet ? PRIVACY_CONTRACT_ADDRESS.TOMOCHAIN_TESTNET : PRIVACY_CONTRACT_ADDRESS.TOMOCHAIN_MAINNET,
+      ADDRESS: serverConfig.privacyContract,
       SOCKET_END_POINT: serverConfig.ws, // serverConfig.ws,
       gas: 20000000,
       gasPrice: 2500000,

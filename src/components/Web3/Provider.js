@@ -80,7 +80,7 @@ class Web3Provider extends Component {
       this.handleSetMetaMaskProvider();
     } else if (_get(web3Info, 'recoveryPhrase')) {
       const { recoveryPhrase } = web3Info;
-      const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+      const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_TESETNET;
       const rpcServer = _get(web3Info, 'hdPath')
         ? {
             ..._get(RPC_SERVER, [networkKey]),
@@ -107,7 +107,7 @@ class Web3Provider extends Component {
     if (networkKey) {
       this.handleUpdateRpcServer(networkKey);
     } else {
-      this.handleUpdateRpcServer(ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET);
+      this.handleUpdateRpcServer(ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET);
     }
   }
 
@@ -186,7 +186,7 @@ class Web3Provider extends Component {
 
     Web3.givenProvider._metamask.isUnlocked().then(bool => {
       if (bool) {
-        const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+        const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
         const rpcServer = _get(RPC_SERVER, [networkKey]);
         this.handleSetWeb3(newWeb3);
         this.setState({
