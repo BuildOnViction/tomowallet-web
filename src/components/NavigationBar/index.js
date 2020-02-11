@@ -241,12 +241,12 @@ class NavigationBar extends PureComponent {
             )}
 
             {/* Switch network - Begin */}
-            <CustomDropdownItem className='onl' onClick={this.toggleSwitchNetworkMenu}>
+            {/* <CustomDropdownItem className='onl' onClick={this.toggleSwitchNetworkMenu}>
               {formatMessage(MSG.HEADER_NAVBAR_MENU_SWITCH_NETWORK)}
               <i className='font-chevron-down' />
-            </CustomDropdownItem>
+            </CustomDropdownItem> */}
 
-            <Collapse isOpen={isOpenSwitchNetworkMenu}>
+            {/* <Collapse isOpen={isOpenSwitchNetworkMenu}>
               {LIST.NETWORKS.map((opt, optIdx) => (
                 <SubDropdownItem
                   key={`network_${optIdx + 1}`}
@@ -257,7 +257,7 @@ class NavigationBar extends PureComponent {
                   {opt.label}
                 </SubDropdownItem>
               ))}
-            </Collapse>
+            </Collapse> */}
             {/* Switch network - End */}
 
             {/* Switch language - Begin */}

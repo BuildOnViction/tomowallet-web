@@ -43,7 +43,7 @@ const initialState = fromJS({
   language: _get(LIST, ['LANGUAGES', 0, 'value'], ''),
   loading: false,
   network: {
-    data: LIST.NETWORKS[0],
+    data: LIST.NETWORKS[1],
   },
   networkConfirmationPopup: {
     isOpen: false,
