@@ -308,6 +308,7 @@ class NavigationBar extends PureComponent {
       isLoggedIn,
       networkConfirmationPopup,
       onToggleNetworkConfirmationPopup,
+      onTogglePrivacyMode,
     } = this.props;
 
     const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
