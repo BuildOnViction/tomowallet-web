@@ -105,7 +105,9 @@ class NavigationBar extends PureComponent {
     const { changeLocale, onSetNetwork, onTogglePrivacyMode } = this.props;
     const storedNetwork = LIST.NETWORKS.find(opt => opt.value === getNetwork());
     const storedLocale = getLocale();
-    const privacy = getPrivacyMode()
+    const privacy = getPrivacyMode();
+    const loginType = _get(getWeb3Info(), "loginType");
+    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
 
     if (!_isEmpty(storedNetwork)) {
       onSetNetwork(storedNetwork);
@@ -115,6 +117,16 @@ class NavigationBar extends PureComponent {
     }
     if (privacy !== undefined) {
       onTogglePrivacyMode(privacy)
+    }
+
+    if (!isTestnet) {
+      onTogglePrivacyMode(false);
+    }
+
+    if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY && isTestnet) {
+      this.setState({
+        showPrivacy: isTestnet
+      });
     }
   }
 
@@ -310,14 +322,6 @@ class NavigationBar extends PureComponent {
       onToggleNetworkConfirmationPopup,
       onTogglePrivacyMode,
     } = this.props;
-
-    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
-    if (!isTestnet) {
-      onTogglePrivacyMode(false);
-    }
-    this.setState({
-      showPrivacy: isTestnet
-    })
 
     return (
       <NavWrapper>
