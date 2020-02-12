@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
-import { removeTrailingZero } from '../../../../../utils';
-import { MSG } from '../../../../../constants';
+import { removeTrailingZero, getNetwork } from '../../../../../utils';
+import { MSG, API } from '../../../../../constants';
 import { BoxText, TextYellow, TextGray, TextBlue } from '../../../../../styles';
 // ===================
 
@@ -44,7 +44,12 @@ class SuccessContent extends PureComponent {
         <TextGray className='mb-3 '>
           {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
         </TextGray>
-        <div><TextBlue>{_get(txHash, 'transactionHash', txHash)}</TextBlue></div>
+        <div><TextBlue>
+          <a
+            href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${_get(txHash, 'transactionHash', txHash)}`}
+            rel='noopener noreferrer'
+            target='_blank'
+          >{_get(txHash, 'transactionHash', txHash)}</a></TextBlue></div>
       </BoxText>
     );
   }
