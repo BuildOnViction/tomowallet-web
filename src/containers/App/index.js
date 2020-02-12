@@ -75,7 +75,8 @@ class App extends PureComponent {
         const privacyObject = getPrivacyAddressInfo(
           wallet.address,
           recoveryPhrase ? mnemonicToPrivateKey(recoveryPhrase, serverConfig)
-                : formValues.privateKey, serverConfig,
+                : formValues.privateKey,
+          serverConfig,
           isTestnet
           );
         wallet.privacy = privacyObject

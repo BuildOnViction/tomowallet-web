@@ -201,7 +201,8 @@ class ImportWallet extends PureComponent {
             const privacyObject = getPrivacyAddressInfo(
               walletInfo.address,
               formValues.recoveryPhrase ? mnemonicToPrivateKey(formValues.recoveryPhrase, updatedRpcServer)
-                    : formValues.privateKey, updatedRpcServer,
+                    : formValues.privateKey,
+              updatedRpcServer,
               isTestnet
             );
             walletInfo.privacy = privacyObject;
