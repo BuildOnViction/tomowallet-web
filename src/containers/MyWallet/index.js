@@ -313,14 +313,11 @@ class MyWallet extends PureComponent {
     } else {
       toggleLoading(true);
       try {
-        const fee = estimatePrivacyFee(web3,
+        const feeObj = estimatePrivacyFee(web3,
           _get(wallet, ['privacy', 'privacyWallet'], {}),
           _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT], 0))
 
-				this.handleValidateWithdrawFee({
-					type: 'TRC21',
-					amount: bnToDecimals(fee, 18),
-        })
+				this.handleValidateWithdrawFee(feeObj)
       } catch (error) {
         this.handleConfirmationError(error.message);
       }
@@ -483,6 +480,7 @@ class MyWallet extends PureComponent {
           const privacyObject = getPrivacyAddressInfo(
             walletInfo.address,
             mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+            serverConfig,
             isTestnet
           );
           privacyObject.privacyWallet = privacyWallet
@@ -509,7 +507,7 @@ class MyWallet extends PureComponent {
     } = this.props;
     toggleLoading(true);
     const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
-		const address = _get(wallet, 'address')
+    const address = _get(wallet, 'address')
     withdrawPrivacy(
       web3,
       wallet,
@@ -533,6 +531,7 @@ class MyWallet extends PureComponent {
           const privacyObject = getPrivacyAddressInfo(
             walletInfo.address,
             mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+            serverConfig,
             isTestnet
           );
           privacyObject.privacyWallet = privacyWallet
@@ -575,6 +574,7 @@ class MyWallet extends PureComponent {
             const privacyObject = getPrivacyAddressInfo(
               walletInfo.address,
               mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+              serverConfig,
               isTestnet
             );
             walletInfo.privacy = privacyObject;
@@ -1006,6 +1006,14 @@ class MyWallet extends PureComponent {
       web3,
     } = this.props;
 
+    const feeAmount = bnToDecimals(_get(feeObj, 'fee', 0), 18)
+
+    const feeObject = {
+      type: 'TRC21',
+      amount: feeAmount,
+    }
+    
+
     const balance = _get(withdrawForm, [
       WITHDRAW_PRIVACY_FIELDS.TOKEN,
       PORTFOLIO_COLUMNS.BALANCE
@@ -1021,7 +1029,7 @@ class MyWallet extends PureComponent {
       web3.utils.toBN(balance),
       addBN(
         _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
-        feeObj.amount,
+        feeAmount,
         decimals
       ),
       decimals
@@ -1036,14 +1044,14 @@ class MyWallet extends PureComponent {
       toggleLoading(false);
       const remainAmount = subBN(
         web3.utils.toBN(balance),
-        feeObj.amount,
+        feeAmount,
         decimals
       );
       onUpdateWithdrawPrivacyInput(
         WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
         removeTrailingZero(remainAmount)
       );
-      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObject);
       onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.CONFIRMATION);
     } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
       this.handleConfirmationError(
@@ -1053,7 +1061,7 @@ class MyWallet extends PureComponent {
       );
     } else {
       toggleLoading(false);
-      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
+      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObject);
       onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.CONFIRMATION);
     }
   }
