@@ -18,7 +18,6 @@ const ProcessingPopup = (props) => {
         <StyledPopup
             backdrop
             isOpen={screen === 'scanning' ? status : false}
-            toggle={() => togglePopup(false)}
             Content={ProcessingContent}
             getContentProps={{ process: data }}
             button={{}} />

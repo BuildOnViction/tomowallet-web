@@ -82,10 +82,6 @@ class NavigationBar extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      showPrivacy: false
-    }
-
     this.handleChangeLocale = this.handleChangeLocale.bind(this);
     this.handleChangeNetwork = this.handleChangeNetwork.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
@@ -93,6 +89,7 @@ class NavigationBar extends PureComponent {
     this.handleRenderPrivateBar = this.handleRenderPrivateBar.bind(this);
     this.handleRenderPublicBar = this.handleRenderPublicBar.bind(this);
     this.isActiveNetwork = this.isActiveNetwork.bind(this);
+    this.handlePrivacyMode = this.handlePrivacyMode.bind(this);
   }
 
   state = {
@@ -106,7 +103,6 @@ class NavigationBar extends PureComponent {
     const storedNetwork = LIST.NETWORKS.find(opt => opt.value === getNetwork());
     const storedLocale = getLocale();
     const privacy = getPrivacyMode();
-    const loginType = _get(getWeb3Info(), "loginType");
     const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
 
     if (!_isEmpty(storedNetwork)) {
@@ -121,12 +117,6 @@ class NavigationBar extends PureComponent {
 
     if (!isTestnet) {
       onTogglePrivacyMode(false);
-    }
-
-    if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY && isTestnet) {
-      this.setState({
-        showPrivacy: isTestnet
-      });
     }
   }
 
@@ -206,6 +196,15 @@ class NavigationBar extends PureComponent {
     );
   }
 
+  handlePrivacyMode () {
+    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+    const loginType = _get(getWeb3Info(), "loginType");
+
+    if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY && isTestnet) {
+      return true
+    }
+  }
+
   handleRenderPrivateBar() {
     const {
       intl: { formatMessage },
@@ -224,7 +223,7 @@ class NavigationBar extends PureComponent {
 
     return (
       <Fragment>
-        {this.state.showPrivacy ? 
+        {this.handlePrivacyMode() ? 
           <ButtonSwitchMode onClick={() => onTogglePrivacyMode()}>
             {formatMessage(privacyMode ? MSG.HEADER_NAVBAR_NORMAL_MOD : MSG.HEADER_NAVBAR_PRIVACY_MOD)}
             <ArrowRight />
