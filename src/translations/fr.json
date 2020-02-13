@@ -200,5 +200,6 @@
   "tomowallet.container.mywallet.popup.deposit.title": "Dépôt",
   "tomowallet.container.mywallet.popup.withdraw.title": "Retirer",
   "tomowallet.container.mywallet.table.portfolio.header.privacy.balance": "Incognito Solde",
-  "tomowallet.container.mywallet.popup.processing.send.token.title": "Votre mode de confidentialité est en cours de configuration"
+  "tomowallet.container.mywallet.popup.processing.send.token.title": "Votre mode de confidentialité est en cours de configuration",
+  "tomowallet.container.mywallet.popup.processing.scanning.privacy.title": "VOTRE MODE DE CONFIDENTIALITÉ EST EN COURS DE CONFIGURATION"
 }

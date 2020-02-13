@@ -148,7 +148,7 @@ const getPrivacyAddressInfo = (address, accessKey, serverConfig, isTestnet) => {
       ADDRESS: serverConfig.privacyContract,
       SOCKET_END_POINT: serverConfig.ws, // serverConfig.ws,
       gas: 20000000,
-      gasPrice: 2500000,
+      gasPrice: 250000000,
       RPC_END_POINT: serverConfig.host //serverConfig.host
     });
     if (wallet && wallet.scannedTo) {

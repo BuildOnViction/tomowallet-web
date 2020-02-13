@@ -9,14 +9,22 @@ import { MSG } from '../../../../../constants'
 import { withIntl } from '../../../../../components/IntlProvider';
 import { calculatePercentage } from '../../../../../utils';
 
+const tipTexts = [
+    'Send/Receive tokens anonymously with hidden transactions’ wallet addresses & amounts.',
+    'Leave no traces behind with no leaks of personal information.',
+    'Protect your identity using incognito accounts that cannot be traced.'
+]
+
 class ProcessingContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
             percent: 0,
-            timeouts: []
+            timeouts: [],
+            textId: 0,
         }
         this.setPercent = this.setPercent.bind(this);
+        this.setTips = this.setTips.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -37,6 +45,15 @@ class ProcessingContent extends Component {
         }
     }
 
+    setTips () {
+        this.interval = setInterval(() => {
+            let currentId = this.state.textId;
+            this.setState({
+                textId: currentId + 1,
+            })
+        }, 20000);
+    }
+
     setPercent (total, i) {
         const timeouts = this.state.timeouts;
         timeouts.push(setTimeout(() => {
@@ -55,6 +72,8 @@ class ProcessingContent extends Component {
             process,
         } = this.props
 
+        this.setTips();
+
         if (process.status && process.total > 0 && process.screen === 'sending') {
             const total = (process.total * (process.total < 2 ? 4 : 6)); // 4 seconds per tx
             for (let i = 1; i < total; i++) {
@@ -71,7 +90,7 @@ class ProcessingContent extends Component {
         return (
             <Wrapper>
                 <ModalHeader>{formatMessage(MSG.MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE)}</ModalHeader>
-                <Description>Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable</Description>
+                <Description>Tips: {tipTexts[this.state.textId % tipTexts.length]}</Description>
                 <StyledProgress color="yellow" value={this.state.percent} />
             </Wrapper>
         )

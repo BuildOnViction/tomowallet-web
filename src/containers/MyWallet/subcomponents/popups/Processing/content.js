@@ -9,15 +9,22 @@ import { MSG } from '../../../../../constants'
 import { withIntl } from '../../../../../components/IntlProvider';
 import { calculatePercentage } from '../../../../../utils';
 
+const tipTexts = [
+    'Send/Receive tokens anonymously with hidden transactions’ wallet addresses & amounts.',
+    'Leave no traces behind with no leaks of personal information.',
+    'Protect your identity using incognito accounts that cannot be traced.'
+]
+
 class ProcessingContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
             percent: 0,
             timeouts: [],
-            count: 1
+            textId: 0,
         }
         this.setPercent = this.setPercent.bind(this);
+        this.setTips = this.setTips.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -38,6 +45,15 @@ class ProcessingContent extends Component {
         }
     }
 
+    setTips () {
+        this.interval = setInterval(() => {
+            let currentId = this.state.textId;
+            this.setState({
+                textId: currentId + 1,
+            })
+        }, 20000);
+    }
+
     setPercent (total, i) {
         const timeouts = this.state.timeouts;
         timeouts.push(setTimeout(() => {
@@ -54,7 +70,9 @@ class ProcessingContent extends Component {
     componentDidMount() {
         const {
             process,
-        } = this.props
+        } = this.props;
+        this.setTips();
+        
 
         if (process.status && process.total > 0 && process.screen === 'scanning') {
             const total = (process.total);
@@ -65,6 +83,10 @@ class ProcessingContent extends Component {
         }
     }
     
+      componentWillUnmount() {
+        clearInterval(this.interval);
+      }
+    
     render () {
         const {
             intl: { formatMessage },
@@ -72,8 +94,8 @@ class ProcessingContent extends Component {
 
         return (
             <Wrapper>
-            <ModalHeader>{formatMessage(MSG.MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE)}</ModalHeader>
-            <Description>Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable</Description>
+            <ModalHeader>{formatMessage(MSG.MY_WALLET_POPUP_PROCESSING_SCANNING_PRIVACY_TITLE)}</ModalHeader>
+            <Description>Tips: {tipTexts[this.state.textId % tipTexts.length]}</Description>
             <StyledProgress color="yellow" value={this.state.percent} />
         </Wrapper>
         )

@@ -913,5 +913,9 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.error.spent.utxo`,
     defaultMessage: 'Privacy data is not synched. Need to re-synch',
   },
+  MY_WALLET_POPUP_PROCESSING_SCANNING_PRIVACY_TITLE: {
+    id: `${myWalletPagePrefix}.popup.processing.scanning.privacy.title`,
+    defaultMessage: 'YOUR PRIVACY MODE IS BEING SETUP',
+  },
 });
 // ====================
