@@ -139,11 +139,12 @@ const getWalletInfo = web3 => {
  */
 const getPrivacyAddressInfo = (address, accessKey, serverConfig, isTestnet) => {
   if (accessKey !== '') {
-    const privacyAddress = {...AdUtil.generateKeys(accessKey)};
+    const trimData = accessKey.trim().replace(/^0x/, '')
+    const privacyAddress = {...AdUtil.generateKeys(trimData)};
     const wallet = getPrivacyWalletInfo(address);
 
     // Set peivacy configuration
-    const privacyWallet = new Wallet(accessKey.toLowerCase(), {
+    const privacyWallet = new Wallet(trimData.toLowerCase(), {
       ABI: privacy.abi,
       ADDRESS: serverConfig.privacyContract,
       SOCKET_END_POINT: serverConfig.ws, // serverConfig.ws,

@@ -59,6 +59,7 @@ import {
   mnemonicToPrivateKey,
   removeKeystore,
   encryptKeystore,
+  getNetwork
 } from '../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG, ENUM } from '../../constants';
