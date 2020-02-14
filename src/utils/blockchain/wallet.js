@@ -139,11 +139,12 @@ const getWalletInfo = web3 => {
  */
 const getPrivacyAddressInfo = (address, accessKey, serverConfig, isTestnet) => {
   if (accessKey !== '') {
-    const privacyAddress = {...AdUtil.generateKeys(accessKey)};
+    const trimData = accessKey.trim().replace(/^0x/, '')
+    const privacyAddress = {...AdUtil.generateKeys(trimData)};
     const wallet = getPrivacyWalletInfo(address);
 
     // Set peivacy configuration
-    const privacyWallet = new Wallet(accessKey.toLowerCase(), {
+    const privacyWallet = new Wallet(trimData.toLowerCase(), {
       ABI: privacy.abi,
       ADDRESS: serverConfig.privacyContract,
       SOCKET_END_POINT: serverConfig.ws, // serverConfig.ws,
@@ -494,15 +495,15 @@ const getLastUTXO = (wallet) => {
  * @param {Array} utxos An object which contains privacy data
  */
 const checkSpentUTXO = (wallet, utxos) => {
-  if (utxos.length > 0) {
-    const newUTXO = utxos.map(u => {
-      const a = new UTXO(u);
-      wallet.isMineUTXO(a)
-      return a;
-    });
+	if (utxos.length > 0) {
+		const newUTXO = utxos.map(u => {
+			const a = new UTXO(u);
+			wallet.isMineUTXO(a)
+			return a;
+		});
 
-    return wallet.areSpent(newUTXO);
-  }
+		return wallet.areSpent(newUTXO);
+	}
 };
 
 /**
