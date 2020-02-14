@@ -11,7 +11,7 @@ import _map from "lodash.map";
 import _isEmpty from "lodash.isempty";
 // Utilities & Constants
 import request from "../../utils/request";
-import { getNetwork, setPrivacyInfo, getLastUTXO, bnToDecimals, checkSpentUTXO } from "../../utils";
+import { getNetwork, setPrivacyInfo, getLastUTXO, bnToDecimals, checkSpentUTXO, calculatePercentage } from "../../utils";
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,
@@ -121,110 +121,125 @@ export function* loadCoin() {
 }
 
 export function* scanPrivacy(actionData) {
-  let check = 0;
-  try {
-	  yield put(toggleLoading(true));
-    const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
-    const address = _get(actionData, ['wallet', 'address'], '');
-    const scannedTo = wallet.scannedTo || 0;
+	let check = 0;
+	try {
+		yield put(toggleLoading(true));
+		const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
+		const address = _get(actionData, ['wallet', 'address'], '');
 
-    const totalUTXOs = yield call([wallet, wallet.totalUTXO]);
+		const totalUTXOs = yield call([wallet, wallet.totalUTXO]);
 
-    check = totalUTXOs - wallet.scannedTo;
-    if (check > 100) {
-      yield put(toggleLoading(false));
-      yield put(updateProcessing({
-        screen: 'scanning',
-        total: totalUTXOs - wallet.scannedTo,
-        percent: 0,
-        status: true,
-      }))
-	  }
-    const response = yield call([wallet, wallet.scan]);
+		check = totalUTXOs - wallet.scannedTo;
+		if (check > 100) {
+			yield put(toggleLoading(false));
+			yield put(updateProcessing({
+				screen: 'scanning',
+				total: totalUTXOs - wallet.scannedTo,
+				percent: 0,
+				status: true,
+			}))
+		}
+		const response = yield call([wallet, wallet.scan]);
+		let checkedUTXO = [];
 
-    if (response) {
-        const utxos = wallet.utxos
-        const checkedUTXO = yield checkSpentUTXO(wallet, utxos)
-        if (checkedUTXO && checkedUTXO.length > 0) {
-          const newUTXO = []
-          for (let i = 0; i < checkedUTXO.length; i++) {
-            if (!checkedUTXO[i]) {
-              newUTXO.push(utxos[i])
-            }
-          }
-          wallet.updateUTXOs(newUTXO)
-        }
-        response.balance = wallet.balance.toString(10);
-        response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
-        yield put(scanPrivacyDataSuccess(response));
-        setPrivacyInfo({ address, ...wallet.state() });
-        
-        if (check > 100) {
-          yield put(updateProcessing({
-            screen: '',
-            total: 0,
-            percent: 0,
-            status: false,
-          }))
-        } else { yield put(toggleLoading(false)); }
-    }
-  } catch (error) {
-    if (check > 100) {
-      yield put(updateProcessing({
-        screen: '',
-        total: 0,
-        percent: 0,
-        status: false,
-      }))
-    } else { yield put(toggleLoading(false)); }
-    
-    // yield put(toggleLoading(false));
-    yield put(scanPrivacyDataFailed(error))
-  }
+		if (response) {
+			const utxos = wallet.utxos
+			// Separate huge utxo array
+			let separateUTXOs = [];
+			for (let i = 0; i < utxos.length; i += 100) {
+				separateUTXOs.push(utxos.slice(i, i + 99))
+			}
+
+			for (let j = 0; j < separateUTXOs.length; j++) {
+				const a = yield checkSpentUTXO(wallet, separateUTXOs[j])
+				checkedUTXO = yield checkedUTXO.concat(a)
+			}
+
+			if (checkedUTXO && checkedUTXO.length > 0) {
+				const newUTXO = []
+				for (let i = 0; i < checkedUTXO.length; i++) {
+					if (!checkedUTXO[i]) {
+						newUTXO.push(utxos[i])
+					}
+				}
+				wallet.updateUTXOs(newUTXO)
+			}
+			response.balance = wallet.balance.toString(10);
+			response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
+			yield put(scanPrivacyDataSuccess(response));
+			setPrivacyInfo({
+				address,
+				...wallet.state()
+			});
+
+			if (check > 100) {
+				yield put(updateProcessing({
+					screen: '',
+					total: 0,
+					percent: 0,
+					status: false,
+				}))
+			} else {
+				yield put(toggleLoading(false));
+			}
+		}
+	} catch (error) {
+		if (check > 100) {
+			yield put(updateProcessing({
+				screen: '',
+				total: 0,
+				percent: 0,
+				status: false,
+			}))
+		} else {
+			yield put(toggleLoading(false));
+		}
+		yield put(scanPrivacyDataFailed(error))
+	}
 }
 
 export function* scanPrivacyTransaction(actionData) {
-  try {
-    yield put(toggleLoading(true));
-    const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
-    const privacyAddress = _get(actionData, ['wallet', 'privacy', 'privacyAddress', 'pubAddr'], '');
-    const address = _get(actionData, ['wallet', 'address'], '')
-    const lastUTXO = getLastUTXO(wallet).txID
+	try {
+		yield put(toggleLoading(true));
+		const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
+		const privacyAddress = _get(actionData, ['wallet', 'privacy', 'privacyAddress', 'pubAddr'], '');
+		const address = _get(actionData, ['wallet', 'address'], '')
+		const lastUTXO = getLastUTXO(wallet).txID
 
-    let last30Txs = []
-    for (let i = lastUTXO - 48; i <=lastUTXO; i++) {
-      last30Txs.push(i)
-    }
-    last30Txs = last30Txs.sort((a, b) => b - a)
-    const response = yield call([wallet, wallet.getTxs], last30Txs);
-    const result = []
-    for (let i = 0; i < response.length; i++) {
-      const data = _map(response[i][1], byte => byte.substr(2, 2)).join('');
-      const owner = yield call([wallet, wallet.checkTxOwnership], response[i][0], Buffer.from(data, 'hex'))
-      
-      if (owner) {
-        result.push({
-          createdTime: parseInt(owner.createdAt),
-          from: owner.receiver === privacyAddress ? address : privacyAddress,
-          to: owner.receiver,
-          amount: bnToDecimals(owner.amount, 9)
-        })
-      }
-    }
-    yield put(scanPrivacyTransactionSuccess({
-      items: result,
-      currentPage: 1,
-      total: 500,
-      pages: 1,
-      address: privacyAddress
-    }))
+		let last30Txs = []
+		for (let i = lastUTXO - 48; i <= lastUTXO; i++) {
+			last30Txs.push(i)
+		}
+		last30Txs = last30Txs.sort((a, b) => b - a)
+		const response = yield call([wallet, wallet.getTxs], last30Txs);
+		const result = []
+		for (let i = 0; i < response.length; i++) {
+			const data = _map(response[i][1], byte => byte.substr(2, 2)).join('');
+			const owner = yield call([wallet, wallet.checkTxOwnership], response[i][0], Buffer.from(data, 'hex'))
 
-    /// store txindex
-    yield put(toggleLoading(false));
-  } catch (error) {
-    yield put(toggleLoading(false));
-    yield put(scanPrivacyTransactionFailed(error));
-  }
+			if (owner) {
+				result.push({
+					createdTime: parseInt(owner.createdAt),
+					from: owner.receiver === privacyAddress ? address : privacyAddress,
+					to: owner.receiver,
+					amount: bnToDecimals(owner.amount, 9)
+				})
+			}
+		}
+		yield put(scanPrivacyTransactionSuccess({
+			items: result,
+			currentPage: 1,
+			total: 500,
+			pages: 1,
+			address: privacyAddress
+		}))
+
+		/// store txindex
+		yield put(toggleLoading(false));
+	} catch (error) {
+		yield put(toggleLoading(false));
+		yield put(scanPrivacyTransactionFailed(error));
+	}
 }
 
 function* rootSaga() {

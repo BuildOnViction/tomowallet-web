@@ -494,15 +494,15 @@ const getLastUTXO = (wallet) => {
  * @param {Array} utxos An object which contains privacy data
  */
 const checkSpentUTXO = (wallet, utxos) => {
-  if (utxos.length > 0) {
-    const newUTXO = utxos.map(u => {
-      const a = new UTXO(u);
-      wallet.isMineUTXO(a)
-      return a;
-    });
+	if (utxos.length > 0) {
+		const newUTXO = utxos.map(u => {
+			const a = new UTXO(u);
+			wallet.isMineUTXO(a)
+			return a;
+		});
 
-    return wallet.areSpent(newUTXO);
-  }
+		return wallet.areSpent(newUTXO);
+	}
 };
 
 /**
