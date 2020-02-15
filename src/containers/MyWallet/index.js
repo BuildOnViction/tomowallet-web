@@ -96,7 +96,6 @@ import {
   subBN,
   validations,
   withGlobal,
-  sendMoneyPrivacy,
   depositPrivacyMoney,
   getPrivacyAddressInfo,
   estimatePrivacyFee,
@@ -104,7 +103,7 @@ import {
   mnemonicToPrivateKey,
   prepareSendingTxs,
   setPrivacyInfo,
-  calculatePercentage,
+  convertLocaleNumber,
   executeTransaction,
 } from "../../utils";
 import { withIntl } from "../../components/IntlProvider";
@@ -287,7 +286,7 @@ class MyWallet extends PureComponent {
       try {
         const feeObj = {
 					type: 'TRC21',
-					amount: '0.0001',
+					amount: '0.001', // deposit fee (privacy)
         }
 				this.handleValidateDepositFee(feeObj)
       } catch (error) {
@@ -492,7 +491,11 @@ class MyWallet extends PureComponent {
 			onUpdatePrivacyData({ address, privacyWallet })
       this.handleCloseDepositPrivacyPopup();
 			onToggleSuccessDepositPopup(true, tx.transactionHash || '');
-    }).catch(this.handleTransactionError);
+    }).catch(error => {
+      console.log(error)
+      toggleLoading(false);
+      this.handleTransactionError(error)
+    });
   }
 
   handleWithdrawPrivacyByPk() {
@@ -943,17 +946,11 @@ class MyWallet extends PureComponent {
       wallet,
       web3,
     } = this.props;
-    // const balance = _get(wallet, 'balance', 0);
 
-    const decimals = _get(
-      depositForm,
-      [DEPOSIT_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0
-    );
-    const balance =  decimalsToBN(
-      _get(wallet, 'balance', 0),
-      decimals
-    )
+    const decimals = 18;
+    const balance = _get(wallet, 'balance', 0); // bn
+    const fee = decimalsToBN(feeObj.amount, 18);
+
 
     const remainBalance = subBN(
       web3.utils.toBN(balance),
@@ -965,15 +962,16 @@ class MyWallet extends PureComponent {
       decimals
     );
 
+    const depositAmount = decimalsToBN(
+      _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
+      decimals
+    ) // bn
     if (
-      balance === decimalsToBN(
-        _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
-        decimals
-      )
+      web3.utils.toBN(balance).sub(web3.utils.toBN(depositAmount)).lt(web3.utils.toBN(fee))
     ) {
       toggleLoading(false);
       const remainAmount = subBN(
-        web3.utils.toBN(balance),
+        web3.utils.toBN(depositAmount),
         feeObj.amount,
         decimals
       );
@@ -984,6 +982,7 @@ class MyWallet extends PureComponent {
       onUpdateDepositPrivacyInput(DEPOSIT_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
       onUpdateDepositPrivacyPopupStage(DEPOSIT_STAGES.CONFIRMATION);
     } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+      toggleLoading(false);
       this.handleConfirmationError(
         formatMessage(
           MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
@@ -1402,11 +1401,11 @@ class MyWallet extends PureComponent {
 					updateWithdrawPrivacyPopupStage={onUpdateWithdrawPrivacyPopupStage}
         />
         <SuccessWithdrawPopup
-        amount={_get(depositForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT])}
+        amount={_get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT])}
         togglePopup={onToggleSuccessWithdrawPopup}
         successWithdrawPopup={successWithdrawPopup}
         symbol={_get(
-          depositForm,
+          withdrawForm,
           [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.SYMBOL],
           ""
         )}
