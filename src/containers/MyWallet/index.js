@@ -215,10 +215,13 @@ class MyWallet extends PureComponent {
   }
 
   handleConfirmationError(message) {
-    const { onUpdateSendTokenErrors, toggleLoading } = this.props;
+    const { onUpdateSendTokenErrors, toggleLoading, onUpdateDepositPrivacyErrors } = this.props;
     toggleLoading(false);
     onUpdateSendTokenErrors({
       [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: [message]
+    });
+    onUpdateDepositPrivacyErrors({
+      [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]: [message]
     });
   }
 
@@ -947,41 +950,17 @@ class MyWallet extends PureComponent {
       web3,
     } = this.props;
 
-    const decimals = 18;
     const balance = _get(wallet, 'balance', 0); // bn
-    const fee = decimalsToBN(feeObj.amount, 18);
 
-
-    const remainBalance = subBN(
-      web3.utils.toBN(balance),
-      addBN(
+    const transferAmountBN = web3.utils.toBN(
+      decimalsToBN(
         _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
-        feeObj.amount,
-        decimals
-      ),
-      decimals
-    );
+        18)
+      );
 
-    const depositAmount = decimalsToBN(
-      _get(depositForm, [DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
-      decimals
-    ) // bn
-    if (
-      web3.utils.toBN(balance).sub(web3.utils.toBN(depositAmount)).lt(web3.utils.toBN(fee))
-    ) {
-      toggleLoading(false);
-      const remainAmount = subBN(
-        web3.utils.toBN(depositAmount),
-        feeObj.amount,
-        decimals
-      );
-      onUpdateDepositPrivacyInput(
-        DEPOSIT_PRIVACY_FIELDS.TRANSFER_AMOUNT,
-        removeTrailingZero(remainAmount)
-      );
-      onUpdateDepositPrivacyInput(DEPOSIT_PRIVACY_FIELDS.TRANSACTION_FEE, feeObj);
-      onUpdateDepositPrivacyPopupStage(DEPOSIT_STAGES.CONFIRMATION);
-    } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+    const remainBalance = web3.utils.toBN(balance).sub(transferAmountBN)
+
+    if (remainBalance.isNeg()) {
       toggleLoading(false);
       this.handleConfirmationError(
         formatMessage(
