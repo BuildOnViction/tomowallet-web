@@ -427,18 +427,16 @@ class MyWallet extends PureComponent {
 			sendTokenForm,
 			onUpdatePrivacyData,
     } = this.props;
-    const t2 = performance.now()
     toggleLoading(true);
 		const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
     const address = _get(wallet, 'address')
     executeTransaction(
       privacyWallet
-    ).then(utxo => {
-      const t3 = performance.now()
+    ).then(data => {
 			toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
 			this.handleCloseSendTokenPopup();
-			onToggleSuccessPopup(true, '');
+      onToggleSuccessPopup(true, '');
     }).catch(error => {
       console.log(error)
 			toggleLoading(false);
@@ -1090,6 +1088,21 @@ class MyWallet extends PureComponent {
           },
           formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_RECIPIENT_INVALID)
       ),
+      // need to deposit first
+      privacyMode ?
+      isMinNumber(
+          {
+            name: SEND_TOKEN_FIELDS.TOKEN,
+            value: _get(sendTokenForm, [
+              SEND_TOKEN_FIELDS.TOKEN,
+              PORTFOLIO_COLUMNS.BALANCE
+            ]),
+            min: 0.01
+          },
+          formatMessage(MSG.MY_WALLET_POPUP_DEPOSIT_PRIVACY_REQUIRED)
+        )
+        :
+        {},
       isRequired(
         {
           name: SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,

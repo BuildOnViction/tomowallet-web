@@ -917,5 +917,9 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.popup.processing.scanning.privacy.title`,
     defaultMessage: 'YOUR PRIVACY MODE IS BEING SETUP',
   },
+  MY_WALLET_POPUP_DEPOSIT_PRIVACY_REQUIRED: {
+    id: `${myWalletPagePrefix}.popup.deposit.privacy.required`,
+    defaultMessage: 'You need to Deposit TOMO to Incognito Balance from Main Balance first',
+  },
 });
 // ====================
