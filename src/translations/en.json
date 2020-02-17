@@ -147,7 +147,7 @@
   "tomowallet.container.mywallet.section.balance.main": "Main Balance",
   "tomowallet.container.mywallet.mode.main": "Main Mode",
   "tomowallet.container.mywallet.mode.incognito": "Incognito Mode",
-  "tomowallet.container.mywallet.mode.main.description": "Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable",
+  "tomowallet.container.mywallet.mode.main.description": "Main mode allows you to make public & traceable transactions that can be tracked via",
   "tomowallet.container.mywallet.mode.incognito.description": "Incognito mode allows you to make the transactions which are ingconitive and  couldn’t be traceable",
   "tomowallet.container.mywallet.section.exchange.chart.rank": "Rank",
   "tomowallet.container.mywallet.section.exchange.chart.marketcap": "Market Cap",

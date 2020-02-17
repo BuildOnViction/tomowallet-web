@@ -631,7 +631,7 @@ export default defineMessages({
   },
   MY_WALLET_MAIN_MODE_DESCRIPTION: {
     id: `${myWalletPagePrefix}.mode.main.description`,
-    defaultMessage: 'Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable',
+    defaultMessage: 'Main mode allows you to make public & traceable transactions that can be tracked via',
   },
   MY_WALLET_INCOGNITO_MODE: {
     id: `${myWalletPagePrefix}.mode.incognito`,
