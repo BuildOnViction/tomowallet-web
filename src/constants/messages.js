@@ -631,7 +631,7 @@ export default defineMessages({
   },
   MY_WALLET_MAIN_MODE_DESCRIPTION: {
     id: `${myWalletPagePrefix}.mode.main.description`,
-    defaultMessage: 'Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable',
+    defaultMessage: 'Main mode allows you to make public & traceable transactions that can be tracked via',
   },
   MY_WALLET_INCOGNITO_MODE: {
     id: `${myWalletPagePrefix}.mode.incognito`,
@@ -787,7 +787,7 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_PLACEHOLDER: {
     id: `${myWalletPagePrefix}.popup.sendtoken.input.recipient.placeholder`,
-    defaultMessage: 'Paste or scan an address...',
+    defaultMessage: 'Paste an address...',
   },
   MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL: {
     id: `${myWalletPagePrefix}.popup.sendtoken.input.transferamount.label`,
@@ -879,7 +879,7 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE: {
     id: `${myWalletPagePrefix}.popup.receivetoken.content.message`,
-    defaultMessage: 'Your address supports transferring to TOMO and its token',
+    defaultMessage: 'Your address supports transferring to TOMO and other TomoChain tokens.',
   },
   MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE_DEPOSIT: {
     id: `${myWalletPagePrefix}.popup.receivetoken.title.deposit`,
@@ -916,6 +916,10 @@ export default defineMessages({
   MY_WALLET_POPUP_PROCESSING_SCANNING_PRIVACY_TITLE: {
     id: `${myWalletPagePrefix}.popup.processing.scanning.privacy.title`,
     defaultMessage: 'YOUR PRIVACY MODE IS BEING SETUP',
+  },
+  MY_WALLET_POPUP_DEPOSIT_PRIVACY_REQUIRED: {
+    id: `${myWalletPagePrefix}.popup.deposit.privacy.required`,
+    defaultMessage: 'You need to Deposit TOMO to Incognito Balance from Main Balance first',
   },
 });
 // ====================

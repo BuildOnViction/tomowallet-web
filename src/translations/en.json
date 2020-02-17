@@ -147,7 +147,7 @@
   "tomowallet.container.mywallet.section.balance.main": "Main Balance",
   "tomowallet.container.mywallet.mode.main": "Main Mode",
   "tomowallet.container.mywallet.mode.incognito": "Incognito Mode",
-  "tomowallet.container.mywallet.mode.main.description": "Main mode allows you to make the transactions which are ingconitive and couldn’t be traceable",
+  "tomowallet.container.mywallet.mode.main.description": "Main mode allows you to make public & traceable transactions that can be tracked via",
   "tomowallet.container.mywallet.mode.incognito.description": "Incognito mode allows you to make the transactions which are ingconitive and  couldn’t be traceable",
   "tomowallet.container.mywallet.section.exchange.chart.rank": "Rank",
   "tomowallet.container.mywallet.section.exchange.chart.marketcap": "Market Cap",
@@ -176,7 +176,7 @@
   "tomowallet.container.mywallet.popup.sendtoken.input.token.label": "Token",
   "tomowallet.container.mywallet.popup.sendtoken.input.token.placeholder": "Select token...",
   "tomowallet.container.mywallet.popup.sendtoken.input.recipient.label": "Recipient",
-  "tomowallet.container.mywallet.popup.sendtoken.input.recipient.placeholder": "Paste or scan an address...",
+  "tomowallet.container.mywallet.popup.sendtoken.input.recipient.placeholder": "Paste an address...",
   "tomowallet.container.mywallet.popup.sendtoken.input.transferamount.label": "Transfer Amount",
   "tomowallet.container.mywallet.popup.sendtoken.input.transferamount.placeholder": "Add amount token...",
   "tomowallet.container.mywallet.popup.sendtoken.input.message.label": "Message",
@@ -196,10 +196,11 @@
   "tomowallet.container.mywallet.popup.success.info.amountsent": "You have sent",
   "tomowallet.container.mywallet.popup.success.info.transactionhash": "Transaction hash",
   "tomowallet.container.mywallet.popup.receivetoken.title": "Receive",
-  "tomowallet.container.mywallet.popup.receivetoken.content.message": "Your address supports transferring to TOMO and its token",
+  "tomowallet.container.mywallet.popup.receivetoken.content.message": "Your address supports transferring to TOMO and other TomoChain tokens.",
   "tomowallet.container.mywallet.popup.deposit.title": "Deposit",
   "tomowallet.container.mywallet.popup.withdraw.title": "Withdraw",
   "tomowallet.container.mywallet.table.portfolio.header.privacy.balance": "Incognito Balance",
   "tomowallet.container.mywallet.popup.processing.send.token.title": "ANONYMIZING YOUR TRANSACTION INFORMATION",
-  "tomowallet.container.mywallet.popup.processing.scanning.privacy.title": "YOUR PRIVACY MODE IS BEING SETUP"
+  "tomowallet.container.mywallet.popup.processing.scanning.privacy.title": "YOUR PRIVACY MODE IS BEING SETUP",
+  "tomowallet.container.mywallet.popup.deposit.privacy.required": "You need to Deposit TOMO to Incognito Balance from Main Balance first"
 }
