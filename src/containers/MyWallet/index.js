@@ -1320,7 +1320,7 @@ class MyWallet extends PureComponent {
           : (<WelcomeSection>
               <h1>{formatMessage(MSG.MY_WALLET_MAIN_MODE)}</h1>
               <p>{formatMessage(MSG.MY_WALLET_MAIN_MODE_DESCRIPTION)} 
-                <a href='https://scan.tomochain.com' target='_blank'>scan.tomochain.com</a>
+                <a href='https://scan.tomochain.com' target='_blank'> scan.tomochain.com</a>
               </p>
             </WelcomeSection>)
         }
