@@ -194,7 +194,7 @@
   "tomowallet.container.mywallet.popup.sendtoken.error.amount.invalid": "Le montant du virement n'est pas correct",
   "tomowallet.container.mywallet.popup.sendtoken.error.message.maxlength": "Le message dépasse 255 caractères maximum",
   "tomowallet.container.mywallet.popup.receivetoken.title": "Recevoir",
-  "tomowallet.container.mywallet.popup.receivetoken.content.message": "Votre adresse prend en charge le transfert vers TOMO et son jeton.",
+  "tomowallet.container.mywallet.popup.receivetoken.content.message": "Votre adresse prend en charge le transfert vers TOMO et autres jetons TomoChain.",
   "tomowallet.container.mywallet.popup.success.info.amountsent": "Vous avez envoyé",
   "tomowallet.container.mywallet.popup.success.info.transactionhash": "Hachage de transaction",
   "tomowallet.container.mywallet.popup.deposit.title": "Dépôt",

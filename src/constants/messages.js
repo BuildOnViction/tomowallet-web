@@ -879,7 +879,7 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE: {
     id: `${myWalletPagePrefix}.popup.receivetoken.content.message`,
-    defaultMessage: 'Your address supports transferring to TOMO and its token',
+    defaultMessage: 'Your address supports transferring to TOMO and other TomoChain tokens.',
   },
   MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE_DEPOSIT: {
     id: `${myWalletPagePrefix}.popup.receivetoken.title.deposit`,

@@ -196,7 +196,7 @@
   "tomowallet.container.mywallet.popup.success.info.amountsent": "You have sent",
   "tomowallet.container.mywallet.popup.success.info.transactionhash": "Transaction hash",
   "tomowallet.container.mywallet.popup.receivetoken.title": "Receive",
-  "tomowallet.container.mywallet.popup.receivetoken.content.message": "Your address supports transferring to TOMO and its token",
+  "tomowallet.container.mywallet.popup.receivetoken.content.message": "Your address supports transferring to TOMO and other TomoChain tokens.",
   "tomowallet.container.mywallet.popup.deposit.title": "Deposit",
   "tomowallet.container.mywallet.popup.withdraw.title": "Withdraw",
   "tomowallet.container.mywallet.table.portfolio.header.privacy.balance": "Incognito Balance",
