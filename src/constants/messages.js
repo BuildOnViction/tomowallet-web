@@ -787,7 +787,7 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_PLACEHOLDER: {
     id: `${myWalletPagePrefix}.popup.sendtoken.input.recipient.placeholder`,
-    defaultMessage: 'Paste or scan an address...',
+    defaultMessage: 'Paste an address...',
   },
   MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL: {
     id: `${myWalletPagePrefix}.popup.sendtoken.input.transferamount.label`,

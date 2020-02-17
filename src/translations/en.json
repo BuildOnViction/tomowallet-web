@@ -176,7 +176,7 @@
   "tomowallet.container.mywallet.popup.sendtoken.input.token.label": "Token",
   "tomowallet.container.mywallet.popup.sendtoken.input.token.placeholder": "Select token...",
   "tomowallet.container.mywallet.popup.sendtoken.input.recipient.label": "Recipient",
-  "tomowallet.container.mywallet.popup.sendtoken.input.recipient.placeholder": "Paste or scan an address...",
+  "tomowallet.container.mywallet.popup.sendtoken.input.recipient.placeholder": "Paste an address...",
   "tomowallet.container.mywallet.popup.sendtoken.input.transferamount.label": "Transfer Amount",
   "tomowallet.container.mywallet.popup.sendtoken.input.transferamount.placeholder": "Add amount token...",
   "tomowallet.container.mywallet.popup.sendtoken.input.message.label": "Message",

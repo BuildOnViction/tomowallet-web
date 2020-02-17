@@ -176,7 +176,7 @@
   "tomowallet.container.mywallet.popup.sendtoken.input.token.label": "Jeton",
   "tomowallet.container.mywallet.popup.sendtoken.input.token.placeholder": "Sélectionner un jeton...",
   "tomowallet.container.mywallet.popup.sendtoken.input.recipient.label": "Bénéficiaire",
-  "tomowallet.container.mywallet.popup.sendtoken.input.recipient.placeholder": "Coller ou numériser une adresse...",
+  "tomowallet.container.mywallet.popup.sendtoken.input.recipient.placeholder": "Coller une adresse...",
   "tomowallet.container.mywallet.popup.sendtoken.input.transferamount.label": "Montant du transfert",
   "tomowallet.container.mywallet.popup.sendtoken.input.transferamount.placeholder": "Ajouter un jeton de montant...",
   "tomowallet.container.mywallet.popup.sendtoken.input.message.label": "Message",
