@@ -37,6 +37,15 @@ class ProcessingContent extends Component {
             return true
     }
 
+    componentWillUnmount () {
+        this.state.timeouts.forEach((timeout) => {
+            clearTimeout(timeout);
+        });
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+    }
+
     componentWillUpdate(nextProps, nextState) {
         if (!nextProps.process.status) {
             this.state.timeouts.forEach((timeout) => {

@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
-import { removeTrailingZero, getNetwork } from '../../../../../utils';
+import { removeTrailingZero, getNetwork, truncateMiddle } from '../../../../../utils';
 import { MSG, API } from '../../../../../constants';
 import { BoxText, TextYellow, TextGray, TextBlue } from '../../../../../styles';
 // ===================
@@ -42,25 +42,42 @@ class SuccessContent extends PureComponent {
 
           <TextYellow>{` ${removeTrailingZero(amount)} ${symbol}`}</TextYellow>
         </div>
-        {privacyMode
-        ?
-          ''
-        :
         <TextGray className='mb-3 '>
           {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}
         </TextGray>
+        {
+          privacyMode
+          ?
+            <RenderTx array={txHash || []}/>
+          :
+            <div><TextBlue>
+            <a
+              href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${_get(txHash, 'transactionHash', txHash)}`}
+              rel='noopener noreferrer'
+              target='_blank'
+            >{truncateMiddle(_get(txHash, 'transactionHash', txHash), 14, 14)}</a></TextBlue></div>
         }
-        <div><TextBlue>
-        <a
-          href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${_get(txHash, 'transactionHash', txHash)}`}
-          rel='noopener noreferrer'
-          target='_blank'
-        >{_get(txHash, 'transactionHash', txHash)}</a></TextBlue></div>
+        
       </BoxText>
     );
   }
 }
 // ==========================
+
+const RenderTx = ({ array }) => {
+  // const { array } = props;
+  const result = array.map((hash, id) => {
+    return (
+      <div key={id}><TextBlue>
+      <a
+        href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${_get(hash, 'transactionHash', hash)}`}
+        rel='noopener noreferrer'
+        target='_blank'
+      >{truncateMiddle(_get(hash, 'transactionHash', hash), 14, 14)}</a></TextBlue></div>
+    )
+  })
+  return result
+}
 
 // ===== PROP TYPES =====
 SuccessContent.propTypes = {
@@ -71,7 +88,7 @@ SuccessContent.propTypes = {
   /** Token symbol */
   symbol: PropTypes.string,
   /** Successful transaction's hash data */
-  txHash: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  txHash: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.array]),
   /** Privacy mode */
   privacyMode: PropTypes.bool,
 };
