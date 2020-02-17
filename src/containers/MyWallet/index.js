@@ -433,10 +433,14 @@ class MyWallet extends PureComponent {
     executeTransaction(
       privacyWallet
     ).then(data => {
+      const arrayTxs = new Set();
+      for (let i = 0; i < data[0].length; i++) {
+        arrayTxs.add(_get(data[0][i], 'transactionHash', ''))
+      }
 			toggleLoading(false);
 			onUpdatePrivacyData({ address, privacyWallet })
 			this.handleCloseSendTokenPopup();
-      onToggleSuccessPopup(true, '');
+      onToggleSuccessPopup(true, Array.from(arrayTxs));
     }).catch(error => {
       console.log(error)
 			toggleLoading(false);
@@ -1319,8 +1323,8 @@ class MyWallet extends PureComponent {
             </WelcomeSection>)
           : (<WelcomeSection>
               <h1>{formatMessage(MSG.MY_WALLET_MAIN_MODE)}</h1>
-              <p>{formatMessage(MSG.MY_WALLET_MAIN_MODE_DESCRIPTION)} 
-                <a href='https://scan.tomochain.com' target='_blank'>scan.tomochain.com</a>
+              <p>{formatMessage(MSG.MY_WALLET_MAIN_MODE_DESCRIPTION)}
+                <a href='https://scan.tomochain.com' target='_blank'> scan.tomochain.com</a>
               </p>
             </WelcomeSection>)
         }
