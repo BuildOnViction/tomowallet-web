@@ -123,8 +123,8 @@ export default defineMessages({
     defaultMessage: 'FAQ',
   },
   HEADER_NAVBAR_PRIVACY_MOD: {
-    id: `${navbarPrefix}.switch.mode.incognito`,
-    defaultMessage: 'Switch to Incognito mode',
+    id: `${navbarPrefix}.switch.mode.privacy`,
+    defaultMessage: 'Switch to Privacy mode',
   },
   HEADER_NAVBAR_NORMAL_MOD: {
     id: `${navbarPrefix}.switch.mode.main`,
@@ -633,21 +633,21 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.mode.main.description`,
     defaultMessage: 'Main mode allows you to make public & traceable transactions that can be tracked via',
   },
-  MY_WALLET_INCOGNITO_MODE: {
-    id: `${myWalletPagePrefix}.mode.incognito`,
-    defaultMessage: 'Incognito Mode',
+  MY_WALLET_PRIVACY_MODE: {
+    id: `${myWalletPagePrefix}.mode.privacy`,
+    defaultMessage: 'Privacy Mode',
   },
-  MY_WALLET_INCOGNITO_MODE_DESCRIPTION: {
-    id: `${myWalletPagePrefix}.mode.incognito.description`,
-    defaultMessage: 'Incognito mode allows you to make the transactions which are ingconitive and  couldn’t be traceable',
+  MY_WALLET_PRIVACY_MODE_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.mode.privacy.description`,
+    defaultMessage: 'Privacy mode allows you to make the transactions which are ingconitive and  couldn’t be traceable',
   },
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
     defaultMessage: 'Main Address',
   },
   MY_WALLET_SECTION_PRIVACY_ADDRESS_TITLE: {
-    id: `${myWalletPagePrefix}.section.address.incognito.title`,
-    defaultMessage: 'Incognito Address',
+    id: `${myWalletPagePrefix}.section.address.privacy.title`,
+    defaultMessage: 'Privacy Address',
   },
   MY_WALLET_SECTION_BALANCE_BALANCE: {
     id: `${myWalletPagePrefix}.section.balance.balance`,
@@ -657,9 +657,9 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.section.balance.estimated`,
     defaultMessage: 'Estimated value',
   },
-  MY_WALLET_SECTION_BALANCE_INCOGNITO: {
-    id: `${myWalletPagePrefix}.section.balance.incognito`,
-    defaultMessage: 'Incognito Balance',
+  MY_WALLET_SECTION_BALANCE_PRIVACY: {
+    id: `${myWalletPagePrefix}.section.balance.privacy`,
+    defaultMessage: 'Privacy Balance',
   },
   MY_WALLET_SECTION_BALANCE_MAIN: {
     id: `${myWalletPagePrefix}.section.balance.main`,
@@ -703,7 +703,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_PRIVACY_HEADER_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
-    defaultMessage: 'Incognito Balance',
+    defaultMessage: 'Privacy Balance',
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.value`,
@@ -903,7 +903,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_PRIVACY_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.privacy.balance`,
-    defaultMessage: 'Incognito Balance',
+    defaultMessage: 'Privacy Balance',
   },
   MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE: {
     id: `${myWalletPagePrefix}.popup.processing.send.token.title`,
@@ -919,7 +919,7 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_DEPOSIT_PRIVACY_REQUIRED: {
     id: `${myWalletPagePrefix}.popup.deposit.privacy.required`,
-    defaultMessage: 'You need to Deposit TOMO to Incognito Balance from Main Balance first',
+    defaultMessage: 'You need to Deposit TOMO to Privacy Balance from Main Balance first',
   },
 });
 // ====================

@@ -88,7 +88,7 @@ const theme = {
         paginationColor: '#A5A8AD',
         paginationActiveColor: '#202533',
     },
-    incognito: {
+    privacy: {
         headingColor: '#f5f5f5',
 
         color: '#757575',

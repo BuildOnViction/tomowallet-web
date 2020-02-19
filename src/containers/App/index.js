@@ -106,7 +106,7 @@ class App extends PureComponent {
     } = this.props;
     const isLoggedIn = this.handleCheckLoggedIn();
 
-    const mode = privacyMode ? 'incognito' : 'main';
+    const mode = privacyMode ? 'privacy' : 'main';
 
     return (
       <Router>

@@ -392,7 +392,7 @@ NavigationBar.propTypes = {
   switchRPCServer: PropTypes.func,
   /** Action to show/hide loading screen */
   toggleLoading: PropTypes.func,
-  /** Action to switch normal and incognito screen */
+  /** Action to switch normal and privacy screen */
   onTogglePrivacyMode: PropTypes.func,
 };
 

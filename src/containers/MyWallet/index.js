@@ -1318,8 +1318,8 @@ class MyWallet extends PureComponent {
         {
           privacyMode ? 
             (<WelcomeSection>
-              <h1>{formatMessage(MSG.MY_WALLET_INCOGNITO_MODE)}</h1>
-              <p>{formatMessage(MSG.MY_WALLET_INCOGNITO_MODE_DESCRIPTION)}</p>
+              <h1>{formatMessage(MSG.MY_WALLET_PRIVACY_MODE)}</h1>
+              <p>{formatMessage(MSG.MY_WALLET_PRIVACY_MODE_DESCRIPTION)}</p>
             </WelcomeSection>)
           : (<WelcomeSection>
               <h1>{formatMessage(MSG.MY_WALLET_MAIN_MODE)}</h1>
