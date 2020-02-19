@@ -4,7 +4,7 @@ import { MSG } from '../../../../constants';
 
 import Chart from './Chart';
 import PropTypes from 'prop-types';
-import { Wrapper, Col, BalanceIncognito, BalanceMain, TextTitle, TextValue, Ellipsis } from './style';
+import { Wrapper, Col, BalancePrivacy, BalanceMain, TextTitle, TextValue, Ellipsis } from './style';
 import { bnToDecimals,
     convertLocaleNumber } from '../../../../utils'
 import _get from "lodash.get";
@@ -83,12 +83,12 @@ class BalanceInfo extends PureComponent {
                     <Chart data={data}/>
                 </Col>
                 <Col>
-                    <BalanceIncognito>
+                    <BalancePrivacy>
                         <TextTitle>
-                            <Ellipsis title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_INCOGNITO)}</Ellipsis>
+                            <Ellipsis title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_PRIVACY)}>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_PRIVACY)}</Ellipsis>
                         </TextTitle>
                         <TextValue title={`${this.handleGetPrivacyBalance()} TOMO`}>{this.handleGetPrivacyBalance()} TOMO</TextValue>
-                    </BalanceIncognito>
+                    </BalancePrivacy>
                     <BalanceMain>
                         <TextTitle title={formatMessage(MSG.MY_WALLET_SECTION_BALANCE_MAIN)}>
                             <Ellipsis>{formatMessage(MSG.MY_WALLET_SECTION_BALANCE_MAIN)}</Ellipsis>

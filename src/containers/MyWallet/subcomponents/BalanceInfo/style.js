@@ -39,7 +39,7 @@ const BalanceMain = styled(BalanceMode)`
   }
 `
 
-const BalanceIncognito = styled(BalanceMode)`
+const BalancePrivacy = styled(BalanceMode)`
   .title::before {
     background: #E4AE63;
   }
@@ -68,4 +68,4 @@ const Ellipsis = styled.span.attrs({
   width: 100%;
 `
 
-export { Wrapper, Col, BalanceMain, BalanceIncognito, TextTitle, TextValue, Ellipsis };
+export { Wrapper, Col, BalanceMain, BalancePrivacy, TextTitle, TextValue, Ellipsis };

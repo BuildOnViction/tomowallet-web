@@ -12,7 +12,7 @@ import { calculatePercentage } from '../../../../../utils';
 const tipTexts = [
     'Send/Receive tokens anonymously with hidden transactions’ wallet addresses & amounts.',
     'Leave no traces behind with no leaks of personal information.',
-    'Protect your identity using incognito accounts that cannot be traced.'
+    'Protect your identity using privacy accounts that cannot be traced.'
 ]
 
 class ProcessingContent extends Component {
