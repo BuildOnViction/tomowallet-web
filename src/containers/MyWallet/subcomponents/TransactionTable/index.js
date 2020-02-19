@@ -14,7 +14,7 @@ import _get from 'lodash.get';
 import _isEqual from 'lodash.isequal';
 // Custom Components
 import CommonTable from '../../../../components/Table';
-import { BoxTransaction } from './style';
+import { BoxTransaction, BoxPrivacyTransaction } from './style';
 // Utilities & Constants
 import { withIntl } from '../../../../components/IntlProvider';
 import transactionConfig from './configuration';
@@ -68,33 +68,55 @@ class TransactionTable extends PureComponent {
 
   render() {
     const {
-      intl: { formatMessage },
-      transData,
-      privacyTransData,
-      privacyMode,
+        intl: { formatMessage },
+        transData,
+        privacyTransData,
+        privacyMode,
     } = this.props;
     let dt = privacyMode ? _get(privacyTransData, 'data', []) : _get(transData, 'data', [])
-    let cf = privacyMode ? privacyTransactionConfig : transactionConfig
-
     return (
-      <BoxTransaction>
-        <CommonTable
-          data={dt}
-          setConfig={cf}
-          getConfigProps={{
-            formatMessage,
-          }}
-          getTableProps={{
-            defaultPageSize: 5,
-            minRows: 5,
-            getPaginationProps: () => ({
-              changePage: this.handleLoadTransactionData,
-              currentPage: _get(transData, 'page', 1),
-              totalPages: _get(transData, 'pages', 1),
-            }),
-          }}
-        />
-      </BoxTransaction>
+        <>
+            {privacyMode ? 
+                <BoxPrivacyTransaction>
+                <CommonTable
+                    data={dt}
+                    setConfig={privacyTransactionConfig}
+                    getConfigProps={{
+                        formatMessage,
+                    }}
+                    getTableProps={{
+                        defaultPageSize: 5,
+                        minRows: 5,
+                        getPaginationProps: () => ({
+                        changePage: this.handleLoadTransactionData,
+                        currentPage: _get(transData, 'page', 1),
+                        totalPages: _get(transData, 'pages', 1),
+                        }),
+                    }}
+                />
+                </BoxPrivacyTransaction>
+                :
+                <BoxTransaction>
+                    <CommonTable
+                        data={dt}
+                        setConfig={transactionConfig}
+                        getConfigProps={{
+                            formatMessage,
+                        }}
+                        getTableProps={{
+                            defaultPageSize: 5,
+                            minRows: 5,
+                            getPaginationProps: () => ({
+                            changePage: this.handleLoadTransactionData,
+                            currentPage: _get(transData, 'page', 1),
+                            totalPages: _get(transData, 'pages', 1),
+                            }),
+                        }}
+                    />
+            </BoxTransaction>
+        }
+        </>
+        
     );
   }
 }

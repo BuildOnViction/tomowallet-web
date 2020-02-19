@@ -484,7 +484,13 @@ const withdrawPrivacy = (web3, wallet, amount) => {
 const getLastUTXO = (wallet) => {
   if (wallet.utxos.length > 0) {
     return new UTXO(wallet.utxos[wallet.utxos.length - 1])
-  } else return {}
+  } else {
+    return new Promise((resolve, reject) => {
+      wallet.getUTXO(wallet.scannedTo-1).then(rawUTXO => {
+        resolve(new UTXO(rawUTXO));
+      }).catch(error => reject(error));
+    });
+  }
 };
 
 /**

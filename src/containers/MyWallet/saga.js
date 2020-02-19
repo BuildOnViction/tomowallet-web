@@ -198,20 +198,28 @@ export function* scanPrivacy(actionData) {
 	}
 }
 
+async function scanTx (wallet) {
+	const lastUTXO = await getLastUTXO(wallet)
+	let lastTxID = 0;
+	if (lastUTXO) {
+		lastTxID = lastUTXO.txID;
+	}
+	const last49Txs = []
+	for (let i = lastTxID; i > lastTxID - 48; i-- ) {
+		last49Txs.push(i)
+	}
+	const response = await wallet.getTxs(last49Txs);
+	return response
+}
+
 export function* scanPrivacyTransaction(actionData) {
 	try {
 		yield put(toggleLoading(true));
 		const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
 		const privacyAddress = _get(actionData, ['wallet', 'privacy', 'privacyAddress', 'pubAddr'], '');
 		const address = _get(actionData, ['wallet', 'address'], '')
-		const lastUTXO = getLastUTXO(wallet).txID
 
-		let last30Txs = []
-		for (let i = lastUTXO - 48; i <= lastUTXO; i++) {
-			last30Txs.push(i)
-		}
-		last30Txs = last30Txs.sort((a, b) => b - a)
-		const response = yield call([wallet, wallet.getTxs], last30Txs);
+		const response = yield call(scanTx, wallet);
 		const result = []
 		for (let i = 0; i < response.length; i++) {
 			const data = _map(response[i][1], byte => byte.substr(2, 2)).join('');
