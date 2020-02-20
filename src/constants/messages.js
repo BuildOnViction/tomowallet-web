@@ -124,7 +124,7 @@ export default defineMessages({
   },
   HEADER_NAVBAR_PRIVACY_MOD: {
     id: `${navbarPrefix}.switch.mode.privacy`,
-    defaultMessage: 'Switch to Private Mode',
+    defaultMessage: 'Switch to Privacy Mode',
   },
   HEADER_NAVBAR_NORMAL_MOD: {
     id: `${navbarPrefix}.switch.mode.main`,
@@ -639,7 +639,7 @@ export default defineMessages({
   },
   MY_WALLET_PRIVACY_MODE_DESCRIPTION: {
     id: `${myWalletPagePrefix}.mode.privacy.description`,
-    defaultMessage: 'Private Mode allows you to make transactions where the wallet addresses and amount are hidden',
+    defaultMessage: 'Privacy Mode allows you to make transactions where the wallet addresses and amount are hidden',
   },
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
@@ -655,11 +655,11 @@ export default defineMessages({
   },
   MY_WALLET_SECTION_BALANCE_ESTIMATED: {
     id: `${myWalletPagePrefix}.section.balance.estimated`,
-    defaultMessage: 'Estimated value',
+    defaultMessage: 'Estimated Value',
   },
   MY_WALLET_SECTION_BALANCE_PRIVACY: {
     id: `${myWalletPagePrefix}.section.balance.privacy`,
-    defaultMessage: 'Private Balance',
+    defaultMessage: 'Privacy Balance',
   },
   MY_WALLET_SECTION_BALANCE_MAIN: {
     id: `${myWalletPagePrefix}.section.balance.main`,
@@ -695,7 +695,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_TOKEN_NAME: {
     id: `${myWalletPagePrefix}.table.portfolio.header.tokenname`,
-    defaultMessage: 'Token name',
+    defaultMessage: 'Token Name',
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
@@ -703,7 +703,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_PRIVACY_HEADER_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
-    defaultMessage: 'Private Balance',
+    defaultMessage: 'Privacy Balance',
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.value`,
@@ -887,7 +887,7 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_RECEIVE_TOKEN_PRIVACY_CONTENT_MESSAGE: {
     id: `${myWalletPagePrefix}.popup.receivetoken.privacy.content.message`,
-    defaultMessage: 'This is your Privacy Wallet Address. It supports transfers sent only through Private Mode',
+    defaultMessage: 'This is your Privacy Wallet Address. It supports transfers sent only through Privacy Mode',
   },
   MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE_DEPOSIT: {
     id: `${myWalletPagePrefix}.popup.receivetoken.title.deposit`,
@@ -911,7 +911,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_PRIVACY_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.privacy.balance`,
-    defaultMessage: 'Private Balance',
+    defaultMessage: 'Privacy Balance',
   },
   MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE: {
     id: `${myWalletPagePrefix}.popup.processing.send.token.title`,
@@ -927,15 +927,15 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_DEPOSIT_PRIVACY_REQUIRED: {
     id: `${myWalletPagePrefix}.popup.deposit.privacy.required`,
-    defaultMessage: 'You need to Deposit TOMO to Private Balance from Public Balance first',
+    defaultMessage: 'You need to Deposit TOMO to Privacy Balance from Public Balance first',
   },
   MY_WALLET_POPUP_DEPOSIT_PRIVACY_DESCRIPTION: {
     id: `${myWalletPagePrefix}.popup.deposit.privacy.description`,
-    defaultMessage: 'Deposit tokens from your Public Balance to start making private transactions',
+    defaultMessage: 'Deposit tokens from your Public Balance to start making privacy transactions',
   },
   MY_WALLET_POPUP_WITHDRAW_PRIVACY_DESCRIPTION: {
     id: `${myWalletPagePrefix}.popup.withdraw.privacy.description`,
-    defaultMessage: 'Withdraw your private tokens back to your Public Balance to make public transactions',
+    defaultMessage: 'Withdraw your privacy tokens back to your Public Balance to make public transactions',
   },
   MY_WALLET_POPUP_SEND_PRIVACY_DESCRIPTION: {
     id: `${myWalletPagePrefix}.popup.send.privacy.description`,
