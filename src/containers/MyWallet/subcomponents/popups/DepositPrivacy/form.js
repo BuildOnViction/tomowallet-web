@@ -24,7 +24,7 @@ import {
 import Select, { components } from 'react-select';
 // Custom Components
 import Image from '../../../../../components/Image';
-import { StyledFormGroup } from '../../../../../styles/StyleForm';
+import { StyledFormGroup, HeadingMediumCenter } from '../../../../../styles';
 // Utilities & Constants
 import { convertLocaleNumber } from '../../../../../utils';
 import { PORTFOLIO_COLUMNS, DEPOSIT_PRIVACY_FIELDS } from '../../../constants';
@@ -153,6 +153,11 @@ class FormContent extends PureComponent {
     return (
       <Form onSubmit={submitForm} className='cm_form'>
         <StyledFormGroup>
+        <HeadingMediumCenter>
+          {
+            formatMessage(MSG.MY_WALLET_POPUP_DEPOSIT_PRIVACY_DESCRIPTION)
+          }
+        </HeadingMediumCenter>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>

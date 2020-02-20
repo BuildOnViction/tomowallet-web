@@ -17,7 +17,7 @@ import { AddressBox, AddressText } from '../style';
 import { BoxImages, TextLinkYellow } from '../../../../../../styles';
 import { Copy } from '../../../../../../components/Icons';
 // Utilities & Constants
-import { withGlobal } from '../../../../../../utils';
+import { withGlobal, truncateMiddle } from '../../../../../../utils';
 import { withIntl } from '../../../../../../components/IntlProvider';
 import { selectWallet, selectPrivacyMode } from '../../../../../Global/selectors';
 import { MSG } from '../../../../../../constants';
@@ -40,7 +40,11 @@ class ReceiveContent extends PureComponent {
     return (
       <Fragment>
         <div className='text-center'>
-          {formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE)}
+          {privacyMode ?
+            formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_PRIVACY_CONTENT_MESSAGE)
+            :
+            formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE)
+          }
         </div>
         <BoxImages className='mt-5 mb-5'>
           <div className='qrc_bd'>
@@ -48,7 +52,7 @@ class ReceiveContent extends PureComponent {
           </div>
         </BoxImages>
         <AddressBox>
-          <AddressText>{currentAddress}</AddressText>
+          <AddressText>{privacyMode ? truncateMiddle(currentAddress, 18, 18) : currentAddress}</AddressText>
           <TextLinkYellow onClick={() => handleCopyToClipboard(currentAddress)}>
             <Copy /> {formatMessage(MSG.COMMON_BUTTON_COPY)}
           </TextLinkYellow>

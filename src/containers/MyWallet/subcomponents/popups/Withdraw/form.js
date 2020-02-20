@@ -30,7 +30,7 @@ import { convertLocaleNumber } from '../../../../../utils';
 import { WITHDRAW_PRIVACY_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
 import { MSG } from '../../../../../constants';
 import { bnToDecimals } from '../../../../../utils';
-import { StyledFormGroup } from '../../../../../styles';
+import { StyledFormGroup, HeadingMediumCenter } from '../../../../../styles';
 // ===================
 
 // ===== SUB-COMPONENTS =====
@@ -146,6 +146,11 @@ class FormContent extends PureComponent {
     return (
       <Form onSubmit={submitForm} className='cm_form'>
         <StyledFormGroup>
+          <HeadingMediumCenter>
+            {
+              formatMessage(MSG.MY_WALLET_POPUP_WITHDRAW_PRIVACY_DESCRIPTION)
+            }
+          </HeadingMediumCenter>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
