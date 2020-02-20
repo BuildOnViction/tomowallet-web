@@ -25,7 +25,7 @@ import {
 import Select, { components } from 'react-select';
 // Custom Components
 import Image from '../../../../../components/Image';
-import { StyledFormGroup } from '../../../../../styles/StyleForm';
+import { StyledFormGroup, HeadingMediumCenter } from '../../../../../styles';
 // Utilities & Constants
 import { convertLocaleNumber } from '../../../../../utils';
 import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
@@ -146,6 +146,16 @@ class FormContent extends PureComponent {
     return (
       <Form onSubmit={submitForm} className='cm_form'>
         <StyledFormGroup>
+          {
+            privacyMode ?
+            <HeadingMediumCenter>
+              {
+                formatMessage(MSG.MY_WALLET_POPUP_SEND_PRIVACY_DESCRIPTION)
+              }
+            </HeadingMediumCenter>
+            :
+            ''
+          }
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>

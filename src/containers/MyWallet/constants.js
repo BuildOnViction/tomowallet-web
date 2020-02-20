@@ -110,8 +110,8 @@ export const SEND_TOKEN_FIELDS = {
 // Send Token Popup' Stages
 export const SEND_TOKEN_STAGES = {
   FORM: 1,
-  PROCESSING: 1.5,
-  CONFIRMATION: 2,
+  PROCESSING: 2,
+  CONFIRMATION: 3,
 };
 
 // Popup Forms' Fields
@@ -131,7 +131,8 @@ export const DEPOSIT_STAGES = {
 // Withdraw Privacy Popup' Stages
 export const WITHDRAW_STAGES = {
   FORM: 1,
-  CONFIRMATION: 2,
+  PROCESSING: 2,
+  CONFIRMATION: 3,
 };
 
 // Popup Forms' Fields

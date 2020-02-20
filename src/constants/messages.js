@@ -124,11 +124,11 @@ export default defineMessages({
   },
   HEADER_NAVBAR_PRIVACY_MOD: {
     id: `${navbarPrefix}.switch.mode.privacy`,
-    defaultMessage: 'Switch to Privacy mode',
+    defaultMessage: 'Switch to Private Mode',
   },
   HEADER_NAVBAR_NORMAL_MOD: {
     id: `${navbarPrefix}.switch.mode.main`,
-    defaultMessage: 'Switch to main mode',
+    defaultMessage: 'Switch to Public Mode',
   },
   HEADER_NAVBAR_OPTION_MY_WALLET: {
     id: `${navbarPrefix}.option.mywallet`,
@@ -627,7 +627,7 @@ export default defineMessages({
   },
   MY_WALLET_MAIN_MODE: {
     id: `${myWalletPagePrefix}.mode.main`,
-    defaultMessage: 'Main Mode',
+    defaultMessage: 'PUBLIC MODE',
   },
   MY_WALLET_MAIN_MODE_DESCRIPTION: {
     id: `${myWalletPagePrefix}.mode.main.description`,
@@ -639,11 +639,11 @@ export default defineMessages({
   },
   MY_WALLET_PRIVACY_MODE_DESCRIPTION: {
     id: `${myWalletPagePrefix}.mode.privacy.description`,
-    defaultMessage: 'Privacy mode allows you to make the transactions which are ingconitive and  couldn’t be traceable',
+    defaultMessage: 'Private Mode allows you to make transactions where the wallet addresses and amount are hidden',
   },
   MY_WALLET_SECTION_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.title`,
-    defaultMessage: 'Main Address',
+    defaultMessage: 'Public Address',
   },
   MY_WALLET_SECTION_PRIVACY_ADDRESS_TITLE: {
     id: `${myWalletPagePrefix}.section.address.privacy.title`,
@@ -659,11 +659,11 @@ export default defineMessages({
   },
   MY_WALLET_SECTION_BALANCE_PRIVACY: {
     id: `${myWalletPagePrefix}.section.balance.privacy`,
-    defaultMessage: 'Privacy Balance',
+    defaultMessage: 'Private Balance',
   },
   MY_WALLET_SECTION_BALANCE_MAIN: {
     id: `${myWalletPagePrefix}.section.balance.main`,
-    defaultMessage: 'Main Balance',
+    defaultMessage: 'Public Balance',
   },
   MY_WALLET_SECTION_EXCHANGE_CHART_RANK: {
     id: `${myWalletPagePrefix}.section.exchange.chart.rank`,
@@ -703,7 +703,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_PRIVACY_HEADER_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.balance`,
-    defaultMessage: 'Privacy Balance',
+    defaultMessage: 'Private Balance',
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_VALUE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.value`,
@@ -835,7 +835,7 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_SEND_TOKEN_ERROR_PRIVACY_RECIPIENT_INVALID: {
     id: `${myWalletPagePrefix}.popup.sendtoken.error.privacy.recipient.invalid`,
-    defaultMessage: 'This privacy recipient is invalid',
+    defaultMessage: 'This Privacy Address is invalid',
   },
   MY_WALLET_POPUP_SEND_TOKEN_ERROR_AMOUNT_REQUIRED: {
     id: `${myWalletPagePrefix}.popup.sendtoken.error.amount.required`,
@@ -863,7 +863,11 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_DEPOSIT: {
     id: `${myWalletPagePrefix}.popup.success.info.amount.deposit`,
-    defaultMessage: 'You have deposit',
+    defaultMessage: 'You have deposited',
+  },
+  MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_DEPOSIT_AFTER: {
+    id: `${myWalletPagePrefix}.popup.success.info.amount.deposit.after`,
+    defaultMessage: 'into your Privacy Wallet',
   },
   MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_WITHDRAW: {
     id: `${myWalletPagePrefix}.popup.success.info.amount.withdraw`,
@@ -880,6 +884,10 @@ export default defineMessages({
   MY_WALLET_POPUP_RECEIVE_TOKEN_CONTENT_MESSAGE: {
     id: `${myWalletPagePrefix}.popup.receivetoken.content.message`,
     defaultMessage: 'Your address supports transferring to TOMO and other TomoChain tokens.',
+  },
+  MY_WALLET_POPUP_RECEIVE_TOKEN_PRIVACY_CONTENT_MESSAGE: {
+    id: `${myWalletPagePrefix}.popup.receivetoken.privacy.content.message`,
+    defaultMessage: 'This is your Privacy Wallet Address. It supports transfers sent only through Private Mode',
   },
   MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE_DEPOSIT: {
     id: `${myWalletPagePrefix}.popup.receivetoken.title.deposit`,
@@ -903,7 +911,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_HEADER_PRIVACY_BALANCE: {
     id: `${myWalletPagePrefix}.table.portfolio.header.privacy.balance`,
-    defaultMessage: 'Privacy Balance',
+    defaultMessage: 'Private Balance',
   },
   MY_WALLET_POPUP_PROCESSING_SEND_TOKEN_TITLE: {
     id: `${myWalletPagePrefix}.popup.processing.send.token.title`,
@@ -919,7 +927,19 @@ export default defineMessages({
   },
   MY_WALLET_POPUP_DEPOSIT_PRIVACY_REQUIRED: {
     id: `${myWalletPagePrefix}.popup.deposit.privacy.required`,
-    defaultMessage: 'You need to Deposit TOMO to Privacy Balance from Main Balance first',
+    defaultMessage: 'You need to Deposit TOMO to Private Balance from Public Balance first',
+  },
+  MY_WALLET_POPUP_DEPOSIT_PRIVACY_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.popup.deposit.privacy.description`,
+    defaultMessage: 'Deposit tokens from your Public Balance to start making private transactions',
+  },
+  MY_WALLET_POPUP_WITHDRAW_PRIVACY_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.popup.withdraw.privacy.description`,
+    defaultMessage: 'Withdraw your private tokens back to your Public Balance to make public transactions',
+  },
+  MY_WALLET_POPUP_SEND_PRIVACY_DESCRIPTION: {
+    id: `${myWalletPagePrefix}.popup.send.privacy.description`,
+    defaultMessage: 'Send tokens to another Privacy Wallet Address',
   },
 });
 // ====================

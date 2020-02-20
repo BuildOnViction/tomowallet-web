@@ -39,7 +39,12 @@ class SuccessContent extends PureComponent {
             MSG.MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_DEPOSIT,
           )}
 
-          <TextYellow>{` ${removeTrailingZero(amount)} ${symbol}`}</TextYellow>
+          <TextYellow>{` ${removeTrailingZero(amount)} ${symbol} `}</TextYellow>
+          {
+            formatMessage(
+              MSG.MY_WALLET_POPUP_SUCCESS_INFO_AMOUNT_DEPOSIT_AFTER,
+            )
+          }
         </div>
         <TextGray className='mb-3 '>
           {formatMessage(MSG.MY_WALLET_POPUP_SUCCESS_INFO_TRANSACTION_HASH)}

@@ -85,6 +85,13 @@ const TextGray = styled.div`
   color: ${props => props.theme.highlightColor1};
 `;
 
+const HeadingMediumCenter = styled.h3`
+  color: ${props => props.theme.headingColor};
+  font-size: 16px;
+  text-align: center;
+  padding-bottom: 10px;
+`;
+
 const BoxText = styled.div``;
 export {
   HeadingBig,
@@ -104,4 +111,5 @@ export {
   TextSend,
   TextDeposit,
   TextWithdraw,
+  HeadingMediumCenter,
 };

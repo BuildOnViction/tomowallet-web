@@ -38,6 +38,7 @@ import {
   TextSend,
   TextDeposit,
   TextWithdraw,
+  HeadingMediumCenter,
 } from './StyleTypo';
 
 import theme from './StyleTheme'
@@ -87,4 +88,5 @@ export {
   TextSend,
   TextDeposit,
   TextWithdraw,
+  HeadingMediumCenter,
 };
