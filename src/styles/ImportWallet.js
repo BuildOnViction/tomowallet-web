@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { primaryColor } from "./variables";
 // Style Component//
 
 const ImporWalletStyler = styled.div`
@@ -15,8 +16,8 @@ const ImporWalletStyler = styled.div`
   text-align: center;
   ${({ isActive }) =>
     isActive
-      ? 'background-color: #2d344a;border: solid 1px #2d344a;border-top: 5px solid #e4ae63;'
-      : 'border: solid 1px #444b64;border-top: solid 5px #444b64;'}
+      ? `background-color: #2d344a;border: solid 1px #2d344a;border-top: 5px solid ${primaryColor};`
+      : "border: solid 1px #444b64;border-top: solid 5px #444b64;"}
   .text-end {
     margin-top: auto !important;
   }
@@ -27,7 +28,7 @@ const ImporWalletStyler = styled.div`
     .card-title {
       margin-bottom: 0px;
       font-size: 20px;
-      ${({ isActive }) => isActive && 'font-weight: bold;'}
+      ${({ isActive }) => isActive && "font-weight: bold;"}
     }
   }
 `;

@@ -5,7 +5,8 @@
  */
 // ===== IMPORTS =====
 // Modules
-import styled from 'styled-components';
+import styled from "styled-components";
+import { primaryColor } from "../../../../styles/variables";
 // ===================
 
 // ===== STYLES =====
@@ -27,7 +28,7 @@ const ExchangeInfoStyler = styled.div`
         font-size: 18px;
         a {
           text-decoration: none;
-          color: #e4ae63;
+          color: ${primaryColor};
         }
       }
       .exchange-info__data-rate--usd {
@@ -36,7 +37,7 @@ const ExchangeInfoStyler = styled.div`
           color: #009e73;
         }
         animation: ${({ isLoaded }) =>
-          isLoaded ? 'blinker 0.5s linear 1' : 'none'};
+          isLoaded ? "blinker 0.5s linear 1" : "none"};
       }
       .exchange-info__data-rate--btc {
         font-size: 12px;
@@ -49,9 +50,11 @@ const ExchangeInfoStyler = styled.div`
       text-align: center;
       img {
         margin: auto;
+        width: 70px;
+        height: auto;
       }
       animation: ${({ isLoaded }) =>
-        isLoaded ? 'bouncer 0.5s linear 1' : 'none'};
+        isLoaded ? "bouncer 0.5s linear 1" : "none"};
     }
     .exchange-info__charts {
       padding-top: 10px;

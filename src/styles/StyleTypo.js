@@ -1,18 +1,20 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { primaryColor } from "./variables";
+import { lightenDarkenColor } from "../utils/style";
 // Style Component//
 
 const HeadingBig = styled.h1`
   color: #ffffff;
   font-size: 50px;
   font-weight: 600;
-  font-family: 'Bai Jamjuree', sans-serif;
+  font-family: "Bai Jamjuree", sans-serif;
 `;
 const HeadingLarge = styled.h2`
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;
   text-transform: uppercase;
-  font-family: 'Bai Jamjuree', sans-serif;
+  font-family: "Bai Jamjuree", sans-serif;
 `;
 const HeadingMedium = styled.h3`
   color: #ffffff;
@@ -38,19 +40,19 @@ const TextBlue = styled.span`
   }
 `;
 const TextYellow = styled.span`
-  color: #e4ae63;
+  color: ${primaryColor};
 `;
 const TextLinkYellow = styled.a`
-  color: #e4ae63 !important;
+  color: ${primaryColor} !important;
   cursor: pointer;
 `;
 const TextYellowPointer = styled.span`
-  color: #e4ae63;
+  color: ${primaryColor};
   font-size: 20px;
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
-    color: #c59148;
+    color: ${lightenDarkenColor(primaryColor, 80)};
   }
 `;
 const TextGray = styled.div`
@@ -69,5 +71,5 @@ export {
   TextLinkYellow,
   TextYellowPointer,
   BoxText,
-  TextGray,
+  TextGray
 };
