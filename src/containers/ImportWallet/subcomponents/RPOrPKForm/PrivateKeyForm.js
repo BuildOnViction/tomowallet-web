@@ -14,9 +14,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Utilities & Constants
 import { KEY_INPUT_TYPE } from '../../constants';
 import { withIntl } from '../../../../components/IntlProvider';
-import { changeInputWithSubmit, detectSubmit } from '../../../../utils';
-import { MSG } from '../../../../constants';
+import { changeInputWithSubmit, detectSubmit, mnemonicToPrivateKey, getWeb3Info, getNetwork } from '../../../../utils';
+import { MSG, RPC_SERVER, ENUM } from '../../../../constants';
 import { StyledFormGroup } from '../../../../styles';
+import styled from 'styled-components';
+import { generateMnemonic } from 'bip39'
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -25,6 +27,7 @@ class PrivateKeyForm extends PureComponent {
     super(props);
 
     this.handleChangePK = this.handleChangePK.bind(this);
+    this.handleGeneratePK = this.handleGeneratePK.bind(this);
   }
 
   componentDidMount() {
@@ -46,6 +49,16 @@ class PrivateKeyForm extends PureComponent {
   handleChangePK(value) {
     const { updateInput } = this.props;
     updateInput('privateKey', value);
+  }
+  // generate random private key for testing
+  handleGeneratePK () {
+    const { updateInput } = this.props;
+    const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+    const serverConfig = _get(RPC_SERVER, [networkKey]);
+
+    const newMnemonic = generateMnemonic();
+    const privateKey = mnemonicToPrivateKey(newMnemonic, serverConfig)
+    updateInput('privateKey', privateKey);
   }
 
   render() {
@@ -76,6 +89,9 @@ class PrivateKeyForm extends PureComponent {
           onKeyDown={detectSubmit(handleSubmit)}
           invalid={_get(errors, 'privateKey', []).length > 0}
         />
+        <p
+            style={{cursor: 'pointer', color: '#4b8aff', width: '200px', float: 'right'}}
+            onClick={() => this.handleGeneratePK()}>Generate a random private key</p>
         <FormFeedback>
           {_get(errors, 'privateKey', []).map((err, errIdx) => (
             <div key={`error_${errIdx + 1}`}>{`* ${err}`}</div>
@@ -106,8 +122,12 @@ PrivateKeyForm.defaultProps = {
   formValues: {},
   handleSubmit: () => {},
   intl: {},
-  updateInput: () => {},
+  updateInput: () => {}
 };
 // ======================
 
+const StyledATag = styled.p`
+    cursor: pointer;
+    width: 100%;
+`
 export default withIntl(PrivateKeyForm);
