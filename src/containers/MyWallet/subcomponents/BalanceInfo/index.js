@@ -1,19 +1,26 @@
 import React, { PureComponent } from 'react';
 
-import { MSG } from '../../../../constants';
+import { MSG, ENUM, RPC_SERVER } from '../../../../constants';
 
 import Chart from './Chart';
 import PropTypes from 'prop-types';
 import { Wrapper, Col, BalancePrivacy, BalanceMain, TextTitle, TextValue, Ellipsis } from './style';
 import { bnToDecimals,
-    convertLocaleNumber } from '../../../../utils'
+    convertLocaleNumber,
+    getWalletInfo,
+    mnemonicToPrivateKey,
+    getNetwork,
+    getWeb3Info,
+    getPrivacyAddressInfo} from '../../../../utils'
 import _get from "lodash.get";
 import { createStructuredSelector } from 'reselect';
 import { selectCoinData } from '../../selectors';
-import { loadCoinData } from '../../actions';
+import { loadCoinData, loadBalanceSuccess } from '../../actions';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withIntl } from '../../../../components/IntlProvider';
+import { storeWallet } from '../../../Global/actions';
+import { withWeb3 } from "../../../../components/Web3";
 
 class BalanceInfo extends PureComponent {
     constructor(props) {
@@ -39,10 +46,42 @@ class BalanceInfo extends PureComponent {
         return privacyBalance;
     }
     componentDidMount() {
-        const { onLoadCoinData } = this.props;
+        const {
+            onLoadCoinData,
+            web3,
+            wallet,
+            onStoreWallet,
+            onLoadBalance
+        } = this.props;
+        const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
         onLoadCoinData();
         this.requestCoinData = setInterval(() => {
             onLoadCoinData();
+            getWalletInfo(web3).then(walletInfo => {
+                onLoadBalance(walletInfo);
+                const { hdPath, recoveryPhrase } = getWeb3Info() || {};
+                const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
+                const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+                const serverConfig = hdPath
+                    ? {
+                        ..._get(RPC_SERVER, [networkKey], {}),
+                        hdPath,
+                        }
+                    : _get(RPC_SERVER, [networkKey], {});
+                const loginType = _get(getWeb3Info(), "loginType");
+                if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+                    // get privacy address
+                    const privacyObject = getPrivacyAddressInfo(
+                        walletInfo.address,
+                        mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+                        serverConfig,
+                        isTestnet
+                    );
+                    privacyObject.privacyWallet = privacyWallet
+                    walletInfo.privacy = privacyObject;
+                }
+                onStoreWallet(walletInfo);
+                });
         }, 15000);
     }
     
@@ -122,6 +161,8 @@ const mapStateToProps = () =>
   });
 const mapDispatchToProps = dispatch => ({
   onLoadCoinData: () => dispatch(loadCoinData()),
+  onStoreWallet: wallet => dispatch(storeWallet(wallet)),
+  onLoadBalance: (wallet) => dispatch(loadBalanceSuccess(wallet))
 });
 const withConnect = connect(
   mapStateToProps,
@@ -132,4 +173,5 @@ const withConnect = connect(
 export default compose(
     withIntl,
     withConnect,
+    withWeb3,
   )(BalanceInfo);

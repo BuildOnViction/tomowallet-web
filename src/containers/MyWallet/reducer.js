@@ -53,6 +53,7 @@ import {
   SCAN_PRIVACY_TRANSACTION,
   SCAN_PRIVACY_TRANSACTION_SUCCESS,
   UPDATE_PROCESS,
+  LOAD_BALANCE_SUCCESS
 } from './constants';
 import { LIST } from '../../constants';
 import tomoIcon from '../../assets/images/logo-tomo.png';
@@ -386,6 +387,24 @@ export default (state = initialState, action) => {
           current: _get(action, ['data', 'current'], 0),
           status: _get(action, ['data', 'status'], false)
         })
+      case LOAD_BALANCE_SUCCESS: {
+            return state
+            .update('tokenOptions', tokens =>
+                tokens.map(tok => {
+                if (tok[PORTFOLIO_COLUMNS.TOKEN_NAME] === 'TOMO') {
+                    return {
+                    ...tok,
+                    [PORTFOLIO_COLUMNS.BALANCE]: _get(
+                        action,
+                        'data.balance',
+                        0,
+                    ),
+                    };
+                }
+                return tok;
+                }),
+            );
+         }
     default:
       return state;
   }

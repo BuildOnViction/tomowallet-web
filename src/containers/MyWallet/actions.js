@@ -43,6 +43,7 @@ import {
   SCAN_PRIVACY_TRANSACTION_SUCCESS,
   SCAN_PRIVACY_TRANSACTION_FAILED,
   UPDATE_PROCESS,
+  LOAD_BALANCE_SUCCESS,
 } from './constants';
 // ===================
 
@@ -227,4 +228,9 @@ export const updateProcessing = (data) => ({
   type: UPDATE_PROCESS,
   data,
 });
+export const loadBalanceSuccess = data => ({
+  type: LOAD_BALANCE_SUCCESS,
+  data
+})
+
 // ===================
