@@ -20,6 +20,7 @@ import {
   Collapse,
   UncontrolledDropdown,
   Container,
+  CardImg,
 } from 'reactstrap';
 // Custom Components
 import WalletPopup from './subcomponents/WalletPopup';
@@ -328,10 +329,14 @@ class NavigationBar extends PureComponent {
           <div className="row">
             <NavBarStyler light expand='md'>
               <NavbarBrand onClick={this.handleRedirectToHomepage}>
-                <LogoBox>
+                <CardImg
+                    src={logo_tomochain}
+                    alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
+                />
+                {/* <LogoBox>
                   <LogoTomo />
                   <TomoText>TomoChain</TomoText>
-                </LogoBox>
+                </LogoBox> */}
               </NavbarBrand>
               <Collapse navbar>
                 <NavRight className='ml-auto' navbar>
