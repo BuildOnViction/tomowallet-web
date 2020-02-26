@@ -46,7 +46,7 @@ import {
   updateInput,
   loadWalletAddresses,
   toggleAddressPopup,
-  updateChosenWallet,
+  updateChosenWallet
 } from "./actions";
 import reducer from "./reducer";
 import { ROUTE, MSG, ENUM, RPC_SERVER } from "../../constants";
@@ -69,11 +69,11 @@ import {
   encryptKeystore,
   mnemonicToPrivateKey,
   trimMnemonic,
-  getPrivacyAddressInfo
+  getPrivacyAddressInfo,
 } from "../../utils";
 import { withWeb3 } from "../../components/Web3";
 import { withIntl } from "../../components/IntlProvider";
-import { storeWallet } from "../Global/actions";
+import { storeWallet, storePrivacyWallet } from "../Global/actions";
 import LogoLedger from "../../assets/images/logo-ledger.svg";
 import LogoMetaMask from "../../assets/images/logo-metamask.png";
 import LogoKey from "../../assets/images/logo-key.png";
@@ -95,6 +95,8 @@ class ImportWallet extends PureComponent {
     this.handleRedirect = this.handleRedirect.bind(this);
     this.handleGetLedgerAddresses = this.handleGetLedgerAddresses.bind(this);
     this.handleUpdateError = this.handleUpdateError.bind(this);
+  }
+  componentDidMount () {
   }
 
   componentWillUnmount() {
@@ -144,6 +146,7 @@ class ImportWallet extends PureComponent {
       rpcServer,
       toggleLoading,
       updateWeb3,
+      onStorePrivacyWallet,
     } = this.props;
     const formValues = _get(importWallet, "input", {});
     const keyInputType = _get(
@@ -178,72 +181,77 @@ class ImportWallet extends PureComponent {
     }
 
     if (_isEmpty(errorList)) {
-      // Create Web3 provider & store wallet data into state if form validation is passed.
-      try {
-        toggleLoading(true);
-        const accessKey = trimMnemonic(
-          formValues.recoveryPhrase || formValues.privateKey
-        );
-        const hdPath = _get(importWallet, "input.hdPath", "");
-        const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
-        const updatedRpcServer = hdPath
-          ? {
-              ...rpcServer,
-              hdPath
-            }
-          : rpcServer;
-        const newWeb3 = createWeb3(accessKey, updatedRpcServer);
-        updateWeb3(newWeb3);
-
-        getWalletInfo(newWeb3)
-          .then(walletInfo => {
-            // get privacy address
-            const privacyObject = getPrivacyAddressInfo(
-              walletInfo.address,
-              formValues.recoveryPhrase ? mnemonicToPrivateKey(formValues.recoveryPhrase, updatedRpcServer)
-                    : formValues.privateKey,
-              updatedRpcServer,
-              isTestnet
+        // Create Web3 provider & store wallet data into state if form validation is passed.
+        try {
+            toggleLoading(true);
+            const accessKey = trimMnemonic(
+                formValues.recoveryPhrase || formValues.privateKey
             );
-            walletInfo.privacy = privacyObject;
-
-            onStoreWallet(walletInfo);
-
-            setWeb3Info({
-              loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
-              recoveryPhrase: accessKey,
-              address: walletInfo.address,
-              ...(hdPath
-                ? {
+            const hdPath = _get(importWallet, "input.hdPath", "");
+            const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+            const updatedRpcServer = hdPath ?
+                {
+                    ...rpcServer,
                     hdPath
-                  }
-                : {})
-            });
-          })
-          .then(() => {
-            if (isElectron() && accessType !== "keystore") {
-              // Specific handle in Electron app:
-              // Store encrypted wallet key into temporary file for quick access
-              const privKey = formValues.recoveryPhrase
-                ? mnemonicToPrivateKey(formValues.recoveryPhrase, rpcServer)
-                : formValues.privateKey;
-              removeKeystore().then(
-                ({ error }) => error && this.handleUpdateError(error.message)
-              );
-              writeRPFile(
-                JSON.stringify(encryptKeystore(privKey, "recoveryPhrase"))
-              ).then(
-                ({ error }) => error && this.handleUpdateError(error.message)
-              );
-            }
-            toggleLoading(false);
-            history.push(ROUTE.MY_WALLET);
-          });
-      } catch (error) {
-        this.handleUpdateError(error.message);
-      }
+                } :
+                rpcServer;
+            const newWeb3 = createWeb3(accessKey, updatedRpcServer);
+            updateWeb3(newWeb3);
+
+            getWalletInfo(newWeb3)
+                .then(walletInfo => {
+                    onStoreWallet(walletInfo);
+
+                    if (isPrivateKey(formValues.privateKey)) {
+                        // get privacy address
+                        const privacyObject = getPrivacyAddressInfo(
+                            walletInfo.address,
+                            formValues.privateKey,
+                            updatedRpcServer,
+                            isTestnet
+                        );
+                        onStorePrivacyWallet(privacyObject)
+                    }
+
+                    setWeb3Info({
+                        loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
+                        recoveryPhrase: accessKey,
+                        address: walletInfo.address,
+                        ...(hdPath ?
+                            {
+                                hdPath
+                            } :
+                            {})
+                    });
+                })
+                .then(() => {
+                    if (isElectron() && accessType !== "keystore") {
+                        // Specific handle in Electron app:
+                        // Store encrypted wallet key into temporary file for quick access
+                        const privKey = formValues.recoveryPhrase ?
+                            mnemonicToPrivateKey(formValues.recoveryPhrase, rpcServer) :
+                            formValues.privateKey;
+                        removeKeystore().then(
+                            ({
+                                error
+                            }) => error && this.handleUpdateError(error.message)
+                        );
+                        writeRPFile(
+                            JSON.stringify(encryptKeystore(privKey, "recoveryPhrase"))
+                        ).then(
+                            ({
+                                error
+                            }) => error && this.handleUpdateError(error.message)
+                        );
+                    }
+                    toggleLoading(false);
+                    history.push(ROUTE.MY_WALLET);
+                });
+        } catch (error) {
+            this.handleUpdateError(error.message);
+        }
     } else {
-      this.handleUpdateError(errorList);
+        this.handleUpdateError(errorList);
     }
   }
 
@@ -573,6 +581,7 @@ const mapDispatchToProps = dispatch => ({
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onUpdateImportType: type => dispatch(updateImportType(type)),
   onUpdateInput: (name, value) => dispatch(updateInput(name, value)),
+  onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

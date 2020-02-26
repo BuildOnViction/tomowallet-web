@@ -43,6 +43,10 @@ const selectPrivacyMode = createDeepEqualSelector(
   selectGlobalDomain,
   obj => obj.toJS().privacyMode,
 );
+const selectPrivacyWallet = createDeepEqualSelector(
+    selectGlobalDomain,
+    obj => obj.toJS().privacyWallet,
+);
 // =====================
 
 export {
@@ -54,4 +58,5 @@ export {
   selectWallet,
   selectWalletPopup,
   selectPrivacyMode,
+  selectPrivacyWallet,
 };

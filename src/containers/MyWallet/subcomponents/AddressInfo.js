@@ -39,9 +39,10 @@ class AddressInfo extends PureComponent {
       openSendTokenPopup,
       wallet,
       privacyMode,
+      privacyWallet,
     } = this.props;
     const walletAddress = _get(wallet, 'address', '');
-    const privacyAddress = _get(wallet, ['privacy', 'privacyAddress', 'pubAddr'], '');
+    const privacyAddress = _get(privacyWallet, ['privacyAddress', 'pubAddr'], '');
 
     return (
       <div>
@@ -53,7 +54,7 @@ class AddressInfo extends PureComponent {
               className='mb-sm-3 mb-lg-0'
             >
               <BoxWrapper>
-                <BalanceInfo formatMessage={formatMessage} wallet={wallet} />
+                <BalanceInfo formatMessage={formatMessage} wallet={wallet} privacyWallet={privacyWallet} />
               </BoxWrapper>
             </Col>
             <Col xs={12} lg={{ size: 7, order: 1 }}>
@@ -153,7 +154,9 @@ AddressInfo.propTypes = {
   /** Wallet's data */
   wallet: PropTypes.object,
   /** Action to get privacy data */
-  onLoadPrivacyData: PropTypes.func
+  onLoadPrivacyData: PropTypes.func,
+  /** Privacy Wallet's data */
+  privacyWallet: PropTypes.object,
 };
 
 AddressInfo.defaultProps = {
@@ -162,6 +165,7 @@ AddressInfo.defaultProps = {
   openReceiveTokenPopup: () => {},
   openSendTokenPopup: () => {},
   wallet: {},
+  privacyWallet: {},
 };
 // ======================
 

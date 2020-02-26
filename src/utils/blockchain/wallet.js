@@ -451,9 +451,9 @@ const estimatePrivacyFee = (web3, wallet, amount) => {
  * @param {Integer} amount Deposit amount
  */
 const withdrawPrivacy = (web3, wallet, amount) => {
-  const { address, privacy } = wallet;
-  if (privacy && privacy.privacyWallet) {
-    const instanceWallet = privacy.privacyWallet
+  const { address, privacyWallet } = wallet;
+  if (privacyWallet ) {
+    const instanceWallet = privacyWallet
     const utxos = instanceWallet.utxos
     return checkSpentUTXO(instanceWallet, utxos).then(checkedUTXO => {
       if (checkedUTXO.length > 0) {

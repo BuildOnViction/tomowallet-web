@@ -11,6 +11,7 @@ import {
   SET_LANGUAGE,
   SET_NETWORK,
   STORE_WALLET_INFO,
+  STORE_PRIVACY_WALLET_INFO,
   TOGGLE_CLIPBOARD_POPUP,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
@@ -90,5 +91,10 @@ export const updatePrivacyData = data => ({
 
 export const releasePrivacyMode = () => ({
   type: RELEASE_PRIVACY_MODE,
+});
+
+export const storePrivacyWallet = data => ({
+  type: STORE_PRIVACY_WALLET_INFO,
+  data,
 });
 // ===================

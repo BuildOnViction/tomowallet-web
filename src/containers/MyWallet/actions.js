@@ -151,9 +151,9 @@ export const updateSendTokenPopupStage = stage => ({
 });
 
 // PRIVACY
-export const scanPrivacyData = wallet => ({
+export const scanPrivacyData = data => ({
   type: SCAN_PRIVACY_DATA,
-  wallet,
+  data,
 });
 
 export const scanPrivacyDataFailed = message => ({
@@ -228,9 +228,8 @@ export const updateProcessing = (data) => ({
   type: UPDATE_PROCESS,
   data,
 });
-export const loadBalanceSuccess = data => ({
+export const loadBalanceSuccess = wallet => ({
   type: LOAD_BALANCE_SUCCESS,
-  data
-})
-
+  wallet
+});
 // ===================

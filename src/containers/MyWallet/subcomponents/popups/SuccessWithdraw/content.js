@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import _get from 'lodash.get';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
-import { removeTrailingZero, getNetwork } from '../../../../../utils';
+import { removeTrailingZero, getNetwork, truncateMiddle } from '../../../../../utils';
 import { MSG, API } from '../../../../../constants';
 import { BoxText, TextYellow, TextGray, TextBlue } from '../../../../../styles';
 // ===================
@@ -49,7 +49,7 @@ class SuccessContent extends PureComponent {
             href={`${_get(API, [getNetwork(), 'VIEW_TRANSACTION'])}/${_get(txHash, 'transactionHash', txHash)}`}
             rel='noopener noreferrer'
             target='_blank'
-          >{_get(txHash, 'transactionHash', txHash)}</a></TextBlue></div>
+          >{truncateMiddle(_get(txHash, 'transactionHash', txHash), 14, 14)}</a></TextBlue></div>
       </BoxText>
     );
   }

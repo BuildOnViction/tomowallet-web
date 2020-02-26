@@ -33,7 +33,7 @@ import { withIntl } from '../../../../components/IntlProvider';
 import portfolioConfig from './configuration';
 import portfolioPrivacyConfig from './privacy-configuration';
 import { PORTFOLIO_COLUMNS } from '../../constants';
-import { selectWallet, selectPrivacyMode } from '../../../Global/selectors';
+import { selectWallet, selectPrivacyMode, selectPrivacyWallet } from '../../../Global/selectors';
 import { LIST, ENUM } from '../../../../constants';
 import tomoIcon from '../../../../assets/images/logo-tomo.png';
 // ===================
@@ -96,16 +96,21 @@ class PortfolioTable extends Component {
   }
 
   handleLoadTokenOptions() {
-    const { onLoadTokenOptions, wallet, privacyMode, onScanPrivacyData } = this.props;
+    const {
+        onLoadTokenOptions,
+        wallet,
+        privacyMode,
+        onScanPrivacyData,
+        privacyWallet,
+    } = this.props;
     if (privacyMode) {
-      onScanPrivacyData(wallet);
+        onScanPrivacyData({ wallet, privacyWallet });
     } else {
-      onLoadTokenOptions(
-        {
-          address: _get(wallet, 'address', ''),
-        },
-        this.handleGetNativeCurrency(),
-      );
+        onLoadTokenOptions({
+                address: _get(wallet, 'address', ''),
+            },
+            this.handleGetNativeCurrency(),
+        );
     }
   }
 
@@ -207,7 +212,8 @@ const mapStateToProps = () =>
     privacyMode: selectPrivacyMode,
     privacyData: selectPrivacyData,
     successDepositPopup: selectSuccessDepositPopup,
-    successWithdrawPopup: selectSuccessWithdrawPopup
+    successWithdrawPopup: selectSuccessWithdrawPopup,
+    privacyWallet: selectPrivacyWallet,
   });
 const mapDispatchToProps = dispatch => ({
   onLoadTokenOptions: (params, initialTokens) =>
