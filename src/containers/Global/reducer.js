@@ -14,6 +14,7 @@ import {
   SET_LANGUAGE,
   SET_NETWORK,
   STORE_WALLET_INFO,
+  STORE_PRIVACY_WALLET_INFO,
   TOGGLE_CLIPBOARD_POPUP,
   TOGGLE_LOADING_SCREEN,
   TOGGLE_NETWORK_CONFIRMATION_POPUP,
@@ -51,7 +52,8 @@ const initialState = fromJS({
   },
   wallet: null,
   walletPopup: initialWalletPopupState,
-  privacyMode: false
+  privacyMode: false,
+  privacyWallet: null
 });
 // =============================
 
@@ -70,9 +72,11 @@ export default (state = initialState, action) => {
           .value || '',
       );
     case SET_NETWORK:
-      return state.setIn(['network', 'data'], action.network);
+        return state.setIn(['network', 'data'], action.network);
     case STORE_WALLET_INFO:
-      return state.set('wallet', action.data);
+        return state.set('wallet', action.data);
+    case STORE_PRIVACY_WALLET_INFO:
+        return state.set('privacyWallet', action.data);
     case TOGGLE_CLIPBOARD_POPUP:
       return state.setIn(['clipboardPopup', 'isOpen'], action.bool);
     case TOGGLE_LOADING_SCREEN: {
@@ -120,7 +124,7 @@ export default (state = initialState, action) => {
       const address = action.data.address;
 
       setPrivacyInfo({ address, ...wallet.state() })
-      return state.setIn(['walletl', 'privacy', 'privacyWallet'], wallet);
+      return state.setIn(['privacyWallet', 'privacyWallet'], wallet);
     }
     default:
       return state;

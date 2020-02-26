@@ -34,12 +34,12 @@ class BalanceInfo extends PureComponent {
     }
 
     handleGetPrivacyBalance () {
-        const { wallet } = this.props;
+        const { privacyWallet } = this.props;
         let privacyBalance = 0;
-        const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {});
-        if (privacyWallet && privacyWallet.balance) {
+        const pWallet = _get(privacyWallet, ['privacyWallet'], {});
+        if (pWallet && pWallet.balance) {
             privacyBalance = bnToDecimals(
-                privacyWallet.balance.toString(10),
+                pWallet.balance.toString(10),
                 9
             );
         }
@@ -53,34 +53,12 @@ class BalanceInfo extends PureComponent {
             onStoreWallet,
             onLoadBalance
         } = this.props;
-        const privacyWallet = _get(wallet, ['privacy', 'privacyWallet'], {})
         onLoadCoinData();
         this.requestCoinData = setInterval(() => {
             onLoadCoinData();
             getWalletInfo(web3).then(walletInfo => {
-                onLoadBalance(walletInfo);
-                const { hdPath, recoveryPhrase } = getWeb3Info() || {};
-                const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
-                const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
-                const serverConfig = hdPath
-                    ? {
-                        ..._get(RPC_SERVER, [networkKey], {}),
-                        hdPath,
-                        }
-                    : _get(RPC_SERVER, [networkKey], {});
-                const loginType = _get(getWeb3Info(), "loginType");
-                if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
-                    // get privacy address
-                    const privacyObject = getPrivacyAddressInfo(
-                        walletInfo.address,
-                        mnemonicToPrivateKey(recoveryPhrase, serverConfig),
-                        serverConfig,
-                        isTestnet
-                    );
-                    privacyObject.privacyWallet = privacyWallet
-                    walletInfo.privacy = privacyObject;
-                }
                 onStoreWallet(walletInfo);
+                onLoadBalance(walletInfo);
                 });
         }, 15000);
     }
@@ -148,6 +126,8 @@ BalanceInfo.propTypes = {
     wallet: PropTypes.object,
     /** Coin's data */
     coinData: PropTypes.object,
+    /** Privacy Wallet's data */
+    privacyWallet: PropTypes.object,
 };
 
 BalanceInfo.defaultProps = {
@@ -156,13 +136,13 @@ BalanceInfo.defaultProps = {
 
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
-  createStructuredSelector({
-    coinData: selectCoinData,
-  });
+    createStructuredSelector({
+        coinData: selectCoinData,
+});
 const mapDispatchToProps = dispatch => ({
   onLoadCoinData: () => dispatch(loadCoinData()),
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),
-  onLoadBalance: (wallet) => dispatch(loadBalanceSuccess(wallet))
+  onLoadBalance: (wallet) => dispatch(loadBalanceSuccess(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,

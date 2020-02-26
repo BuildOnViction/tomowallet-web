@@ -59,11 +59,12 @@ import {
   mnemonicToPrivateKey,
   removeKeystore,
   encryptKeystore,
-  getNetwork
+  getNetwork,
+  isPrivateKey
 } from '../../utils';
 import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG, ENUM } from '../../constants';
-import { storeWallet } from '../Global/actions';
+import { storeWallet, storePrivacyWallet } from '../Global/actions';
 import { writeRPFile } from '../../utils/electron';
 // ===================
 
@@ -95,63 +96,72 @@ class WalletCreationPage extends PureComponent {
   }
 
   handleVerifyMnemonic() {
-    const {
-      intl: { formatMessage },
-      mnemonic,
-      onClearComparison,
-      onSetFormState,
-      onUpdateErrors,
-      rpcServer,
-      toggleLoading,
-    } = this.props;
-    const recoveryPhrase = _get(mnemonic, 'origin');
+const {
+    intl: {
+        formatMessage
+    },
+    mnemonic,
+    onClearComparison,
+    onSetFormState,
+    onUpdateErrors,
+    rpcServer,
+    toggleLoading,
+    onStorePrivacyWallet
+} = this.props;
+const recoveryPhrase = _get(mnemonic, 'origin');
 
-    if (_isEqual(recoveryPhrase, _get(mnemonic, 'compare', []).join(' '))) {
-      toggleLoading(true);
-      const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
-      const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
-      getWalletInfo(newWeb3)
+if (_isEqual(recoveryPhrase, _get(mnemonic, 'compare', []).join(' '))) {
+    toggleLoading(true);
+    const newWeb3 = createWeb3(recoveryPhrase, rpcServer);
+    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
+    getWalletInfo(newWeb3)
         .then(walletInfo => {
-          // get privacy address
-          const privacyObject = getPrivacyAddressInfo(
-            walletInfo.address,
-            recoveryPhrase ? mnemonicToPrivateKey(recoveryPhrase, rpcServer)
-                  : formValues.privateKey,
-            rpcServer,
-            isTestnet
-          );
-          walletInfo.privacy = privacyObject;
+            // get privacy address
+            if (isPrivateKey(recoveryPhrase)) {
+                const privacyObject = getPrivacyAddressInfo(
+                    walletInfo.address,
+                    recoveryPhrase ? mnemonicToPrivateKey(recoveryPhrase, rpcServer) :
+                    formValues.privateKey,
+                    rpcServer,
+                    isTestnet
+                );
+                onStorePrivacyWallet(privacyObject);
+            }
 
-          this.setState({
-            storeData: {
-              walletInfo,
-              web3: newWeb3,
-              web3Info: {
-                loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
-                recoveryPhrase,
-                address: walletInfo.address,
-              },
-            },
-          });
+            this.setState({
+                storeData: {
+                    walletInfo,
+                    web3: newWeb3,
+                    web3Info: {
+                        loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
+                        recoveryPhrase,
+                        address: walletInfo.address,
+                    },
+                },
+            });
         })
         .then(() => {
-          if (isElectron()) {
-            const privKey = mnemonicToPrivateKey(recoveryPhrase, rpcServer);
-            removeKeystore().then(
-              ({ error }) => error && onUpdateErrors([error.message]),
-            );
-            writeRPFile(
-              JSON.stringify(encryptKeystore(privKey, 'recoveryPhrase')),
-            ).then(({ error }) => error && onUpdateErrors([error.message]));
-          }
-          toggleLoading(false);
-          onSetFormState(FORM_STATES.SUCCESS);
+            if (isElectron()) {
+                const privKey = mnemonicToPrivateKey(recoveryPhrase, rpcServer);
+                removeKeystore().then(
+                    ({
+                        error
+                    }) => error && onUpdateErrors([error.message]),
+                );
+                writeRPFile(
+                    JSON.stringify(encryptKeystore(privKey, 'recoveryPhrase')),
+                ).then(({
+                    error
+                }) => error && onUpdateErrors([error.message]));
+            }
+            toggleLoading(false);
+            onSetFormState(FORM_STATES.SUCCESS);
         });
-    } else {
-      toggleLoading(false);
-      onUpdateErrors([formatMessage(MSG.VERIFICATION_ERROR_VERIFY_FAILED)]);
-      onClearComparison();
-    }
+} else {
+    toggleLoading(false);
+    onUpdateErrors([formatMessage(MSG.VERIFICATION_ERROR_VERIFY_FAILED)]);
+    onClearComparison();
+}
   }
 
   render() {
@@ -333,6 +343,7 @@ const mapDispatchToProps = dispatch => ({
   onToggleKeyViewPopup: bool => dispatch(toggleKeyViewPopup(bool)),
   onToggleKeyVisible: bool => dispatch(toggleKeyVisibile(bool)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
+  onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,

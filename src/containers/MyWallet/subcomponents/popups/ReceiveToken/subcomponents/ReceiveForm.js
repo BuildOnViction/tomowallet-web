@@ -19,7 +19,7 @@ import { Copy } from '../../../../../../components/Icons';
 // Utilities & Constants
 import { withGlobal, truncateMiddle } from '../../../../../../utils';
 import { withIntl } from '../../../../../../components/IntlProvider';
-import { selectWallet, selectPrivacyMode } from '../../../../../Global/selectors';
+import { selectWallet, selectPrivacyMode, selectPrivacyWallet } from '../../../../../Global/selectors';
 import { MSG } from '../../../../../../constants';
 // ===================
 
@@ -31,11 +31,12 @@ class ReceiveContent extends PureComponent {
       wallet,
       privacyMode,
       handleCopyToClipboard,
+      privacyWallet,
     } = this.props;
 
     const address = _get(wallet, 'address', '');
-    const privacyAddress = _get(wallet, ['privacy', 'privacyAddress'], '');
-    const currentAddress = privacyMode ? privacyAddress.pubAddr : address;
+    const privacyAddress = _get(privacyWallet, ['privacyAddress', 'pubAddr'], '');
+    const currentAddress = privacyMode ? privacyAddress : address;
 
     return (
       <Fragment>
@@ -48,7 +49,7 @@ class ReceiveContent extends PureComponent {
         </div>
         <BoxImages className='mt-5 mb-5'>
           <div className='qrc_bd'>
-            <QRCode value={privacyMode ? privacyAddress.pubAddr : address} />
+            <QRCode value={privacyMode ? privacyAddress : address} />
           </div>
         </BoxImages>
         <AddressBox>
@@ -69,11 +70,14 @@ ReceiveContent.propTypes = {
   intl: PropTypes.object,
   /** Current wallet's data */
   wallet: PropTypes.object,
+  /** Current privacy wallet's data */
+  privacyWallet: PropTypes.object,
 };
 
 ReceiveContent.defaultProps = {
   intl: {},
   wallet: {},
+  privacyWallet: {},
 };
 // ======================
 
@@ -82,6 +86,7 @@ const mapStateToProps = () =>
   createStructuredSelector({
     wallet: selectWallet,
     privacyMode: selectPrivacyMode,
+    privacyWallet: selectPrivacyWallet,
   });
 const withConnect = connect(mapStateToProps);
 // ======================

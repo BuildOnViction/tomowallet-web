@@ -31,8 +31,8 @@ import AppStyler from './style';
 import { TextLinkBlue, theme } from '../../styles';
 // Utilities & Constants
 import { withWeb3 } from '../../components/Web3';
-import { selectWallet, selectClipboardPopup, selectPrivacyMode } from '../Global/selectors';
-import { storeWallet } from '../Global/actions';
+import { selectWallet, selectClipboardPopup, selectPrivacyMode, selectPrivacyWallet } from '../Global/selectors';
+import { storeWallet, storePrivacyWallet } from '../Global/actions';
 import { ROUTE, RPC_SERVER, ENUM, MSG } from '../../constants';
 import './app.scss';
 import {
@@ -40,10 +40,10 @@ import {
   getBalance,
   getNetwork,
   getWalletInfo,
-  getPrivacyAddressInfo,
-  mnemonicToPrivateKey,
   getWeb3Info,
   withGlobal,
+  isPrivateKey,
+  getPrivacyAddressInfo
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
 import { Container } from 'reactstrap';
@@ -57,39 +57,46 @@ class App extends PureComponent {
   }
 
   componentDidMount() {
-    const { onStoreWallet } = this.props;
-
-    const { address, hdPath, recoveryPhrase } = getWeb3Info() || {};
+    const {
+        onStoreWallet,
+        onStorePrivacyWallet
+    } = this.props;
+    const {
+        address,
+        hdPath,
+        recoveryPhrase
+    } = getWeb3Info() || {};
     const networkKey = getNetwork() || ENUM.NETWORK_TYPE.TOMOCHAIN_MAINNET;
-    const isTestnet = getNetwork() === ENUM.NETWORK_TYPE.TOMOCHAIN_TESTNET;
-    const serverConfig = hdPath
-      ? {
-          ..._get(RPC_SERVER, [networkKey], {}),
-          hdPath,
-        }
-      : _get(RPC_SERVER, [networkKey], {});
+    const serverConfig = hdPath ?
+        {
+            ..._get(RPC_SERVER, [networkKey], {}),
+            hdPath,
+        } :
+        _get(RPC_SERVER, [networkKey], {});
 
     if (recoveryPhrase) {
-      const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
-      getWalletInfo(newWeb3).then(wallet => {
-        const privacyObject = getPrivacyAddressInfo(
-          wallet.address,
-          recoveryPhrase ? mnemonicToPrivateKey(recoveryPhrase, serverConfig)
-                : formValues.privateKey,
-          serverConfig,
-          isTestnet
-          );
-        wallet.privacy = privacyObject
-        onStoreWallet(wallet);
-      });
+        const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
+        getWalletInfo(newWeb3).then(wallet => {
+            if (isPrivateKey(recoveryPhrase)) {
+                // get privacy address
+                const privacyObject = getPrivacyAddressInfo(
+                    wallet.address,
+                    recoveryPhrase,
+                    serverConfig,
+                    true
+                );
+                onStorePrivacyWallet(privacyObject)
+            }
+            onStoreWallet(wallet);
+        });
     } else if (address) {
-      getBalance(address, serverConfig).then(balance => {
-        const walletInfo = {
-          address,
-          balance,
-        };
-        onStoreWallet(walletInfo);
-      });
+        getBalance(address, serverConfig).then(balance => {
+            const walletInfo = {
+                address,
+                balance,
+            };
+            onStoreWallet(walletInfo);
+        });
     }
   }
 
@@ -219,6 +226,7 @@ const mapStateToProps = () =>
   });
 const mapDispatchToProps = dispatch => ({
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),
+  onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,

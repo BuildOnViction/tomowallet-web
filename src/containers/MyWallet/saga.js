@@ -17,7 +17,8 @@ import {
   LOAD_TRANSACTION_DATA,
   LOAD_COIN_DATA,
   SCAN_PRIVACY_DATA,
-  SCAN_PRIVACY_TRANSACTION
+  SCAN_PRIVACY_TRANSACTION,
+  LOAD_BALANCE_SUCCESS,
 } from "./constants";
 import { API } from "../../constants";
 import {
@@ -124,8 +125,8 @@ export function* scanPrivacy(actionData) {
 	let check = 0;
 	try {
 		yield put(toggleLoading(true));
-		const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
-		const address = _get(actionData, ['wallet', 'address'], '');
+		const wallet = _get(actionData, ['data', 'privacyWallet', 'privacyWallet'], {});
+		const address = _get(actionData, ['data', 'wallet', 'address'], '');
 
 		const totalUTXOs = yield call([wallet, wallet.totalUTXO]);
 
@@ -165,7 +166,7 @@ export function* scanPrivacy(actionData) {
 				wallet.updateUTXOs(newUTXO)
 			}
 			response.balance = wallet.balance.toString(10);
-			response.mainBalance = _get(actionData, ['wallet', 'balance'], 0)
+			response.mainBalance = _get(actionData, ['data', 'wallet', 'balance'], 0);
 			yield put(scanPrivacyDataSuccess(response));
 			setPrivacyInfo({
 				address,
@@ -215,9 +216,9 @@ async function scanTx (wallet) {
 export function* scanPrivacyTransaction(actionData) {
 	try {
 		yield put(toggleLoading(true));
-		const wallet = _get(actionData, ['wallet', 'privacy', 'privacyWallet'], {});
-		const privacyAddress = _get(actionData, ['wallet', 'privacy', 'privacyAddress', 'pubAddr'], '');
-		const address = _get(actionData, ['wallet', 'address'], '')
+		const privacyAddress = _get(actionData, ['data', 'privacyWallet', 'privacyAddress', 'pubAddr'], '');
+		const wallet = _get(actionData, ['data', 'privacyWallet', 'privacyWallet'], {});
+		const address = _get(actionData, ['data', 'wallet', 'address'], '');
 
 		const response = yield call(scanTx, wallet);
 		const result = []

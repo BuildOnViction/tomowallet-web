@@ -45,6 +45,10 @@ class PrivateKeyForm extends PureComponent {
       document.getElementById('privateKeyInput').focus();
     }
   }
+  componentWillUnmount () {
+    const { updateInput } = this.props;
+    updateInput('privateKey', '');
+  }
 
   handleChangePK(value) {
     const { updateInput } = this.props;

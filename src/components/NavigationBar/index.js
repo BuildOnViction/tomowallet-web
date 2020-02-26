@@ -70,6 +70,7 @@ import {
   selectNetworkConfirmationPopup,
   selectPrivacyMode,
   selectWallet,
+  selectPrivacyWallet,
 } from '../../containers/Global/selectors';
 
 import logo_tomochain from '../../assets/images/logo-tomochain.png';
@@ -215,12 +216,13 @@ class NavigationBar extends PureComponent {
       privacyMode,
       language,
       wallet,
+      privacyWallet
     } = this.props;
 
     const { isOpenMainMenu, isOpenSwitchNetworkMenu, isOpenLanguageMenu } = this.state
     const hasPrivateKey = _get(getWeb3Info(), 'recoveryPhrase', false);
     const walletAddress = _get(wallet, 'address', '');
-    const privacyAddress = _get(wallet, ['privacy', 'privacyAddress', 'pubAddr'], '');
+    const privacyAddress = _get(privacyWallet, ['privacyAddress', 'pubAddr'], '');
 
     return (
       <Fragment>
@@ -429,6 +431,7 @@ const mapStateToProps = () =>
     networkConfirmationPopup: selectNetworkConfirmationPopup,
     privacyMode: selectPrivacyMode,
     wallet: selectWallet,
+    privacyWallet: selectPrivacyWallet,
   });
 const mapDispatchToProps = dispatch => ({
   onReleaseWallet: () => dispatch(releaseWallet()),

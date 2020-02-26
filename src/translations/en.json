@@ -198,7 +198,7 @@
   "tomowallet.container.mywallet.popup.success.info.transactionhash": "Transaction hash",
   "tomowallet.container.mywallet.popup.receivetoken.title": "Receive",
   "tomowallet.container.mywallet.popup.receivetoken.content.message": "Your address supports transferring to TOMO and other TomoChain tokens",
-  "tomowallet.container.mywallet.popup.receivetoken.privacy.content.message": "Il s'agit de votre adresse de portefeuille de confidentialité. Il prend en charge les transferts envoyés uniquement via le mode de confidentialité",
+  "tomowallet.container.mywallet.popup.receivetoken.privacy.content.message": "This is your Privacy Wallet Address. It supports transfers sent only through Privacy Mode",
   "tomowallet.container.mywallet.popup.deposit.title": "Deposit",
   "tomowallet.container.mywallet.popup.withdraw.title": "Withdraw",
   "tomowallet.container.mywallet.table.portfolio.header.privacy.balance": "Privacy Balance",

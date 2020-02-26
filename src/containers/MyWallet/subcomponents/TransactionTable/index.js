@@ -22,7 +22,7 @@ import privacyTransactionConfig from './privacy-config';
 import { selectTransactionData, selectTableType, selectPrivacyTransactionData } from '../../selectors';
 import { loadTransactionData, scanPrivacyTransaction } from '../../actions';
 import { LIST } from '../../../../constants';
-import { selectWallet, selectPrivacyMode } from '../../../Global/selectors';
+import { selectWallet, selectPrivacyMode, selectPrivacyWallet } from '../../../Global/selectors';
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -54,10 +54,11 @@ class TransactionTable extends PureComponent {
       onLoadTransactionData,
       wallet,
       privacyMode,
-      onLoadPrivacyTransaction
+      onLoadPrivacyTransaction,
+      privacyWallet
     } = this.props;
     if (privacyMode) {
-      onLoadPrivacyTransaction(wallet);
+      onLoadPrivacyTransaction({ wallet, privacyWallet });
     } else {
       onLoadTransactionData({
         page: newPage || 1,
@@ -134,6 +135,8 @@ TransactionTable.propTypes = {
   wallet: PropTypes.object,
   /** Transaction table's privacy data */
   privacyTransData: PropTypes.object,
+  /** Current privacy wallet's data */
+  privacyWallet: PropTypes.object,
 };
 
 TransactionTable.defaultProps = {
@@ -152,6 +155,7 @@ const mapStateToProps = () =>
     wallet: selectWallet,
     privacyMode: selectPrivacyMode,
     privacyTransData: selectPrivacyTransactionData,
+    privacyWallet: selectPrivacyWallet,
   });
 const mapDispatchToProps = dispatch => ({
   onLoadTransactionData: params => dispatch(loadTransactionData(params)),

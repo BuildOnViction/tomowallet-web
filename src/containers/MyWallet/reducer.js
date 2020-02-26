@@ -396,7 +396,7 @@ export default (state = initialState, action) => {
                     ...tok,
                     [PORTFOLIO_COLUMNS.BALANCE]: _get(
                         action,
-                        'data.balance',
+                        'wallet.balance',
                         0,
                     ),
                     };
@@ -404,7 +404,7 @@ export default (state = initialState, action) => {
                 return tok;
                 }),
             );
-         }
+        }
     default:
       return state;
   }
