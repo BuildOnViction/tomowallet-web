@@ -196,7 +196,7 @@
   "tomowallet.container.mywallet.popup.sendtoken.error.message.maxlength": "Le message dépasse 255 caractères maximum",
   "tomowallet.container.mywallet.popup.receivetoken.title": "Recevoir",
   "tomowallet.container.mywallet.popup.receivetoken.content.message": "Il s'agit de votre adresse de portefeuille de confidentialité. Il prend en charge les transferts envoyés uniquement via le mode privé",
-  "tomowallet.container.mywallet.popup.receivetoken.privacy.content.message": "Il s'agit de votre adresse de portefeuille de confidentialité. Il prend en charge les transferts envoyés uniquement via le mode privé",
+  "tomowallet.container.mywallet.popup.receivetoken.privacy.content.message": "Il s'agit de votre adresse de portefeuille de confidentialité. Il prend en charge les transferts envoyés uniquement via le mode de confidentialité",
   "tomowallet.container.mywallet.popup.success.info.amountsent": "Vous avez envoyé",
   "tomowallet.container.mywallet.popup.success.info.transactionhash": "Hachage de transaction",
   "tomowallet.container.mywallet.popup.deposit.title": "Dépôt",
