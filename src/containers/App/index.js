@@ -43,7 +43,8 @@ import {
   getWeb3Info,
   withGlobal,
   isPrivateKey,
-  getPrivacyAddressInfo
+  getPrivacyAddressInfo,
+  mnemonicToPrivateKey
 } from '../../utils';
 import { withIntl } from '../../components/IntlProvider';
 import { Container } from 'reactstrap';
@@ -77,16 +78,14 @@ class App extends PureComponent {
     if (recoveryPhrase) {
         const newWeb3 = createWeb3(recoveryPhrase, serverConfig);
         getWalletInfo(newWeb3).then(wallet => {
-            if (isPrivateKey(recoveryPhrase)) {
-                // get privacy address
-                const privacyObject = getPrivacyAddressInfo(
-                    wallet.address,
-                    recoveryPhrase,
-                    serverConfig,
-                    true
-                );
-                onStorePrivacyWallet(privacyObject)
-            }
+            // get privacy address
+            const privacyObject = getPrivacyAddressInfo(
+                wallet.address,
+                isPrivateKey(recoveryPhrase) ? recoveryPhrase: mnemonicToPrivateKey(recoveryPhrase, serverConfig),
+                serverConfig,
+                true
+            );
+            onStorePrivacyWallet(privacyObject)
             onStoreWallet(wallet);
         });
     } else if (address) {

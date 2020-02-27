@@ -202,16 +202,14 @@ class ImportWallet extends PureComponent {
                 .then(walletInfo => {
                     onStoreWallet(walletInfo);
 
-                    if (isPrivateKey(formValues.privateKey)) {
-                        // get privacy address
-                        const privacyObject = getPrivacyAddressInfo(
-                            walletInfo.address,
-                            formValues.privateKey,
-                            updatedRpcServer,
-                            isTestnet
-                        );
-                        onStorePrivacyWallet(privacyObject)
-                    }
+                    // get privacy address
+                    const privacyObject = getPrivacyAddressInfo(
+                      walletInfo.address,
+                      isPrivateKey(accessKey) ? accessKey: mnemonicToPrivateKey(accessKey, updatedRpcServer),
+                      updatedRpcServer,
+                      isTestnet
+                  );
+                  onStorePrivacyWallet(privacyObject)
 
                     setWeb3Info({
                         loginType: ENUM.LOGIN_TYPE.PRIVATE_KEY,
