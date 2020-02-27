@@ -58,8 +58,12 @@ class Footer extends PureComponent {
         content: formatMessage(MSG.FOOTER_OPTION_HELP),
       },
       {
-        url: 'https://docs.tomochain.com/products/tomowallet/terms/',
-        content: formatMessage(MSG.FOOTER_OPTION_TERMS_PRIVACY),
+        url: 'https://docs.tomochain.com/legal/terms-of-use',
+        content: formatMessage(MSG.FOOTER_OPTION_TERMS_USE),
+      },
+      {
+        url: 'https://docs.tomochain.com/legal/privacy',
+        content: formatMessage(MSG.FOOTER_OPTION_PRIVACY_POLICY),
       },
       {
         url: 'https://tomochain.com',
