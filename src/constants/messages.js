@@ -189,9 +189,13 @@ export default defineMessages({
     id: `${footerPrefix}.option.help`,
     defaultMessage: 'Need help?',
   },
-  FOOTER_OPTION_TERMS_PRIVACY: {
-    id: `${footerPrefix}.option.terms&privacy`,
-    defaultMessage: 'Terms & Privacy',
+  FOOTER_OPTION_TERMS_USE: {
+    id: `${footerPrefix}.option.termsofuse`,
+    defaultMessage: 'Terms of Use',
+  },
+  FOOTER_OPTION_PRIVACY_POLICY: {
+    id: `${footerPrefix}.option.privacypolicy`,
+    defaultMessage: 'Privacy Policy',
   },
   // Component - Clipboard Popup
   POPUP_CLIPBOARD_CONTENT_MESSAGE: {
