@@ -117,16 +117,13 @@ if (_isEqual(recoveryPhrase, _get(mnemonic, 'compare', []).join(' '))) {
     getWalletInfo(newWeb3)
         .then(walletInfo => {
             // get privacy address
-            if (isPrivateKey(recoveryPhrase)) {
-                const privacyObject = getPrivacyAddressInfo(
-                    walletInfo.address,
-                    recoveryPhrase ? mnemonicToPrivateKey(recoveryPhrase, rpcServer) :
-                    formValues.privateKey,
-                    rpcServer,
-                    isTestnet
-                );
-                onStorePrivacyWallet(privacyObject);
-            }
+            const privacyObject = getPrivacyAddressInfo(
+              walletInfo.address,
+              isPrivateKey(recoveryPhrase) ? recoveryPhrase : mnemonicToPrivateKey(recoveryPhrase, rpcServer),
+              rpcServer,
+              isTestnet
+          );
+          onStorePrivacyWallet(privacyObject);
 
             this.setState({
                 storeData: {
