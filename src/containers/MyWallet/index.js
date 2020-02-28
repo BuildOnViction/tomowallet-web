@@ -428,7 +428,6 @@ class MyWallet extends PureComponent {
     toggleLoading(true);
 		const pWallet = _get(privacyWallet, ['privacyWallet'], {})
     const address = _get(wallet, 'address')
-    console.log('pWallet', pWallet)
     executeTransaction(
       pWallet 
     ).then(data => {
