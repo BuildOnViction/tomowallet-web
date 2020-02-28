@@ -7,11 +7,8 @@ import PropTypes from 'prop-types';
 import { Wrapper, Col, BalancePrivacy, BalanceMain, TextTitle, TextValue, Ellipsis } from './style';
 import { bnToDecimals,
     convertLocaleNumber,
-    getWalletInfo,
-    mnemonicToPrivateKey,
-    getNetwork,
-    getWeb3Info,
-    getPrivacyAddressInfo} from '../../../../utils'
+    getWalletInfo 
+} from '../../../../utils'
 import _get from "lodash.get";
 import { createStructuredSelector } from 'reselect';
 import { selectCoinData } from '../../selectors';

@@ -216,9 +216,9 @@ async function scanTx (wallet) {
 export function* scanPrivacyTransaction(actionData) {
 	try {
 		yield put(toggleLoading(true));
-		const privacyAddress = _get(actionData, ['data', 'privacyWallet', 'privacyAddress', 'pubAddr'], '');
-		const wallet = _get(actionData, ['data', 'privacyWallet', 'privacyWallet'], {});
-		const address = _get(actionData, ['data', 'wallet', 'address'], '');
+		const privacyAddress = _get(actionData, ['wallet', 'privacyWallet', 'privacyAddress', 'pubAddr'], '');
+		const wallet = _get(actionData, ['wallet', 'privacyWallet', 'privacyWallet'], {});
+		const address = _get(actionData, ['wallet', 'wallet', 'address'], '');
 
 		const response = yield call(scanTx, wallet);
 		const result = []
