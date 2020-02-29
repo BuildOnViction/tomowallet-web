@@ -70,7 +70,7 @@ class Footer extends PureComponent {
         content: formatMessage(MSG.HEADER_NAVBAR_OPTION_ABOUT),
       },
       {
-        url: 'https://docs.tomochain.com/general/faq/#tomowallet',
+        url: 'https://docs.tomochain.com/faq/products/tomochain-applications/tomowallet',
         content: formatMessage(MSG.HEADER_NAVBAR_OPTION_FAQS),
       },
     ];
