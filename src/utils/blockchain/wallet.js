@@ -17,8 +17,6 @@ import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
 import { Address as AdUtil, Wallet, UTXO } from 'tomoprivacyjs';
-
-import { getPrivacyWalletInfo } from '../storage';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
@@ -38,6 +36,8 @@ const TOKEN_TYPE = {
 };
 const defaultCallback = error => console.error('[ERROR]: ', error);
 const defaultReject = message => new Promise((_, rj) => rj(new Error(message)));
+
+import { getPrivacyWalletInfo } from '../storage';
 // ===============================
 
 // ===== METHODS =====
@@ -137,24 +137,21 @@ const getWalletInfo = web3 => {
  * @param {String} accessKey private key or mnemonic
  * @param {Object} serverConfig (optional) Custom RPC server configuration
  */
-let privacyWallet = null
 const getPrivacyAddressInfo = (address, accessKey, serverConfig, isTestnet) => {
   if (accessKey !== '') {
     const trimData = accessKey.trim().replace(/^0x/, '').toLowerCase()
     const privacyAddress = {...AdUtil.generateKeys(trimData)};
     const wallet = getPrivacyWalletInfo(address);
 
-    if (!privacyWallet) {
-      privacyWallet = new Wallet(trimData, {
-        ABI: privacy.abi,
-        ADDRESS: serverConfig.privacyContract,
-        SOCKET_END_POINT: serverConfig.ws, // serverConfig.ws,
-        gas: 20000000,
-        gasPrice: 250000000,
-        RPC_END_POINT: serverConfig.host //serverConfig.host
-      });
-    }
-    
+    // Set peivacy configuration
+    const privacyWallet = new Wallet(trimData, {
+      ABI: privacy.abi,
+      ADDRESS: serverConfig.privacyContract,
+      SOCKET_END_POINT: serverConfig.ws, // serverConfig.ws,
+      gas: 20000000,
+      gasPrice: 250000000,
+      RPC_END_POINT: serverConfig.host //serverConfig.host
+    });
     if (wallet && wallet.scannedTo) {
       privacyWallet.state(wallet);
     }
