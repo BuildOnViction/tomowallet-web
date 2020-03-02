@@ -74,6 +74,7 @@ import {
 import { withWeb3 } from "../../components/Web3";
 import { withIntl } from "../../components/IntlProvider";
 import { storeWallet, storePrivacyWallet } from "../Global/actions";
+import { updatePrivacyBalance } from '../MyWallet/actions';
 import LogoLedger from "../../assets/images/logo-ledger.svg";
 import LogoMetaMask from "../../assets/images/logo-metamask.png";
 import LogoKey from "../../assets/images/logo-key.png";
@@ -147,6 +148,7 @@ class ImportWallet extends PureComponent {
       toggleLoading,
       updateWeb3,
       onStorePrivacyWallet,
+      onLoadBalance
     } = this.props;
     const formValues = _get(importWallet, "input", {});
     const keyInputType = _get(
@@ -208,7 +210,18 @@ class ImportWallet extends PureComponent {
                       isPrivateKey(accessKey) ? accessKey: mnemonicToPrivateKey(accessKey, updatedRpcServer),
                       updatedRpcServer,
                       isTestnet
-                  );
+                    );
+                    privacyObject.privacyWallet.on("NEW_UTXO", (utxo) => {
+                      let isExisted = privacyObject.privacyWallet.utxos.find((element) => {
+                        return element["3"] === utxo["3"] || parseInt(element["3"]) === parseInt(utxo["3"])
+                      })
+                      if (!isExisted) {
+                        privacyObject.privacyWallet.utxos.push(utxo)
+                        privacyObject.privacyWallet.balance = privacyObject.privacyWallet._calTotal(privacyObject.privacyWallet.utxos)
+                        onLoadBalance(privacyObject.privacyWallet.balance.toString(10))
+                      }
+                  })
+                    
                   onStorePrivacyWallet(privacyObject)
 
                     setWeb3Info({
@@ -580,6 +593,7 @@ const mapDispatchToProps = dispatch => ({
   onUpdateImportType: type => dispatch(updateImportType(type)),
   onUpdateInput: (name, value) => dispatch(updateInput(name, value)),
   onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
+  onLoadBalance: (wallet) => dispatch(updatePrivacyBalance(wallet)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
