@@ -26,7 +26,7 @@ const composeEnhancers =
 export default history => {
   const sagaMiddleware = createSagaMiddleWare({});
   const middlewares = [
-    ...(process.env.NODE_ENV !== 'production' ? [] : []),
+    ...(process.env.NODE_ENV !== 'production' ? [logger] : []),
     routerMiddleware(history),
     sagaMiddleware,
     thunkMiddleware,
