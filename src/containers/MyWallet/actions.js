@@ -232,4 +232,12 @@ export const loadBalanceSuccess = wallet => ({
   type: LOAD_BALANCE_SUCCESS,
   wallet
 });
+
+export const updatePrivacyBalance = balance => ({
+  type: "UPDATE_PRIVACY_BALANCE",
+  data: {
+    balance
+  }
+});
+
 // ===================

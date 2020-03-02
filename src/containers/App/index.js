@@ -33,6 +33,7 @@ import { TextLinkBlue, theme } from '../../styles';
 import { withWeb3 } from '../../components/Web3';
 import { selectWallet, selectClipboardPopup, selectPrivacyMode, selectPrivacyWallet } from '../Global/selectors';
 import { storeWallet, storePrivacyWallet } from '../Global/actions';
+import { updatePrivacyBalance } from '../MyWallet/actions';
 import { ROUTE, RPC_SERVER, ENUM, MSG } from '../../constants';
 import './app.scss';
 import {
@@ -49,6 +50,7 @@ import {
 import { withIntl } from '../../components/IntlProvider';
 import { Container } from 'reactstrap';
 
+
 // ===== MAIN COMPONENT =====
 class App extends PureComponent {
   constructor(props) {
@@ -60,7 +62,8 @@ class App extends PureComponent {
   componentDidMount() {
     const {
         onStoreWallet,
-        onStorePrivacyWallet
+        onStorePrivacyWallet,
+        onLoadPrivacyBalance
     } = this.props;
     const {
         address,
@@ -85,6 +88,23 @@ class App extends PureComponent {
                 serverConfig,
                 true
             );
+
+            // listen privacy events
+            privacyObject.privacyWallet.on("NEW_UTXO", (utxo) => {
+                let isExisted = privacyObject.privacyWallet.utxos.find((element) => {
+                  return element["3"] === utxo["3"] || parseInt(element["3"]) === parseInt(utxo["3"])
+                })
+                if (!isExisted) {
+                  privacyObject.privacyWallet.utxos.push(utxo)
+                  privacyObject.privacyWallet.balance = privacyObject.privacyWallet._calTotal(privacyObject.privacyWallet.utxos)
+                  onLoadPrivacyBalance(privacyObject.privacyWallet.balance.toString(10))
+                }
+            })
+            // privacyObject.privacyWallet.on("NEW_TRANSACTION", (transaction) => {
+            //   console.log(transaction)
+              
+            //   // onLoadPrivacyBalance(privacyObject.privacyWallet)
+            // })
             onStorePrivacyWallet(privacyObject)
             onStoreWallet(wallet);
         });
@@ -226,6 +246,7 @@ const mapStateToProps = () =>
 const mapDispatchToProps = dispatch => ({
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),
   onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
+  onLoadPrivacyBalance: (wallet) => dispatch(updatePrivacyBalance(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,
