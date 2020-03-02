@@ -63,7 +63,7 @@ class App extends PureComponent {
     const {
         onStoreWallet,
         onStorePrivacyWallet,
-        onLoadBalance
+        onLoadPrivacyBalance
     } = this.props;
     const {
         address,
@@ -88,6 +88,8 @@ class App extends PureComponent {
                 serverConfig,
                 true
             );
+
+            // listen privacy events
             privacyObject.privacyWallet.on("NEW_UTXO", (utxo) => {
                 let isExisted = privacyObject.privacyWallet.utxos.find((element) => {
                   return element["3"] === utxo["3"] || parseInt(element["3"]) === parseInt(utxo["3"])
@@ -95,13 +97,13 @@ class App extends PureComponent {
                 if (!isExisted) {
                   privacyObject.privacyWallet.utxos.push(utxo)
                   privacyObject.privacyWallet.balance = privacyObject.privacyWallet._calTotal(privacyObject.privacyWallet.utxos)
-                  onLoadBalance(privacyObject.privacyWallet.balance.toString(10))
+                  onLoadPrivacyBalance(privacyObject.privacyWallet.balance.toString(10))
                 }
             })
             // privacyObject.privacyWallet.on("NEW_TRANSACTION", (transaction) => {
             //   console.log(transaction)
               
-            //   // onLoadBalance(privacyObject.privacyWallet)
+            //   // onLoadPrivacyBalance(privacyObject.privacyWallet)
             // })
             onStorePrivacyWallet(privacyObject)
             onStoreWallet(wallet);
@@ -244,7 +246,7 @@ const mapStateToProps = () =>
 const mapDispatchToProps = dispatch => ({
   onStoreWallet: wallet => dispatch(storeWallet(wallet)),
   onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
-  onLoadBalance: (wallet) => dispatch(updatePrivacyBalance(wallet)),
+  onLoadPrivacyBalance: (wallet) => dispatch(updatePrivacyBalance(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,

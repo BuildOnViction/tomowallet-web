@@ -66,6 +66,7 @@ import { FORM_STATES, DOMAIN_KEY } from './constants';
 import { MSG, ENUM } from '../../constants';
 import { storeWallet, storePrivacyWallet } from '../Global/actions';
 import { writeRPFile } from '../../utils/electron';
+import { updatePrivacyBalance } from '../MyWallet/actions'
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -106,7 +107,8 @@ const {
     onUpdateErrors,
     rpcServer,
     toggleLoading,
-    onStorePrivacyWallet
+    onStorePrivacyWallet,
+    onLoadPrivacyBalance
 } = this.props;
 const recoveryPhrase = _get(mnemonic, 'origin');
 
@@ -123,6 +125,19 @@ if (_isEqual(recoveryPhrase, _get(mnemonic, 'compare', []).join(' '))) {
               rpcServer,
               isTestnet
           );
+
+          // listen privacy events
+          privacyObject.privacyWallet.on("NEW_UTXO", (utxo) => {
+            let isExisted = privacyObject.privacyWallet.utxos.find((element) => {
+              return element["3"] === utxo["3"] || parseInt(element["3"]) === parseInt(utxo["3"])
+            })
+            if (!isExisted) {
+              privacyObject.privacyWallet.utxos.push(utxo)
+              privacyObject.privacyWallet.balance = privacyObject.privacyWallet._calTotal(privacyObject.privacyWallet.utxos)
+              onLoadPrivacyBalance(privacyObject.privacyWallet.balance.toString(10))
+            }
+        })
+
           onStorePrivacyWallet(privacyObject);
 
             this.setState({
@@ -341,6 +356,7 @@ const mapDispatchToProps = dispatch => ({
   onToggleKeyVisible: bool => dispatch(toggleKeyVisibile(bool)),
   onUpdateErrors: errors => dispatch(updateErrors(errors)),
   onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
+  onLoadPrivacyBalance: (wallet) => dispatch(updatePrivacyBalance(wallet)),
 });
 const withConnect = connect(
   mapStateToProps,

@@ -148,7 +148,7 @@ class ImportWallet extends PureComponent {
       toggleLoading,
       updateWeb3,
       onStorePrivacyWallet,
-      onLoadBalance
+      onLoadPrivacyBalance
     } = this.props;
     const formValues = _get(importWallet, "input", {});
     const keyInputType = _get(
@@ -211,6 +211,7 @@ class ImportWallet extends PureComponent {
                       updatedRpcServer,
                       isTestnet
                     );
+                    // listen privacy events
                     privacyObject.privacyWallet.on("NEW_UTXO", (utxo) => {
                       let isExisted = privacyObject.privacyWallet.utxos.find((element) => {
                         return element["3"] === utxo["3"] || parseInt(element["3"]) === parseInt(utxo["3"])
@@ -218,7 +219,7 @@ class ImportWallet extends PureComponent {
                       if (!isExisted) {
                         privacyObject.privacyWallet.utxos.push(utxo)
                         privacyObject.privacyWallet.balance = privacyObject.privacyWallet._calTotal(privacyObject.privacyWallet.utxos)
-                        onLoadBalance(privacyObject.privacyWallet.balance.toString(10))
+                        onLoadPrivacyBalance(privacyObject.privacyWallet.balance.toString(10))
                       }
                   })
                     
@@ -593,7 +594,7 @@ const mapDispatchToProps = dispatch => ({
   onUpdateImportType: type => dispatch(updateImportType(type)),
   onUpdateInput: (name, value) => dispatch(updateInput(name, value)),
   onStorePrivacyWallet: wallet => dispatch(storePrivacyWallet(wallet)),
-  onLoadBalance: (wallet) => dispatch(updatePrivacyBalance(wallet)),
+  onLoadPrivacyBalance: (wallet) => dispatch(updatePrivacyBalance(wallet)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
