@@ -192,8 +192,7 @@ export default (state = initialState, action) => {
                 '',
               ),
               [PORTFOLIO_COLUMNS.TYPE]: _get(token, 'type', 'TRC20'),
-              [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
-              [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
+              [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03
             };
           }),
         ),
@@ -278,7 +277,7 @@ export default (state = initialState, action) => {
     case SCAN_PRIVACY_DATA_SUCCESS:
         return state
           .set('privacyData', [{
-            [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
+            [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TomoChain',
             [PORTFOLIO_COLUMNS.SYMBOL]: 'TOMO',
             [PORTFOLIO_COLUMNS.ICON]: tomoIcon,
             [PORTFOLIO_COLUMNS.BALANCE]: action.data.balance || 0,
@@ -286,8 +285,7 @@ export default (state = initialState, action) => {
             [PORTFOLIO_COLUMNS.PRICE]: 1,
             [PORTFOLIO_COLUMNS.TOKEN_ADDRESS]: '',
             [PORTFOLIO_COLUMNS.TYPE]: 'TRC21',
-            [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: '0.001',
-            [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
+            [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: '0.001'
           }]);
       case TOGGLE_DEPOSIT_PRIVACY_POPUP:{
         if (action.bool) {
@@ -408,7 +406,7 @@ export default (state = initialState, action) => {
       case 'UPDATE_PRIVACY_BALANCE':
           return state
             .set('privacyData', [{
-              [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
+              [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TomoChain',
               [PORTFOLIO_COLUMNS.SYMBOL]: 'TOMO',
               [PORTFOLIO_COLUMNS.ICON]: tomoIcon,
               [PORTFOLIO_COLUMNS.BALANCE]: action.data.balance || 0,
@@ -417,7 +415,6 @@ export default (state = initialState, action) => {
               [PORTFOLIO_COLUMNS.TOKEN_ADDRESS]: '',
               [PORTFOLIO_COLUMNS.TYPE]: 'TRC21',
               [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: '0.001',
-              [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
             }]);
     default:
       return state;

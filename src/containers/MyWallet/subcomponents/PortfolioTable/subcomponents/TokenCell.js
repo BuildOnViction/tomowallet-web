@@ -20,6 +20,7 @@ class TokenCell extends PureComponent {
   render() {
     const { formatMessage, values } = this.props;
     const tokenName = _get(values, [PORTFOLIO_COLUMNS.TOKEN_NAME], '');
+    const tokenSymbol = _get(values, [PORTFOLIO_COLUMNS.SYMBOL], '');
     const iconSrc = _get(values, [PORTFOLIO_COLUMNS.ICON], '');
     return (
       <TokenCellStyler>
@@ -33,12 +34,8 @@ class TokenCell extends PureComponent {
           />
         </div>
         <div className='block-token'>
-          <div className='block-token__name'>{tokenName}</div>
-          <div className='block-token__publisher'>
-            {formatMessage(
-              MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_TOKEN_NAME_PUBLISHER,
-            )}
-          </div>
+          <div className="block-token__name">{tokenSymbol}</div>
+          <div className="block-token__publisher">{tokenName}</div>
         </div>
       </TokenCellStyler>
     );
