@@ -82,15 +82,14 @@ class PortfolioTable extends Component {
     const { coinData, wallet } = this.props;
     return [
       {
-        [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TOMO',
+        [PORTFOLIO_COLUMNS.TOKEN_NAME]: 'TomoChain',
         [PORTFOLIO_COLUMNS.SYMBOL]: 'TOMO',
         [PORTFOLIO_COLUMNS.ICON]: tomoIcon,
         [PORTFOLIO_COLUMNS.BALANCE]: _get(wallet, 'balance', 0),
         [PORTFOLIO_COLUMNS.DECIMALS]: 18,
         [PORTFOLIO_COLUMNS.PRICE]: _get(coinData, 'data.quotes.USD.price', 0),
         [PORTFOLIO_COLUMNS.TYPE]: ENUM.TOKEN_TYPE.CURRENCY,
-        [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
-        [PORTFOLIO_COLUMNS.PUBLISHER]: 'TomoChain',
+        [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03
       },
     ];
   }

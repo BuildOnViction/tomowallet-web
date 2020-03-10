@@ -48,9 +48,9 @@ const TokenOption = props => {
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
             alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
           />
-          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          <span>{`${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], "")} (${_get(
             data,
-            [PORTFOLIO_COLUMNS.PUBLISHER],
+            [PORTFOLIO_COLUMNS.TOKEN_NAME],
             '',
           )})`}</span>
         </Col>
@@ -80,9 +80,9 @@ const TokenInputValue = props => {
             src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
             alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
           />
-          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          <span>{`${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], "")} (${_get(
             data,
-            [PORTFOLIO_COLUMNS.PUBLISHER],
+            [PORTFOLIO_COLUMNS.TOKEN_NAME],
             '',
           )})`}</span>
         </Col>
