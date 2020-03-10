@@ -205,7 +205,7 @@ class MyWallet extends PureComponent {
 
     if (loginType === ENUM.LOGIN_TYPE.LEDGER) {
       sendAction = this.handleSendMoneyByLedger;
-    } else if (loginType === ENUM.LOGIN_TYPE.PRIVATE_KEY) {
+    } else {
       if (
         _get(sendTokenForm, [
           SEND_TOKEN_FIELDS.TOKEN,
@@ -216,8 +216,6 @@ class MyWallet extends PureComponent {
       } else {
         sendAction = this.handleSendTokenByPK;
       }
-    } else {
-      sendAction = this.handleSendMoneyByPK;
     }
 
     return sendAction();

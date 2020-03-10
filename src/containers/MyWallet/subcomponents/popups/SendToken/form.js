@@ -5,9 +5,9 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import _get from 'lodash.get';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import _get from "lodash.get";
 import {
   Form,
   FormGroup,
@@ -21,16 +21,16 @@ import {
   Col,
   FormFeedback,
   Nav,
-  NavItem,
-} from 'reactstrap';
-import Select, { components } from 'react-select';
+  NavItem
+} from "reactstrap";
+import Select, { components } from "react-select";
 // Custom Components
-import Image from '../../../../../components/Image';
+import Image from "../../../../../components/Image";
 // Utilities & Constants
-import { convertLocaleNumber } from '../../../../../utils';
-import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from '../../../constants';
-import { MSG } from '../../../../../constants';
-import { bnToDecimals } from '../../../../../utils';
+import { convertLocaleNumber } from "../../../../../utils";
+import { SEND_TOKEN_FIELDS, PORTFOLIO_COLUMNS } from "../../../constants";
+import { MSG } from "../../../../../constants";
+import { bnToDecimals } from "../../../../../utils";
 // ===================
 
 // ===== SUB-COMPONENTS =====
@@ -41,24 +41,24 @@ const TokenOption = props => {
   const normalBalance = parseFloat(bnToDecimals(rawBalance, decimals));
 
   return (
-    <Container {...innerProps} role='presentation' fluid className='px-0'>
-      <Row noGutters className='select_option align-items-center'>
-        <Col xs={6} className='d-flex align-items-center text-ellipsis'>
+    <Container {...innerProps} role="presentation" fluid className="px-0">
+      <Row noGutters className="select_option align-items-center">
+        <Col xs={6} className="d-flex align-items-center text-ellipsis">
           <Image
-            src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
-            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
+            src={_get(data, [PORTFOLIO_COLUMNS.ICON], "")}
+            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], "")}
           />
-          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          <span>{`${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], "")} (${_get(
             data,
-            [PORTFOLIO_COLUMNS.PUBLISHER],
-            '',
+            [PORTFOLIO_COLUMNS.TOKEN_NAME],
+            ""
           )})`}</span>
         </Col>
-        <Col xs={6} className='text-right text-ellipsis'>
+        <Col xs={6} className="text-right text-ellipsis">
           {`${convertLocaleNumber(normalBalance)} ${_get(
             data,
             [PORTFOLIO_COLUMNS.SYMBOL],
-            '',
+            ""
           )}`}
         </Col>
       </Row>
@@ -73,24 +73,24 @@ const TokenInputValue = props => {
   const normalBalance = parseFloat(bnToDecimals(rawBalance, decimals));
 
   return (
-    <div style={{ width: '96%' }}>
-      <Row noGutters className='select_option_active align-items-center'>
-        <Col xs={6} className='d-flex align-items-center text-ellipsis'>
+    <div style={{ width: "96%" }}>
+      <Row noGutters className="select_option_active align-items-center">
+        <Col xs={6} className="d-flex align-items-center text-ellipsis">
           <Image
-            src={_get(data, [PORTFOLIO_COLUMNS.ICON], '')}
-            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')}
+            src={_get(data, [PORTFOLIO_COLUMNS.ICON], "")}
+            alt={_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], "")}
           />
-          <span>{`${_get(data, [PORTFOLIO_COLUMNS.TOKEN_NAME], '')} (${_get(
+          <span>{`${_get(data, [PORTFOLIO_COLUMNS.SYMBOL], "")} (${_get(
             data,
-            [PORTFOLIO_COLUMNS.PUBLISHER],
-            '',
+            [PORTFOLIO_COLUMNS.TOKEN_NAME],
+            ""
           )})`}</span>
         </Col>
-        <Col xs={6} className='text-right text-ellipsis'>
+        <Col xs={6} className="text-right text-ellipsis">
           {`${convertLocaleNumber(normalBalance)} ${_get(
             data,
             [PORTFOLIO_COLUMNS.SYMBOL],
-            '',
+            ""
           )}`}
         </Col>
       </Row>
@@ -116,12 +116,12 @@ class FormContent extends PureComponent {
   handleRenderErrorList(field) {
     const { errors } = this.props;
     return (
-      <FormFeedback className='d-block'>
+      <FormFeedback className="d-block">
         <Nav>
           {_get(errors, [field], []).map((err, errIdx) => (
             <NavItem
               key={`error_${field}_${errIdx + 1}`}
-              className='text-danger'
+              className="text-danger"
             >
               {`* ${err}`}
             </NavItem>
@@ -138,54 +138,54 @@ class FormContent extends PureComponent {
       formValues,
       submitForm,
       tokenOptions,
-      updateInput,
+      updateInput
     } = this.props;
 
     return (
-      <Form onSubmit={submitForm} className='cm_form'>
+      <Form onSubmit={submitForm} className="cm_form">
         <FormGroup>
           <Label>
             {formatMessage(MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_LABEL)}
           </Label>
           <Select
-            className='box_select'
+            className="box_select"
             name={SEND_TOKEN_FIELDS.TOKEN}
-            value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], '')}
+            value={_get(formValues, [SEND_TOKEN_FIELDS.TOKEN], "")}
             options={tokenOptions}
             onChange={value => updateInput(SEND_TOKEN_FIELDS.TOKEN, value)}
             components={{
               Option: TokenOption,
               SingleValue: TokenInputValue,
               Placeholder: () => (
-                <div className='text-placeholder'>
-                  {' '}
+                <div className="text-placeholder">
+                  {" "}
                   {formatMessage(
-                    MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER,
+                    MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TOKEN_PLACEHOLDER
                   )}
                 </div>
               ),
-              IndicatorSeparator: () => '',
+              IndicatorSeparator: () => "",
               DropdownIndicator:
-                !_get(formValues, 'isTokenSpecific') &&
-                components.DropdownIndicator,
+                !_get(formValues, "isTokenSpecific") &&
+                components.DropdownIndicator
             }}
-            isDisabled={_get(formValues, 'isTokenSpecific')}
+            isDisabled={_get(formValues, "isTokenSpecific")}
             menuIsOpens
-            classNamePrefix='my-select'
+            classNamePrefix="my-select"
           />
           {this.handleRenderErrorList(SEND_TOKEN_FIELDS.TOKEN)}
         </FormGroup>
         <FormGroup>
           <Label>
             {formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_LABEL,
+              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_LABEL
             )}
           </Label>
           <Input
             name={SEND_TOKEN_FIELDS.RECIPIENT}
-            value={_get(formValues, [SEND_TOKEN_FIELDS.RECIPIENT], '')}
+            value={_get(formValues, [SEND_TOKEN_FIELDS.RECIPIENT], "")}
             placeholder={formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_PLACEHOLDER,
+              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_RECIPIENT_PLACEHOLDER
             )}
             onChange={e =>
               updateInput(SEND_TOKEN_FIELDS.RECIPIENT, e.target.value)
@@ -197,30 +197,30 @@ class FormContent extends PureComponent {
         <FormGroup>
           <Label>
             {formatMessage(
-              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL,
+              MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_LABEL
             )}
           </Label>
           <InputGroup>
             <Input
-              type='number'
+              type="number"
               name={SEND_TOKEN_FIELDS.TRANSFER_AMOUNT}
-              value={_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], '')}
+              value={_get(formValues, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], "")}
               max={_get(
                 formValues,
                 [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.BALANCE],
-                0,
+                0
               )}
               placeholder={formatMessage(
-                MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_PLACEHOLDER,
+                MSG.MY_WALLET_POPUP_SEND_TOKEN_INPUT_TRANSFER_AMOUNT_PLACEHOLDER
               )}
               onChange={e =>
                 updateInput(SEND_TOKEN_FIELDS.TRANSFER_AMOUNT, e.target.value)
               }
               invalid={this.handleMarkFieldInvalid(
-                SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+                SEND_TOKEN_FIELDS.TRANSFER_AMOUNT
               )}
             />
-            <InputGroupAddon addonType='append'>
+            <InputGroupAddon addonType="append">
               <Button onClick={addFullAmount}>
                 {formatMessage(MSG.COMMON_BUTTON_MAXIMUM)}
               </Button>
@@ -276,7 +276,7 @@ FormContent.propTypes = {
   /** List of token options */
   tokenOptions: PropTypes.arrayOf(PropTypes.object),
   /** Action to hande input change */
-  updateInput: PropTypes.func,
+  updateInput: PropTypes.func
 };
 
 FormContent.defaultProps = {
@@ -285,7 +285,7 @@ FormContent.defaultProps = {
   formValues: {},
   submitForm: () => {},
   tokenOptions: [],
-  updateInput: () => {},
+  updateInput: () => {}
 };
 // ======================
 
