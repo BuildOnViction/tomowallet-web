@@ -15,6 +15,7 @@ import _isEqual from 'lodash.isequal';
 // Custom Components
 import FormContent from './form';
 import ConfirmationContent from './confirmation';
+import ProcessContent from './processing';
 import { WithdrawPrivacyPopupStyler } from './style';
 // Utilities & Constants
 import { withIntl } from '../../../../../components/IntlProvider';
@@ -114,6 +115,8 @@ class WithdrawPopup extends PureComponent {
       wallet,
       privacyMode,
       privacyData,
+      updateProcess,
+      process
     } = this.props;
     return (
       (_get(popupData, 'stage') === WITHDRAW_STAGES.FORM && {
@@ -127,6 +130,17 @@ class WithdrawPopup extends PureComponent {
           updateInput,
           privacyMode,
           privacyData
+        },
+      }) ||
+      (_get(popupData, 'stage') === WITHDRAW_STAGES.PROCESSING && {
+        Content: ProcessContent,
+        getContentProps: {
+          errors: _get(popupData, 'errors', {}),
+          formValues,
+          wallet,
+          privacyData,
+          process,
+          updateProcess,
         },
       }) ||
       (_get(popupData, 'stage') === WITHDRAW_STAGES.CONFIRMATION && {
@@ -151,6 +165,7 @@ class WithdrawPopup extends PureComponent {
     const {
       intl: { formatMessage },
       popupData,
+      process
     } = this.props;
 
     return (
@@ -158,7 +173,7 @@ class WithdrawPopup extends PureComponent {
         button={this.handleGetButtonConfig()}
         {...this.handleGetContentConfig()}
         isOpen={_get(popupData, 'isOpen', false)}
-        title={formatMessage(MSG.MY_WALLET_POPUP_WITHDRAW_PRIVACY_TITLE)}
+        title={process.status ? '' : formatMessage(MSG.MY_WALLET_POPUP_WITHDRAW_PRIVACY_TITLE)}
         toggle={this.handleClosePopup}
       />
     );
@@ -192,6 +207,8 @@ WithdrawPopup.propTypes = {
   updateWithdrawPrivacyPopupStage: PropTypes.func,
   /** Wallet's information */
   wallet: PropTypes.object,
+  /** Action to update processing step in send token form */
+  updateProcess: PropTypes.func,
 };
 
 WithdrawPopup.defaultProps = {
@@ -207,6 +224,7 @@ WithdrawPopup.defaultProps = {
   updateInput: () => {},
   updateWithdrawPrivacyPopupStage: () => {},
   wallet: {},
+  updateProcess: () => {},
 };
 // ======================
 

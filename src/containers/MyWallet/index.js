@@ -432,13 +432,13 @@ class MyWallet extends PureComponent {
       pWallet 
     ).then(data => {
       const arrayTxs = new Set();
-      for (let i = 0; i < data[0].length; i++) {
-        arrayTxs.add(_get(data[0][i], 'transactionHash', ''))
-      }
-			toggleLoading(false);
-			onUpdatePrivacyData({ address, privacyWallet: pWallet })
-			this.handleCloseSendTokenPopup();
-      onToggleSuccessPopup(true, Array.from(arrayTxs));
+        for (let i = 0; i < data[0].length; i++) {
+            arrayTxs.add(_get(data[0][i], 'transactionHash', ''))
+        }
+        toggleLoading(false);
+        onUpdatePrivacyData({ address, privacyWallet: pWallet })
+        this.handleCloseSendTokenPopup();
+        onToggleSuccessPopup(true, Array.from(arrayTxs));
     }).catch(error => {
       console.log(error)
 			toggleLoading(false);
@@ -768,117 +768,125 @@ class MyWallet extends PureComponent {
   }
 
   handleValidatePrivacyFee(feeObj) {
-    const {
-      intl: { formatMessage },
-      onUpdateSendTokenInput,
-      onUpdateSendTokenPopupStage,
-      onToggleSendTokenPopup,
-      onUpdateProcessing,
-      sendTokenForm,
-      web3,
-      wallet,
-      privacyWallet,
-    } = this.props;
-    
-    const { fee, utxos } = feeObj;
+      const {
+          intl: {
+              formatMessage
+          },
+          onUpdateSendTokenInput,
+          onUpdateSendTokenPopupStage,
+          onToggleSendTokenPopup,
+          onUpdateProcessing,
+          sendTokenForm,
+          web3,
+          wallet,
+          privacyWallet,
+          process
+      } = this.props;
 
-    const feeAmount = bnToDecimals(fee.toString(10), 18)
-    const feeObject = {
-      type: 'TRC21',
-      amount: feeAmount,
-    }
+      const {
+          fee,
+          utxos
+      } = feeObj;
 
-    const pWallet = _get(privacyWallet, ['privacyWallet'], {});
-    const balance = _get(sendTokenForm, [
-      SEND_TOKEN_FIELDS.TOKEN,
-      PORTFOLIO_COLUMNS.BALANCE
-    ]);
+      const feeAmount = bnToDecimals(fee.toString(10), 18)
+      const feeObject = {
+          type: 'TRC21',
+          amount: feeAmount,
+      }
 
-    const total = feeAmount * 100 ;
+      const pWallet = _get(privacyWallet, ['privacyWallet'], {});
+      const balance = _get(sendTokenForm, [
+          SEND_TOKEN_FIELDS.TOKEN,
+          PORTFOLIO_COLUMNS.BALANCE
+      ]);
 
-    onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.PROCESSING);
-    onUpdateProcessing({
-        screen: 'sending',
-        total: total,
-        current: 0,
-        status: true,
-      })
+      const total = feeAmount * 100;
 
-    const decimals = _get(
-      sendTokenForm,
-      [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0
-    );
-
-    const remainBalance = subBN(
-      web3.utils.toBN(balance),
-      addBN(
-        _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
-        feeAmount,
-        decimals
-      ),
-      decimals
-    );
-
-    const transferAmountBN = decimalsToBN(
-      _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
-      decimals
-    );
-    let transferAmount = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]);
-    if (balance === transferAmountBN) {
-      transferAmount = subBN(
-        web3.utils.toBN(balance),
-        feeAmount,
-        decimals
-      );
-      onUpdateSendTokenInput(
-        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-        removeTrailingZero(transferAmount)
-      );
-    } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
-        this.handleConfirmationError(
-          formatMessage(
-            MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
-          )
-        );
-    }
-    prepareSendingTxs(
-      web3,
-      pWallet,
-      transferAmount,
-      _get(sendTokenForm, [
-        SEND_TOKEN_FIELDS.RECIPIENT
-      ], ''),
-      utxos
-    ).then(data => {
-      onUpdateSendTokenInput(
-        SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
-        removeTrailingZero(transferAmount)
-      );
+      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.PROCESSING);
       onUpdateProcessing({
-        screen: 'sending',
-        total: total,
-        current: 100,
-        status: false,
+          screen: 'sending',
+          total: total,
+          current: 0,
+          status: true,
       })
-      onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObject);
-      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
-    }).catch(error => {
-      console.log(error);
-      onUpdateProcessing({
-        screen: '',
-        total: 0,
-        current: 0,
-        status: false,
-      })
-      this.handleConfirmationError(
-        formatMessage(
-          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
-        )
+
+      const decimals = _get(
+          sendTokenForm,
+          [SEND_TOKEN_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+          0
       );
-      onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.FORM);
-    })
-	}
+
+      const remainBalance = subBN(
+          web3.utils.toBN(balance),
+          addBN(
+              _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT], 0),
+              feeAmount,
+              decimals
+          ),
+          decimals
+      );
+
+      const transferAmountBN = decimalsToBN(
+          _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]),
+          decimals
+      );
+      let transferAmount = _get(sendTokenForm, [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]);
+
+      if (balance === transferAmountBN) {
+          transferAmount = subBN(
+              web3.utils.toBN(balance),
+              feeAmount,
+              decimals
+          );
+          onUpdateSendTokenInput(
+              SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+              removeTrailingZero(transferAmount)
+          );
+      } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+          this.handleConfirmationError(
+              formatMessage(
+                  MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+              )
+          );
+      }
+      prepareSendingTxs(
+          web3,
+          pWallet,
+          transferAmount,
+          _get(sendTokenForm, [
+              SEND_TOKEN_FIELDS.RECIPIENT
+          ], ''),
+          utxos
+      ).then(data => {
+          onUpdateSendTokenInput(
+              SEND_TOKEN_FIELDS.TRANSFER_AMOUNT,
+              removeTrailingZero(transferAmount)
+          );
+
+          onUpdateProcessing({
+              screen: 'sending',
+              total: total,
+              current: 100,
+              status: false,
+          })
+          onUpdateSendTokenInput(SEND_TOKEN_FIELDS.TRANSACTION_FEE, feeObject);
+          onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.CONFIRMATION);
+      }).catch(error => {
+          console.log(error);
+          onUpdateProcessing({
+              screen: '',
+              total: 0,
+              current: 0,
+              status: false,
+          })
+          this.handleConfirmationError(
+              formatMessage(
+                  MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+              )
+          );
+          onUpdateSendTokenPopupStage(SEND_TOKEN_STAGES.FORM);
+      })
+  }
 	
 	handleValidateDepositFee(feeObj) {
     const {
@@ -916,75 +924,122 @@ class MyWallet extends PureComponent {
   }
 
 	handleValidateWithdrawFee(feeObj) {
-    const {
-      intl: { formatMessage },
-      onUpdateWithdrawPrivacyInput,
-      onUpdateWithdrawPrivacyPopupStage,
-      withdrawForm,
-      toggleLoading,
-      web3,
-    } = this.props;
+	    const {
+	        intl: {
+	            formatMessage
+	        },
+	        onUpdateWithdrawPrivacyInput,
+	        onUpdateWithdrawPrivacyPopupStage,
+	        onUpdateProcessing,
+	        withdrawForm,
+	        toggleLoading,
+	        web3,
+	        wallet,
+	        privacyWallet,
+	    } = this.props;
 
-    const feeAmount = bnToDecimals(_get(feeObj, 'fee', 0), 18)
+	    const feeAmount = bnToDecimals(_get(feeObj, 'fee', 0), 18)
 
-    const feeObject = {
-      type: 'TRC21',
-      amount: feeAmount,
-    }
+	    const feeObject = {
+	        type: 'TRC21',
+	        amount: feeAmount,
+	    }
 
-    const balance = _get(withdrawForm, [
-      WITHDRAW_PRIVACY_FIELDS.TOKEN,
-      PORTFOLIO_COLUMNS.BALANCE
-    ]);
+	    const pWallet = _get(privacyWallet, ['privacyWallet'], {});
 
-    const decimals = _get(
-      withdrawForm,
-      [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
-      0
-    );
+	    const totalTime = feeAmount * 100;
 
-    const remainBalance = subBN(
-      web3.utils.toBN(balance),
-      addBN(
-        _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
-        feeAmount,
-        decimals
-      ),
-      decimals
-    );
+	    const balance = _get(withdrawForm, [
+	        WITHDRAW_PRIVACY_FIELDS.TOKEN,
+	        PORTFOLIO_COLUMNS.BALANCE
+	    ]);
 
-    const withdrawAmountBN = decimalsToBN(
-      _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]),
-      decimals
-    )
+	    const decimals = _get(
+	        withdrawForm,
+	        [WITHDRAW_PRIVACY_FIELDS.TOKEN, PORTFOLIO_COLUMNS.DECIMALS],
+	        0
+		);
+		let  withdrawAmount = _get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT]);
 
-    if (
-      web3.utils.toBN(balance).eq(web3.utils.toBN(withdrawAmountBN))
-    ) {
-      toggleLoading(false);
-      const remainAmount = subBN(
-        web3.utils.toBN(balance),
-        feeAmount,
-        decimals
-      );
-      onUpdateWithdrawPrivacyInput(
-        WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
-        removeTrailingZero(remainAmount)
-      );
-      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObject);
-      onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.CONFIRMATION);
-    } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
-      this.handleConfirmationError(
-        formatMessage(
-          MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
-        )
-      );
-    } else {
-      toggleLoading(false);
-      onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObject);
-      onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.CONFIRMATION);
-    }
-  }
+	    const remainBalance = subBN(
+	        web3.utils.toBN(balance),
+	        addBN(
+	            withdrawAmount,
+	            feeAmount,
+	            decimals
+	        ),
+	        decimals
+	    );
+
+	    const withdrawAmountBN = decimalsToBN(
+	        withdrawAmount,
+	        decimals
+		)
+
+	    onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.PROCESSING);
+	    onUpdateProcessing({
+	        screen: 'withdrawal',
+	        total: totalTime,
+	        current: 0,
+	        status: true,
+	    })
+        
+        if (
+	        web3.utils.toBN(balance).eq(web3.utils.toBN(withdrawAmountBN))
+	    ) {
+            withdrawAmount = subBN(
+	            web3.utils.toBN(balance),
+	            feeAmount,
+	            decimals
+          );
+	        onUpdateWithdrawPrivacyInput(
+	            WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+	            removeTrailingZero(withdrawAmount)
+	        );
+        } else if (web3.utils.toBN(decimalsToBN(remainBalance, decimals)).isNeg()) {
+	        this.handleConfirmationError(
+	            formatMessage(
+	                MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+	            )
+	        );
+		}
+		
+		// make withdrawing proof
+	    prepareWithdrawingTxs(
+	        web3,
+	        pWallet,
+	        withdrawAmount,
+	        _get(wallet, ['address'], ''),
+	        _get(feeObj, ['utxos'], [])
+        ).then(data => {
+			onUpdateWithdrawPrivacyInput(
+	            WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT,
+	            removeTrailingZero(withdrawAmount)
+	        );
+			onUpdateProcessing({
+				screen: 'withdrawing',
+				total: totalTime,
+				current: 100,
+				status: false,
+			})
+			onUpdateWithdrawPrivacyInput(WITHDRAW_PRIVACY_FIELDS.TRANSACTION_FEE, feeObject);
+	        onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.CONFIRMATION);
+		}).catch(error => {
+			console.log(error);
+			onUpdateProcessing({
+				screen: '',
+				total: 0,
+				current: 0,
+				status: false,
+			})
+			this.handleConfirmationError(
+				formatMessage(
+					MSG.MY_WALLET_POPUP_SEND_TOKEN_ERROR_INSUFFICIENT_FEE_FROM_CURRENCY
+				)
+			);
+			onUpdateWithdrawPrivacyPopupStage(WITHDRAW_STAGES.FORM);
+		})
+	}
 
   handleValidationSendForm() {
     const {
@@ -1336,8 +1391,9 @@ class MyWallet extends PureComponent {
           submitWithdraw={this.handleGetWithdrawAction}
           tokenOptions={tokenOptions}
           updateInput={onUpdateWithdrawPrivacyInput}
-					updateWithdrawPrivacyPopupStage={onUpdateWithdrawPrivacyPopupStage}
+		      updateWithdrawPrivacyPopupStage={onUpdateWithdrawPrivacyPopupStage}
           updateProcess={onUpdateProcessing}
+          process={this.handleProcessing()}
         />
         <SuccessWithdrawPopup
         amount={_get(withdrawForm, [WITHDRAW_PRIVACY_FIELDS.TRANSFER_AMOUNT])}
