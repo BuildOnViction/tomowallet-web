@@ -37,15 +37,6 @@ class ProcessingContent extends Component {
             return true
     }
 
-    componentWillUnmount () {
-        this.state.timeouts.forEach((timeout) => {
-            clearTimeout(timeout);
-        });
-        if (this.interval) {
-            clearInterval(this.interval);
-        }
-    }
-
     componentWillUpdate(nextProps, nextState) {
         if (!nextProps.process.status) {
             this.state.timeouts.forEach((timeout) => {
@@ -64,21 +55,12 @@ class ProcessingContent extends Component {
     }
 
     setPercent (total, i) {
-        const { updateProcess } = this.props;
         const timeouts = this.state.timeouts;
         timeouts.push(setTimeout(() => {
             const percent = calculatePercentage(total, i);
             this.setState({
                 percent: percent < 90 ? percent : 95,
             })
-            if (percent > 90) {
-                updateProcess({
-                    screen: 'sending',
-                    total: total,
-                    current: percent < 90 ? percent : 95,
-                    status: true,
-                })
-            }
         }, 50 * i));
         this.setState({
             timeouts: timeouts
@@ -91,10 +73,11 @@ class ProcessingContent extends Component {
         } = this.props
 
         this.setTips();
+        console.log('process',process)
 
-        if (process.status && process.total > 0 && process.screen === 'sending') {
+        if (process.status && process.total > 0 && process.screen === 'withdrawal') {
             const total = (process.total * (process.total < 2 ? 4 : 6)); // 4 seconds per tx
-            for (let i = 1; i <= total; i++) {
+            for (let i = 1; i < total; i++) {
                 this.setPercent(total, i);
             }
         }
