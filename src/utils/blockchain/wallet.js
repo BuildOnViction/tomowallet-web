@@ -5,34 +5,35 @@
  */
 // ===== IMPORTS =====
 // Modules
-import Web3 from 'web3';
-import HDWalletProvider from 'truffle-hdwallet-provider';
-import _isEmpty from 'lodash.isempty';
-import _isEqual from 'lodash.isequal';
+import Web3 from "web3";
+import HDWalletProvider from "truffle-hdwallet-provider";
+import _isEmpty from "lodash.isempty";
+import _isEqual from "lodash.isequal";
 // Utilities
-import trc20 from './abi/trc20.json';
-import trc21 from './abi/trc21.json';
-import trc21Issuer from './abi/trc21Issuer.json';
-import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
-import { mulBN } from './index.js';
+import trc20 from "./abi/trc20.json";
+import trc21 from "./abi/trc21.json";
+import trc21Issuer from "./abi/trc21Issuer.json";
+import { decimalsToBN, bnToDecimals, repeatGetTransaction } from "./utilities";
+import { mulBN } from "./index.js";
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
 const TOMO_Z_CONTRACT_ADDRESS = {
-  TOMOCHAIN_MAINNET: '0x8c0faeb5c6bed2129b8674f262fd45c4e9468bee',
-  TOMOCHAIN_TESTNET: '0x7081c72c9dc44686c7b7eab1d338ea137fa9f0d3',
+  TOMOCHAIN_MAINNET: "0x8c0faeb5c6bed2129b8674f262fd45c4e9468bee",
+  TOMOCHAIN_TESTNET: "0x7081c72c9dc44686c7b7eab1d338ea137fa9f0d3",
 };
-const DEFAULT_GAS_PRICE = '250000000';
-const DEFAULT_GAS_TOKEN = '500000';
-const DEFAULT_GAS_CURRENCY = '21000';
+const DEFAULT_GAS_PRICE = "250000000";
+const DEFAULT_GAS_TOKEN = "500000";
+const DEFAULT_GAS_CURRENCY = "21000";
 const DEFAULT_CURRENCY_DECIMALS = 18;
 const TOKEN_TYPE = {
-  TRC20: 'TRC20',
-  TRC21: 'TRC21',
-  CURRENCY: 'CURRENCY',
+  TRC20: "TRC20",
+  TRC21: "TRC21",
+  CURRENCY: "CURRENCY",
 };
-const defaultCallback = error => console.error('[ERROR]: ', error);
-const defaultReject = message => new Promise((_, rj) => rj(new Error(message)));
+const defaultCallback = (error) => console.error("[ERROR]: ", error);
+const defaultReject = (message) =>
+  new Promise((_, rj) => rj(new Error(message)));
 // ===============================
 
 // ===== METHODS =====
@@ -48,20 +49,20 @@ const createWeb3 = (mnemonic, serverConfig, callback = defaultCallback) => {
   let provider;
 
   try {
-    if (mnemonic && typeof serverConfig === 'object') {
+    if (mnemonic && typeof serverConfig === "object") {
       const { hdPath, host } = serverConfig;
       provider = new HDWalletProvider(mnemonic, host, 0, 1, true, hdPath);
     } else if (!_isEmpty(serverConfig)) {
-      if (typeof serverConfig === 'object') {
+      if (typeof serverConfig === "object") {
         const { host, type } = serverConfig;
-        if (type === 'ws') {
+        if (type === "ws") {
           provider = new Web3.providers.WebsocketProvider(host);
-        } else if (type === 'ipc') {
+        } else if (type === "ipc") {
           provider = new Web3.providers.IpcProvider(host);
         } else {
           provider = new Web3.providers.HttpProvider(host);
         }
-      } else if (typeof serverConfig === 'string') {
+      } else if (typeof serverConfig === "string") {
         provider = new Web3.providers.HttpProvider(serverConfig);
       }
     }
@@ -79,7 +80,7 @@ const createWeb3 = (mnemonic, serverConfig, callback = defaultCallback) => {
  * Retrieve account address from current Web3 provider
  * @param {Web3} web3 A Web3 object with provider initiated
  */
-const getAddressFromProvider = web3 => {
+const getAddressFromProvider = (web3) => {
   return (
     web3.currentProvider.selectedAddress ||
     (web3.currentProvider.addresses && web3.currentProvider.addresses[0])
@@ -93,15 +94,16 @@ const getAddressFromProvider = web3 => {
  * @param {String} mnemonic A 12-word recovery phrase
  * @param {Object} serverConfig Current RPC server configuration
  */
-const mnemonicToPrivateKey = (mnemonic = '', serverConfig = {}) => {
+const mnemonicToPrivateKey = (mnemonic = "", serverConfig = {}) => {
   const web3 = createWeb3(mnemonic, serverConfig);
+
   if (web3) {
     const address = getAddressFromProvider(web3);
     const pkInBytes = web3.currentProvider.wallets[address]._privKey;
 
-    return web3.utils.bytesToHex(pkInBytes).replace(/^0x/, '');
+    return web3.utils.bytesToHex(pkInBytes).replace(/^0x/, "");
   }
-  return '';
+  return "";
 };
 
 /**
@@ -110,18 +112,18 @@ const mnemonicToPrivateKey = (mnemonic = '', serverConfig = {}) => {
  * Retrieve wallet's basic information from current Web3 provider
  * @param {Web3} web3 A Web3 object with provider initiated
  */
-const getWalletInfo = web3 => {
+const getWalletInfo = (web3) => {
   if (web3) {
     const address = getAddressFromProvider(web3);
     if (address) {
-      return web3.eth.getBalance(address).then(balance => ({
+      return web3.eth.getBalance(address).then((balance) => ({
         address,
         balance,
       }));
     }
   }
   return defaultReject(
-    'Cannot find wallet information. Please check your web3 provider.',
+    "Cannot find wallet information. Please check your web3 provider."
   );
 };
 
@@ -136,12 +138,12 @@ const getBalance = (address, serverConfig) => {
   if (web3.utils.isAddress(address)) {
     return web3.eth.getBalance(address).catch(() => {
       throw new Error(
-        'Cannot get wallet balance. Please recheck RPC server configuration.',
+        "Cannot get wallet balance. Please recheck RPC server configuration."
       );
     });
   }
 
-  return defaultReject('Cannot get wallet balance due to invalid address.');
+  return defaultReject("Cannot get wallet balance due to invalid address.");
 };
 
 /**
@@ -158,12 +160,12 @@ const isAppliedTomoZ = (web3, txData, isTestnet) => {
     trc21Issuer,
     isTestnet
       ? TOMO_Z_CONTRACT_ADDRESS.TOMOCHAIN_TESTNET
-      : TOMO_Z_CONTRACT_ADDRESS.TOMOCHAIN_MAINNET,
+      : TOMO_Z_CONTRACT_ADDRESS.TOMOCHAIN_MAINNET
   );
   return tomoZContract.methods
     .getTokenCapacity(contractAddress)
     .call({ from })
-    .then(cap => !!Number(cap))
+    .then((cap) => !!Number(cap))
     .catch(() => false);
 };
 
@@ -182,12 +184,12 @@ const estimateTRC20Fee = (web3, txData) => {
   return contract.methods
     .transfer(to, weiAmount)
     .estimateGas({ from })
-    .then(gas =>
-      web3.eth.getGasPrice().then(price => {
+    .then((gas) =>
+      web3.eth.getGasPrice().then((price) => {
         const fee = mulBN(
           web3.utils.toBN(gas),
           web3.utils.toBN(price),
-          DEFAULT_CURRENCY_DECIMALS,
+          DEFAULT_CURRENCY_DECIMALS
         );
 
         return {
@@ -196,7 +198,7 @@ const estimateTRC20Fee = (web3, txData) => {
           gas,
           gasPrice: price,
         };
-      }),
+      })
     );
 };
 
@@ -212,12 +214,12 @@ const estimateTRC21Fee = (web3, txData, isTestnet) => {
   const contract = new web3.eth.Contract(trc21, contractAddress || from);
   const weiAmount = decimalsToBN(amount, decimals);
 
-  return isAppliedTomoZ(web3, txData, isTestnet).then(isApplied => {
+  return isAppliedTomoZ(web3, txData, isTestnet).then((isApplied) => {
     if (isApplied) {
       return contract.methods
         .estimateFee(weiAmount)
         .call({ from, to })
-        .then(fee => ({
+        .then((fee) => ({
           type: TOKEN_TYPE.TRC21,
           amount: bnToDecimals(fee, decimals),
           gas: DEFAULT_GAS_TOKEN,
@@ -240,16 +242,16 @@ const estimateCurrencyFee = (web3, txData) => {
   const fee = mulBN(
     web3.utils.toBN(DEFAULT_GAS_PRICE),
     web3.utils.toBN(DEFAULT_GAS_CURRENCY),
-    decimals,
+    decimals
   );
 
-  return new Promise(rs =>
+  return new Promise((rs) =>
     rs({
       type: TOKEN_TYPE.CURRENCY,
       amount: fee,
       gas: DEFAULT_GAS_CURRENCY,
       gasPrice: DEFAULT_GAS_PRICE,
-    }),
+    })
   );
 };
 
@@ -270,7 +272,7 @@ const estimateFee = (web3, tokenType, txData, isTestnet = false) => {
     return estimateCurrencyFee(web3, txData);
   }
   return defaultReject(
-    'Token type is invalid. Please choose between 3 options: "TRC20", "TRC21" or "CURRENCY".',
+    'Token type is invalid. Please choose between 3 options: "TRC20", "TRC21" or "CURRENCY".'
   );
 };
 
@@ -287,13 +289,13 @@ const sendToken = (web3, txData) => {
   const contract = new web3.eth.Contract(tokenAbi, contractAddress);
   const weiAmount = decimalsToBN(amount, decimals);
 
-  return new Promise(rs => {
+  return new Promise((rs) => {
     if (type === TOKEN_TYPE.TRC20) {
       rs(estimateTRC20Fee(web3, txData));
     } else if (type === TOKEN_TYPE.TRC21) {
       rs(estimateTRC21Fee(web3, txData));
     }
-  }).then(priceObj =>
+  }).then((priceObj) =>
     contract.methods
       .transfer(to, weiAmount)
       .send({
@@ -301,9 +303,9 @@ const sendToken = (web3, txData) => {
         gas: priceObj.gas,
         gasPrice: priceObj.gasPrice,
       })
-      .on('transactionHash', hash => {
+      .on("transactionHash", (hash) => {
         repeatGetTransaction(web3, hash);
-      }),
+      })
   );
 };
 
@@ -317,11 +319,11 @@ const sendToken = (web3, txData) => {
 const sendMoney = (web3, txData) => {
   const { amount, decimals, from, to } = txData;
   const remainDecimals =
-    amount.indexOf('.') !== -1
-      ? decimals - (amount.length - 1 - amount.indexOf('.'))
+    amount.indexOf(".") !== -1
+      ? decimals - (amount.length - 1 - amount.indexOf("."))
       : decimals;
   const weiAmount = web3.utils
-    .toBN(`${amount}`.replace('.', ''))
+    .toBN(`${amount}`.replace(".", ""))
     .mul(web3.utils.toBN(10 ** remainDecimals))
     .toString(10);
 

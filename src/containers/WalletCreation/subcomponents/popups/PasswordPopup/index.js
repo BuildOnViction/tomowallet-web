@@ -6,28 +6,28 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import _get from 'lodash.get';
-import _isEmpty from 'lodash.isempty';
-import _isEqual from 'lodash.isequal';
-import moment from 'moment';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import _get from "lodash.get";
+import _isEmpty from "lodash.isempty";
+import _isEqual from "lodash.isequal";
+import moment from "moment";
 // Custom Components
-import { PasswordPopupStyler } from './style';
-import PasswordContent from './content';
+import { PasswordPopupStyler } from "./style";
+import PasswordContent from "./content";
 // Utilities
-import { withIntl } from '../../../../../components/IntlProvider';
-import { selectPasswordPopup, selectMnemonic } from '../../../selectors';
+import { withIntl } from "../../../../../components/IntlProvider";
+import { selectPasswordPopup, selectMnemonic } from "../../../selectors";
 import {
   revealPasswordInput,
   togglePasswordPopup,
   updatePasswordPopupErrors,
   updatePasswordPopupInput,
   updatePasswordPopupState,
-} from '../../../actions';
+} from "../../../actions";
 import {
   encryptKeystore,
   mergeErrors,
@@ -35,9 +35,10 @@ import {
   validations,
   decryptKeystore,
   downloadFile,
-} from '../../../../../utils';
-import { MSG } from '../../../../../constants';
-import { PASSWORD_POPUP_STATES } from '../../../constants';
+} from "../../../../../utils";
+import { MSG } from "../../../../../constants";
+import { PASSWORD_POPUP_STATES } from "../../../constants";
+import { withWeb3 } from "../../../../../components/Web3";
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -47,7 +48,7 @@ class PasswordPopup extends PureComponent {
 
     this.handleEncryptData = this.handleEncryptData.bind(this);
     this.handleMoveToConfirmationForm = this.handleMoveToConfirmationForm.bind(
-      this,
+      this
     );
     this.handleMoveToPasswordForm = this.handleMoveToPasswordForm.bind(this);
     this.handleValidateForm = this.handleValidateForm.bind(this);
@@ -65,29 +66,29 @@ class PasswordPopup extends PureComponent {
 
     if (
       !_isEqual(
-        _get(popupData, 'input.password'),
-        _get(popupData, 'input.confirmation'),
+        _get(popupData, "input.password"),
+        _get(popupData, "input.confirmation")
       )
     ) {
       onUpdateErrors({
         confirmation: [
           formatMessage(
-            MSG.CREATE_WALLET_POPUP_PASSWORD_ERROR_INVALID_CONFIRMATION,
+            MSG.CREATE_WALLET_POPUP_PASSWORD_ERROR_INVALID_CONFIRMATION
           ),
         ],
       });
     } else {
       const privKey = mnemonicToPrivateKey(
-        _get(mnemonicState, 'origin', ''),
-        rpcServer,
+        _get(mnemonicState, "origin", ""),
+        rpcServer
       );
       const encryptedData = encryptKeystore(
         `0x${privKey}`,
-        _get(popupData, 'input.password', ''),
+        _get(popupData, "input.password", "")
       );
-      const timePrefix = moment().format('ZZ--YYYY-MM-DD-HH-mm-ss');
+      const timePrefix = moment().format("ZZ--YYYY-MM-DD-HH-mm-ss");
       const { address } =
-        decryptKeystore(encryptedData, _get(popupData, 'input.password', '')) ||
+        decryptKeystore(encryptedData, _get(popupData, "input.password", "")) ||
         {};
 
       downloadFile({
@@ -113,7 +114,7 @@ class PasswordPopup extends PureComponent {
     const { onUpdateInput, onUpdateState } = this.props;
 
     onUpdateState(PASSWORD_POPUP_STATES.PASSWORD);
-    onUpdateInput('confirmation', '');
+    onUpdateInput("confirmation", "");
   }
 
   handleValidateForm() {
@@ -127,24 +128,24 @@ class PasswordPopup extends PureComponent {
       [
         {
           ...isRequired(
-            { name: 'password', value: _get(popupData, 'input.password', '') },
+            { name: "password", value: _get(popupData, "input.password", "") },
             formatMessage(
-              MSG.CREATE_WALLET_POPUP_PASSWORD_ERROR_PASSWORD_REQUIRED,
-            ),
+              MSG.CREATE_WALLET_POPUP_PASSWORD_ERROR_PASSWORD_REQUIRED
+            )
           ),
           ...isMinLength(
             {
-              name: 'password',
-              value: _get(popupData, 'input.password'),
+              name: "password",
+              value: _get(popupData, "input.password"),
               min: 8,
             },
             formatMessage(
-              MSG.CREATE_WALLET_POPUP_PASSWORD_ERROR_MINIMUM_PASSWORD,
-            ),
+              MSG.CREATE_WALLET_POPUP_PASSWORD_ERROR_MINIMUM_PASSWORD
+            )
           ),
         },
       ],
-      _get(popupData, 'errors'),
+      _get(popupData, "errors")
     );
   }
 
@@ -156,7 +157,7 @@ class PasswordPopup extends PureComponent {
       onUpdateInput,
       popupData,
     } = this.props;
-    const formState = _get(popupData, 'state');
+    const formState = _get(popupData, "state");
 
     return (
       <PasswordPopupStyler
@@ -186,10 +187,10 @@ class PasswordPopup extends PureComponent {
         }
         Content={PasswordContent}
         getContentProps={{
-          errors: _get(popupData, 'errors', {}),
-          formState: _get(popupData, 'state', PASSWORD_POPUP_STATES.PASSWORD),
-          formValues: _get(popupData, 'input', {}),
-          isRevealed: _get(popupData, 'isRevealed', false),
+          errors: _get(popupData, "errors", {}),
+          formState: _get(popupData, "state", PASSWORD_POPUP_STATES.PASSWORD),
+          formValues: _get(popupData, "input", {}),
+          isRevealed: _get(popupData, "isRevealed", false),
           revealText: onRevealPasswordInput,
           updateInput: onUpdateInput,
           handleSubmit:
@@ -197,7 +198,7 @@ class PasswordPopup extends PureComponent {
               ? this.handleMoveToConfirmationForm
               : this.handleEncryptData,
         }}
-        isOpen={_get(popupData, 'isOpen', false)}
+        isOpen={_get(popupData, "isOpen", false)}
         title={formatMessage(MSG.CREATE_WALLET_POPUP_PASSWORD_TITLE)}
       />
     );
@@ -209,6 +210,8 @@ class PasswordPopup extends PureComponent {
 PasswordPopup.propTypes = {
   /** Mnemonic generation's state */
   mnemonicState: PropTypes.object,
+  /** Current RPC server configuration */
+  rpcServer: PropTypes.object,
   /** Action to hide/reveal password input */
   onRevealPasswordInput: PropTypes.func,
   /** Action to show/hide popup */
@@ -225,6 +228,7 @@ PasswordPopup.propTypes = {
 
 PasswordPopup.defaultProps = {
   mnemonicState: {},
+  rpcServer: {},
   onRevealPasswordInput: () => {},
   onTogglePopup: () => {},
   onUpdateErrors: () => {},
@@ -240,21 +244,15 @@ const mapStateToProps = () =>
     mnemonicState: selectMnemonic,
     popupData: selectPasswordPopup,
   });
-const mapDispatchToProps = dispatch => ({
-  onRevealPasswordInput: bool => dispatch(revealPasswordInput(bool)),
-  onTogglePopup: bool => dispatch(togglePasswordPopup(bool)),
-  onUpdateErrors: errors => dispatch(updatePasswordPopupErrors(errors)),
+const mapDispatchToProps = (dispatch) => ({
+  onRevealPasswordInput: (bool) => dispatch(revealPasswordInput(bool)),
+  onTogglePopup: (bool) => dispatch(togglePasswordPopup(bool)),
+  onUpdateErrors: (errors) => dispatch(updatePasswordPopupErrors(errors)),
   onUpdateInput: (name, value) =>
     dispatch(updatePasswordPopupInput(name, value)),
-  onUpdateState: state => dispatch(updatePasswordPopupState(state)),
+  onUpdateState: (state) => dispatch(updatePasswordPopupState(state)),
 });
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 // ======================
 
-export default compose(
-  withConnect,
-  withIntl,
-)(PasswordPopup);
+export default compose(withConnect, withIntl, withWeb3)(PasswordPopup);
