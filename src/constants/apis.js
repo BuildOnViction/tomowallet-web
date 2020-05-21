@@ -4,10 +4,12 @@
  *
  */
 // Base URLs
-const WALLET_TESTNET = 'https://apiwallet.testnet.tomochain.com';
-const SCAN_TESTNET = 'https://scan.testnet.tomochain.com';
-const WALLET_MAINNET = 'https://wallet.tomochain.com';
-const SCAN_MAINNET = 'https://scan.tomochain.com';
+const WALLET_TESTNET = "https://apiwallet.testnet.tomochain.com";
+const SCAN_TESTNET = "https://scan.testnet.tomochain.com";
+const WALLET_MAINNET = "https://wallet.tomochain.com";
+const SCAN_MAINNET = "https://scan.tomochain.com";
+const TOMO_BRIDGE = "https://bridge.tomochain.com";
+const TOMO_DEX = "https://dex.tomochain.com";
 
 export default {
   TOMOCHAIN_TESTNET: {
@@ -17,6 +19,8 @@ export default {
     VIEW_TRANSACTION: `${SCAN_TESTNET}/txs`,
     VIEW_ADDRESS: `${SCAN_TESTNET}/address`,
     VIEW_TOKEN: `${SCAN_TESTNET}/tokens`,
+    VIEW_WRAP_APP: `${TOMO_BRIDGE}/wrap`,
+    VIEW_TRADE_APP: `${TOMO_DEX}/trade`,
   },
   TOMOCHAIN_MAINNET: {
     GET_TOKENS: `${WALLET_MAINNET}/api/tokens`,
@@ -25,5 +29,7 @@ export default {
     VIEW_TRANSACTION: `${SCAN_MAINNET}/txs`,
     VIEW_ADDRESS: `${SCAN_MAINNET}/address`,
     VIEW_TOKEN: `${SCAN_MAINNET}/tokens`,
+    VIEW_WRAP_APP: `${TOMO_BRIDGE}/wrap`,
+    VIEW_TRADE_APP: `${TOMO_DEX}/trade`,
   },
 };

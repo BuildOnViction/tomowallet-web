@@ -5,7 +5,7 @@
  */
 // ===== IMPORTS =====
 // Modules
-import styled from 'styled-components';
+import styled from "styled-components";
 // ===================
 
 // ===== STYLE =====
@@ -35,7 +35,7 @@ const TokenCellStyler = styled.div`
 const BoxPortfolio = styled.div`
   .rt-tr {
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-columns: 24% 24% 24% 28%;
     .rt-th {
       position: relative;
       &:not(.no-header):before {
@@ -63,7 +63,7 @@ const BoxPortfolio = styled.div`
   }
   .rt-tbody {
     .rt-tr {
-      grid-template-columns: 20% 20% 20% 20% 15% 5%;
+      grid-template-columns: 24% 24% 24% 10% 9% 9%;
     }
   }
 `;
