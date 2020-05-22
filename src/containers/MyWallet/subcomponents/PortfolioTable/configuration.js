@@ -120,7 +120,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           );
           const tokenSymbol = _get(original, [PORTFOLIO_COLUMNS.SYMBOL], "");
           const isVisible = Object.values(ENUM.WRAPPABLE_TOKEN).some(
-            (address) => address === tokenAddress
+            (address) => address.toLowerCase() === tokenAddress.toLowerCase()
           );
           const wrapLink = `${API.TOMOCHAIN_MAINNET.VIEW_WRAP_APP}${
             tokenSymbol ? `/${tokenSymbol.toLowerCase()}` : ""
@@ -156,7 +156,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           const isVisible =
             tokenSymbol === "TOMO" ||
             Object.values(ENUM.TRADEABLE_TOKEN).some(
-              (address) => address === tokenAddress
+              (address) => address.toLowerCase() === tokenAddress.toLowerCase()
             );
           const tradeLink = `${API.TOMOCHAIN_MAINNET.VIEW_TRADE_APP}${
             tokenSymbol ? `/${tokenSymbol.toLowerCase()}` : ""
