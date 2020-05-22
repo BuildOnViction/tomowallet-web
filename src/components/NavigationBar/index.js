@@ -6,41 +6,43 @@
  * with different kinds of options (public & private)
  */
 // Modules
-import React, { PureComponent, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { createStructuredSelector } from 'reselect';
-import _get from 'lodash.get';
-import _isEmpty from 'lodash.isempty';
-import _isEqual from 'lodash.isequal';
+import React, { PureComponent, Fragment } from "react";
+import PropTypes from "prop-types";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { createStructuredSelector } from "reselect";
+import _get from "lodash.get";
+import _isEmpty from "lodash.isempty";
+import _isEqual from "lodash.isequal";
 import {
   NavbarBrand,
   Collapse,
   Nav,
   UncontrolledDropdown,
   CardImg,
-} from 'reactstrap';
+  NavItem,
+  NavLink,
+} from "reactstrap";
 // Custom Components
-import WalletPopup from './subcomponents/WalletPopup';
-import NetworkConfirmationPopup from './subcomponents/NetworkConfirmationPopup';
+import WalletPopup from "./subcomponents/WalletPopup";
+import NetworkConfirmationPopup from "./subcomponents/NetworkConfirmationPopup";
 import {
   NavBarStyler,
   DropdownToggleHeader,
   DropdownMenuStyler,
   DropdownItemStyler,
-} from './style';
+} from "./style";
 // Utilities & Constants
-import { withWeb3 } from '../Web3';
-import { withIntl } from '../IntlProvider';
+import { withWeb3 } from "../Web3";
+import { withIntl } from "../IntlProvider";
 import {
   releaseWallet,
   toggleWalletPopup,
   setNetwork,
   toggleNetworkConfirmationPopup,
-} from '../../containers/Global/actions';
-import { ROUTE, LIST, MSG } from '../../constants';
+} from "../../containers/Global/actions";
+import { ROUTE, LIST, MSG, API } from "../../constants";
 import {
   removeWeb3Info,
   setLocale,
@@ -50,13 +52,13 @@ import {
   getWeb3Info,
   isElectron,
   withGlobal,
-} from '../../utils';
+} from "../../utils";
 import {
   selectNetworkData,
   selectNetworkConfirmationPopup,
-} from '../../containers/Global/selectors';
-import logo_tomochain from '../../assets/images/logo-tomochain.png';
-import { removeRPFile } from '../../utils/electron';
+} from "../../containers/Global/selectors";
+import logo_tomochain from "../../assets/images/logo-tomochain.png";
+import { removeRPFile } from "../../utils/electron";
 
 // ===== MAIN COMPONENT =====
 class NavigationBar extends PureComponent {
@@ -74,7 +76,9 @@ class NavigationBar extends PureComponent {
 
   componentDidMount() {
     const { changeLocale, onSetNetwork } = this.props;
-    const storedNetwork = LIST.NETWORKS.find(opt => opt.value === getNetwork());
+    const storedNetwork = LIST.NETWORKS.find(
+      (opt) => opt.value === getNetwork()
+    );
     const storedLocale = getLocale();
 
     if (!_isEmpty(storedNetwork)) {
@@ -121,10 +125,10 @@ class NavigationBar extends PureComponent {
     return (
       <UncontrolledDropdown nav inNavbar>
         <DropdownToggleHeader nav>
-          {(LIST.LANGUAGES.find(opt => opt.value === language) || {}).label}
-          <i className='font-chevron-down' />
+          {(LIST.LANGUAGES.find((opt) => opt.value === language) || {}).label}
+          <i className="font-chevron-down" />
         </DropdownToggleHeader>
-        <DropdownMenuStyler right className='shadow-lg'>
+        <DropdownMenuStyler right className="shadow-lg">
           {LIST.LANGUAGES.map((opt, optIdx) => (
             <DropdownItemStyler
               key={`language_${optIdx + 1}`}
@@ -145,16 +149,21 @@ class NavigationBar extends PureComponent {
       onToggleNetworkConfirmationPopup,
       onToggleWalletPopup,
     } = this.props;
-    const hasPrivateKey = _get(getWeb3Info(), 'recoveryPhrase', false);
+    const hasPrivateKey = _get(getWeb3Info(), "recoveryPhrase", false);
 
     return (
       <Fragment>
+        <NavItem className="mr-2">
+          <NavLink href={API.TOMOCHAIN_MAINNET.VIEW_TRADE_APP} target="_blank">
+            {formatMessage(MSG.HEADER_NAVBAR_OPTION_TRADING)}
+          </NavLink>
+        </NavItem>
         <UncontrolledDropdown nav inNavbar>
-          <DropdownToggleHeader nav className='onl'>
-            {_get(network, 'data.label')}
-            <i className='font-chevron-down' />
+          <DropdownToggleHeader nav className="onl">
+            {_get(network, "data.label")}
+            <i className="font-chevron-down" />
           </DropdownToggleHeader>
-          <DropdownMenuStyler right className='box_onl shadow'>
+          <DropdownMenuStyler right className="box_onl shadow">
             {LIST.NETWORKS.map((opt, optIdx) => (
               <DropdownItemStyler
                 key={`network_${optIdx + 1}`}
@@ -170,13 +179,13 @@ class NavigationBar extends PureComponent {
         <UncontrolledDropdown nav inNavbar>
           <DropdownToggleHeader nav>
             {formatMessage(MSG.HEADER_NAVBAR_OPTION_MY_WALLET)}
-            <i className='font-chevron-down' />
+            <i className="font-chevron-down" />
           </DropdownToggleHeader>
-          <DropdownMenuStyler right className='shadow-lg'>
+          <DropdownMenuStyler right className="shadow-lg">
             {hasPrivateKey && (
               <DropdownItemStyler onClick={() => onToggleWalletPopup(true)}>
                 {formatMessage(
-                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET,
+                  MSG.HEADER_NAVBAR_OPTION_MY_WALLET_OPTION_SHOW_WALLET
                 )}
               </DropdownItemStyler>
             )}
@@ -196,7 +205,7 @@ class NavigationBar extends PureComponent {
     const { network } = this.props;
     const { value } = networkOpt;
 
-    return _isEqual(_get(network, 'data.value'), value);
+    return _isEqual(_get(network, "data.value"), value);
   }
 
   render() {
@@ -209,7 +218,7 @@ class NavigationBar extends PureComponent {
 
     return (
       <Fragment>
-        <NavBarStyler light expand='md'>
+        <NavBarStyler light expand="md">
           <NavbarBrand onClick={this.handleRedirectToHomepage}>
             <CardImg
               src={logo_tomochain}
@@ -217,7 +226,7 @@ class NavigationBar extends PureComponent {
             />
           </NavbarBrand>
           <Collapse navbar>
-            <Nav className='ml-auto' navbar>
+            <Nav className="ml-auto" navbar>
               {isLoggedIn && this.handleRenderPrivateBar()}
               {this.handleRenderPublicBar()}
             </Nav>
@@ -276,7 +285,7 @@ NavigationBar.defaultProps = {
   history: {},
   intl: {},
   isLoggedIn: false,
-  language: 'en',
+  language: "en",
   network: {},
   networkConfirmationPopup: {},
   onReleaseWallet: () => {},
@@ -296,17 +305,14 @@ const mapStateToProps = () =>
     network: selectNetworkData,
     networkConfirmationPopup: selectNetworkConfirmationPopup,
   });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onReleaseWallet: () => dispatch(releaseWallet()),
-  onSetNetwork: network => dispatch(setNetwork(network)),
+  onSetNetwork: (network) => dispatch(setNetwork(network)),
   onToggleNetworkConfirmationPopup: (bool, networkOpt) =>
     dispatch(toggleNetworkConfirmationPopup(bool, networkOpt)),
-  onToggleWalletPopup: bool => dispatch(toggleWalletPopup(bool)),
+  onToggleWalletPopup: (bool) => dispatch(toggleWalletPopup(bool)),
 });
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 // ======================
 
 export default compose(
@@ -314,5 +320,5 @@ export default compose(
   withGlobal,
   withIntl,
   withRouter,
-  withWeb3,
+  withWeb3
 )(NavigationBar);

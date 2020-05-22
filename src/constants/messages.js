@@ -122,6 +122,10 @@ export default defineMessages({
     id: `${navbarPrefix}.option.mywallet.option.logout`,
     defaultMessage: "Log out",
   },
+  HEADER_NAVBAR_OPTION_TRADING: {
+    id: `${navbarPrefix}.option.mywallet.option.trading`,
+    defaultMessage: "Trade on TomoDex",
+  },
   HEADER_NAVBAR_POPUP_SHOW_WALLET_TITLE: {
     id: `${navbarPrefix}.popup.showwallet.title`,
     defaultMessage: "Show Wallet",
@@ -700,6 +704,10 @@ export default defineMessages({
   MY_WALLET_TABLE_TRANSACTIONS_HEADER_QUANTITY: {
     id: `${myWalletPagePrefix}.table.transactions.header.quantity`,
     defaultMessage: "Amount",
+  },
+  MY_WALLET_TABLE_TOOLBAR_LINK_WRAP_APP: {
+    id: `${myWalletPagePrefix}.table.toolbar.link.wrapapp`,
+    defaultMessage: "Wrap/Unwrap on TomoBridge",
   },
   MY_WALLET_POPUP_SEND_TOKEN_TITLE: {
     id: `${myWalletPagePrefix}.popup.sendtoken.title`,

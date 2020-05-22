@@ -5,14 +5,14 @@
  */
 // ===== IMPORTS =====
 // Modules
-import styled from 'styled-components';
+import styled from "styled-components";
 import {
   Navbar,
   NavLink,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-} from 'reactstrap';
+} from "reactstrap";
 // ===================
 
 // ===== STYLE =====
@@ -32,7 +32,7 @@ const DropdownToggleHeader = styled(DropdownToggle)`
   &.onl:before {
     background-color: #36ce9a;
     border-radius: 50%;
-    content: '';
+    content: "";
     width: 6px;
     height: 6px;
     position: absolute;
@@ -93,7 +93,14 @@ const NavBarStyler = styled(Navbar)`
     }
   }
   .nav-item {
-    font-weight: bold;
+    .nav-link {
+      color: #9eaacc;
+      transition: none;
+      &:hover {
+        color: #9eaacc;
+        font-weight: bold;
+      }
+    }
     @media (min-width: 992px) {
       &:not(:first-child) {
         margin-left: 20px;

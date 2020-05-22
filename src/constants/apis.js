@@ -8,8 +8,8 @@ const WALLET_TESTNET = "https://apiwallet.testnet.tomochain.com";
 const SCAN_TESTNET = "https://scan.testnet.tomochain.com";
 const WALLET_MAINNET = "https://wallet.tomochain.com";
 const SCAN_MAINNET = "https://scan.tomochain.com";
-const TOMO_BRIDGE = "https://bridge.tomochain.com";
-const TOMO_DEX = "https://dex.tomochain.com";
+export const TOMO_BRIDGE = "https://bridge.tomochain.com";
+export const TOMO_DEX = "https://dex.tomochain.com";
 
 export default {
   TOMOCHAIN_TESTNET: {
