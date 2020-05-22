@@ -111,8 +111,6 @@ export default ({ formatMessage, openSendTokenPopup }) => [
       {
         headerClassName: "d-none",
         Cell: ({ index, original }) => {
-          console.warn("token row", original);
-
           const tokenAddress = _get(
             original,
             [PORTFOLIO_COLUMNS.TOKEN_ADDRESS],
@@ -135,7 +133,7 @@ export default ({ formatMessage, openSendTokenPopup }) => [
                   {formatMessage(
                     MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_WRAP_APP,
                     {
-                      token: _get(original, [PORTFOLIO_COLUMNS.TOKEN_NAME], ""),
+                      token: _get(original, [PORTFOLIO_COLUMNS.SYMBOL], ""),
                     }
                   )}
                 </Tooltip>
@@ -164,14 +162,17 @@ export default ({ formatMessage, openSendTokenPopup }) => [
           return (
             isVisible && (
               <a href={tradeLink} rel="noopener noreferrer" target="_blank">
-                <TextYellowPointer id={`view_wrap_link_${index + 1}`}>
+                <TextYellowPointer id={`view_trade_link_${index + 1}`}>
                   <FontAwesomeIcon icon="chart-line" />
                 </TextYellowPointer>
-                <Tooltip placement="top" target={`view_wrap_link_${index + 1}`}>
+                <Tooltip
+                  placement="top"
+                  target={`view_trade_link_${index + 1}`}
+                >
                   {formatMessage(
                     MSG.MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_TRADE_APP,
                     {
-                      token: _get(original, [PORTFOLIO_COLUMNS.TOKEN_NAME], ""),
+                      token: _get(original, [PORTFOLIO_COLUMNS.SYMBOL], ""),
                     }
                   )}
                 </Tooltip>

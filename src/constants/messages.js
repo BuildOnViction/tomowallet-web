@@ -675,7 +675,7 @@ export default defineMessages({
   },
   MY_WALLET_TABLE_PORTFOLIO_CELL_ACTION_VIEW_TRADE_APP: {
     id: `${myWalletPagePrefix}.table.portfolio.cell.action.viewtradeapp`,
-    defaultMessage: "Start trading {token} on TomoDex",
+    defaultMessage: "Trade {token} on TomoDex",
   },
   MY_WALLET_TABLE_PORTFOLIO_ERROR_LOAD_FAILED: {
     id: `${myWalletPagePrefix}.table.portfolio.error.load.failed`,

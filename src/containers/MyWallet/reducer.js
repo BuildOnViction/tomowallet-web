@@ -34,7 +34,7 @@ import {
   UPDATE_RECEIVE_TOKEN_INPUT,
   UPDATE_SEND_TOKEN_ERRORS,
   UPDATE_SEND_TOKEN_INPUT,
-  UPDATE_SEND_TOKEN_POPUP_STAGE
+  UPDATE_SEND_TOKEN_POPUP_STAGE,
 } from "./constants";
 import { LIST } from "../../constants";
 // ===================
@@ -44,29 +44,29 @@ const initialSendForm = {
   [SEND_TOKEN_FIELDS.TOKEN]: "",
   [SEND_TOKEN_FIELDS.RECIPIENT]: "",
   [SEND_TOKEN_FIELDS.TRANSFER_AMOUNT]: "",
-  [SEND_TOKEN_FIELDS.MESSAGE]: ""
+  [SEND_TOKEN_FIELDS.MESSAGE]: "",
 };
 
 const initialState = fromJS({
   coinData: {
     isLoaded: false,
     data: {},
-    errorMessage: ""
+    errorMessage: "",
   },
   receiveTokenPopup: {
     errors: {},
     input: {},
-    isOpen: false
+    isOpen: false,
   },
   sendForm: initialSendForm,
   sendTokenPopup: {
     errors: {},
     isOpen: false,
-    stage: SEND_TOKEN_STAGES.FORM
+    stage: SEND_TOKEN_STAGES.FORM,
   },
   successPopup: {
     isOpen: false,
-    txHash: ""
+    txHash: "",
   },
   tableType: LIST.MY_WALLET_TABLE_TYPES[0].value,
   tokenOptions: [],
@@ -74,8 +74,8 @@ const initialState = fromJS({
     data: [],
     page: 1,
     pages: 1,
-    total: 0
-  }
+    total: 0,
+  },
 });
 // ====================================
 
@@ -94,8 +94,8 @@ export default (state = initialState, action) => {
       return state
         .setIn(["coinData", "isLoaded"], true)
         .setIn(["coinData", "data"], action.data)
-        .update("tokenOptions", tokens =>
-          tokens.map(tok => {
+        .update("tokenOptions", (tokens) =>
+          tokens.map((tok) => {
             if (tok[PORTFOLIO_COLUMNS.TOKEN_NAME] === "TOMO") {
               return {
                 ...tok,
@@ -103,7 +103,7 @@ export default (state = initialState, action) => {
                   action,
                   "data.quotes.USD.price",
                   0
-                )
+                ),
               };
             }
             return tok;
@@ -112,9 +112,9 @@ export default (state = initialState, action) => {
     case LOAD_TOKEN_OPTIONS:
       return state.set("tokenOptions", action.initialTokens);
     case LOAD_TOKEN_OPTIONS_SUCCESS:
-      return state.update("tokenOptions", tokens =>
+      return state.update("tokenOptions", (tokens) =>
         tokens.concat(
-          action.tokens.map(token => {
+          action.tokens.map((token) => {
             return {
               [PORTFOLIO_COLUMNS.TOKEN_NAME]: _get(token, "name", ""),
               [PORTFOLIO_COLUMNS.SYMBOL]: _get(token, "symbol", ""),
@@ -128,7 +128,7 @@ export default (state = initialState, action) => {
                 ""
               ),
               [PORTFOLIO_COLUMNS.TYPE]: _get(token, "type", "TRC20"),
-              [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03
+              [PORTFOLIO_COLUMNS.TRANSACTION_FEE]: 0.03,
             };
           })
         )
@@ -137,7 +137,7 @@ export default (state = initialState, action) => {
       return state.setIn(["transactionTable", "data"], []);
     case LOAD_TRANSACTION_DATA_SUCCESS:
       return state.set("transactionTable", {
-        data: _get(action, "tableData.items", []).map(trans => ({
+        data: _get(action, "tableData.items", []).map((trans) => ({
           [TRANSACTION_COLUMNS.TOKEN_TYPE]: trans.tokenType,
           [TRANSACTION_COLUMNS.TX_HASH]: trans.txHash,
           [TRANSACTION_COLUMNS.CREATE_TIME]: moment(
@@ -148,11 +148,11 @@ export default (state = initialState, action) => {
           [TRANSACTION_COLUMNS.FROM]: trans.from,
           [TRANSACTION_COLUMNS.TO]: trans.to,
           [TRANSACTION_COLUMNS.QUANTITY]: trans.amount,
-          [TRANSACTION_COLUMNS.TYPE]: trans.type
+          [TRANSACTION_COLUMNS.TYPE]: trans.type,
         })),
         page: _get(action, "tableData.currentPage", 1),
         total: _get(action, "tableData.total", 0),
-        pages: _get(action, "tableData.pages", 1)
+        pages: _get(action, "tableData.pages", 1),
       });
     case RESET_RECEIVE_TOKEN_FORM:
       return state
@@ -172,7 +172,7 @@ export default (state = initialState, action) => {
           .setIn(["sendTokenPopup", "isOpen"], true)
           .set("sendForm", {
             ...initialSendForm,
-            ...(action.initialValues || {})
+            ...(action.initialValues || {}),
           })
           .setIn(["sendTokenPopup", "errors"], {});
       }
@@ -195,7 +195,7 @@ export default (state = initialState, action) => {
     case UPDATE_RECEIVE_TOKEN_INPUT:
       return state
         .setIn(["receiveTokenPopup", "input", action.name], action.value)
-        .updateIn(["receiveTokenPopup", "errors"], errors =>
+        .updateIn(["receiveTokenPopup", "errors"], (errors) =>
           _omit(errors, action.name)
         );
     case UPDATE_SEND_TOKEN_ERRORS:
@@ -203,7 +203,7 @@ export default (state = initialState, action) => {
     case UPDATE_SEND_TOKEN_INPUT:
       return state
         .setIn(["sendForm", action.name], action.value)
-        .updateIn(["sendTokenPopup", "errors"], errors =>
+        .updateIn(["sendTokenPopup", "errors"], (errors) =>
           _omit(errors, action.name)
         );
     case UPDATE_SEND_TOKEN_POPUP_STAGE:
