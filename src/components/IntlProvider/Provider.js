@@ -6,22 +6,24 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { IntlProvider, injectIntl } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import hoistNonReactStatics from 'hoist-non-react-statics';
+import React, { PureComponent } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { IntlProvider, injectIntl } from "react-intl";
+import { createStructuredSelector } from "reselect";
+import hoistNonReactStatics from "hoist-non-react-statics";
 // Utilities & Constants
-import { selectLanguage } from '../../containers/Global/selectors';
-import { setLanguage } from '../../containers/Global/actions';
-import { ENUM } from '../../constants';
+import { selectLanguage } from "../../containers/Global/selectors";
+import { setLanguage } from "../../containers/Global/actions";
+import { ENUM } from "../../constants";
 // ===================
 
 // ===== React Intl Customized Provider =====
 class CustomIntlProvider extends PureComponent {
   render() {
     const { language, children } = this.props;
+    console.warn("Language: ", language);
+
     return (
       <IntlProvider locale={language} messages={ENUM.MESSAGE_SET[language]}>
         {children}
@@ -39,7 +41,7 @@ export default connect(mapStateToProps)(CustomIntlProvider);
 // ==========================
 
 // ===== React Intl Customized Injection =====
-export const withIntl = WrappedComponent => {
+export const withIntl = (WrappedComponent) => {
   class IntlConsumer extends PureComponent {
     render() {
       const { language, onSetLanguage } = this.props;
@@ -61,20 +63,14 @@ export const withIntl = WrappedComponent => {
     createStructuredSelector({
       language: selectLanguage,
     });
-  const mapDispatchToProps = dispatch => ({
-    onSetLanguage: language => dispatch(setLanguage(language)),
+  const mapDispatchToProps = (dispatch) => ({
+    onSetLanguage: (language) => dispatch(setLanguage(language)),
   });
-  const withConnect = connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  );
+  const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
   return hoistNonReactStatics(
-    compose(
-      withConnect,
-      injectIntl,
-    )(IntlConsumer),
-    WrappedComponent,
+    compose(withConnect, injectIntl)(IntlConsumer),
+    WrappedComponent
   );
 };
 // ===========================================
