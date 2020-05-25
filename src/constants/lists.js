@@ -6,9 +6,9 @@
  */
 // ===== IMPORTS =====
 // Utilities & Constants
-import { getMessage } from '../components/IntlProvider';
-import MSG from './messages';
-import ENUM from './enums';
+import { getMessage } from "../components/IntlProvider";
+import MSG from "./messages";
+import ENUM from "./enums";
 // ===================
 
 // ===== LISTS =====
@@ -16,11 +16,15 @@ import ENUM from './enums';
 const LANGUAGES = [
   {
     label: getMessage(MSG.COMMON_LIST_LANGUAGE_ENGLISH),
-    value: 'en',
+    value: "en",
   },
   {
     label: getMessage(MSG.COMMON_LIST_LANGUAGE_FRENCH),
-    value: 'fr',
+    value: "fr",
+  },
+  {
+    label: getMessage(MSG.COMMON_LIST_LANGUAGE_TURKISH),
+    value: "tr",
   },
 ];
 
@@ -40,11 +44,11 @@ const NETWORKS = [
 const MY_WALLET_TABLE_TYPES = [
   {
     label: getMessage(MSG.MY_WALLET_TABLE_PORTFOLIO_TITLE),
-    value: '1',
+    value: "1",
   },
   {
     label: getMessage(MSG.MY_WALLET_TABLE_TRANSACTION_TITLE),
-    value: '2',
+    value: "2",
   },
 ];
 // =================

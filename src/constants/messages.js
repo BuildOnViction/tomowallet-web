@@ -79,11 +79,15 @@ export default defineMessages({
   // Common - Lists
   COMMON_LIST_LANGUAGE_ENGLISH: {
     id: `${listPrefix}.language.english`,
-    defaultMessage: "EN",
+    defaultMessage: "English (EN)",
   },
   COMMON_LIST_LANGUAGE_FRENCH: {
     id: `${listPrefix}.language.french`,
-    defaultMessage: "FR",
+    defaultMessage: "French (FR)",
+  },
+  COMMON_LIST_LANGUAGE_TURKISH: {
+    id: `${listPrefix}.language.turkish`,
+    defaultMessage: "Turkish (TR)",
   },
   COMMON_LIST_NETWORK_TOMOCHAIN_TESTNET: {
     id: `${listPrefix}.network.tomochain.testnet`,
@@ -809,25 +813,9 @@ export default defineMessages({
     id: `${myWalletPagePrefix}.popup.receivetoken.content.message`,
     defaultMessage: "Your address supports transferring to TOMO and its token",
   },
-  MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE_DEPOSIT: {
-    id: `${myWalletPagePrefix}.popup.receivetoken.title.deposit`,
-    defaultMessage: "Deposit",
-  },
   MY_WALLET_POPUP_RECEIVE_TOKEN_INPUT_AMOUNT_LABEL: {
     id: `${myWalletPagePrefix}.popup.receivetoken.input.amount.label`,
     defaultMessage: "Amount",
-  },
-  MY_WALLET_POPUP_RECEIVE_TOKEN_INPUT_AMOUNT_PLACEHOLDER: {
-    id: `${myWalletPagePrefix}.popup.receivetoken.input.amount.placeholder`,
-    defaultMessage: "Enter an amount of TOMO...",
-  },
-  MY_WALLET_POPUP_RECEIVE_TOKEN_ERROR_AMOUNT_REQUIRED: {
-    id: `${myWalletPagePrefix}.popup.receivetoken.error.amount.required`,
-    defaultMessage: "Given amount is invalid.",
-  },
-  MY_WALLET_POPUP_RECEIVE_TOKEN_ERROR_AMOUNT_INVALID: {
-    id: `${myWalletPagePrefix}.popup.receivetoken.error.amount.invalid`,
-    defaultMessage: "Given amount is invalid.",
   },
 });
 // ====================

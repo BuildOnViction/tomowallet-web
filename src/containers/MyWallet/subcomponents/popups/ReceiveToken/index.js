@@ -5,52 +5,30 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import _get from 'lodash.get';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import _get from "lodash.get";
 // Custom Components
-import ReceiveForm from './subcomponents/ReceiveForm';
-import { ReceiveTokenPopupStyler } from './style';
+import ReceiveForm from "./subcomponents/ReceiveForm";
+import { ReceiveTokenPopupStyler } from "./style";
 // Utilities & Constants
-import { withIntl } from '../../../../../components/IntlProvider';
-import { withWeb3 } from '../../../../../components/Web3';
-import { MSG } from '../../../../../constants';
-import { withGlobal, validations } from '../../../../../utils';
-import { createStructuredSelector } from 'reselect';
-import { selectReceiveToKenPopup } from '../../../selectors';
+import { withIntl } from "../../../../../components/IntlProvider";
+import { withWeb3 } from "../../../../../components/Web3";
+import { MSG } from "../../../../../constants";
+import { withGlobal } from "../../../../../utils";
+import { createStructuredSelector } from "reselect";
+import { selectReceiveToKenPopup } from "../../../selectors";
 import {
   toggleReceiveTokenPopup,
   updateReceiveTokenErrors,
-} from '../../../actions';
-import { selectWallet } from '../../../../Global/selectors';
+} from "../../../actions";
+import { selectWallet } from "../../../../Global/selectors";
 // ===================
 
 // ===== MAIN COMPONENT =====
 class ReceiveTokenPopup extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.handleValidateForm = this.handleValidateForm.bind(this);
-  }
-
-  handleValidateForm() {
-    const {
-      intl: { formatMessage },
-      popupData,
-    } = this.props;
-    const { isRequired } = validations;
-    const formValues = _get(popupData, 'input', {});
-
-    return {
-      ...isRequired(
-        { name: 'amount', value: formValues.amount },
-        formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_ERROR_AMOUNT_REQUIRED),
-      ),
-    };
-  }
-
   render() {
     const {
       intl: { formatMessage },
@@ -60,7 +38,7 @@ class ReceiveTokenPopup extends PureComponent {
     return (
       <ReceiveTokenPopupStyler
         Content={ReceiveForm}
-        isOpen={_get(popupData, 'isOpen', false)}
+        isOpen={_get(popupData, "isOpen", false)}
         title={formatMessage(MSG.MY_WALLET_POPUP_RECEIVE_TOKEN_TITLE)}
         button={{
           primary: {
@@ -107,20 +85,17 @@ const mapStateToProps = () =>
     popupData: selectReceiveToKenPopup,
     wallet: selectWallet,
   });
-const mapDispatchToProps = dispatch => ({
-  onTogglePopup: bool => dispatch(toggleReceiveTokenPopup(bool)),
-  onUpdateReceiveTokenErrors: errors =>
+const mapDispatchToProps = (dispatch) => ({
+  onTogglePopup: (bool) => dispatch(toggleReceiveTokenPopup(bool)),
+  onUpdateReceiveTokenErrors: (errors) =>
     dispatch(updateReceiveTokenErrors(errors)),
 });
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 // ======================
 
 export default compose(
   withConnect,
   withGlobal,
   withIntl,
-  withWeb3,
+  withWeb3
 )(ReceiveTokenPopup);

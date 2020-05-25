@@ -153,7 +153,7 @@ class NavigationBar extends PureComponent {
 
     return (
       <Fragment>
-        <NavItem className="mr-2">
+        <NavItem>
           <NavLink href={API.TOMOCHAIN_MAINNET.VIEW_TRADE_APP} target="_blank">
             {formatMessage(MSG.HEADER_NAVBAR_OPTION_TRADING)}
           </NavLink>
@@ -219,14 +219,14 @@ class NavigationBar extends PureComponent {
     return (
       <Fragment>
         <NavBarStyler light expand="md">
-          <NavbarBrand onClick={this.handleRedirectToHomepage}>
+          <NavbarBrand onClick={this.handleRedirectToHomepage} className="mr-5">
             <CardImg
               src={logo_tomochain}
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
             />
           </NavbarBrand>
           <Collapse navbar>
-            <Nav className="ml-auto" navbar>
+            <Nav className="justify-content-between flex-wrap ml-auto" navbar>
               {isLoggedIn && this.handleRenderPrivateBar()}
               {this.handleRenderPublicBar()}
             </Nav>

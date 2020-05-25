@@ -8,6 +8,7 @@
 // Utilities
 import message_en from "../translations/en.json";
 import message_fr from "../translations/fr.json";
+import message_tr from "../translations/tr.json";
 // ===================
 
 // ===== ENUMS =====
@@ -20,6 +21,7 @@ const WEB3_STATUSES = {
 const MESSAGE_SET = {
   en: message_en,
   fr: message_fr,
+  tr: message_tr,
 };
 
 const TOKEN_TYPE = {
