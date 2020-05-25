@@ -22,7 +22,6 @@ import { ENUM } from "../../constants";
 class CustomIntlProvider extends PureComponent {
   render() {
     const { language, children } = this.props;
-    console.warn("Language: ", language);
 
     return (
       <IntlProvider locale={language} messages={ENUM.MESSAGE_SET[language]}>
