@@ -20,7 +20,7 @@ import { decimalsToBN, repeatGetTransaction } from './utilities';
 // ===================
 
 // ===== SUPPORTED VARIABLES =====
-const LEDGER_WALLET_LIMIT = 5;
+const LEDGER_WALLET_LIMIT = 10;
 // ===============================
 
 // ===== METHODS =====
