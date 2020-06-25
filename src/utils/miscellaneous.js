@@ -10,7 +10,7 @@ import _get from "lodash.get";
 // ===================
 
 // ===== METHODS =====
-export const shuffleArray = array => {
+export const shuffleArray = (array) => {
   let original = array;
   const result = [];
 
@@ -31,7 +31,7 @@ export const shuffleArray = array => {
   return result;
 };
 
-export const trimMnemonic = rawMnemonic => {
+export const trimMnemonic = (rawMnemonic) => {
   if (rawMnemonic) {
     const words = rawMnemonic
       .trim() // Remove beginning & end spaces
@@ -51,7 +51,7 @@ export const convertLocaleNumber = (rawNumber, decimals = 3) => {
   return 0;
 };
 
-export const removeTrailingZero = rawNumber => {
+export const removeTrailingZero = (rawNumber) => {
   let result = `${rawNumber}`;
 
   if (result.includes(".")) {
@@ -64,7 +64,7 @@ export const removeTrailingZero = rawNumber => {
   return result;
 };
 
-export const copyToClipboard = content => {
+export const copyToClipboard = (content) => {
   const textHolder = document.createElement("input");
   textHolder.defaultValue = content;
   document.body.appendChild(textHolder);
@@ -97,15 +97,16 @@ export const downloadFile = ({ content, name, type }) => {
   document.body.removeChild(link);
 };
 
-export const changeInputWithSubmit = updateInput => event => {
+export const changeInputWithSubmit = (updateInput) => (event) => {
   const newValue = _get(event, "target.value", "");
-  const isSubmitted = newValue.lastIndexOf("\n") === newValue.length - 1;
+  const isSubmitted =
+    newValue && newValue.lastIndexOf("\n") === newValue.length - 1;
   if (!isSubmitted && updateInput) {
     updateInput(newValue);
   }
 };
 
-export const detectSubmit = handleSubmit => event => {
+export const detectSubmit = (handleSubmit) => (event) => {
   if (event.keyCode === 13 && handleSubmit) {
     handleSubmit(event);
   }
