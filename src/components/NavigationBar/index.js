@@ -57,7 +57,7 @@ import {
   selectNetworkData,
   selectNetworkConfirmationPopup,
 } from "../../containers/Global/selectors";
-import logo_tomochain from "../../assets/images/logo-tomochain.png";
+import tomowalletLogoSrc from "../../assets/images/logo-tomowallet.png";
 import { removeRPFile } from "../../utils/electron";
 
 // ===== MAIN COMPONENT =====
@@ -221,7 +221,7 @@ class NavigationBar extends PureComponent {
         <NavBarStyler light expand="md">
           <NavbarBrand onClick={this.handleRedirectToHomepage} className="mr-5">
             <CardImg
-              src={logo_tomochain}
+              src={tomowalletLogoSrc}
               alt={formatMessage(MSG.HEADER_NAVBAR_LOGO_ALT)}
             />
           </NavbarBrand>
