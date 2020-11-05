@@ -18,6 +18,7 @@ import _isEmpty from "lodash.isempty";
 import { Helmet } from "react-helmet";
 // Custom Components
 import AddressInfo from "./subcomponents/AddressInfo";
+import ClaimInfo from "./subcomponents/ClaimInfo";
 import DataTables from "./subcomponents/DataTables";
 import SendTokenPopup from "./subcomponents/popups/SendToken";
 import ReceiveTokenPopup from "./subcomponents/popups/ReceiveToken";
@@ -578,6 +579,9 @@ class MyWallet extends PureComponent {
         <Helmet>
           <title>{formatMessage(MSG.MY_WALLET_TITLE)}</title>
         </Helmet>
+        <ClaimInfo
+            wallet={wallet}
+        />
         <AddressInfo
           openReceiveTokenPopup={() => onToggleReceiveTokenPopup(true)}
           openSendTokenPopup={this.handleOpenSendTokenPopup}
