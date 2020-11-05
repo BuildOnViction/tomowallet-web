@@ -29,6 +29,10 @@ import {
   sendMoney,
   sendToken,
 } from './wallet';
+import {
+  canClaim,
+  claimToken
+} from './claimLition';
 
 export {
   addBN,
@@ -59,4 +63,6 @@ export {
   subBN,
   toBN,
   weiToDecimals,
+  canClaim,
+  claimToken,
 };
