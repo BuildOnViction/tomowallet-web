@@ -14,8 +14,8 @@ import { bnToDecimals } from "./utilities";
 const CLAIM_LITION_CONTRACT = '0x2c45e23dbba7051eed71a7596b8c72742c30b5d3';
 const LITION_ADDRESS = '0xf9787e76750c1e731054cf4cc97a2e3f490db360';
 
-const START_BLOCK = 10873800;
-const END_BLOCK = 10875800;
+const START_BLOCK = 27813000;
+const END_BLOCK = 29109000;
 const DEFAULT_DECIMALS = 2;
 // ===============================
 
