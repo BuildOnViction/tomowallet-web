@@ -111,4 +111,10 @@ export const detectSubmit = (handleSubmit) => (event) => {
     handleSubmit(event);
   }
 };
+
+export const reduceFractionDigit = (number = "", digitAmount = 0) =>
+  Number(number).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: digitAmount,
+  });
 // ===================

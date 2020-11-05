@@ -23,6 +23,7 @@ import { createStructuredSelector } from "reselect";
 import { selectCoinData } from "../../selectors";
 import { loadCoinData } from "../../actions";
 import tomoIcon from "../../../../assets/images/logo-tomo.png";
+import { reduceFractionDigit } from "../../../../utils/miscellaneous";
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -61,21 +62,21 @@ class ExchangeInfo extends PureComponent {
   handleGetExchangeData() {
     const { coinData } = this.props;
     return {
-      name: _get(coinData, "data.name", "-----"),
-      symbol: _get(coinData, "data.symbol", "---"),
-      usdPrice: _get(coinData, "data.quotes.USD.price", 0),
-      changeRate: _get(coinData, "data.quotes.USD.percent_change_24h", 0),
-      btcPrice: _get(coinData, "data.quotes.BTC.price", 0),
-      rank: _get(coinData, "data.rank", 0),
-      marketCap: _get(coinData, "data.quotes.USD.market_cap", 0),
-      volume: _get(coinData, "data.quotes.USD.volume_24h", 0)
+      name: _get(coinData, "data.2570.name", "-----"),
+      symbol: _get(coinData, "data.2570.symbol", "---"),
+      usdPrice: _get(coinData, "data.2570.quote.USD.price", 0),
+      changeRate: _get(coinData, "data.2570.quote.USD.percent_change_24h", 0),
+      btcPrice: _get(coinData, "data.2570.quote.BTC.price", 0),
+      rank: _get(coinData, "data.2570.cmc_rank", 0),
+      marketCap: _get(coinData, "data.2570.quote.USD.market_cap", 0),
+      volume: _get(coinData, "data.2570.quote.USD.volume_24h", 0),
     };
   }
 
   render() {
     const {
       coinData,
-      intl: { formatMessage }
+      intl: { formatMessage },
     } = this.props;
     const data = this.handleGetExchangeData();
     const isDecrease = Math.sign(data.changeRate) === -1;
@@ -96,10 +97,10 @@ class ExchangeInfo extends PureComponent {
               </span>
               <br />
               <span className="exchange-info__data-rate--usd">
-                {data.usdPrice}
+                {reduceFractionDigit(data.usdPrice, 4)}
                 <span
                   className={isDecrease ? "text-danger" : ""}
-                >{` (${data.changeRate}%)`}</span>
+                >{` (${reduceFractionDigit(data.changeRate, 2)}%)`}</span>
               </span>
               <br />
               <span className="exchange-info__data-rate--btc">
@@ -156,23 +157,23 @@ ExchangeInfo.propTypes = {
   /** React Intl's instance object */
   intl: PropTypes.object,
   /** Action to get currency statistic from CoinMarketCap */
-  onLoadCoinData: PropTypes.func
+  onLoadCoinData: PropTypes.func,
 };
 
 ExchangeInfo.defaultProps = {
   coinData: {},
   intl: {},
-  onLoadCoinData: () => {}
+  onLoadCoinData: () => {},
 };
 // ======================
 
 // ===== INJECTIONS =====
 const mapStateToProps = () =>
   createStructuredSelector({
-    coinData: selectCoinData
+    coinData: selectCoinData,
   });
-const mapDispatchToProps = dispatch => ({
-  onLoadCoinData: () => dispatch(loadCoinData())
+const mapDispatchToProps = (dispatch) => ({
+  onLoadCoinData: () => dispatch(loadCoinData()),
 });
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 // ======================

@@ -264,7 +264,7 @@ const estimateCurrencyFee = (web3, txData) => {
  * @param {Object} txData Set of transaction data
  */
 const estimateFee = (web3, tokenType, txData, isTestnet = false) => {
-  if (tokenType === TOKEN_TYPE.trc20) {
+  if (tokenType === TOKEN_TYPE.TRC20) {
     return estimateTRC20Fee(web3, txData);
   } else if (tokenType === TOKEN_TYPE.TRC21) {
     return estimateTRC21Fee(web3, txData, isTestnet);

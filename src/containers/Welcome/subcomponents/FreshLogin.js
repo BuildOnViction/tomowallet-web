@@ -5,16 +5,33 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { CardImg, Col, Row } from 'reactstrap';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import { CardImg, Col, Row } from "reactstrap";
 // Custom Components
-import { BigButtonStyler, BoxBtnStyler, HeadingBig } from '../../../styles';
+import { BigButtonStyler, BoxBtnStyler, HeadingBig } from "../../../styles";
 // Utilities & Constants
-import { withIntl } from '../../../components/IntlProvider';
-import { MSG, ROUTE } from '../../../constants';
-import imgvisual_login from '../../../assets/images/img-visual-login.png';
+import { withIntl } from "../../../components/IntlProvider";
+import { MSG, ROUTE } from "../../../constants";
+import imgvisual_login from "../../../assets/images/img-visual-login.png";
 // ===================
+
+// // ===== TEST PROVIDER =====
+// import WalletConnectProvider from "@walletconnect/web3-provider";
+// import Web3 from "web3";
+
+// const web3Provider = new WalletConnectProvider({
+//   rpc: {
+//     1: "https://rpc.tomochain.com",
+//   },
+// });
+
+// web3Provider.enable().then(() => {
+//   const web3 = new Web3(web3Provider);
+//   console.log("walletConnect", web3);
+// });
+
+// // =========================
 
 // ===== MAIN COMPONENT =====
 class FreshLoginSection extends PureComponent {
@@ -25,11 +42,11 @@ class FreshLoginSection extends PureComponent {
     } = this.props;
 
     return (
-      <Row className='align-items-center'>
+      <Row className="align-items-center">
         <Col xs={12} md={6} lg={7}>
           <HeadingBig>{formatMessage(MSG.WELCOME_TITLE)}</HeadingBig>
-          <p className='mb-5'>{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
-          <BoxBtnStyler className='mt-3'>
+          <p className="mb-5">{formatMessage(MSG.WELCOME_DESCRIPTION)}</p>
+          <BoxBtnStyler className="mt-3">
             <div>
               <BigButtonStyler
                 btnBlue
@@ -38,7 +55,7 @@ class FreshLoginSection extends PureComponent {
                 {formatMessage(MSG.WELCOME_BUTTON_IMPORT_WALLET)}
               </BigButtonStyler>
             </div>
-            <div className='m-3'>
+            <div className="m-3">
               {formatMessage(MSG.WELCOME_TEXT_BETWEEN_BUTTONS)}
             </div>
             <div>
@@ -48,7 +65,7 @@ class FreshLoginSection extends PureComponent {
             </div>
           </BoxBtnStyler>
         </Col>
-        <Col xs={12} md={6} lg={5} className='d-none d-md-block'>
+        <Col xs={12} md={6} lg={5} className="d-none d-md-block">
           <CardImg
             src={imgvisual_login}
             alt={formatMessage(MSG.WELCOME_IMAGE_ALT)}

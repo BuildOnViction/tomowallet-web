@@ -14,7 +14,7 @@ import { getNetwork } from "../../utils";
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,
-  LOAD_COIN_DATA
+  LOAD_COIN_DATA,
 } from "./constants";
 import { API } from "../../constants";
 import {
@@ -22,7 +22,7 @@ import {
   loadTransactionDataSuccess,
   updateSendTokenErrors,
   loadCoinDataSuccess,
-  loadCoinDataFailed
+  loadCoinDataFailed,
 } from "./actions";
 import { toggleLoading } from "../Global/actions";
 // ===================
@@ -46,7 +46,7 @@ export function* loadTokens(actionData) {
     yield put(toggleLoading(false));
     yield put(
       updateSendTokenErrors({
-        tokenTable: "Cannot load token list!"
+        tokenTable: "Cannot load token list!",
       })
     );
   }
@@ -63,7 +63,7 @@ export function* loadTransaction(actionData) {
     );
 
     if (!_isEmpty(walletTransactions)) {
-      var updatedItems = walletTransactions.map(e => {
+      var updatedItems = walletTransactions.map((e) => {
         return {
           tokenType: e.symbol,
           txHash: e.hash,
@@ -71,7 +71,7 @@ export function* loadTransaction(actionData) {
           type: e.type,
           from: e.from,
           to: e.to,
-          amount: e.amount
+          amount: e.amount,
         };
       });
 
@@ -81,7 +81,7 @@ export function* loadTransaction(actionData) {
           currentPage: params.page,
           total: 500,
           pages: 10,
-          address: params.address
+          address: params.address,
         })
       );
     }
@@ -90,7 +90,7 @@ export function* loadTransaction(actionData) {
     yield put(toggleLoading(false));
     yield put(
       updateSendTokenErrors({
-        transactionTable: "Cannot load transaction list!"
+        transactionTable: "Cannot load transaction list!",
       })
     );
   }
@@ -100,7 +100,7 @@ export function* loadCoin() {
   try {
     const response = yield call(
       request,
-      "https://widgets.coinmarketcap.com/v2/ticker/2570/?ref=widget&convert=USD"
+      "https://3rdparty-apis.coinmarketcap.com/v1/cryptocurrency/widget?id=2570&convert=BTC,USD"
     );
     if (response.data) {
       yield put(loadCoinDataSuccess(response.data));

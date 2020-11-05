@@ -5,10 +5,10 @@
  */
 // ===== IMPORTS =====
 // Modules
-import Web3 from 'web3';
-import _isEmpty from 'lodash.isempty';
+import Web3 from "web3";
+import _isEmpty from "lodash.isempty";
 // Utilities
-import { trimMnemonic } from '../miscellaneous';
+import { trimMnemonic } from "../miscellaneous";
 // ===================
 
 // ===== PRE-DEFINED VARIABLES =====
@@ -26,11 +26,11 @@ const web3Utils = new Web3().utils;
  */
 const addBN = (number1, number2, decimals) => {
   const convertedNo1 =
-    typeof number1 === 'object'
+    typeof number1 === "object"
       ? number1
       : web3Utils.toBN(decimalsToBN(number1, decimals));
   const convertedNo2 =
-    typeof number2 === 'object'
+    typeof number2 === "object"
       ? number2
       : web3Utils.toBN(decimalsToBN(number2, decimals));
 
@@ -46,14 +46,17 @@ const addBN = (number1, number2, decimals) => {
  */
 const bnToDecimals = (numberToConvert, decimals) => {
   if (!numberToConvert) {
-    return '0';
+    return "0";
   }
 
   const numberObj = web3Utils
     .toBN(numberToConvert)
     .divmod(web3Utils.toBN(10 ** decimals));
-  const mod = numberObj.mod.toString(10, decimals).replace(/0+$/, '');
-  return `${numberObj.div}${mod.length > 0 ? `.${mod}` : ''}`;
+  console.log("bnToDecimals", numberToConvert, numberObj);
+  const mod = numberObj.mod.toString(10, decimals).replace(/0+$/, "");
+  return `${mod.includes("-") ? `-${numberObj.div}` : numberObj.div}${
+    mod.length > 0 ? `.${mod.replace("-", "")}` : ""
+  }`;
 };
 
 /**
@@ -65,32 +68,32 @@ const bnToDecimals = (numberToConvert, decimals) => {
  */
 const decimalsToBN = (numberToConvert, decimals) => {
   if (!numberToConvert) {
-    return '0';
+    return "0";
   }
 
   const rawDecimals =
-    numberToConvert.indexOf('.') !== -1
-      ? numberToConvert.length - 1 - numberToConvert.indexOf('.')
+    numberToConvert.indexOf(".") !== -1
+      ? numberToConvert.length - 1 - numberToConvert.indexOf(".")
       : 0;
   let remainDecimals;
   if (rawDecimals) {
     if (decimals >= rawDecimals) {
       remainDecimals = decimals - rawDecimals;
       return web3Utils
-        .toBN(`${numberToConvert}`.replace('.', ''))
+        .toBN(`${numberToConvert}`.replace(".", ""))
         .mul(web3Utils.toBN(remainDecimals === 0 ? 1 : 10 ** remainDecimals))
         .toString(10);
     } else {
       remainDecimals = rawDecimals - decimals;
       return web3Utils
-        .toBN(`${numberToConvert}`.replace('.', ''))
+        .toBN(`${numberToConvert}`.replace(".", ""))
         .div(web3Utils.toBN(10 ** remainDecimals))
         .toString(10);
     }
   }
   remainDecimals = decimals;
   return web3Utils
-    .toBN(`${numberToConvert}`.replace('.', ''))
+    .toBN(`${numberToConvert}`.replace(".", ""))
     .mul(web3Utils.toBN(10 ** remainDecimals))
     .toString(10);
 };
@@ -119,17 +122,17 @@ const decryptKeystore = (encryptedInfo, password) => {
  */
 const divBN = (number1, number2, decimals) => {
   const convertedNo1 =
-    typeof number1 === 'object'
+    typeof number1 === "object"
       ? number1
       : web3Utils.toBN(decimalsToBN(number1, decimals));
   const convertedNo2 =
-    typeof number2 === 'object'
+    typeof number2 === "object"
       ? number2
       : web3Utils.toBN(decimalsToBN(number2, decimals));
 
   const quotient = convertedNo1.divmod(convertedNo2);
-  const quotientMod = quotient.mod.toString(10, decimals).replace(/0+$/, '');
-  return `${quotient.div}${quotientMod.length > 0 ? `.${quotientMod}` : ''}`;
+  const quotientMod = quotient.mod.toString(10, decimals).replace(/0+$/, "");
+  return `${quotient.div}${quotientMod.length > 0 ? `.${quotientMod}` : ""}`;
 };
 
 /**
@@ -153,7 +156,7 @@ const encryptKeystore = (rawInfo, password) => {
  * Check if the input string is a valid private key
  * @param {String} rawData address input's value
  */
-const isAddress = rawData => !!rawData && web3Utils.isAddress(rawData);
+const isAddress = (rawData) => !!rawData && web3Utils.isAddress(rawData);
 
 /**
  * isHDPath
@@ -161,7 +164,7 @@ const isAddress = rawData => !!rawData && web3Utils.isAddress(rawData);
  * Check if the input string is a valid HD path
  * @param {String} hdPath A string of HD path to validate
  */
-const isHDPath = hdPath =>
+const isHDPath = (hdPath) =>
   !!hdPath && /^m(\/\d+'?)+(\/\d*'?)$/.test(hdPath.trim());
 
 /**
@@ -170,7 +173,7 @@ const isHDPath = hdPath =>
  * Check if the input string is a valid hex number
  * @param {String} rawData A string of hex number to validate
  */
-const isHex = rawData => {
+const isHex = (rawData) => {
   if (rawData) {
     const trimmedData = rawData.trim();
 
@@ -185,9 +188,9 @@ const isHex = rawData => {
  * Check if the input string is a valid private key
  * @param {String} rawData private key input's value
  */
-const isPrivateKey = rawData => {
+const isPrivateKey = (rawData) => {
   if (rawData) {
-    const trimData = rawData.trim().replace(/^0x/, '');
+    const trimData = rawData.trim().replace(/^0x/, "");
 
     return web3Utils.isHex(trimData) && trimData.length === 64;
   }
@@ -200,11 +203,11 @@ const isPrivateKey = rawData => {
  * Check if the input string is a valid recovery phrase
  * @param {String} rawData recovery phrase input's value
  */
-const isRecoveryPhrase = rawData => {
+const isRecoveryPhrase = (rawData) => {
   if (rawData) {
     const trimData = trimMnemonic(rawData);
 
-    return trimData.split(' ').length === 12;
+    return trimData.split(" ").length === 12;
   }
   return false;
 };
@@ -219,11 +222,11 @@ const isRecoveryPhrase = rawData => {
  */
 const mulBN = (number1, number2, decimals) => {
   const convertedNo1 =
-    typeof number1 === 'object'
+    typeof number1 === "object"
       ? number1
       : web3Utils.toBN(decimalsToBN(number1, decimals));
   const convertedNo2 =
-    typeof number2 === 'object'
+    typeof number2 === "object"
       ? number2
       : web3Utils.toBN(decimalsToBN(number2, decimals));
 
@@ -238,21 +241,26 @@ const mulBN = (number1, number2, decimals) => {
  */
 const repeatCall = ({ interval = 1000, timeout = 1000, action = () => {} }) => {
   let intervalId = 0;
-  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const repeat = (ms, func) =>
-    new Promise(r => {
+    new Promise((r) => {
       intervalId = setInterval(func, ms);
       wait(ms).then(r);
     });
   const stopAfter10Seconds = () =>
-    new Promise(r => r(setTimeout(() => clearInterval(intervalId)), timeout));
+    new Promise((r) =>
+      r(
+        setTimeout(() => clearInterval(intervalId)),
+        timeout
+      )
+    );
   return repeat(
     interval,
-    action().then(trans => {
+    action().then((trans) => {
       if (!_isEmpty(trans)) {
         clearInterval(intervalId);
       }
-    }),
+    })
   ).then(stopAfter10Seconds());
 };
 
@@ -282,12 +290,13 @@ const repeatGetTransaction = (web3, txHash) => {
  * @param {Number} decimals Decimal unit (10, 2, 16...)
  */
 const subBN = (number1, number2, decimals) => {
+  console.warn("subBN", number1, number2);
   const convertedNo1 =
-    typeof number1 === 'object'
+    typeof number1 === "object"
       ? number1
       : web3Utils.toBN(decimalsToBN(number1, decimals));
   const convertedNo2 =
-    typeof number2 === 'object'
+    typeof number2 === "object"
       ? number2
       : web3Utils.toBN(decimalsToBN(number2, decimals));
 
@@ -300,7 +309,7 @@ const subBN = (number1, number2, decimals) => {
  * Convert a decimal number into a Big Number instance
  * @param {String|Number} decimalAmount A decimal number to convert
  */
-const toBN = decimalAmount => web3Utils.toBN(decimalAmount);
+const toBN = (decimalAmount) => web3Utils.toBN(decimalAmount);
 
 /**
  * weiToDecimals
@@ -308,7 +317,7 @@ const toBN = decimalAmount => web3Utils.toBN(decimalAmount);
  * Convert a Wei-format number into a decimal number
  * @param {Number} amount An amount of TOMO in Wei format
  */
-const weiToDecimals = amount => {
+const weiToDecimals = (amount) => {
   return web3Utils.fromWei(amount);
 };
 // ===================

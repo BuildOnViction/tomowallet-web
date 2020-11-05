@@ -101,7 +101,7 @@ export default (state = initialState, action) => {
                 ...tok,
                 [PORTFOLIO_COLUMNS.PRICE]: _get(
                   action,
-                  "data.quotes.USD.price",
+                  "data.2570.quote.USD.price",
                   0
                 ),
               };
