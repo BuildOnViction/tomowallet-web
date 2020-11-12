@@ -16,7 +16,7 @@ import trc21Issuer from './abi/trc21Issuer.json';
 import privacy from './abi/privacy.json';
 import { decimalsToBN, bnToDecimals, repeatGetTransaction } from './utilities';
 import { mulBN } from './index.js';
-import { Address as AdUtil, Wallet, UTXO } from '/Users/apple/Documents/projects/tomochain/privacyjs/dist/';
+import { Address as AdUtil, Wallet, UTXO } from 'tomoprivacyjs';
 
 import { getPrivacyWalletInfo } from '../storage';
 // ===================
@@ -435,7 +435,7 @@ const sendMoneyPrivacy = async (web3, wallet, amount, toAddress) => {
  * @param {Integer} amount Deposit amount
  */
 const estimatePrivacyFee = (web3, wallet, amount) => {
-  const balance = bnToDecimals(wallet.balance, 9);
+  const balance = bnToDecimals(wallet.balance, 8);
   if (balance === amount) {
     return wallet.estimateFee()
   } else {

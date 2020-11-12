@@ -231,7 +231,7 @@ export function* scanPrivacyTransaction(actionData) {
 					createdTime: parseInt(owner.createdAt),
 					from: owner.receiver === privacyAddress ? address : privacyAddress,
 					to: owner.receiver,
-					amount: bnToDecimals(owner.amount, 9)
+					amount: bnToDecimals(owner.amount, 8)
 				})
 			}
 		}
