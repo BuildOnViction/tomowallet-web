@@ -37,7 +37,7 @@ class BalanceInfo extends PureComponent {
         if (pWallet && pWallet.balance) {
             privacyBalance = bnToDecimals(
                 pWallet.balance.toString(10),
-                9
+                8
             );
         }
         return privacyBalance;

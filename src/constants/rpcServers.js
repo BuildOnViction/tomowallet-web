@@ -1,18 +1,18 @@
 export default {
   TOMOCHAIN_MAINNET: {
     type: 'http',
-    host: 'https://rpc.tomochain.com',
-    ws: 'wss://ws.tomochain.com',
-    networkId: 88,
+    host: 'https://rpc.devnet.tomochain.com',
+    ws: 'wss://ws.devnet.tomochain.com',
+    networkId: 89,
     hdPath: "m/44'/889'/0'/0/",
-    privacyContract: ''
+    privacyContract: '0x959ac7C61a0b87c0B41aeaE268512CCa4c3e2573'
   },
   TOMOCHAIN_TESTNET: {
     type: 'http',
-    host: 'https://rpc.testnet.tomochain.com',
-    ws: 'wss://ws.testnet.tomochain.com',
-    networkId: 89,
+    host: 'https://rpc.devnet.tomochain.com',
+    ws: 'wss://ws.devnet.tomochain.com',
+    networkId: 99,
     hdPath: "m/44'/889'/0'/0/",
-    privacyContract: '0x2D94946815076471E204792798951a517cE2F5bf'
+    privacyContract: '0x959ac7C61a0b87c0B41aeaE268512CCa4c3e2573'
   },
 };
