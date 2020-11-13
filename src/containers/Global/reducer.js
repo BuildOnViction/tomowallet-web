@@ -116,8 +116,9 @@ export default (state = initialState, action) => {
         return state.set('privacyMode', privacy);
     }
     case RELEASE_PRIVACY_MODE: {
-      removePrivacyMode()
-      return state.set('privacyMode', false);
+      removePrivacyMode();
+      return state.setIn(['privacyWallet'], null)
+        .setIn(['privacyMode'], false);
     }
     case UPDATE_PRIVACY_INFO: {
       const wallet = action.data.privacyWallet;
