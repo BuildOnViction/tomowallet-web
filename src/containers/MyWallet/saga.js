@@ -11,7 +11,7 @@ import _map from "lodash.map";
 import _isEmpty from "lodash.isempty";
 // Utilities & Constants
 import request from "../../utils/request";
-import { getNetwork, setPrivacyInfo, getLastUTXO, bnToDecimals, checkSpentUTXO, calculatePercentage } from "../../utils";
+import { getNetwork, setPrivacyInfo, getLastUTXO, bnToDecimals, checkSpentUTXO, getPrivacyWalletInfo } from "../../utils";
 import {
   LOAD_TOKEN_OPTIONS,
   LOAD_TRANSACTION_DATA,

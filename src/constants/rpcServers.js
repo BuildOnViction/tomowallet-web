@@ -13,6 +13,6 @@ export default {
     ws: 'wss://ws.devnet.tomochain.com',
     networkId: 99,
     hdPath: "m/44'/889'/0'/0/",
-    privacyContract: '0x959ac7C61a0b87c0B41aeaE268512CCa4c3e2573'
+    privacyContract: '0xE307329FB04fb9DD4368909D3B2Ed24dA0372B20'
   },
 };

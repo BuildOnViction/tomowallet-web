@@ -73,6 +73,7 @@ import {
   setWeb3Info,
   setPrivacyInfo,
   setPrivacyMode,
+  getPrivacyWalletInfo,
 } from './storage';
 import electron, {
   detectKeystore,
@@ -167,4 +168,5 @@ export {
   prepareWithdrawingTxs,
   executeTransaction,
   calculatePercentage,
+  getPrivacyWalletInfo
 };
