@@ -42,7 +42,7 @@
     "lodash.uniqby": "^4.7.0",
     "moment": "2.24.0",
     "moment-locales-webpack-plugin": "1.1.0",
-    "node-sass": "4.12.0",
+    "node-sass": "4.13.1",
     "prop-types": "15.7.2",
     "qrcode.react": "0.9.3",
     "random-hash": "^4.0.1",
