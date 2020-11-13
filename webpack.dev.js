@@ -1,6 +1,7 @@
 const path = require('path');
 const common = require('./webpack.common.js');
 const express = require('express')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = common({
   mode: 'development',
@@ -19,6 +20,11 @@ module.exports = common({
         express.static(path.join(__dirname, 'public', 'privacy.wasm')));
     }
   },
+  plugins: [
+    new CopyWebpackPlugin(
+      [{ from: 'public'}],
+    ),
+  ],
   optimization: {
     moduleIds: 'hashed',
     splitChunks: {
