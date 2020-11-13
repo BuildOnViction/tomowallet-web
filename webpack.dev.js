@@ -1,5 +1,6 @@
 const path = require('path');
 const common = require('./webpack.common.js');
+const express = require('express')
 
 module.exports = common({
   mode: 'development',
@@ -13,6 +14,10 @@ module.exports = common({
     historyApiFallback: true,
     contentBase: 'dist',
     https: false,
+    setup (app) {
+      app.use('/privacy.wasm/',
+        express.static(path.join(__dirname, 'public', 'privacy.wasm')));
+    }
   },
   optimization: {
     moduleIds: 'hashed',
