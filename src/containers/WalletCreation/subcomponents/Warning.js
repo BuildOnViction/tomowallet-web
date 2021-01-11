@@ -7,11 +7,11 @@
  */
 // ===== IMPORTS =====
 // Modules
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { withRouter } from 'react-router-dom';
-import { generateMnemonic } from 'bip39';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
+import { generateMnemonic } from "bip39";
 import {
   CardHeader,
   CardBody,
@@ -21,7 +21,7 @@ import {
   Row,
   Col,
   Card,
-} from 'reactstrap';
+} from "reactstrap";
 // Custom Components
 import {
   ButtonStyler,
@@ -30,14 +30,14 @@ import {
   HeadingMedium,
   TextBlue,
   NoticeTextRed,
-} from '../../../styles';
+} from "../../../styles";
 // Utilities, Constants & Styles
-import { withIntl } from '../../../components/IntlProvider';
-import { withWeb3 } from '../../../components/Web3';
-import { mnemonicToPrivateKey } from '../../../utils';
-import { FORM_STATES } from '../constants';
-import { MSG, ROUTE } from '../../../constants';
-import imgWarning from '../../../assets/images/img-warning.png';
+import { withIntl } from "../../../components/IntlProvider";
+import { withWeb3 } from "../../../components/Web3";
+import { mnemonicToPrivateKey } from "../../../utils";
+import { FORM_STATES } from "../constants";
+import { MSG, ROUTE } from "../../../constants";
+import imgWarning from "../../../assets/images/img-warning.png";
 // ===================
 
 // ===== MAIN COMPONENT =====
@@ -61,8 +61,18 @@ class Warning extends PureComponent {
       setPrivateKey,
       setFormState,
     } = this.props;
-    new Promise(resolve => {
-      const newMnemonic = generateMnemonic();
+    new Promise((resolve) => {
+      let newMnemonic = "";
+      let mnemonicArr = [];
+      do {
+        mnemonicArr = generateMnemonic().trim().split(" ");
+      } while (
+        mnemonicArr.filter(
+          // eslint-disable-next-line no-loop-func
+          (word, wordIdx) => mnemonicArr.indexOf(word) !== wordIdx
+        ).length > 0
+      );
+      newMnemonic = mnemonicArr.join(" ");
       storeMnemonic(newMnemonic);
       setPrivateKey(mnemonicToPrivateKey(newMnemonic, rpcServer));
       resolve();
@@ -82,9 +92,9 @@ class Warning extends PureComponent {
           <CardText>
             {`${formatMessage(MSG.WARNING_HEADER_ALTERNATIVE_TEXT)} `}
             <TextBlue
-              role='presentation'
+              role="presentation"
               onClick={() => this.handleRedirect(ROUTE.IMPORT_WALLET)}
-              className='d-inline-block'
+              className="d-inline-block"
             >
               {formatMessage(MSG.WARNING_HEADER_ALTERNATIVE_LINK)}
             </TextBlue>
@@ -152,8 +162,4 @@ Warning.defaultProps = {
 };
 // ======================
 
-export default compose(
-  withIntl,
-  withRouter,
-  withWeb3,
-)(Warning);
+export default compose(withIntl, withRouter, withWeb3)(Warning);
