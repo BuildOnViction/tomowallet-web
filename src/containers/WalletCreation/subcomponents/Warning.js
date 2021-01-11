@@ -65,7 +65,7 @@ class Warning extends PureComponent {
       let newMnemonic = "";
       let mnemonicArr = [];
       do {
-        mnemonicArr = generateMnemonic().trim().split(" ");
+        mnemonicArr = (generateMnemonic() || "").trim().split(" ");
       } while (
         mnemonicArr.filter(
           // eslint-disable-next-line no-loop-func
