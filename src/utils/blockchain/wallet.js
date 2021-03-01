@@ -264,16 +264,14 @@ const estimateCurrencyFee = (web3, txData) => {
  * @param {Object} txData Set of transaction data
  */
 const estimateFee = (web3, tokenType, txData, isTestnet = false) => {
-  if (tokenType === TOKEN_TYPE.TRC20) {
-    return estimateTRC20Fee(web3, txData);
-  } else if (tokenType === TOKEN_TYPE.TRC21) {
+  if (tokenType === TOKEN_TYPE.TRC21) {
     return estimateTRC21Fee(web3, txData, isTestnet);
   } else if (tokenType === TOKEN_TYPE.CURRENCY) {
     return estimateCurrencyFee(web3, txData);
   }
-  return defaultReject(
-    'Token type is invalid. Please choose between 3 options: "TRC20", "TRC21" or "CURRENCY".'
-  );
+  else {
+    return estimateTRC20Fee(web3, txData);
+  }
 };
 
 /**
