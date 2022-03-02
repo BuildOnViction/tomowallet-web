@@ -59,15 +59,16 @@ const unlockLedger = hdPath => {
         });
     });
   }
-  const TransportU2F = require('@ledgerhq/hw-transport-u2f').default;
-  return TransportU2F.isSupported()
+  // const TransportU2F = require('@ledgerhq/hw-transport-u2f').default;
+  const TransportWebUSB = require('@ledgerhq/hw-transport-webusb').default;
+  return TransportWebUSB.isSupported()
     .then(u2fSuppported => {
       if (!u2fSuppported) {
         throw new Error(
           formatMessage(MSG.IMPORT_WALLET_ERROR_TRANSPORT_U2F_NOT_SUPPORTED),
         );
       }
-      return TransportU2F.create()
+      return TransportWebUSB.create()
         .then(transport => new Eth(transport).getAddress(hdPath, false, true))
         .catch(error => {
           throw error;
@@ -222,8 +223,9 @@ const sendSignedTransaction = (web3, txData) => {
         if (isElectron()) {
           return rs(electron.transportNodeHid.create());
         } else {
-          const TransportU2F = require('@ledgerhq/hw-transport-u2f').default;
-          return rs(TransportU2F.create());
+          // const TransportU2F = require('@ledgerhq/hw-transport-u2f').default;
+          const TransportWebUSB = require('@ledgerhq/hw-transport-webusb').default;
+          return rs(TransportWebUSB.create());
         }
       }).then(transport =>
         new Eth(transport)
